@@ -42,9 +42,9 @@ export default function HeaderNav({ activePage }) {
     <a
       key={label}
       aria-current={activePage === label ? "page" : undefined}
-      className={`relative whitespace-nowrap py-2 text-[11px] font-semibold transition-colors hover:text-[#bd0d27] ${
+      className={`relative whitespace-nowrap py-2 text-[11px] font-semibold transition-colors hover:text-[#10c8e0] ${
         activePage === label
-          ? "text-[#bd0d27] after:absolute after:inset-x-0 after:-bottom-0.75 after:h-0.5 after:bg-[#bd0d27]"
+          ? "text-[#10c8e0] after:absolute after:inset-x-0 after:-bottom-0.75 after:h-0.5 after:bg-[#10c8e0]"
           : "text-[#1f2937]"
       }`}
       href={href}
@@ -55,12 +55,15 @@ export default function HeaderNav({ activePage }) {
   );
 
   return (
-    <header className="relative z-10 w-full border-b border-slate-100 bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]">
+    <header
+      className="relative z-10 w-full border-b border-slate-100 bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]"
+      data-theme={activePage === "CEO Message" ? "ceo" : undefined}
+    >
       <div className="mx-auto flex min-h-19 max-w-360 items-center justify-between gap-4 px-4 sm:px-6 lg:min-h-21 lg:px-10">
         <a aria-label="Clingene home" className="shrink-0" href="#home">
           <img
             alt="Clingene"
-            className="h-[14.5 w-37.5 object-contain sm:16.5 sm:w-44.5"
+            className="h-11 w-36 object-contain sm:h-12 sm:w-44"
             src={clingeneLogo}
           />
         </a>
@@ -72,13 +75,13 @@ export default function HeaderNav({ activePage }) {
         <div className="hidden shrink-0 items-center gap-4 min-[1200px]:flex">
           <button
             aria-label="Search"
-            className="grid h-9 w-9 place-items-center rounded-full border border-slate-100 text-slate-600 transition-colors hover:border-slate-300 hover:text-[#bd0d27]"
+            className="grid h-9 w-9 place-items-center rounded-full border border-slate-100 text-slate-600 transition-colors hover:border-slate-300 hover:text-[#10c8e0]"
             type="button"
           >
             <SearchIcon />
           </button>
           <a
-            className="rounded-full bg-[#bd0d27] px-5 py-[11px] text-[11px] font-bold text-white shadow-sm transition-colors hover:bg-[#9f0b21]"
+            className="rounded-full bg-[#10c8e0] px-5 py-[11px] text-[11px] font-bold text-[#050b1c] shadow-sm transition-colors hover:bg-[#079bb0]"
             href="#contact"
           >
             Contact Us
@@ -88,7 +91,7 @@ export default function HeaderNav({ activePage }) {
         <button
           aria-expanded={menuOpen}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-700 transition-colors hover:border-[#bd0d27] hover:text-[#bd0d27] min-[1200px]:hidden"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-700 transition-colors hover:border-[#10c8e0] hover:text-[#10c8e0] min-[1200px]:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
           type="button"
         >
@@ -106,8 +109,8 @@ export default function HeaderNav({ activePage }) {
               <a
                 key={link.label}
                 aria-current={activePage === link.label ? "page" : undefined}
-                className={`rounded-md px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50 hover:text-[#bd0d27] ${
-                  activePage === link.label ? "text-[#bd0d27]" : "text-slate-700"
+                className={`rounded-md px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50 hover:text-[#10c8e0] ${
+                  activePage === link.label ? "text-[#10c8e0]" : "text-slate-700"
                 }`}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
@@ -116,7 +119,7 @@ export default function HeaderNav({ activePage }) {
               </a>
             ))}
             <a
-              className="mt-2 rounded-full bg-[#bd0d27] px-5 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-[#9f0b21]"
+              className="mt-2 rounded-full bg-[#10c8e0] px-5 py-3 text-center text-sm font-bold text-[#050b1c] transition-colors hover:bg-[#079bb0]"
               href="#contact"
               onClick={() => setMenuOpen(false)}
             >

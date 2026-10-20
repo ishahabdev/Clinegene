@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import clingeneLogo from "./assets/clingene-logo.png";
 import HeaderNav from "./components/HeaderNav.jsx";
+import SiteFooter from "./components/SiteFooter.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
 import CEOMessagePage from "./pages/CEOMessagePage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
@@ -31,6 +33,8 @@ function getCurrentPage() {
 
 export default function App() {
   const [pageId, setPageId] = useState(getCurrentPage);
+  const [loaderPhase, setLoaderPhase] = useState("reveal");
+  const [showLoader, setShowLoader] = useState(true);
   const CurrentPage = pages[pageId].component;
 
   useEffect(() => {
@@ -39,12 +43,39 @@ export default function App() {
     return () => window.removeEventListener("hashchange", updatePage);
   }, []);
 
+  useEffect(() => {
+    const exitTimer = window.setTimeout(() => setLoaderPhase("exit"), 1500);
+    const removeTimer = window.setTimeout(() => setShowLoader(false), 1950);
+
+    return () => {
+      window.clearTimeout(exitTimer);
+      window.clearTimeout(removeTimer);
+    };
+  }, []);
+
   return (
     <>
       <HeaderNav activePage={pages[pageId].label} />
       <main>
         <CurrentPage />
       </main>
+      <SiteFooter showJoinCta={pageId === "home"} />
+      {showLoader && (
+        <div
+          aria-label="Loading ClinGene"
+          aria-live="polite"
+          className={`brand-loader ${loaderPhase === "exit" ? "brand-loader-exit" : ""}`}
+          role="status"
+        >
+          <div className="brand-loader-content">
+            <img
+              alt="ClinGene"
+              className="brand-loader-logo"
+              src={clingeneLogo}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 }
