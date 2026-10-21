@@ -5,6 +5,36 @@
   --font-inter: "Inter", sans-serif;
 }
 
+.preloader-logo {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(14px) scale(0.88);
+  animation: preloader-logo-reveal 1.5s cubic-bezier(0.22, 1, 0.36, 1) 180ms both;
+}
+
+@keyframes preloader-logo-reveal {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(14px) scale(0.88);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader-logo {
+    animation: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
 .site-container {
   width: 100%;
   max-width: 1320px;

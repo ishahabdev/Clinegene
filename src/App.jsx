@@ -26,6 +26,23 @@ const pages = {
   contact: { label: "Contact", component: ContactPage },
 };
 
+function LoadingScreen() {
+  return (
+    <div
+      aria-label="Loading ClinGene"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-white"
+      role="status"
+    >
+      <img
+        alt="ClinGene"
+        className="preloader-logo h-28 w-80 max-w-[85vw] object-contain sm:h-36 sm:w-md lg:h-44 lg:w-xl"
+        src="/images/clingene-logo.webp"
+      />
+      <span className="sr-only">Loading ClinGene</span>
+    </div>
+  );
+}
+
 function getCurrentPage() {
   const hash = window.location.hash.slice(1);
   return pages[hash] ? hash : "home";
@@ -33,6 +50,7 @@ function getCurrentPage() {
 
 export default function App() {
   const [pageId, setPageId] = useState(getCurrentPage);
+  const [showPreloader, setShowPreloader] = useState(true);
   const CurrentPage = pages[pageId].component;
 
   useEffect(() => {
@@ -41,11 +59,17 @@ export default function App() {
     return () => window.removeEventListener("hashchange", updatePage);
   }, []);
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => setShowPreloader(false), 1700);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   return (
     <>
+      {showPreloader && <LoadingScreen />}
       <HeaderNav activePage={pages[pageId].label} />
       <main>
-        <Suspense fallback={null}>
+        <Suspense fallback={<LoadingScreen />}>
           <CurrentPage />
         </Suspense>
       </main>
