@@ -1,157 +1,452 @@
-import ceoPortrait from "../assets/ceo-portrait.jpg";
-import homeBackground from "../assets/home1.png";
+import home1 from "../assets/home1.png";
+import photo from "../assets/photo.jpg";
+import micro from "../assets/micro.jpg";
+import sig from "../assets/sig.png";
+import dnaStrand from "../assets/dna_strand.png";
 
-const pillars = [
+const C = {
+  cyan: "#12c5df",
+  navy: "#0a2540",
+  headingNavy: "#0c2b48",
+  bodyText: "#4a6e8b",
+};
+
+/* ─── Hero Banner ─── */
+function Hero() {
+  return (
+    <section className="relative overflow-hidden bg-[#031f31]">
+     <div
+  className="absolute inset-y-0 right-0 hidden w-[68%] bg-cover bg-left md:block"
+  style={{ backgroundImage: `url(${home1})` }}
+/>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#031f31] from-[34%] via-[#031f31]/75 to-transparent to-[75%]" />
+      <div className="relative mx-auto max-w-[1240px] px-6 pb-9 pt-10 lg:px-12">
+        <div className="mb-6 flex items-center gap-2.5 text-[12px] font-medium text-[#12c5df]">
+          <a href="/" className="hover:underline">
+            Home
+          </a>
+          <span>›</span>
+          <span className="text-slate-300">CEO Message</span>
+        </div>
+        <div className="flex items-center gap-3 text-[10px] font-bold tracking-[0.25em] text-[#12c5df] uppercase">
+          <span className="h-px w-8 bg-[#12c5df]" />
+          LEADERSHIP
+        </div>
+        <h1 className="mt-2 font-['Outfit',sans-serif] text-[40px] font-bold leading-tight text-white md:text-[50px]">
+          CEO <span style={{ color: C.cyan }}>Message</span>
+        </h1>
+        <p className="mt-3 max-w-[320px] text-[15px] leading-relaxed text-slate-200">
+          Science today. Healthier generations tomorrow.
+        </p>
+        <div className="mt-4 h-[2.5px] w-9 rounded-full bg-[#12c5df]" />
+      </div>
+    </section>
+  );
+}
+
+/* ─── Profile & Vision Sidebar ─── */
+function ProfileSidebar() {
+  return (
+    <div className="flex flex-col gap-4">
+      {/* 1. CEO Photo Card */}
+      <div className="relative pt-2 pl-3">
+        {/* Curved Cyan L-Bracket behind top-left */}
+        <svg
+          className="pointer-events-none absolute -top-1 -left-1 z-0"
+          width="135"
+          height="165"
+          viewBox="0 0 135 165"
+          fill="none"
+        >
+          <defs>
+            <linearGradient id="cornerCyanGrad" x1="1" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#32d5ec" />
+              <stop offset="100%" stopColor="#7ee4f1" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M 112 16 L 42 16 A 26 26 0 0 0 16 42 L 16 142"
+            stroke="url(#cornerCyanGrad)"
+            strokeWidth="25"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+
+        {/* Card Content */}
+        <div className="relative z-10 overflow-hidden rounded-[20px] bg-gradient-to-b from-[#032236] to-[#043a50] shadow-[0_16px_36px_rgba(2,24,38,0.32)]">
+          <img
+            src={photo}
+            alt="Dr. Amjad Ali Tanoli Ph.D"
+            className="block w-full object-cover object-top aspect-[4/3.8]"
+          />
+          <div className="p-5 bg-gradient-to-b from-[#032439] to-[#04374d] text-white">
+            <h3 className="font-['Outfit',sans-serif] text-[17px] font-bold tracking-tight text-white">
+              Dr. Amjad Ali Tanoli Ph.D
+            </h3>
+            <p className="mt-0.5 text-[13.5px] font-bold tracking-wide text-[#12c5df]">
+              CEO
+            </p>
+            <div className="mt-1 text-[11.5px] leading-relaxed text-[#c0d6e5]">
+              <p>Human Geneticist</p>
+              <p>Consultant Genetic Counselor</p>
+            </div>
+            <div className="mt-3.5 h-[2px] w-9 rounded-full bg-[#12c5df]" />
+          </div>
+        </div>
+      </div>
+
+      {/* 2. OUR VISION Card */}
+      <div className="relative isolate overflow-hidden rounded-[20px] p-5 text-white bg-gradient-to-br from-[#022a3f] via-[#03445b] to-[#055c75] shadow-[0_14px_32px_rgba(2,24,38,0.25)] min-h-[175px] flex flex-col justify-between">
+        {/* DNA Graphic background */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-no-repeat opacity-25 mix-blend-screen"
+          style={{
+            backgroundImage: "url('/images/home1.webp')",
+            backgroundPosition: "right -15px center",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#00121f]/45 via-[#00121f]/20 to-white/10"
+        />
+
+        <div className="relative z-10">
+          {/* Researcher / Doctor Icon */}
+          <div className="text-[#12c5df] mb-2.5">
+            <svg
+              width="26"
+              height="26"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <circle cx="12" cy="7" r="3.2" />
+              <path d="M7 13.5v5.5a1 1 0 001 1h8a1 1 0 001-1v-5.5c0-1.8-1.5-3-3.2-3.2l-.8 1.2h-2l-.8-1.2C8.5 10.5 7 11.7 7 13.5z" />
+              <rect x="4.5" y="13" width="3" height="6.5" rx="0.8" />
+              <path d="M17.5 13.5c.8 0 1.5.7 1.5 1.5v3.5c0 .6-.4 1-1 1s-1-.4-1-1v-3.5c0-.8.2-1.5.5-1.5z" />
+            </svg>
+          </div>
+
+          <div className="text-[10px] font-bold tracking-[0.22em] text-[#12c5df] uppercase">
+            OUR VISION
+          </div>
+          <p className="mt-2 text-[12px] leading-relaxed text-[#e5f4f8] max-w-[210px]">
+            To be a leading hub for human genetics and biomedical research in
+            Pakistan and beyond.
+          </p>
+          <div className="mt-3.5 h-[2px] w-9 rounded-full bg-[#12c5df]" />
+        </div>
+
+        {/* Circular Arrow Button */}
+        <a
+          href="#vision"
+          className="absolute bottom-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-[#12c5df]/60 bg-[#06384c]/70 text-[#12c5df] transition hover:scale-105 hover:bg-[#12c5df] hover:text-[#022338]"
+          aria-label="Our Vision details"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Main CEO Message Copy ─── */
+function CeoMessageBody() {
+  const pStyle = "text-[12.5px] leading-[1.8] text-[#486e8e]";
+  return (
+    <div className="pt-2">
+      {/* Eyebrow with cyan line */}
+      <div className="flex items-center gap-3 text-[10px] font-bold tracking-[0.25em] text-[#0d9db3] uppercase">
+        <span>A MESSAGE FROM OUR CEO</span>
+        <span className="h-[2px] w-9 bg-[#12c5df]" />
+      </div>
+
+      {/* Heading */}
+      <h2 className="mt-3 font-['Outfit',sans-serif] text-[30px] md:text-[34px] font-bold leading-[1.2] text-[#0c2b48]">
+        Advancing Science for a<br />
+        <span className="text-[#12c5df]">Healthier Tomorrow</span>
+      </h2>
+
+      {/* Paragraphs */}
+      <div className="mt-5 space-y-3.5">
+        <p className={pStyle}>
+          Artificial intelligence, data science and technological advancement
+          have revolutionized biomedical research in terms of data generation and
+          new scientific discoveries. On daily basis, new technologies are being
+          introduced into the market to give momentum to research. So, it is
+          necessary to equip and train next generation of researchers to learn
+          state-of-the-art tools and techniques to enhance their research skills.
+        </p>
+        <p className={pStyle}>
+          At ClinGene, we are committed to bridging the gap between cutting-edge
+          science and real-world impact. Our focus is not only on generating
+          knowledge but also on translating it into solutions that improve human
+          health and well-being. We believe that by investing in people,
+          technology and collaboration, we can build a stronger research
+          ecosystem and create opportunities for young scientists to contribute
+          to global advancements in genetics, precision medicine and biomedical
+          sciences.
+        </p>
+        <p className={pStyle}>Together, we can make a meaningful difference.</p>
+      </div>
+
+      {/* Signature & Title */}
+      <div className="mt-6">
+        <img
+          src={sig}
+          alt="Amjad Ali Tanoli Signature"
+          className="h-10 mix-blend-multiply"
+        />
+        <div className="mt-2 text-[12.5px] font-bold text-[#0c2b48]">
+          Dr. Amjad Ali Tanoli Ph.D
+        </div>
+        <div className="text-[11.5px] text-[#557b9c]">
+          CEO, ClinGene (Pvt) Ltd.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Quote Card with DNA Watermark ─── */
+function QuoteCard() {
+  return (
+    <div className="relative flex flex-col justify-between overflow-hidden rounded-[22px] px-5 py-6 text-[#1e456c] bg-gradient-to-b from-[#eaf8fc] to-[#d7f2f7] shadow-[0_10px_28px_rgba(18,197,223,0.12)] min-h-[300px] lg:min-h-[330px] w-full">
+      {/* 3D DNA Helix Watermark anchored at bottom-right */}
+      <img
+        src={dnaStrand}
+        alt=""
+        className="pointer-events-none absolute -bottom-2 -right-1 w-28 object-contain opacity-75 select-none"
+      />
+
+      <div className="relative z-10">
+        {/* Cyan Quote Glyph */}
+        <div className="text-[#0ec5df]">
+          <svg width="34" height="28" viewBox="0 0 34 28" fill="currentColor">
+            <path d="M4.5 18c0-3.6 2.6-6.6 6.2-6.6.6 0 1.2.1 1.7.3C11.5 7.8 8 3.6 3.8 1.5L5.4 0C11.2 2 17 8.2 17 15.5c0 4.5-3.6 8-8.2 8-1.8 0-3.3-.5-4.3-1.5V18zm15 0c0-3.6 2.6-6.6 6.2-6.6.6 0 1.2.1 1.7.3C26.5 7.8 23 3.6 18.8 1.5L20.4 0C26.2 2 32 8.2 32 15.5c0 4.5-3.6 8-8.2 8-1.8 0-3.3-.5-4.3-1.5V18z" />
+          </svg>
+        </div>
+
+        {/* Quote text */}
+        <p className="mt-5 text-[17px] md:text-[18px] font-medium leading-[1.55] text-[#1e456c]">
+          “Better research today, healthier generations tomorrow.”
+        </p>
+
+        {/* Cyan line */}
+        <div className="mt-5 h-[2.5px] w-9 rounded-full bg-[#12c5df]" />
+      </div>
+    </div>
+  );
+}
+
+/* ─── 4 Pillars Strip ─── */
+const pillarsData = [
   {
-    title: "Capacity Development",
-    description: "Building the skills and confidence of the next generation of researchers.",
+    title: "Innovative Research",
+    desc: "Bridging science and real-world impact through innovation.",
+    icon: (
+      <path d="M8 3c0 6 8 6 8 12s-8 6-8 6M16 3c0 6-8 6-8 12s8 6 8 6M9 8h6M9 16h6" />
+    ),
+  },
+  {
+    title: "Capacity Building",
+    desc: "Empowering the next generation of researchers.",
     icon: (
       <>
-        <circle cx="12" cy="7" r="3" />
-        <path d="M6 20v-2a6 6 0 0 1 12 0v2M4 10v4m16-4v4M2 12h4m12 0h4" />
+        <circle cx="12" cy="8" r="3" />
+        <circle cx="5.5" cy="10" r="2" />
+        <circle cx="18.5" cy="10" r="2" />
+        <path d="M6 20c0-4 2.5-6 6-6s6 2 6 6" />
       </>
     ),
   },
   {
-    title: "Critical Thinking",
-    description: "Encouraging curiosity, careful analysis, and evidence-led discovery.",
+    title: "Collaboration",
+    desc: "Working together for better solutions.",
     icon: (
       <>
-        <path d="M9 18h6m-5 3h4m-2-18a7 7 0 0 0-4 12.7c.6.4 1 1 1 1.8h6c0-.8.4-1.4 1-1.8A7 7 0 0 0 12 3Z" />
-        <path d="M12 7v4m0 3h.01" />
+        <circle cx="12" cy="6" r="2.5" />
+        <circle cx="6" cy="17" r="2.5" />
+        <circle cx="18" cy="17" r="2.5" />
+        <path d="M10.5 8.5L7 15M13.5 8.5L17 15M9 17h6" />
       </>
     ),
   },
   {
-    title: "Teamwork",
-    description: "Bringing people and disciplines together to solve meaningful challenges.",
+    title: "Healthier Communities",
+    desc: "Advancing science for a healthier tomorrow.",
     icon: (
       <>
-        <circle cx="9" cy="8" r="3" />
-        <circle cx="17" cy="9" r="2.5" />
-        <path d="M3 20v-1a6 6 0 0 1 12 0v1m1-5a5 5 0 0 1 5 5" />
+        <path d="M12 20s-8-4.5-8-10.5A4.5 4.5 0 0112 7a4.5 4.5 0 018 2.5C20 15.5 12 20 12 20z" />
+        <path d="M6 12h3l1.5-3 3 6 1.5-3h3" />
       </>
     ),
   },
 ];
 
-export default function CEOMessagePage() {
+function Pillars() {
   return (
-    <div className="ceo-page ceo-page-redesign">
-      <section
-        aria-labelledby="ceo-page-title"
-        className="ceo-banner"
-      >
-        <img
-          alt=""
-          aria-hidden="true"
-          className="ceo-banner-image"
-          src={homeBackground}
-        />
-        <div aria-hidden="true" className="ceo-banner-overlay" />
-        <div className="ceo-shell ceo-banner-content">
-          <nav aria-label="Breadcrumb" className="ceo-breadcrumb">
-            <a href="#home">Home</a>
-            <span aria-hidden="true">&gt;</span>
-            <span aria-current="page">CEO Message</span>
-          </nav>
-          <p className="ceo-leadership">Leadership <span aria-hidden="true" /></p>
-          <h1 id="ceo-page-title">CEO <span>Message</span></h1>
-          <p className="ceo-tagline">
-            <span>Science today.</span>
-            <span>Healthier generations tomorrow.</span>
+    <div className="mx-auto mt-14 grid max-w-[1140px] grid-cols-2 gap-y-8 rounded-2xl px-6 py-8 lg:grid-cols-4 bg-[#eff9fc]">
+      {pillarsData.map(({ title, desc, icon }, idx) => (
+        <div
+          key={title}
+          className={`px-6 text-center ${
+            idx ? "lg:border-l lg:border-slate-200" : ""
+          }`}
+        >
+          <div className="mx-auto flex h-[54px] w-[54px] items-center justify-center rounded-full bg-[#d4f3f7] text-[#0b8aa6]">
+            <svg
+              width="26"
+              height="26"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {icon}
+            </svg>
+          </div>
+          <div className="mt-3 font-['Outfit',sans-serif] text-[14px] font-bold text-[#0c2b48]">
+            {title}
+          </div>
+          <p className="mx-auto mt-1.5 max-w-[180px] text-[11.5px] leading-relaxed text-[#557b9c]">
+            {desc}
           </p>
         </div>
-      </section>
+      ))}
+    </div>
+  );
+}
 
-      <div className="ceo-main">
-        <section aria-labelledby="ceo-message-title" className="ceo-message-section">
-          <div className="ceo-shell">
-            <div className="ceo-message-grid">
-              <article className="ceo-profile">
-                <div className="ceo-profile-image-frame">
-                  <img
-                    alt="Placeholder portrait for the CEO profile"
-                    className="ceo-profile-photo"
-                    src={ceoPortrait}
-                  />
-                </div>
-                <div className="ceo-profile-caption">
-                  <h2>Dr. Amjad Ali Tanoli, Ph.D</h2>
-                  <p>CEO <span aria-hidden="true">|</span> Human Geneticist <span aria-hidden="true">|</span> Consultant Genetic Counselor</p>
-                </div>
-              </article>
-
-              <article className="ceo-message-copy">
-                <p className="ceo-section-eyebrow">A message from our CEO</p>
-                <h2 id="ceo-message-title">Advancing science for a healthier tomorrow</h2>
-                <blockquote className="ceo-pull-quote">
-                  Equip and train the next generation of researchers.
-                </blockquote>
-                <div className="ceo-message-body">
-                  <p>
-                    Artificial intelligence, data science and technological advancement have
-                    revolutionized biomedical research in terms of data generation and new
-                    scientific discoveries. On a daily basis, new technologies are being introduced
-                    to give momentum to research. It is essential to equip and train the next
-                    generation of researchers to learn state-of-the-art tools and techniques and
-                    enhance their research skills.
-                  </p>
-                  <p>
-                    At ClinGene, we are committed to bridging the gap between cutting-edge science
-                    and real-world impact. Our focus is not only on generating knowledge, but also
-                    on translating it into solutions that improve human health and well-being.
-                    Through investment in people, technology and collaboration, we can build a
-                    stronger research ecosystem and create opportunities for young scientists to
-                    contribute to global advancements in genetics, precision medicine and biomedical
-                    sciences.
-                  </p>
-                  <p>Together, we can make a meaningful difference.</p>
-                </div>
-                <p className="ceo-signature-name">
-                  <strong>Dr. Amjad Ali Tanoli, Ph.D</strong>
-                  <span>Chief Executive Officer, ClinGene (Pvt) Ltd.</span>
-                </p>
-              </article>
-            </div>
-
-            <section aria-label="Our research pillars" className="ceo-pillars">
-              {pillars.map((pillar) => (
-                <article className="ceo-pillar-card" key={pillar.title}>
-                  <span aria-hidden="true" className="ceo-pillar-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      {pillar.icon}
-                    </svg>
-                  </span>
-                  <h3>{pillar.title}</h3>
-                  <p>{pillar.description}</p>
-                </article>
-              ))}
-            </section>
-          </div>
-        </section>
-
-        <section aria-labelledby="ceo-cta-title" className="ceo-cta-section">
-          <div className="ceo-shell ceo-cta-content">
-            <div>
-              <p className="ceo-section-eyebrow">Our commitment</p>
-              <h2 id="ceo-cta-title">Building a future through science</h2>
-              <p>
-                Discover how ClinGene advances biomedical research through collaboration and
-                capacity development.
-              </p>
-            </div>
-            <div className="ceo-cta-actions">
-              <a className="ceo-button ceo-button-primary" href="#research">
-                Explore Our Research <span aria-hidden="true">→</span>
-              </a>
-              <a className="ceo-button ceo-button-secondary" href="#services">
-                Our Services
-              </a>
-            </div>
-          </div>
-        </section>
+/* ─── Commitment Section ─── */
+function Commitment() {
+  return (
+    <section className="relative mt-14 overflow-hidden bg-[#01192b]">
+      {/* 1. Left-side ambient lab background (microscope hidden, soft bokeh only) */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-[55%] overflow-hidden opacity-35">
+        <div
+          className="h-full w-full bg-no-repeat"
+          style={{
+            backgroundImage: `url(${micro})`,
+            backgroundSize: "200% 100%",
+            backgroundPosition: "left center",
+          }}
+        />
+        {/* Soft horizontal gradient fade into the background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#01192b]/30 to-[#01192b]" />
       </div>
+
+      {/* 2. Main microscope on the right: fits the div completely from top to bottom and right edge */}
+      <div
+        className="pointer-events-none absolute inset-y-0 right-0 w-[58%] overflow-hidden"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.25) 15%, rgba(0, 0, 0, 0.75) 45%, black 70%)",
+          maskImage:
+            "linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.25) 15%, rgba(0, 0, 0, 0.75) 45%, black 70%)",
+        }}
+      >
+        <div
+          className="h-full w-full bg-no-repeat"
+          style={{
+            backgroundImage: `url(${micro})`,
+            backgroundSize: "cover",
+            backgroundPosition: "right center",
+          }}
+        />
+      </div>
+
+      {/* 3. Subtle dark overlay on the left for maximum text readability */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#01192b]/70 via-[#01192b]/20 to-transparent" />
+
+      <div className="relative mx-auto flex min-h-[260px] max-w-[1200px] items-center px-6 py-12 lg:px-[56px]">
+        {/* Left text content */}
+        <div className="max-w-[420px]">
+          <div className="flex items-center gap-3 text-[10px] font-semibold tracking-[0.3em] text-[#12c5df]">
+            <span className="h-px w-9 bg-[#12c5df]" />
+            OUR COMMITMENT
+          </div>
+          <h2 className="mt-4 font-['Outfit'] text-[30px] font-bold leading-tight text-white">
+            Building a Future<br />
+            <span className="text-[#12c5df]">Through Science</span>
+          </h2>
+          <p className="mt-4 text-[12.5px] leading-[1.75] text-slate-200">
+            We are dedicated to advancing human health through cutting-edge
+            research, collaboration and capacity building. Our work today lays
+            the foundation for healthier communities and a brighter future.
+          </p>
+          <a
+            href="#research"
+            className="mt-6 inline-flex items-center gap-3 rounded-full bg-[#12c5df] px-6 py-3 text-[12px] font-semibold text-[#01192b] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            Explore Our Research <span>→</span>
+          </a>
+        </div>
+
+        {/* The three-word handwritten tagline in the middle */}
+        <div className="pointer-events-none absolute left-[49%] top-[36%] hidden -rotate-[18deg] font-['Mrs_Saint_Delafield',cursive] text-[38px] leading-[0.95] text-white/90 lg:block">
+          Science<br />
+          <span className="ml-3 block">Collaboration</span>
+          <span className="ml-8 block">Impact</span>
+          <span className="ml-5 mt-3 block h-[2px] w-[36px] rotate-[10deg] bg-[#12c5df]" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Main Component ─── */
+export default function CeoMessagePage() {
+  return (
+    <div className="font-['Inter',sans-serif] antialiased bg-white text-[#0c2b48]">
+      <Hero />
+
+      <main className="pb-8 pt-12">
+        <div className="mx-auto grid max-w-[1140px] items-start gap-8 px-6 lg:grid-cols-[290px_1fr_210px] lg:gap-8">
+          <ProfileSidebar />
+          <CeoMessageBody />
+          <div className="lg:self-center">
+            <QuoteCard />
+          </div>
+        </div>
+
+        <Pillars />
+      </main>
+
+      <Commitment />
+
+      {/* Floating Bottom Scroll Button as seen in reference */}
+      <a
+        href="#top"
+        className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-black text-white shadow-2xl transition hover:scale-105"
+        aria-label="Scroll to top"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M12 5v14M19 12l-7 7-7-7" />
+        </svg>
+      </a>
     </div>
   );
 }

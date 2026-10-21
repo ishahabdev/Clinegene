@@ -1,4 +1,4 @@
-import homeBackground from "../assets/home1.png";
+const homeBackground = "/images/home1.webp";
 
 const contactPhone = "+92-3485607051";
 const contactEmail = "Clinene@gmail.com";

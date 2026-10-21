@@ -1,7 +1,51 @@
-import clingeneLogo from "../assets/clingene-logo.png";
-import homeBackground from "../assets/home1.png";
+const clingeneLogo = "/images/clingene-logo.webp";
+const homeBackground = "/images/home1.webp";
 
-export default function SiteFooter({ showJoinCta }) {
+export default function SiteFooter({ compact = false, showJoinCta }) {
+  if (compact) {
+    return (
+      <footer className="ceo-footer">
+        <div className="ceo-shell">
+          <div className="ceo-footer-main">
+            <a aria-label="ClinGene home" className="ceo-footer-brand shrink-0" href="#home">
+              <img
+                alt="ClinGene"
+                className="h-10 w-36 rounded-lg bg-white object-contain px-2.5 py-1 sm:h-11 sm:w-40"
+                src={clingeneLogo}
+              />
+            </a>
+            <address className="ceo-contact-details">
+              <a href="#contact">
+                <span aria-hidden="true">✉</span>
+                Contact our team for inquiries
+              </a>
+              <p>
+                <span aria-hidden="true">⌖</span>
+                Human genetics and biomedical research
+              </p>
+            </address>
+            <div className="ceo-footer-social">
+              <div aria-label="Social links" className="ceo-social-icons">
+                <a aria-label="LinkedIn" href="#contact">in</a>
+                <a aria-label="Contact ClinGene" href="#contact">↗</a>
+              </div>
+              <p>Better research today,<br />healthier generations tomorrow.</p>
+              <span aria-hidden="true" className="ceo-short-rule" />
+            </div>
+          </div>
+          <div className="ceo-footer-bottom">
+            <p>© {new Date().getFullYear()} ClinGene (Pvt.) Ltd. All rights reserved.</p>
+            <nav aria-label="Legal links">
+              <a href="#home">Home</a>
+              <a href="#privacy-policy">Privacy Policy</a>
+              <a href="#terms-of-use">Terms &amp; Conditions</a>
+            </nav>
+          </div>
+        </div>
+      </footer>
+    );
+  }
+
   return (
     <footer
       className="relative isolate overflow-hidden bg-[#031b37] text-white"
@@ -36,10 +80,10 @@ export default function SiteFooter({ showJoinCta }) {
         )}
 
         <div className="grid gap-8 py-8 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.8fr_0.8fr_1.15fr_0.7fr] lg:gap-7">
-          <a aria-label="ClinGene home" className="flex w-fit items-center rounded-xl bg-white p-3" href="#home">
+          <a aria-label="ClinGene home" className="flex w-[150px] self-start items-center rounded-xl bg-white/95 p-3 shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12c5df]" href="#home">
             <img
               alt="ClinGene — Human Genetics and Biomedical Research"
-              className="w-40 object-contain"
+              className="w-full object-contain"
               src={clingeneLogo}
             />
           </a>

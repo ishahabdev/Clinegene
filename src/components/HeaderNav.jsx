@@ -1,5 +1,6 @@
 import { useState } from "react";
-import clingeneLogo from "../assets/clingene-logo.png";
+
+const clingeneLogo = "/images/clingene-logo.webp";
 
 const links = [
   { label: "Home", href: "#home" },
@@ -42,9 +43,9 @@ export default function HeaderNav({ activePage }) {
     <a
       key={label}
       aria-current={activePage === label ? "page" : undefined}
-      className={`relative whitespace-nowrap py-2 text-[11px] font-semibold transition-colors hover:text-[#10c8e0] ${
+      className={`relative whitespace-nowrap py-2 text-[13px] font-medium transition-colors hover:text-[#0a7a94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${
         activePage === label
-          ? "text-[#10c8e0] after:absolute after:inset-x-0 after:-bottom-0.75 after:h-0.5 after:bg-[#10c8e0]"
+          ? "text-[#0a7a94] after:absolute after:inset-x-0 after:-bottom-0.75 after:h-0.5 after:bg-[#10c8e0]"
           : "text-[#1f2937]"
       }`}
       href={href}
@@ -68,20 +69,20 @@ export default function HeaderNav({ activePage }) {
           />
         </a>
 
-        <nav aria-label="Main navigation" className="hidden items-center gap-3 min-[1200px]:flex 2xl:gap-4">
+        <nav aria-label="Main navigation" className="hidden items-center gap-6 min-[1200px]:flex 2xl:gap-7">
           {links.map(renderLink)}
         </nav>
 
         <div className="hidden shrink-0 items-center gap-4 min-[1200px]:flex">
           <button
             aria-label="Search"
-            className="grid h-9 w-9 place-items-center rounded-full border border-slate-100 text-slate-600 transition-colors hover:border-slate-300 hover:text-[#10c8e0]"
+            className="grid h-9 w-9 place-items-center rounded-full border border-slate-100 text-slate-600 transition-colors hover:border-slate-300 hover:text-[#10c8e0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
             type="button"
           >
             <SearchIcon />
           </button>
           <a
-            className="rounded-full bg-[#10c8e0] px-5 py-[11px] text-[11px] font-bold text-[#050b1c] shadow-sm transition-colors hover:bg-[#079bb0]"
+            className="rounded-full bg-[#10c8e0] px-5 py-[11px] text-[11px] font-bold text-[#050b1c] shadow-sm transition-colors hover:bg-[#079bb0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
             href="#contact"
           >
             Contact Us
@@ -91,7 +92,7 @@ export default function HeaderNav({ activePage }) {
         <button
           aria-expanded={menuOpen}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-700 transition-colors hover:border-[#10c8e0] hover:text-[#10c8e0] min-[1200px]:hidden"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-700 transition-colors hover:border-[#10c8e0] hover:text-[#10c8e0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] min-[1200px]:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
           type="button"
         >
@@ -109,8 +110,8 @@ export default function HeaderNav({ activePage }) {
               <a
                 key={link.label}
                 aria-current={activePage === link.label ? "page" : undefined}
-                className={`rounded-md px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50 hover:text-[#10c8e0] ${
-                  activePage === link.label ? "text-[#10c8e0]" : "text-slate-700"
+                className={`rounded-md px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50 hover:text-[#0a7a94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${
+                  activePage === link.label ? "text-[#0a7a94]" : "text-slate-700"
                 }`}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
@@ -119,7 +120,7 @@ export default function HeaderNav({ activePage }) {
               </a>
             ))}
             <a
-              className="mt-2 rounded-full bg-[#10c8e0] px-5 py-3 text-center text-sm font-bold text-[#050b1c] transition-colors hover:bg-[#079bb0]"
+              className="mt-2 rounded-full bg-[#10c8e0] px-5 py-3 text-center text-sm font-bold text-[#050b1c] transition-colors hover:bg-[#079bb0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
               href="#contact"
               onClick={() => setMenuOpen(false)}
             >

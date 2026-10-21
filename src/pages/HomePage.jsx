@@ -1,20 +1,61 @@
 import { useEffect, useRef, useState } from "react";
-import homeBackground from "../assets/home1.png";
+import {
+  Atom,
+  ArrowRight,
+  BarChart3,
+  Building2,
+  Bug,
+  ChevronLeft,
+  ChevronRight,
+  Dna,
+  Droplet,
+  FlaskConical,
+  GitBranch,
+  GraduationCap,
+  Layers,
+  Leaf,
+  Lightbulb,
+  Microscope,
+  Network,
+  Sprout,
+  Stethoscope,
+  TestTubes,
+  Users,
+  UsersRound,
+} from "lucide-react";
+import SectionHeading from "../components/SectionHeading";
+import amjadPortrait from "../assets/photo.jpg";
+import microscopeImage from "../assets/micro.jpg";
+import clinicalTestingImage from "../assets/services/cropped/clinical-genetic-testing.webp";
+import clinicalSampleImage from "../assets/services/cropped/single-cell-rna-seq-analysis.webp";
+import sangerImage from "../assets/services/cropped/rna-seq.webp";
+import exomeSequencingImage from "../assets/services/cropped/whole-exome-genome-sequencing.webp";
+import wholeGenomeMetagenomeImage from "../assets/services/cropped/whole-genome-metagenome.webp";
+import cellCultureImage from "../assets/services/cropped/sanger-sequencing.webp";
+import metagenomeImage from "../assets/services/cropped/16s-rrna-metagenome-sequencing.webp";
+import fungalGenomeImage from "../assets/services/cropped/whole-fungal-genome-sequencing.webp";
+import phylogeneticImage from "../assets/services/cropped/phylogenetic-tree-construction.webp";
+import plantGenomeImage from "../assets/services/cropped/plant genome.webp";
+import pangenomeImage from "../assets/services/cropped/pangenome-analysis.webp";
+import proteinDockingImage from "../assets/services/cropped/protein-docking-molecular-dynamics.webp";
+import statisticsImage from "../assets/services/cropped/statistical-data-analysis.webp";
+
+const homeBackground = "/images/home1.webp";
 
 const services = [
-  { name: "Clinical Genetic Testing", description: "Genetic testing services for clinical and research needs." },
-  { name: "Sanger Sequencing", description: "Targeted DNA sequencing and sequence analysis." },
-  { name: "Whole Exome/Genome Sequencing", description: "Comprehensive sequencing for genomic research." },
-  { name: "RNA-Seq", description: "RNA sequencing services for gene expression research." },
-  { name: "Single-cell RNA seq data analysis", description: "Analysis of single-cell RNA sequencing datasets." },
-  { name: "16SrRNA Metagenome Sequencing", description: "Sequencing and analysis of 16S rRNA metagenomes." },
-  { name: "Whole Genome Metagenome", description: "Whole-genome metagenomic sequencing and analysis." },
-  { name: "Whole Fungal Genome Sequencing", description: "Genome sequencing services for fungal research." },
-  { name: "Pangenome Analysis", description: "Comparative analysis across multiple genomes." },
-  { name: "Phylogenetic Tree Construction", description: "Phylogenetic analysis and tree construction." },
-  { name: "Plant Genome Sequencing", description: "Genome sequencing services for plant research." },
-  { name: "Protein Docking & Molecular Dynamic Simulation", description: "Computational protein docking and molecular simulation." },
-  { name: "Statistical Data Analysis", description: "Statistical analysis to support research data." },
+  { name: "Clinical Genetic Testing", description: "Genetic testing services for clinical and research needs.", Icon: Stethoscope, image: clinicalTestingImage },
+  { name: "Sanger Sequencing", description: "Targeted DNA sequencing and sequence analysis.", Icon: TestTubes, image: sangerImage },
+  { name: "Whole Exome/Genome Sequencing", description: "Comprehensive sequencing for genomic research.", Icon: Dna, image: exomeSequencingImage },
+  { name: "RNA-Seq", description: "RNA sequencing services for gene expression research.", Icon: FlaskConical, image: clinicalSampleImage },
+  { name: "Single-cell RNA seq data analysis", description: "Analysis of single-cell RNA sequencing datasets.", Icon: Microscope, image: cellCultureImage },
+  { name: "16SrRNA Metagenome Sequencing", description: "Sequencing and analysis of 16S rRNA metagenomes.", Icon: Bug, image: metagenomeImage },
+  { name: "Whole Genome Metagenome", description: "Whole-genome metagenomic sequencing and analysis.", Icon: Layers, image: wholeGenomeMetagenomeImage },
+  { name: "Whole Fungal Genome Sequencing", description: "Genome sequencing services for fungal research.", Icon: Sprout, image: fungalGenomeImage },
+  { name: "Pangenome Analysis", description: "Comparative analysis across multiple genomes.", Icon: Network, image: pangenomeImage },
+  { name: "Phylogenetic Tree Construction", description: "Phylogenetic analysis and tree construction.", Icon: GitBranch, image: phylogeneticImage },
+  { name: "Plant Genome Sequencing", description: "Genome sequencing services for plant research.", Icon: Leaf, image: plantGenomeImage },
+  { name: "Protein Docking & Molecular Dynamic Simulation", description: "Computational protein docking and molecular simulation.", Icon: Atom, image: proteinDockingImage },
+  { name: "Statistical Data Analysis", description: "Statistical analysis to support research data.", Icon: BarChart3, image: statisticsImage },
 ];
 
 function FeatureIcon({ type }) {
@@ -57,34 +98,8 @@ const serviceGradients = [
   "from-[#dcecf4] to-[#f7fbff]",
 ];
 
-function ServiceIcon({ index }) {
-  const icons = [
-    <><path d="M12 4v16M4 12h16" /><circle cx="12" cy="12" r="9" /></>,
-    <><path d="M8 3c10 4 10 14 0 18m8-18C6 7 6 17 16 21M7 6h10M6 12h12m-11 6h10" /></>,
-    <><path d="M5 4h14v16H5zM8 8h8m-8 4h8m-8 4h5M8 2v4m8-4v4" /></>,
-    <><path d="M4 18c4-12 12-12 16 0M4 6c4 12 12 12 16 0" /><circle cx="12" cy="12" r="2" /></>,
-    <><circle cx="12" cy="12" r="8" /><circle cx="9" cy="10" r="1" /><circle cx="15" cy="9" r="1.5" /><circle cx="13" cy="15" r="2" /></>,
-    <><circle cx="7" cy="8" r="2" /><circle cx="16" cy="7" r="1.5" /><circle cx="12" cy="15" r="2.5" /><circle cx="19" cy="16" r="1" /><path d="M5 17c1-2 2-2 3-1m8-7 2 3" /></>,
-    <><path d="M4 5h16M4 12h16M4 19h16" /><circle cx="8" cy="5" r="2" /><circle cx="15" cy="12" r="2" /><circle cx="10" cy="19" r="2" /></>,
-    <><path d="M12 4c-4 0-7 3-7 7 0 3 3 5 7 5s7-2 7-5c0-4-3-7-7-7ZM12 16v4m-4 0h8M8 9c2 1 6 1 8 0" /></>,
-    <><circle cx="6" cy="6" r="2" /><circle cx="18" cy="6" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="6" cy="18" r="2" /><circle cx="18" cy="18" r="2" /><path d="m8 7 3 4m5-4-3 4m-3 2-3 4m5-4 3 4" /></>,
-    <><circle cx="12" cy="4" r="2" /><circle cx="6" cy="11" r="2" /><circle cx="18" cy="11" r="2" /><circle cx="4" cy="20" r="2" /><circle cx="12" cy="20" r="2" /><circle cx="20" cy="20" r="2" /><path d="m11 6-4 3m6-3 4 3m-10 4-2 5m3-5 3 5m4-5 2 5m-3-5-3 5" /></>,
-    <><path d="M19 4C9 4 5 9 5 15c0 3 2 5 5 5 7 0 9-8 9-16ZM5 20c3-5 6-8 11-11" /></>,
-    <><path d="M7 18c0-4 2-7 5-7s5 3 5 7v2H7zM12 11V5m0 2c-3 0-4-2-4-4 3 0 4 1 4 4Zm0 1c3 0 4-2 4-4-3 0-4 1-4 4Z" /></>,
-    <><path d="M4 19V5m0 14h16M8 15l3-4 3 2 5-7" /><circle cx="19" cy="6" r="1.5" /></>,
-  ];
-
-  return (
-    <svg aria-hidden="true" className="relative z-10 h-14 w-14 text-[#10c8e0] sm:h-16 sm:w-16" fill="none" viewBox="0 0 24 24">
-      <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5">
-        {icons[index]}
-      </g>
-    </svg>
-  );
-}
-
 export default function HomePage() {
-  const [serviceIndex, setServiceIndex] = useState(5);
+  const [serviceIndex, setServiceIndex] = useState(0);
   const [servicesViewportWidth, setServicesViewportWidth] = useState(0);
   const servicesViewportRef = useRef(null);
   const cardsPerView = servicesViewportWidth >= 1024 ? 4 : servicesViewportWidth >= 640 ? 2 : 1;
@@ -99,6 +114,8 @@ export default function HomePage() {
     const viewport = servicesViewportRef.current;
     if (!viewport) return undefined;
 
+    viewport.scrollLeft = 0;
+    setServiceIndex(0);
     const resizeObserver = new ResizeObserver(([entry]) => setServicesViewportWidth(entry.contentRect.width));
     resizeObserver.observe(viewport);
     return () => resizeObserver.disconnect();
@@ -112,10 +129,16 @@ export default function HomePage() {
     <>
       <section
         aria-labelledby="hero-title"
-        className="relative isolate flex min-h-140 items-center overflow-hidden bg-[#031b37] bg-cover bg-center text-white sm:min-h-152.5 lg:min-h-[calc(100svh-84px)]"
+        className="relative isolate flex min-h-140 items-center overflow-hidden bg-[#031b37] text-white sm:min-h-152.5 lg:min-h-[calc(100svh-84px)]"
         id="home"
-        style={{ backgroundImage: `url(${homeBackground})` }}
       >
+        <img
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 h-full w-full object-cover object-center"
+          fetchPriority="high"
+          src={homeBackground}
+        />
         <div className="absolute inset-0 -z-10 bg-linear-to-r from-[#03172f]/95 via-[#031a35]/75 to-[#031a35]/10" />
         <div className="site-container grid grid-cols-1 items-center gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="max-w-152.5">
@@ -184,22 +207,19 @@ export default function HomePage() {
 
       <section
         aria-labelledby="about-title"
-        className="bg-white py-16 sm:py-20 lg:py-24"
+        className="overflow-x-clip bg-white py-16 md:py-24"
         id="about"
       >
-        <div className="site-container grid items-center gap-10 lg:grid-cols-[1.35fr_0.9fr] lg:gap-16">
+        <div className="mx-auto grid max-w-[1240px] items-center gap-10 px-6 lg:grid-cols-[1.35fr_0.9fr] lg:gap-16 lg:px-12">
           <div>
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-[#10c8e0]">
-              About ClinGene
-            </p>
-            <h2
-              className="max-w-200 text-3xl font-bold leading-[1.12] tracking-tight text-[#102744] sm:text-4xl lg:text-[44px]"
+            <SectionHeading
+              compact
+              eyebrow="About US"
               id="about-title"
-            >
-              Pakistan’s Pioneer in{" "}
-              <span className="text-[#10c8e0]">Life Sciences Research</span>
-            </h2>
-            <div className="mt-6 max-w-212.5 space-y-4 text-base leading-7 text-slate-600 sm:text-[17px] sm:leading-[1.9]">
+              highlight="Life Sciences Research"
+              title={<>Pakistan’s Pioneer in<br className="hidden md:block" /></>}
+            />
+            <div className="max-w-212.5 space-y-4 font-inter text-base leading-7 text-slate-600 sm:text-[17px] sm:leading-[1.9]">
               <p>
                 ClinGene (Pvt) Ltd. is a human genetics and precision medicine platform in Pakistan,
                 bringing academic researchers, clinicians, and industrial partners together to
@@ -211,49 +231,83 @@ export default function HomePage() {
                 critical thinking, independent research, and teamwork.
               </p>
             </div>
+            <div className="mt-5 flex flex-wrap gap-2.5">
+              {[
+                { label: "Capacity Development", Icon: GraduationCap },
+                { label: "Critical Thinking", Icon: Lightbulb },
+                { label: "Teamwork", Icon: Users },
+              ].map(({ label, Icon }) => (
+                <span
+                  className="inline-flex items-center gap-2 rounded-full border border-[#12c5df]/30 bg-[#effafc] px-3.5 py-2 font-inter text-[13px] font-medium text-[#0a7a94]"
+                  key={label}
+                >
+                  <Icon aria-hidden="true" className="h-4 w-4 text-[#0a7a94]" strokeWidth={1.8} />
+                  {label}
+                </span>
+              ))}
+            </div>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
-                className="inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-[#10c8e0] px-7 text-sm font-bold text-[#050b1c] shadow-[0_10px_22px_rgba(16,200,224,0.2)] transition-colors hover:bg-[#079bb0]"
+                className="group inline-flex min-h-[48px] items-center justify-center gap-2.5 rounded-full bg-[#12c5df] px-7 font-outfit text-sm font-bold text-[#0c2b48] shadow-[0_10px_22px_rgba(18,197,223,0.2)] transition-colors hover:bg-[#10b5cf] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
                 href="#services"
               >
                 Explore Our Services
-                <span aria-hidden="true" className="text-xl font-normal leading-none">→</span>
+                <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
               </a>
               <a
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#10c8e0]/30 px-7 text-sm font-bold text-[#10c8e0] transition-colors hover:bg-[#10c8e0]/5"
+                className="group inline-flex min-h-[48px] items-center justify-center rounded-full border-[1.5px] border-[#0a7a94] px-7 font-outfit text-sm font-bold text-[#0a7a94] transition-colors hover:bg-[#0a7a94] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
                 href="#contact"
               >
                 Contact Us
               </a>
               <a
-                className="inline-flex min-h-12 items-center gap-2 px-2 text-sm font-bold text-[#10c8e0] transition-colors hover:text-[#10c8e0]"
+                className="group inline-flex min-h-[48px] items-center gap-2.5 px-2 font-outfit text-sm font-bold text-[#0a7a94] transition-colors hover:text-[#0c2b48] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
                 href="#ceo-message"
               >
                 Message from CEO
-                <span aria-hidden="true" className="text-xl font-normal leading-none">→</span>
+                <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
               </a>
             </div>
           </div>
 
-          <div
-            aria-label="ClinGene introduction video preview"
-            className="relative isolate min-h-105 overflow-hidden rounded-[22px] bg-[#071e34] bg-cover bg-center shadow-xl sm:min-h-130 lg:min-h-150"
-            role="img"
-            style={{ backgroundImage: `url(${homeBackground})` }}
-          >
-            <div className="absolute inset-0 -z-10 bg-linear-to-b from-[#06192b]/10 via-[#06192b]/10 to-[#06192b]/90" />
-            <div className="absolute left-1/2 top-1/2 grid h-19 w-19 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-[#10c8e0] shadow-lg">
-              <svg aria-hidden="true" className="ml-1 h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M7 4.8c0-.8.9-1.3 1.6-.9l11.1 7.2a1.1 1.1 0 0 1 0 1.8L8.6 20.1c-.7.4-1.6-.1-1.6-.9V4.8Z" />
-              </svg>
+          <div className="relative isolate w-full pb-30">
+            <div className="absolute -right-3 -top-3 z-0 hidden aspect-3/2 w-full rounded-[28px] border-2 border-[#12c5df]/40 sm:block" />
+            <div className="relative z-0 aspect-3/2 w-full overflow-hidden rounded-[28px] bg-[#071e34] shadow-xl">
+              <img
+                alt="Microscope in a biomedical research setting"
+                className="absolute inset-0 h-full w-full object-cover object-center"
+                loading="lazy"
+                src={microscopeImage}
+              />
+              <div className="absolute inset-0 bg-linear-to-b from-[#031e30]/5 via-transparent to-[#031e30]/35" />
             </div>
-            <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-              <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#10c8e0]">
-                Play
-              </p>
-              <p className="text-lg font-bold text-white sm:text-xl">
-                Watch Our Introduction Video
-              </p>
+            <div className="absolute bottom-0 left-1/2 z-10 w-[90%] -translate-x-1/2 rounded-2xl bg-white px-4 py-4 ring-1 ring-slate-100 shadow-[0_18px_40px_rgba(3,31,49,0.18)] sm:px-5 sm:py-5">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                {[
+                  { label: "Researchers", Icon: UsersRound },
+                  { label: "Clinicians", Icon: Stethoscope },
+                  { label: "Industry Partners", Icon: Building2 },
+                ].map(({ label, Icon }) => (
+                  <div className="flex flex-col items-center gap-2 text-center font-inter text-[#0a7a94]" key={label}>
+                    <span className="grid h-12 w-12 place-items-center rounded-full bg-[#e6f8fb]">
+                      <Icon aria-hidden="true" className="h-6 w-6 text-[#0a7a94]" strokeWidth={1.8} />
+                    </span>
+                    <span className="text-[9px] font-semibold leading-tight sm:text-xs">{label}</span>
+                  </div>
+                ))}
+              </div>
+              <svg aria-hidden="true" className="mt-2 h-8 w-full text-[#12c5df]" fill="none" viewBox="0 0 300 30" preserveAspectRatio="none">
+                <path d="M45 2 C76 2 87 23 150 23 M150 2 V23 M255 2 C224 2 213 23 150 23" stroke="currentColor" strokeDasharray="3 4" strokeLinecap="round" strokeWidth="1.5" />
+              </svg>
+              <div className="mt-1 flex flex-col items-center text-center">
+                <p className="inline-flex items-center gap-2 rounded-full bg-[#0c2b48] px-4 py-1.5 font-outfit text-sm font-bold tracking-[0.18em] text-white">
+                  <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[#12c5df]" />
+                  CLINGENE
+                </p>
+                <p className="mt-2 font-inter text-[12.5px] font-medium leading-snug text-[#4a6e8b]">
+                  Biomedical Research for a Better Tomorrow
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -261,39 +315,41 @@ export default function HomePage() {
 
       <section
         aria-labelledby="services-title"
-        className="relative isolate overflow-hidden bg-[#e8f2fa] py-16 text-[#102744] sm:py-20 lg:py-24"
+        className="relative isolate overflow-hidden bg-[#eaf6fa] py-16 text-[#102744] md:py-24"
         id="key-services"
       >
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_10%,rgba(35,133,209,0.08),transparent_32%),linear-gradient(135deg,#e8f2fa,#dcebf7)]" />
-        <div className="site-container">
-          <div className="mb-12 flex flex-col justify-between gap-6 sm:flex-row sm:items-end lg:mb-14">
-            <div className="max-w-190">
-              <p className="mb-3 inline-flex rounded-full bg-white/70 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#10c8e0]">
-                Our Key Services
-              </p>
-              <h2
-                className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-[42px]"
-                id="services-title"
-              >
-                Comprehensive Genomic Solutions
-              </h2>
-              <p className="mt-4 max-w-175 text-sm leading-6 text-[#4e6d87] sm:text-base">
-                From research to real-world applications, we provide genomic services to help unlock the potential of life’s code.
-              </p>
-            </div>
-            <div className="flex shrink-0 items-center gap-2 self-start sm:self-auto">
-              <span aria-live="polite" className="mr-1 hidden text-xs font-semibold tabular-nums text-[#58748d] sm:inline">
-                {String(serviceIndex + 1).padStart(2, "0")} / {String(services.length).padStart(2, "0")}
-              </span>
-              <a
-                className="ml-2 inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[#b7d0e4] px-3 text-xs font-bold text-[#102744] transition-colors hover:border-[#10c8e0] hover:text-[#10c8e0] sm:min-h-12 sm:gap-3 sm:px-5 sm:text-sm"
-                href="#services"
-              >
-                View All
-                <span aria-hidden="true" className="text-xl font-normal leading-none">→</span>
-              </a>
-            </div>
-          </div>
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_10%,rgba(35,133,209,0.08),transparent_32%),linear-gradient(135deg,#eaf6fa,#eaf6fa)]" />
+        <div className="mx-auto max-w-[1240px] px-6 lg:px-12">
+          <SectionHeading
+            action={{ label: "View All", href: "/services" }}
+            controls={
+              <>
+                <button
+                  aria-label="Previous services"
+                  className="grid h-11 w-11 place-items-center rounded-full bg-white text-[#0c2b48] shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-colors hover:bg-[#10c8e0] hover:text-[#050b1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] disabled:cursor-not-allowed disabled:opacity-40"
+                  disabled={serviceIndex === 0}
+                  onClick={() => goToService(serviceIndex - 1)}
+                  type="button"
+                >
+                  <ChevronLeft aria-hidden="true" size={18} />
+                </button>
+                <button
+                  aria-label="Next services"
+                  className="grid h-11 w-11 place-items-center rounded-full bg-white text-[#0c2b48] shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-colors hover:bg-[#10c8e0] hover:text-[#050b1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] disabled:cursor-not-allowed disabled:opacity-40"
+                  disabled={serviceIndex === services.length - 1}
+                  onClick={() => goToService(serviceIndex + 1)}
+                  type="button"
+                >
+                  <ChevronRight aria-hidden="true" size={18} />
+                </button>
+              </>
+            }
+            description="From research to real-world applications, we provide genomic services to help unlock the potential of life's code."
+            eyebrow="Our Services"
+            id="services-title"
+            highlight="Genomic Solutions"
+            title="Comprehensive"
+          />
 
           <div className="min-w-0">
             <div
@@ -314,23 +370,7 @@ export default function HomePage() {
               aria-label="Genomic services"
               style={{ touchAction: "pan-y" }}
             >
-              <button
-                aria-label="Previous services"
-                className="absolute -left-4 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-[#f1f8fd] text-[#102744] shadow-lg transition-colors hover:bg-[#10c8e0] hover:text-[#050b1c] sm:-left-5"
-                onClick={() => goToService(serviceIndex - 1)}
-                type="button"
-              >
-                <span aria-hidden="true" className="text-2xl leading-none">‹</span>
-              </button>
-              <button
-                aria-label="Next services"
-                className="absolute -right-4 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-[#f1f8fd] text-[#102744] shadow-lg transition-colors hover:bg-[#10c8e0] hover:text-[#050b1c] sm:-right-5"
-                onClick={() => goToService(serviceIndex + 1)}
-                type="button"
-              >
-                <span aria-hidden="true" className="text-2xl leading-none">›</span>
-              </button>
-              <div className="overflow-hidden py-1">
+              <div className="[overflow-x:clip] [overflow-y:visible]">
               <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{
@@ -339,46 +379,38 @@ export default function HomePage() {
                   width: cardWidth ? `${carouselServices.length * cardWidth + (carouselServices.length - 1) * cardGap}px` : "100%",
                 }}
               >
-                {carouselServices.map(({ name: service, description }, index) => {
-                  const serviceIndexForCard = index % services.length;
+                {carouselServices.map((service, index) => {
                   return (
                     <a
-                      className="group flex min-h-100 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] bg-[#f7fbff] text-[#102744] shadow-[0_8px_24px_rgba(29,78,116,0.08)] transition duration-200 hover:-translate-y-1 hover:border-[#10c8e0]/40 hover:shadow-xl"
+                      className="group flex min-h-100 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] bg-[#f7fbff] text-[#102744] shadow-[0_8px_24px_rgba(29,78,116,0.08)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#12c5df] hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12c5df] group-focus-within:-translate-y-1.5 group-focus-within:border-[#12c5df] group-focus-within:shadow-xl motion-reduce:transform-none motion-reduce:transition-none"
                       href="#services"
                       key={`${service}-${index}`}
                       style={{ width: `${cardWidth}px` }}
                     >
-                      <div
-                        aria-hidden="true"
-                        className="h-48.75 shrink-0 bg-[#102943] bg-cover bg-center"
-                        style={{
-                          backgroundImage: `url(${homeBackground})`,
-                          backgroundPosition: `${30 + (serviceIndexForCard % 4) * 15}% center`,
-                        }}
-                      />
+                      <div className="relative aspect-[4/3] w-full min-w-0 overflow-hidden bg-[#102943]">
+                        <img
+                          alt=""
+                          aria-hidden="true"
+                          className={`block h-full w-full object-cover object-center transition-transform duration-300 ease-out motion-reduce:transform-none motion-reduce:transition-none ${
+                            service.name === "Whole Exome/Genome Sequencing"
+                              ? "scale-[1.16] group-hover:scale-[1.24] group-focus-within:scale-[1.24]"
+                              : service.name === "16SrRNA Metagenome Sequencing"
+                                ? "origin-bottom scale-[1.16] group-hover:scale-[1.24] group-focus-within:scale-[1.24]"
+                              : "scale-[1.03] group-hover:scale-110 group-focus-within:scale-110"
+                          }`}
+                          loading="lazy"
+                          src={service.image}
+                        />
+                      </div>
                       <div className="relative flex flex-1 flex-col px-5 pb-5 pt-9">
-                        <span className="absolute -top-7 left-5 grid h-14 w-14 place-items-center rounded-xl border border-[#d4e5f2] bg-[#f7fbff] text-[#2385d1] shadow-sm transition-colors group-hover:bg-[#10c8e0] group-hover:text-[#050b1c]">
-                          <svg aria-hidden="true" className="h-6 w-6" fill="none" viewBox="0 0 24 24">
-                            {serviceIndexForCard % 3 === 0 ? (
-                              <>
-                                <path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8m0-12.8L5.6 18.4" stroke="currentColor" strokeLinecap="round" strokeWidth="1.6" />
-                                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.6" />
-                              </>
-                            ) : serviceIndexForCard % 3 === 1 ? (
-                              <path d="M7 3c10 4 10 14 0 18m10-18C7 7 7 17 17 21M7 3h10M7 21h10M5 8h14m-14 8h14" stroke="currentColor" strokeLinecap="round" strokeWidth="1.6" />
-                            ) : (
-                              <>
-                                <path d="M4 19V5m0 14h16M8 16l3-4 3 2 5-7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" />
-                                <circle cx="19" cy="7" r="1.3" fill="currentColor" />
-                              </>
-                            )}
-                          </svg>
+                        <span className="absolute -top-7 left-5 grid h-14 w-14 place-items-center rounded-xl border border-[#d4e5f2] bg-[#f7fbff] text-[#0a7a94] shadow-sm transition-all duration-300 ease-out group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-[#12c5df] group-hover:text-white group-focus-within:scale-110 group-focus-within:-rotate-6 group-focus-within:bg-[#12c5df] group-focus-within:text-white motion-reduce:transform-none motion-reduce:transition-none">
+                          <service.Icon aria-hidden="true" size={22} strokeWidth={1.8} />
                         </span>
-                        <h3 className="text-base font-bold leading-6 sm:text-[17px]">{service}</h3>
-                        <p className="mt-3 text-sm leading-[1.6] text-[#58748d]">{description}</p>
-                        <span className="mt-auto flex items-center gap-2 pt-5 text-sm font-bold text-[#2385d1]">
+                        <h3 className="mt-4 text-base font-bold leading-6 transition-colors duration-300 ease-out group-hover:text-[#0a5265] group-focus-within:text-[#0a5265] motion-reduce:transition-none sm:text-[17px]">{service.name}</h3>
+                        <p className="mt-3 text-sm leading-[1.6] text-[#58748d]">{service.description}</p>
+                        <span className="mt-auto inline-flex items-center gap-2 whitespace-nowrap pt-5 text-sm font-bold text-[#0a7a94]">
                           Explore
-                          <span aria-hidden="true" className="text-lg leading-none transition-transform group-hover:translate-x-1">→</span>
+                          <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-1 group-focus-within:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
                         </span>
                       </div>
                     </a>
@@ -393,7 +425,7 @@ export default function HomePage() {
               <button
                 aria-current={serviceIndex === index ? "true" : undefined}
                 aria-label={`Show ${service.name}`}
-                className={`h-1.75 rounded-full transition-all duration-300 ${
+                className={`h-1.75 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] motion-reduce:transition-none ${
                   serviceIndex === index
                     ? "w-7 bg-[#10c8e0]"
                     : "w-1.75 bg-[#9aafc1] hover:bg-[#10c8e0]/70"
@@ -409,156 +441,154 @@ export default function HomePage() {
 
       <section
         aria-labelledby="journey-title"
-        className="bg-white py-16 sm:py-20 lg:py-24"
+        className="overflow-x-clip bg-white py-16 md:py-24"
         id="scientific-journey"
       >
-        <div className="site-container">
-          <div className="mb-8 flex items-center justify-start gap-3 text-[#10c8e0]">
-            <svg aria-hidden="true" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.6">
-              <path d="M7 9c1.3-2.2 3.5-3.3 5.5-3.3S15.7 6.8 17 9c-1.3 2.2-3.5 3.3-5.5 3.3S8.3 11.2 7 9Zm10 6c-1.3-2.2-3.5-3.3-5.5-3.3S8.3 12.8 7 15c1.3 2.2 3.5 3.3 5.5 3.3S15.7 17.2 17 15Z" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M12 5.7v12.6M5.5 12h13" strokeLinecap="round" />
-            </svg>
-            <span className="text-[15px] font-semibold uppercase tracking-[0.14em]">Our Work Steps</span>
-          </div>
-
-          <h2
-            className="max-w-330 text-left text-3xl font-bold leading-tight tracking-tight text-[#0b2d3c] sm:text-4xl lg:text-[42px]"
+        <div className="mx-auto max-w-[1240px] px-6 lg:px-12">
+          <SectionHeading
+            description="We turn your biological data into meaningful insights — quickly, accurately and with expert care."
+            eyebrow="Work Steps"
             id="journey-title"
-          >
-            From sample to discovery in four
-            <span className="block">simple steps</span>
-          </h2>
+            highlight="Four simple steps"
+            title="From sample to discovery in"
+          />
 
-          <div className="relative mt-14 sm:mt-16">
-            <div className="pointer-events-none absolute left-23 right-[calc(25%-92px)] top-9 hidden border-t-2 border-dashed border-[#cbd0d4] md:block" />
-            <div className="grid gap-7 md:grid-cols-4 md:gap-0">
-              {[
-                {
-                  number: "01",
-                  title: "Sample Collection",
-                  description: "Blood or DNA samples collected safely and efficiently",
-                },
-                {
-                  number: "02",
-                  title: "Sequencing & Genomic Data",
-                  description: "Advanced sequencing generates high-quality genomic data",
-                },
-                {
-                  number: "03",
-                  title: "Bioinformatics Analysis",
-                  description: "Computational pipelines process and analyze genomic data",
-                },
-                {
-                  number: "04",
-                  title: "Interpretation & Discovery",
-                  description: "Expert interpretation turns results into meaningful scientific and clinical insights",
-                },
-              ].map(({ number, title, description }) => (
-                <div className="group relative flex flex-col items-start" key={title}>
-                  <div className="relative z-10 mx-2 mb-6 flex w-[calc(100%-1rem)] max-w-72 justify-start pl-5 sm:pl-12">
-                    <div
-                      aria-hidden="true"
-                      className="grid h-16 w-16 place-items-center bg-[#f0f0ed] text-[22px] font-black text-[#102744] shadow-[0_6px_14px_rgba(15,23,42,0.07)] transition-colors duration-300 group-hover:bg-[#10c8e0] group-hover:text-[#050b1c] group-focus-within:bg-[#10c8e0] group-focus-within:text-[#050b1c] sm:h-18 sm:w-18"
-                      style={{ clipPath: "polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0% 50%)" }}
-                    >
-                      <span className="translate-y-0.5">{number}</span>
-                    </div>
-                  </div>
-
-                  <div className="relative mx-2 min-h-36 w-[calc(100%-1rem)] max-w-72 px-5 pb-4 pt-1 text-left sm:min-h-40 sm:pl-12 sm:pr-5">
-                    <svg
-                      aria-hidden="true"
-                      className="absolute left-0 top-1/2 z-0 h-10 w-5 -translate-y-1/2 text-[#10c8e0] transition-transform duration-1000 ease-in-out group-hover:-translate-y-[calc(50%+8px)]"
-                      fill="none"
-                      viewBox="0 0 20 40"
-                    >
-                      <path d="M3 2 15 20 3 38" stroke="currentColor" strokeWidth="5" />
-                    </svg>
-                    <span
-                      aria-hidden="true"
-                      className="absolute inset-y-0 left-0 z-10 w-0.5 bg-[#d0d4d7] shadow-[-2px_0_5px_rgba(16,39,68,0.12)]"
-                    />
-                    <h3 className="min-h-12 text-[18px] font-bold leading-tight text-[#102744] sm:min-h-14 sm:text-[21px]">
-                      {title}
-                    </h3>
-
-                    <p className="mt-3 text-[14px] leading-[1.65] text-[#66727b] sm:text-[15px]">
-                      {description}
-                    </p>
+          <div className="relative mt-7 grid gap-x-5 gap-y-5 sm:mt-9 md:grid-cols-2 xl:grid-cols-4 xl:gap-x-0">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-8 hidden border-t-2 border-dashed border-[#cbd0d4] xl:block"
+            />
+            {[
+              {
+                Icon: Droplet,
+                title: "Sample Collection",
+                description: "Blood or DNA samples collected safely and efficiently",
+              },
+              {
+                Icon: Dna,
+                title: "Sequencing & Genomic Data",
+                description: "Advanced sequencing generates high-quality genomic data",
+              },
+              {
+                Icon: BarChart3,
+                title: "Bioinformatics Analysis",
+                description: "Computational pipelines process and analyze genomic data",
+              },
+              {
+                Icon: Lightbulb,
+                title: "Interpretation & Discovery",
+                description: "Expert interpretation turns results into meaningful scientific and clinical insights",
+              },
+            ].map(({ Icon, title, description }, index) => (
+              <div className="group relative xl:px-2" key={title}>
+                <div className="mb-5 flex justify-center">
+                  <div
+                    aria-label={`Step ${index + 1}`}
+                    className="relative z-10 grid h-16 w-[74px] place-items-center bg-[#f0f0ed] text-[22px] font-black text-[#102744] shadow-[0_6px_14px_rgba(15,23,42,0.07)] transition-colors duration-1000 ease-in-out group-hover:bg-[#10c8e0] group-focus-within:bg-[#10c8e0] motion-reduce:transition-none"
+                    role="img"
+                    style={{ clipPath: "polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0% 50%)" }}
+                  >
+                    {String(index + 1).padStart(2, "0")}
                   </div>
                 </div>
-              ))}
-            </div>
+                <article className="flex h-full flex-col rounded-2xl border border-[#d4e5f2] bg-white px-5 py-[17px] shadow-[0_8px_24px_rgba(29,78,116,0.08)] transition-all duration-700 ease-out hover:-translate-y-1 hover:border-[#10c8e0] hover:bg-[#f7fbff] hover:shadow-[0_14px_30px_rgba(12,43,72,0.14)] focus-within:border-[#10c8e0] focus-within:bg-[#f7fbff] focus-within:shadow-[0_14px_30px_rgba(12,43,72,0.14)] motion-reduce:transform-none motion-reduce:transition-none">
+                  <span className="grid h-14 w-14 place-items-center rounded-2xl bg-[#eaf6fa] text-[#0a7a94] transition-colors duration-700 group-hover:bg-[#10c8e0] group-hover:text-[#0c2b48] group-focus-within:bg-[#10c8e0] group-focus-within:text-[#0c2b48]">
+                    <Icon aria-hidden="true" className="h-7 w-7" strokeWidth={1.8} />
+                  </span>
+                  <h3 className="mt-3 text-[18px] font-bold leading-tight text-[#0c2b48] sm:text-[20px]">
+                    {title}
+                  </h3>
+                  <span aria-hidden="true" className="mt-3 h-0.5 w-9 rounded-full bg-[#10c8e0]" />
+                  <p className="mt-3 text-[14px] leading-[1.65] text-[#4a6e8b] sm:text-[15px]">
+                    {description}
+                  </p>
+                </article>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       <section
         aria-labelledby="team-title"
-        className="bg-[#f5f8fb] py-16 sm:py-20 lg:py-24"
+        className="relative isolate overflow-hidden bg-[#eaf6fa] py-16 md:py-24"
         id="team"
       >
-        <div className="site-container">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#10c8e0]">
-            Meet Our Team
-          </p>
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <h2
-              className="text-3xl font-bold leading-tight tracking-tight text-[#102744] sm:text-4xl"
-              id="team-title"
-            >
-              The People Behind ClinGene
-            </h2>
-            <a
-              className="inline-flex items-center gap-2 self-start text-sm font-bold text-[#10c8e0] transition-colors hover:text-[#10c8e0] sm:self-auto"
-              href="#team"
-            >
-              Meet the team
-              <span aria-hidden="true">→</span>
-            </a>
-          </div>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_20%_15%,rgba(255,255,255,0.9),transparent_55%)]" />
+        <div className="mx-auto max-w-[1240px] px-6 lg:px-12">
+          <SectionHeading
+            action={{ label: "View Team", href: "/team" }}
+            description="Scientists, clinicians and bioinformaticians turning genomic research into healthier futures."
+            descriptionClassName="text-slate-600"
+            eyebrow="Our Team"
+            id="team-title"
+            highlight="Scientific Team"
+            title="Meet our"
+          />
 
-          <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-[30px]">
+          <div className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4" id="team-members">
             {[
               {
-                initials: "AA",
-                name: "Dr. Amjad Ali Tanoli",
+                name: "Dr. Amjad Ali Tanoli Ph.D",
                 designation: "CEO",
-                specialty: "Genetics & Precision Medicine",
+                details: ["Human Geneticist", "Consultant Genetic Counselor"],
+                image: amjadPortrait,
               },
               {
-                initials: "SA",
-                name: "Dr. Safdar Ali Tanoli",
-                designation: "Co-CEO",
-                specialty: "Clinical and Genomic Research",
+                name: "Dr. Safdar Ali Tanoli Ph.D",
+                designation: "POSTDOC",
+                details: ["Co-CEO", "Medical Physicist", "Princess Margaret Cancer Research Centre, Toronto, Canada"],
               },
               {
-                initials: "KU",
-                name: "Dr. Kifayat Ullah",
-                designation: "Human Genetics",
-                specialty: "Human Geneticist",
+                name: "Dr. Kifayat Ullah Ph.D",
+                designation: "HUMAN GENETICS",
+                details: [],
               },
-            ].map(({ initials, name, designation, specialty }) => (
+            ].map(({ name, designation, details, image }) => (
               <article
-                className="group rounded-xl bg-white px-6 py-8 text-center shadow-[0_8px_28px_rgba(16,39,68,0.08)] transition duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_18px_36px_rgba(16,39,68,0.16)]"
+                className="flex min-h-[228px] items-center gap-4 rounded-2xl border border-[#d4e5f2] bg-white/85 p-4 shadow-[0_8px_24px_rgba(29,78,116,0.06)] transition-all duration-500 ease-out hover:-translate-y-1 hover:border-[#10c8e0] hover:bg-white hover:shadow-[0_14px_30px_rgba(12,43,72,0.12)] motion-reduce:transform-none motion-reduce:transition-none sm:gap-5"
                 key={name}
               >
-                <div className="mx-auto grid h-[150px] w-[150px] place-items-center overflow-hidden rounded-full border-4 border-white bg-gradient-to-br from-[#dcecf8] to-[#b8d4e8] shadow-[0_4px_18px_rgba(16,39,68,0.14)] transition-transform duration-300 ease-out group-hover:scale-105">
-                  <div className="relative flex h-full w-full flex-col items-center justify-end bg-gradient-to-b from-transparent via-transparent to-[#102744]/10">
-                    <svg aria-hidden="true" className="mb-[-1px] h-[118px] w-[118px] text-[#7191a9]" fill="currentColor" viewBox="0 0 120 120">
-                      <circle cx="60" cy="37" r="22" />
-                      <path d="M18 120c2-31 18-49 42-49s40 18 42 49H18Z" />
-                    </svg>
-                    <span className="absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-[#10c8e0] text-[10px] font-bold text-[#050b1c]">
-                      {initials}
-                    </span>
-                  </div>
+                <div className="relative h-48 w-[38%] max-w-[152px] shrink-0 overflow-hidden rounded-xl bg-[#dceaf2]">
+                  {image ? (
+                    <img
+                      alt={name}
+                      className="h-full w-full object-cover object-[center_20%]"
+                      loading="lazy"
+                      src={image}
+                    />
+                  ) : (
+                    <div aria-label={`Portrait placeholder for ${name}`} className="flex h-full w-full items-end justify-center bg-linear-to-b from-[#dceaf2] to-[#c9dce8]" role="img">
+                      <svg aria-hidden="true" className="h-[94%] w-[94%] text-[#496680]" fill="currentColor" viewBox="0 0 120 150">
+                        <ellipse cx="60" cy="46" rx="24" ry="31" />
+                        <path d="M15 150c3-41 18-62 45-62s42 21 45 62H15Z" />
+                        <path d="M43 89 60 111 77 89l9 61H34l9-61Z" fill="#f1f3f5" />
+                      </svg>
+                    </div>
+                  )}
                 </div>
-                <h3 className="mt-6 text-lg font-bold text-[#102744]">{name}</h3>
-                <p className="mt-1 text-sm font-medium text-slate-500 transition-colors duration-300 group-hover:text-[#0d766e]">
-                  {designation}
-                </p>
-                <p className="mt-3 text-sm text-slate-600">{specialty}</p>
+                <div className="flex min-w-0 flex-1 flex-col items-start self-stretch py-2">
+                  <h3 className="text-[15px] font-bold leading-[1.35] text-[#0c2b48] sm:text-base">
+                    {name}
+                  </h3>
+                  {designation && (
+                    <p className="mt-2 rounded-md bg-[#e5f8fb] px-2 py-1 text-[10px] font-bold uppercase leading-tight tracking-[0.04em] text-[#0a7a94]">
+                      {designation}
+                    </p>
+                  )}
+                  <div className="mt-2 space-y-0.5 text-[12px] leading-[1.45] text-[#4a6e8b] sm:text-[13px]">
+                    {details.map((detail) => <p key={detail}>{detail}</p>)}
+                  </div>
+                  <a
+                    aria-label={`View ${name}`}
+                    className="mt-auto grid h-10 w-10 place-items-center rounded-full border border-[#bdebf2] text-[#0a7a94] transition-all duration-500 hover:border-[#10c8e0] hover:bg-[#10c8e0] hover:text-[#0c2b48] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
+                    href="/team"
+                  >
+                    <svg aria-hidden="true" className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+                      <path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" />
+                    </svg>
+                  </a>
+                </div>
               </article>
             ))}
           </div>
@@ -566,33 +596,25 @@ export default function HomePage() {
       </section>
 
       <section
-        aria-label="Gallery and contact"
-        className="bg-white py-12 sm:py-16 lg:py-20"
+        aria-labelledby="home-gallery-title"
+        className="bg-white py-16 md:py-24"
         id="gallery-contact"
       >
-        <div className="site-container grid items-stretch gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(280px,0.72fr)] lg:gap-6">
+        <div className="mx-auto grid max-w-[1240px] items-stretch gap-5 px-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,0.72fr)] lg:gap-6 lg:px-12">
           <div
-            aria-labelledby="home-gallery-title"
             className="rounded-2xl bg-[#f6f8fb] p-6 sm:p-8"
             id="gallery"
           >
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <h2 className="text-xl font-bold text-[#102744] sm:text-2xl" id="home-gallery-title">
-                  Our Gallery
-                </h2>
-                <p className="mt-1 text-sm text-slate-500">Moments from Our Journey</p>
-              </div>
-              <a
-                className="inline-flex items-center gap-2 text-sm font-bold text-[#2385d1] transition-colors hover:text-[#10c8e0]"
-                href="#gallery"
-              >
-                View All Gallery
-                <span aria-hidden="true" className="text-2xl font-normal leading-none">→</span>
-              </a>
-            </div>
+            <SectionHeading
+              action={{ label: "View All Gallery", href: "/gallery" }}
+              description="Glimpses of our research, training and collaboration."
+              eyebrow="Our Gallery"
+              id="home-gallery-title"
+              highlight="Our Journey"
+              title="Moments from"
+            />
 
-            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               {[
                 { label: "Genomics research", position: "65% center" },
                 { label: "DNA sequencing", position: "82% center" },
@@ -607,6 +629,8 @@ export default function HomePage() {
                   <img
                     alt={label}
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    decoding="async"
+                    loading="lazy"
                     src={homeBackground}
                     style={{ objectPosition: position }}
                   />
@@ -631,33 +655,32 @@ export default function HomePage() {
               Have a question or need assistance? We’re here to help.
             </p>
             <a
-              className="mt-6 inline-flex min-h-11 items-center gap-3 rounded-full bg-[#2385d1] px-5 text-sm font-bold text-white shadow-[0_8px_18px_rgba(35,133,209,0.22)] transition-colors hover:bg-[#10c8e0]"
+              className="mt-6 inline-flex min-h-11 items-center gap-2.5 rounded-full bg-[#2385d1] px-5 text-sm font-bold text-white shadow-[0_8px_18px_rgba(35,133,209,0.22)] transition-colors hover:bg-[#10c8e0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
               href="#contact"
             >
               Contact Us
-              <span aria-hidden="true" className="text-xl font-normal leading-none">→</span>
+              <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </a>
-
             <address className="mt-7 space-y-5 not-italic text-sm leading-6 text-slate-600">
-              <a className="flex items-start gap-3 transition-colors hover:text-[#10c8e0]" href="tel:+92515421056">
+              <a className="flex items-start gap-3 transition-colors hover:text-[#0a7a94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="tel:+92515421056">
                 <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#0d9c9c]" fill="none" viewBox="0 0 24 24">
                   <path d="M5 4h4l2 5-3 2a16 16 0 0 0 5 5l2-3 5 2v4c0 1.1-.9 2-2 2C10.3 21 3 13.7 3 5c0-.6.4-1 1-1Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" />
                 </svg>
-                <span>+92 51 5421056</span>
+                <span>+92-3485607051</span>
               </a>
-              <a className="flex items-start gap-3 break-all transition-colors hover:text-[#10c8e0]" href="mailto:info.alphagenomics@gmail.com">
+              <a className="flex items-start gap-3 break-all transition-colors hover:text-[#0a7a94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="mailto:info.Clinegene@gmail.com">
                 <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#0d9c9c]" fill="none" viewBox="0 0 24 24">
                   <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.7" />
                   <path d="m4 7 8 6 8-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" />
                 </svg>
-                <span>info.alphagenomics@gmail.com</span>
+                <span>info.cline@gmail.com</span>
               </a>
               <div className="flex items-start gap-3">
                 <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#0d9c9c]" fill="none" viewBox="0 0 24 24">
                   <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" strokeLinejoin="round" strokeWidth="1.7" />
                   <circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.7" />
                 </svg>
-                <span>Plot 4-C, Danyal Plaza, Block A, Main Double Road, PWD, Islamabad, Pakistan</span>
+                <span> Street 13, Lane 10, Hostel City, Chatta Bakhtawar, Chak Shahzad, Park Road, Islamabad, Pakistan.</span>
               </div>
             </address>
           </aside>

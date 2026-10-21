@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import clingeneLogo from "./assets/clingene-logo.png";
+import { lazy, Suspense, useEffect, useState } from "react";
 import HeaderNav from "./components/HeaderNav.jsx";
 import SiteFooter from "./components/SiteFooter.jsx";
-import AboutPage from "./pages/AboutPage.jsx";
-import CEOMessagePage from "./pages/CEOMessagePage.jsx";
-import ContactPage from "./pages/ContactPage.jsx";
-import GalleryPage from "./pages/GalleryPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
-import NewsPage from "./pages/NewsPage.jsx";
-import OpenPositionsPage from "./pages/OpenPositionsPage.jsx";
-import ResearchPage from "./pages/ResearchPage.jsx";
-import ServicesPage from "./pages/ServicesPage.jsx";
-import TeamPage from "./pages/TeamPage.jsx";
+
+const AboutPage = lazy(() => import("./pages/AboutPage.jsx"));
+const CEOMessagePage = lazy(() => import("./pages/CEOMessagePage.jsx"));
+const ContactPage = lazy(() => import("./pages/ContactPage.jsx"));
+const GalleryPage = lazy(() => import("./pages/GalleryPage.jsx"));
+const NewsPage = lazy(() => import("./pages/NewsPage.jsx"));
+const OpenPositionsPage = lazy(() => import("./pages/OpenPositionsPage.jsx"));
+const ResearchPage = lazy(() => import("./pages/ResearchPage.jsx"));
+const ServicesPage = lazy(() => import("./pages/ServicesPage.jsx"));
+const TeamPage = lazy(() => import("./pages/TeamPage.jsx"));
 
 const pages = {
   home: { label: "Home", component: HomePage },
@@ -33,8 +33,6 @@ function getCurrentPage() {
 
 export default function App() {
   const [pageId, setPageId] = useState(getCurrentPage);
-  const [loaderPhase, setLoaderPhase] = useState("reveal");
-  const [showLoader, setShowLoader] = useState(true);
   const CurrentPage = pages[pageId].component;
 
   useEffect(() => {
@@ -43,39 +41,18 @@ export default function App() {
     return () => window.removeEventListener("hashchange", updatePage);
   }, []);
 
-  useEffect(() => {
-    const exitTimer = window.setTimeout(() => setLoaderPhase("exit"), 1500);
-    const removeTimer = window.setTimeout(() => setShowLoader(false), 1950);
-
-    return () => {
-      window.clearTimeout(exitTimer);
-      window.clearTimeout(removeTimer);
-    };
-  }, []);
-
   return (
     <>
       <HeaderNav activePage={pages[pageId].label} />
       <main>
-        <CurrentPage />
+        <Suspense fallback={null}>
+          <CurrentPage />
+        </Suspense>
       </main>
-      <SiteFooter showJoinCta={pageId === "home"} />
-      {showLoader && (
-        <div
-          aria-label="Loading ClinGene"
-          aria-live="polite"
-          className={`brand-loader ${loaderPhase === "exit" ? "brand-loader-exit" : ""}`}
-          role="status"
-        >
-          <div className="brand-loader-content">
-            <img
-              alt="ClinGene"
-              className="brand-loader-logo"
-              src={clingeneLogo}
-            />
-          </div>
-        </div>
-      )}
+      <SiteFooter
+        compact={pageId === "ceo-message"}
+        showJoinCta={pageId === "home"}
+      />
     </>
   );
 }
