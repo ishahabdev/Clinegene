@@ -20,11 +20,11 @@ import {
   Sprout,
   Stethoscope,
   TestTubes,
+  UserRound,
   Users,
   UsersRound,
 } from "lucide-react";
 import SectionHeading from "../components/SectionHeading";
-import amjadPortrait from "../assets/photo.jpg";
 import microscopeImage from "../assets/micro.jpg";
 import clinicalTestingImage from "../assets/services/cropped/clinical-genetic-testing.webp";
 import clinicalSampleImage from "../assets/services/cropped/single-cell-rna-seq-analysis.webp";
@@ -210,7 +210,7 @@ export default function HomePage() {
         className="overflow-x-clip bg-white py-16 md:py-24"
         id="about"
       >
-        <div className="mx-auto grid max-w-[1240px] items-center gap-10 px-6 lg:grid-cols-[1.35fr_0.9fr] lg:gap-16 lg:px-12">
+        <div className="mx-auto grid max-w-310 items-center gap-10 px-6 lg:grid-cols-[1.35fr_0.9fr] lg:gap-16 lg:px-12">
           <div>
             <SectionHeading
               compact
@@ -248,20 +248,20 @@ export default function HomePage() {
             </div>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
-                className="group inline-flex min-h-[48px] items-center justify-center gap-2.5 rounded-full bg-[#12c5df] px-7 font-outfit text-sm font-bold text-[#0c2b48] shadow-[0_10px_22px_rgba(18,197,223,0.2)] transition-colors hover:bg-[#10b5cf] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
+                className="group inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full bg-[#12c5df] px-7 font-outfit text-sm font-bold text-[#0c2b48] shadow-[0_10px_22px_rgba(18,197,223,0.2)] transition-colors hover:bg-[#10b5cf] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
                 href="#services"
               >
                 Explore Our Services
                 <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
               </a>
               <a
-                className="group inline-flex min-h-[48px] items-center justify-center rounded-full border-[1.5px] border-[#0a7a94] px-7 font-outfit text-sm font-bold text-[#0a7a94] transition-colors hover:bg-[#0a7a94] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
+                className="group inline-flex min-h-12 items-center justify-center rounded-full border-[1.5px] border-[#0a7a94] px-7 font-outfit text-sm font-bold text-[#0a7a94] transition-colors hover:bg-[#0a7a94] hover:text-white focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
                 href="#contact"
               >
                 Contact Us
               </a>
               <a
-                className="group inline-flex min-h-[48px] items-center gap-2.5 px-2 font-outfit text-sm font-bold text-[#0a7a94] transition-colors hover:text-[#0c2b48] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
+                className="group inline-flex min-h-12 items-center gap-2.5 px-2 font-outfit text-sm font-bold text-[#0a7a94] transition-colors hover:text-[#0c2b48] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
                 href="#ceo-message"
               >
                 Message from CEO
@@ -319,14 +319,14 @@ export default function HomePage() {
         id="key-services"
       >
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_10%,rgba(35,133,209,0.08),transparent_32%),linear-gradient(135deg,#eaf6fa,#eaf6fa)]" />
-        <div className="mx-auto max-w-[1240px] px-6 lg:px-12">
+        <div className="mx-auto max-w-310 px-6 lg:px-12">
           <SectionHeading
             action={{ label: "View All", href: "/services" }}
             controls={
               <>
                 <button
                   aria-label="Previous services"
-                  className="grid h-11 w-11 place-items-center rounded-full bg-white text-[#0c2b48] shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-colors hover:bg-[#10c8e0] hover:text-[#050b1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="grid h-11 w-11 place-items-center rounded-full bg-white text-[#0c2b48] shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-colors hover:bg-[#10c8e0] hover:text-[#050b1c] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] disabled:cursor-not-allowed disabled:opacity-40"
                   disabled={serviceIndex === 0}
                   onClick={() => goToService(serviceIndex - 1)}
                   type="button"
@@ -335,7 +335,7 @@ export default function HomePage() {
                 </button>
                 <button
                   aria-label="Next services"
-                  className="grid h-11 w-11 place-items-center rounded-full bg-white text-[#0c2b48] shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-colors hover:bg-[#10c8e0] hover:text-[#050b1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="grid h-11 w-11 place-items-center rounded-full bg-white text-[#0c2b48] shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-colors hover:bg-[#10c8e0] hover:text-[#050b1c] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] disabled:cursor-not-allowed disabled:opacity-40"
                   disabled={serviceIndex === services.length - 1}
                   onClick={() => goToService(serviceIndex + 1)}
                   type="button"
@@ -370,7 +370,7 @@ export default function HomePage() {
               aria-label="Genomic services"
               style={{ touchAction: "pan-y" }}
             >
-              <div className="[overflow-x:clip] [overflow-y:visible]">
+              <div className="overflow-x-clip overflow-y-visible">
               <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{
@@ -382,12 +382,12 @@ export default function HomePage() {
                 {carouselServices.map((service, index) => {
                   return (
                     <a
-                      className="group flex min-h-100 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] bg-[#f7fbff] text-[#102744] shadow-[0_8px_24px_rgba(29,78,116,0.08)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#12c5df] hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12c5df] group-focus-within:-translate-y-1.5 group-focus-within:border-[#12c5df] group-focus-within:shadow-xl motion-reduce:transform-none motion-reduce:transition-none"
+                      className="group flex min-h-100 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] bg-[#f7fbff] text-[#102744] shadow-[0_12px_30px_rgba(12,43,72,0.18)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#12c5df] hover:shadow-[0_16px_36px_rgba(12,43,72,0.24)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12c5df] group-focus-within:-translate-y-1.5 group-focus-within:border-[#12c5df] group-focus-within:shadow-[0_16px_36px_rgba(12,43,72,0.24)] motion-reduce:transform-none motion-reduce:transition-none"
                       href="#services"
                       key={`${service}-${index}`}
                       style={{ width: `${cardWidth}px` }}
                     >
-                      <div className="relative aspect-[4/3] w-full min-w-0 overflow-hidden bg-[#102943]">
+                      <div className="relative aspect-4/3 w-full min-w-0 overflow-hidden bg-[#102943]">
                         <img
                           alt=""
                           aria-hidden="true"
@@ -425,7 +425,7 @@ export default function HomePage() {
               <button
                 aria-current={serviceIndex === index ? "true" : undefined}
                 aria-label={`Show ${service.name}`}
-                className={`h-1.75 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] motion-reduce:transition-none ${
+                className={`h-1.75 rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] motion-reduce:transition-none ${
                   serviceIndex === index
                     ? "w-7 bg-[#10c8e0]"
                     : "w-1.75 bg-[#9aafc1] hover:bg-[#10c8e0]/70"
@@ -444,7 +444,7 @@ export default function HomePage() {
         className="overflow-x-clip bg-white py-16 md:py-24"
         id="scientific-journey"
       >
-        <div className="mx-auto max-w-[1240px] px-6 lg:px-12">
+        <div className="mx-auto max-w-310 px-6 lg:px-12">
           <SectionHeading
             description="We turn your biological data into meaningful insights — quickly, accurately and with expert care."
             eyebrow="Work Steps"
@@ -484,14 +484,14 @@ export default function HomePage() {
                 <div className="mb-5 flex justify-center">
                   <div
                     aria-label={`Step ${index + 1}`}
-                    className="relative z-10 grid h-16 w-[74px] place-items-center bg-[#f0f0ed] text-[22px] font-black text-[#102744] shadow-[0_6px_14px_rgba(15,23,42,0.07)] transition-colors duration-1000 ease-in-out group-hover:bg-[#10c8e0] group-focus-within:bg-[#10c8e0] motion-reduce:transition-none"
+                    className="relative z-10 grid h-16 w-18.5 place-items-center bg-[#f0f0ed] text-[22px] font-black text-[#102744] shadow-[0_6px_14px_rgba(15,23,42,0.07)] transition-colors duration-1000 ease-in-out group-hover:bg-[#10c8e0] group-focus-within:bg-[#10c8e0] motion-reduce:transition-none"
                     role="img"
                     style={{ clipPath: "polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0% 50%)" }}
                   >
                     {String(index + 1).padStart(2, "0")}
                   </div>
                 </div>
-                <article className="flex h-full flex-col rounded-2xl border border-[#d4e5f2] bg-white px-5 py-[17px] shadow-[0_8px_24px_rgba(29,78,116,0.08)] transition-all duration-700 ease-out hover:-translate-y-1 hover:border-[#10c8e0] hover:bg-[#f7fbff] hover:shadow-[0_14px_30px_rgba(12,43,72,0.14)] focus-within:border-[#10c8e0] focus-within:bg-[#f7fbff] focus-within:shadow-[0_14px_30px_rgba(12,43,72,0.14)] motion-reduce:transform-none motion-reduce:transition-none">
+                <article className="flex h-full flex-col rounded-2xl border border-[#d4e5f2] bg-white px-5 py-4.25 shadow-[0_8px_24px_rgba(29,78,116,0.08)] transition-all duration-700 ease-out hover:-translate-y-1 hover:border-[#10c8e0] hover:bg-[#f7fbff] hover:shadow-[0_14px_30px_rgba(12,43,72,0.14)] focus-within:border-[#10c8e0] focus-within:bg-[#f7fbff] focus-within:shadow-[0_14px_30px_rgba(12,43,72,0.14)] motion-reduce:transform-none motion-reduce:transition-none">
                   <span className="grid h-14 w-14 place-items-center rounded-2xl bg-[#eaf6fa] text-[#0a7a94] transition-colors duration-700 group-hover:bg-[#10c8e0] group-hover:text-[#0c2b48] group-focus-within:bg-[#10c8e0] group-focus-within:text-[#0c2b48]">
                     <Icon aria-hidden="true" className="h-7 w-7" strokeWidth={1.8} />
                   </span>
@@ -515,7 +515,7 @@ export default function HomePage() {
         id="team"
       >
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_20%_15%,rgba(255,255,255,0.9),transparent_55%)]" />
-        <div className="mx-auto max-w-[1240px] px-6 lg:px-12">
+        <div className="mx-auto max-w-310 px-6 lg:px-12">
           <SectionHeading
             action={{ label: "View Team", href: "/team" }}
             description="Scientists, clinicians and bioinformaticians turning genomic research into healthier futures."
@@ -532,7 +532,6 @@ export default function HomePage() {
                 name: "Dr. Amjad Ali Tanoli Ph.D",
                 designation: "CEO",
                 details: ["Human Geneticist", "Consultant Genetic Counselor"],
-                image: amjadPortrait,
               },
               {
                 name: "Dr. Safdar Ali Tanoli Ph.D",
@@ -546,10 +545,10 @@ export default function HomePage() {
               },
             ].map(({ name, designation, details, image }) => (
               <article
-                className="flex min-h-[228px] items-center gap-4 rounded-2xl border border-[#d4e5f2] bg-white/85 p-4 shadow-[0_8px_24px_rgba(29,78,116,0.06)] transition-all duration-500 ease-out hover:-translate-y-1 hover:border-[#10c8e0] hover:bg-white hover:shadow-[0_14px_30px_rgba(12,43,72,0.12)] motion-reduce:transform-none motion-reduce:transition-none sm:gap-5"
+                className="flex min-h-57 items-center gap-4 rounded-2xl border border-[#d4e5f2] bg-white/85 p-4 shadow-[0_8px_24px_rgba(29,78,116,0.06)] transition-all duration-500 ease-out hover:-translate-y-1 hover:border-[#10c8e0] hover:bg-white hover:shadow-[0_14px_30px_rgba(12,43,72,0.12)] motion-reduce:transform-none motion-reduce:transition-none sm:gap-5"
                 key={name}
               >
-                <div className="relative h-48 w-[38%] max-w-[152px] shrink-0 overflow-hidden rounded-xl bg-[#dceaf2]">
+                <div className="relative h-48 w-[38%] max-w-38 shrink-0 overflow-hidden rounded-xl bg-[#dceaf2]">
                   {image ? (
                     <img
                       alt={name}
@@ -558,12 +557,8 @@ export default function HomePage() {
                       src={image}
                     />
                   ) : (
-                    <div aria-label={`Portrait placeholder for ${name}`} className="flex h-full w-full items-end justify-center bg-linear-to-b from-[#dceaf2] to-[#c9dce8]" role="img">
-                      <svg aria-hidden="true" className="h-[94%] w-[94%] text-[#496680]" fill="currentColor" viewBox="0 0 120 150">
-                        <ellipse cx="60" cy="46" rx="24" ry="31" />
-                        <path d="M15 150c3-41 18-62 45-62s42 21 45 62H15Z" />
-                        <path d="M43 89 60 111 77 89l9 61H34l9-61Z" fill="#f1f3f5" />
-                      </svg>
+                    <div aria-label={`Portrait placeholder for ${name}`} className="flex h-full w-full items-center justify-center bg-linear-to-b from-[#dceaf2] to-[#c9dce8]" role="img">
+                      <UserRound aria-hidden="true" className="h-20 w-20 text-[#496680]" strokeWidth={1.2} />
                     </div>
                   )}
                 </div>
@@ -581,7 +576,7 @@ export default function HomePage() {
                   </div>
                   <a
                     aria-label={`View ${name}`}
-                    className="mt-auto grid h-10 w-10 place-items-center rounded-full border border-[#bdebf2] text-[#0a7a94] transition-all duration-500 hover:border-[#10c8e0] hover:bg-[#10c8e0] hover:text-[#0c2b48] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
+                    className="mt-auto grid h-10 w-10 place-items-center rounded-full border border-[#bdebf2] text-[#0a7a94] transition-all duration-500 hover:border-[#10c8e0] hover:bg-[#10c8e0] hover:text-[#0c2b48] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
                     href="/team"
                   >
                     <svg aria-hidden="true" className="h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -600,7 +595,7 @@ export default function HomePage() {
         className="bg-white py-16 md:py-24"
         id="gallery-contact"
       >
-        <div className="mx-auto grid max-w-[1240px] items-stretch gap-5 px-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,0.72fr)] lg:gap-6 lg:px-12">
+        <div className="mx-auto grid max-w-310 items-stretch gap-5 px-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,0.72fr)] lg:gap-6 lg:px-12">
           <div
             className="rounded-2xl bg-[#f6f8fb] p-6 sm:p-8"
             id="gallery"
@@ -655,20 +650,20 @@ export default function HomePage() {
               Have a question or need assistance? We’re here to help.
             </p>
             <a
-              className="mt-6 inline-flex min-h-11 items-center gap-2.5 rounded-full bg-[#2385d1] px-5 text-sm font-bold text-white shadow-[0_8px_18px_rgba(35,133,209,0.22)] transition-colors hover:bg-[#10c8e0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
+              className="mt-6 inline-flex min-h-11 items-center gap-2.5 rounded-full bg-[#2385d1] px-5 text-sm font-bold text-white shadow-[0_8px_18px_rgba(35,133,209,0.22)] transition-colors hover:bg-[#10c8e0] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
               href="#contact"
             >
               Contact Us
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </a>
             <address className="mt-7 space-y-5 not-italic text-sm leading-6 text-slate-600">
-              <a className="flex items-start gap-3 transition-colors hover:text-[#0a7a94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="tel:+92515421056">
+              <a className="flex items-start gap-3 transition-colors hover:text-[#0a7a94] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="tel:+92515421056">
                 <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#0d9c9c]" fill="none" viewBox="0 0 24 24">
                   <path d="M5 4h4l2 5-3 2a16 16 0 0 0 5 5l2-3 5 2v4c0 1.1-.9 2-2 2C10.3 21 3 13.7 3 5c0-.6.4-1 1-1Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" />
                 </svg>
                 <span>+92-3485607051</span>
               </a>
-              <a className="flex items-start gap-3 break-all transition-colors hover:text-[#0a7a94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="mailto:info.Clinegene@gmail.com">
+              <a className="flex items-start gap-3 break-all transition-colors hover:text-[#0a7a94] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="mailto:info.Clinegene@gmail.com">
                 <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#0d9c9c]" fill="none" viewBox="0 0 24 24">
                   <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.7" />
                   <path d="m4 7 8 6 8-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" />

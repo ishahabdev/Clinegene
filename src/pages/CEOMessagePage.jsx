@@ -1,8 +1,8 @@
 import home1 from "../assets/home1.png";
-import photo from "../assets/photo.jpg";
 import micro from "../assets/micro.jpg";
 import sig from "../assets/sig.png";
 import dnaStrand from "../assets/dna_strand.png";
+import { UserRound } from "lucide-react";
 
 const C = {
   cyan: "#12c5df",
@@ -19,8 +19,8 @@ function Hero() {
   className="absolute inset-y-0 right-0 hidden w-[68%] bg-cover bg-left md:block"
   style={{ backgroundImage: `url(${home1})` }}
 />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#031f31] from-[34%] via-[#031f31]/75 to-transparent to-[75%]" />
-      <div className="relative mx-auto max-w-[1240px] px-6 pb-9 pt-10 lg:px-12">
+      <div className="absolute inset-0 bg-linear-to-r from-[#031f31] from-34% via-[#031f31]/75 to-transparent to-75%" />
+      <div className="relative mx-auto max-w-310 px-6 pb-9 pt-10 lg:px-12">
         <div className="mb-6 flex items-center gap-2.5 text-[12px] font-medium text-[#12c5df]">
           <a href="/" className="hover:underline">
             Home
@@ -74,13 +74,15 @@ function ProfileSidebar() {
         </svg>
 
         {/* Card Content */}
-        <div className="relative z-10 overflow-hidden rounded-[20px] bg-gradient-to-b from-[#032236] to-[#043a50] shadow-[0_16px_36px_rgba(2,24,38,0.32)]">
-          <img
-            src={photo}
-            alt="Dr. Amjad Ali Tanoli Ph.D"
-            className="block w-full object-cover object-top aspect-[4/3.8]"
-          />
-          <div className="p-5 bg-gradient-to-b from-[#032439] to-[#04374d] text-white">
+        <div className="relative z-10 overflow-hidden rounded-[20px] bg-linear-to-b from-[#032236] to-[#043a50] shadow-[0_16px_36px_rgba(2,24,38,0.32)]">
+          <div
+            aria-label="Portrait placeholder for Dr. Amjad Ali Tanoli Ph.D"
+            className="flex aspect-[4/3.8] w-full items-center justify-center bg-linear-to-b from-[#dceaf2] to-[#c9dce8]"
+            role="img"
+          >
+            <UserRound aria-hidden="true" className="h-24 w-24 text-[#496680]" strokeWidth={1.2} />
+          </div>
+          <div className="p-5 bg-linear-to-b from-[#032439] to-[#04374d] text-white">
             <h3 className="font-['Outfit',sans-serif] text-[17px] font-bold tracking-tight text-white">
               Dr. Amjad Ali Tanoli Ph.D
             </h3>
@@ -91,13 +93,13 @@ function ProfileSidebar() {
               <p>Human Geneticist</p>
               <p>Consultant Genetic Counselor</p>
             </div>
-            <div className="mt-3.5 h-[2px] w-9 rounded-full bg-[#12c5df]" />
+            <div className="mt-3.5 h-0.5 w-9 rounded-full bg-[#12c5df]" />
           </div>
         </div>
       </div>
 
       {/* 2. OUR VISION Card */}
-      <div className="relative isolate overflow-hidden rounded-[20px] p-5 text-white bg-gradient-to-br from-[#022a3f] via-[#03445b] to-[#055c75] shadow-[0_14px_32px_rgba(2,24,38,0.25)] min-h-[175px] flex flex-col justify-between">
+      <div className="relative isolate overflow-hidden rounded-[20px] p-5 text-white bg-linear-to-br from-[#022a3f] via-[#03445b] to-[#055c75] shadow-[0_14px_32px_rgba(2,24,38,0.25)] min-h-43.75 flex flex-col justify-between">
         {/* DNA Graphic background */}
         <div
           className="pointer-events-none absolute inset-0 bg-cover bg-no-repeat opacity-25 mix-blend-screen"
@@ -108,7 +110,7 @@ function ProfileSidebar() {
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#00121f]/45 via-[#00121f]/20 to-white/10"
+          className="pointer-events-none absolute inset-0 bg-linear-to-r from-[#00121f]/45 via-[#00121f]/20 to-white/10"
         />
 
         <div className="relative z-10">
@@ -130,11 +132,11 @@ function ProfileSidebar() {
           <div className="text-[10px] font-bold tracking-[0.22em] text-[#12c5df] uppercase">
             OUR VISION
           </div>
-          <p className="mt-2 text-[12px] leading-relaxed text-[#e5f4f8] max-w-[210px]">
+          <p className="mt-2 text-[12px] leading-relaxed text-[#e5f4f8] max-w-52.5">
             To be a leading hub for human genetics and biomedical research in
             Pakistan and beyond.
           </p>
-          <div className="mt-3.5 h-[2px] w-9 rounded-full bg-[#12c5df]" />
+          <div className="mt-3.5 h-0.5 w-9 rounded-full bg-[#12c5df]" />
         </div>
 
         {/* Circular Arrow Button */}
@@ -169,7 +171,7 @@ function CeoMessageBody() {
       {/* Eyebrow with cyan line */}
       <div className="flex items-center gap-3 text-[10px] font-bold tracking-[0.25em] text-[#0d9db3] uppercase">
         <span>A MESSAGE FROM OUR CEO</span>
-        <span className="h-[2px] w-9 bg-[#12c5df]" />
+        <span className="h-0.5 w-9 bg-[#12c5df]" />
       </div>
 
       {/* Heading */}
@@ -222,7 +224,7 @@ function CeoMessageBody() {
 /* ─── Quote Card with DNA Watermark ─── */
 function QuoteCard() {
   return (
-    <div className="relative flex flex-col justify-between overflow-hidden rounded-[22px] px-5 py-6 text-[#1e456c] bg-gradient-to-b from-[#eaf8fc] to-[#d7f2f7] shadow-[0_10px_28px_rgba(18,197,223,0.12)] min-h-[300px] lg:min-h-[330px] w-full">
+    <div className="relative flex flex-col justify-between overflow-hidden rounded-[22px] px-5 py-5 text-[#1e456c] bg-linear-to-b from-[#eaf8fc] to-[#d7f2f7] shadow-[0_10px_28px_rgba(18,197,223,0.12)] min-h-68.75 lg:min-h-76.25 w-full">
       {/* 3D DNA Helix Watermark anchored at bottom-right */}
       <img
         src={dnaStrand}
@@ -239,7 +241,7 @@ function QuoteCard() {
         </div>
 
         {/* Quote text */}
-        <p className="mt-5 text-[17px] md:text-[18px] font-medium leading-[1.55] text-[#1e456c]">
+        <p className="mt-5 text-[17px] md:text-[18px] font-medium leading-[1.7] text-[#1e456c]">
           “Better research today, healthier generations tomorrow.”
         </p>
 
@@ -297,7 +299,7 @@ const pillarsData = [
 
 function Pillars() {
   return (
-    <div className="mx-auto mt-14 grid max-w-[1140px] grid-cols-2 gap-y-8 rounded-2xl px-6 py-8 lg:grid-cols-4 bg-[#eff9fc]">
+    <div className="mx-auto mt-14 grid max-w-285 grid-cols-2 gap-y-8 rounded-2xl px-6 py-8 lg:grid-cols-4 bg-[#eff9fc]">
       {pillarsData.map(({ title, desc, icon }, idx) => (
         <div
           key={title}
@@ -305,7 +307,7 @@ function Pillars() {
             idx ? "lg:border-l lg:border-slate-200" : ""
           }`}
         >
-          <div className="mx-auto flex h-[54px] w-[54px] items-center justify-center rounded-full bg-[#d4f3f7] text-[#0b8aa6]">
+          <div className="mx-auto flex h-13.5 w-13.5 items-center justify-center rounded-full bg-[#d4f3f7] text-[#0b8aa6]">
             <svg
               width="26"
               height="26"
@@ -322,7 +324,7 @@ function Pillars() {
           <div className="mt-3 font-['Outfit',sans-serif] text-[14px] font-bold text-[#0c2b48]">
             {title}
           </div>
-          <p className="mx-auto mt-1.5 max-w-[180px] text-[11.5px] leading-relaxed text-[#557b9c]">
+          <p className="mx-auto mt-1.5 max-w-45 text-[11.5px] leading-relaxed text-[#557b9c]">
             {desc}
           </p>
         </div>
@@ -346,7 +348,7 @@ function Commitment() {
           }}
         />
         {/* Soft horizontal gradient fade into the background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#01192b]/30 to-[#01192b]" />
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-[#01192b]/30 to-[#01192b]" />
       </div>
 
       {/* 2. Main microscope on the right: fits the div completely from top to bottom and right edge */}
@@ -370,11 +372,10 @@ function Commitment() {
       </div>
 
       {/* 3. Subtle dark overlay on the left for maximum text readability */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#01192b]/70 via-[#01192b]/20 to-transparent" />
-
-      <div className="relative mx-auto flex min-h-[260px] max-w-[1200px] items-center px-6 py-12 lg:px-[56px]">
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-r from-[#01192b]/70 via-[#01192b]/20 to-transparent" />
+      <div className="relative mx-auto flex min-h-65 max-w-300 items-center px-6 py-12 lg:px-14">
         {/* Left text content */}
-        <div className="max-w-[420px]">
+        <div className="max-w-105">
           <div className="flex items-center gap-3 text-[10px] font-semibold tracking-[0.3em] text-[#12c5df]">
             <span className="h-px w-9 bg-[#12c5df]" />
             OUR COMMITMENT
@@ -390,18 +391,18 @@ function Commitment() {
           </p>
           <a
             href="#research"
-            className="mt-6 inline-flex items-center gap-3 rounded-full bg-[#12c5df] px-6 py-3 text-[12px] font-semibold text-[#01192b] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="mt-6 inline-flex items-center gap-3 rounded-full bg-[#12c5df] px-6 py-3 text-[12px] font-semibold text-[#01192b] transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             Explore Our Research <span>→</span>
           </a>
         </div>
 
         {/* The three-word handwritten tagline in the middle */}
-        <div className="pointer-events-none absolute left-[49%] top-[36%] hidden -rotate-[18deg] font-['Mrs_Saint_Delafield',cursive] text-[38px] leading-[0.95] text-white/90 lg:block">
+        <div className="pointer-events-none absolute left-[49%] top-[36%] hidden rotate-[-18deg] font-['Mrs_Saint_Delafield',cursive] text-[38px] leading-[1.2] text-white/90 lg:block">
           Science<br />
           <span className="ml-3 block">Collaboration</span>
           <span className="ml-8 block">Impact</span>
-          <span className="ml-5 mt-3 block h-[2px] w-[36px] rotate-[10deg] bg-[#12c5df]" />
+          <span className="ml-5 mt-3 block h-0.5 w-9 rotate-10 bg-[#12c5df]" />
         </div>
       </div>
     </section>
@@ -415,7 +416,7 @@ export default function CeoMessagePage() {
       <Hero />
 
       <main className="pb-8 pt-12">
-        <div className="mx-auto grid max-w-[1140px] items-start gap-8 px-6 lg:grid-cols-[290px_1fr_210px] lg:gap-8">
+        <div className="mx-auto grid max-w-285 items-start gap-8 px-6 lg:grid-cols-[290px_1fr_210px] lg:gap-8">
           <ProfileSidebar />
           <CeoMessageBody />
           <div className="lg:self-center">
