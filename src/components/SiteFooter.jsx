@@ -1,3 +1,5 @@
+import Button from "./Button.jsx";
+
 const clingeneLogo = "/images/clingene-logo.webp";
 const homeBackground = "/images/home1.webp";
 
@@ -69,13 +71,9 @@ export default function SiteFooter({ compact = false, showJoinCta }) {
                 Be a part of our mission to advance human genetics and biomedical research.
               </p>
             </div>
-            <a
-              className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 self-start rounded-full bg-[#10c8e0] px-5 text-xs font-bold text-[#050b1c] transition-colors hover:bg-[#079bb0] sm:self-center"
-              href="#open-positions"
-            >
-              View Open Positions
-              <span aria-hidden="true">→</span>
-            </a>
+            <Button className="!min-h-10 shrink-0 !px-5 text-xs self-start sm:self-center" href="#open-positions">
+              View Open Positions <span aria-hidden="true">→</span>
+            </Button>
           </div>
         )}
 

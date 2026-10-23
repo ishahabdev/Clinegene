@@ -1,3 +1,5 @@
+import Button from "../components/Button.jsx";
+
 const homeBackground = "/images/home1.webp";
 
 const contactPhone = "+92-3485607051";
@@ -147,7 +149,7 @@ export default function ContactPage() {
               <label htmlFor="contact-message">Message</label>
               <textarea id="contact-message" name="message" placeholder="How can we help?" required rows="5" />
 
-              <button className="contact-submit" type="submit">Send Message <span aria-hidden="true">→</span></button>
+              <Button className="contact-submit hover:!text-white focus-visible:!text-white" type="submit" variant="cyan">Send Message <span aria-hidden="true">→</span></Button>
               <p className="contact-form-note">Your email app will open with your message ready to send.</p>
             </form>
           </div>

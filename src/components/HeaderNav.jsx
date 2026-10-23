@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "./Button";
 
 const clingeneLogo = "/images/clingene-logo.webp";
 
@@ -43,22 +44,20 @@ export default function HeaderNav({ activePage }) {
     <a
       key={label}
       aria-current={activePage === label ? "page" : undefined}
-      className={`relative whitespace-nowrap py-2 text-[13px] font-medium transition-colors hover:text-[#0a7a94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${
-        activePage === label
-          ? "text-[#0a7a94] after:absolute after:inset-x-0 after:-bottom-0.75 after:h-0.5 after:bg-[#10c8e0]"
-          : "text-[#1f2937]"
-      }`}
+      className={`whitespace-nowrap py-2 text-[13px] font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${activePage === label ? "text-[#0a7a94]" : "text-[#1f2937]"}`}
       href={href}
       onClick={() => setMenuOpen(false)}
     >
-      {label}
+      <span className="group relative inline-block">
+        {label}
+        <span aria-hidden="true" className={`absolute -bottom-2 left-0 h-0.5 w-full bg-[#10c8e0] transition-transform duration-300 ${activePage === label ? "scale-x-100 origin-left" : "scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left"}`} />
+      </span>
     </a>
   );
 
   return (
     <header
       className="relative z-10 w-full border-b border-slate-100 bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]"
-      data-theme={activePage === "CEO Message" ? "ceo" : undefined}
     >
       <div className="mx-auto flex min-h-19 max-w-360 items-center justify-between gap-4 px-4 sm:px-6 lg:min-h-21 lg:px-10">
         <a aria-label="Clingene home" className="shrink-0" href="#home">
@@ -74,30 +73,25 @@ export default function HeaderNav({ activePage }) {
         </nav>
 
         <div className="hidden shrink-0 items-center gap-4 min-[1200px]:flex">
-          <button
+          <Button
             aria-label="Search"
-            className="grid h-9 w-9 place-items-center rounded-full border border-slate-100 text-slate-600 transition-colors hover:border-slate-300 hover:text-[#10c8e0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
-            type="button"
+            className="!h-9 !min-h-9 !w-9 !rounded-full !border !border-slate-100 !p-0 !text-slate-600 hover:!border-slate-300 hover:!text-white"
+            variant="white"
           >
             <SearchIcon />
-          </button>
-          <a
-            className="rounded-full bg-[#10c8e0] px-5 py-[11px] text-[11px] font-bold text-[#050b1c] shadow-sm transition-colors hover:bg-[#079bb0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
-            href="#contact"
-          >
-            Contact Us
-          </a>
+          </Button>
+          <Button className="!min-h-0 !px-5 !py-[11px] !text-[11px]" href="#contact">Contact Us</Button>
         </div>
 
-        <button
+        <Button
           aria-expanded={menuOpen}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-700 transition-colors hover:border-[#10c8e0] hover:text-[#10c8e0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] min-[1200px]:hidden"
+          className="!h-10 !min-h-10 !w-10 !shrink-0 !rounded-full !border !border-slate-200 !p-0 !text-slate-700 hover:!text-white min-[1200px]:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
-          type="button"
+          variant="white"
         >
           <MenuIcon open={menuOpen} />
-        </button>
+        </Button>
       </div>
 
       {menuOpen && (
@@ -110,22 +104,25 @@ export default function HeaderNav({ activePage }) {
               <a
                 key={link.label}
                 aria-current={activePage === link.label ? "page" : undefined}
-                className={`rounded-md px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-50 hover:text-[#0a7a94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${
+                className={`group rounded-md px-3 py-2.5 text-sm font-semibold hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${
                   activePage === link.label ? "text-[#0a7a94]" : "text-slate-700"
                 }`}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
               >
-                {link.label}
+                <span className="relative inline-block">
+                  {link.label}
+                  <span aria-hidden="true" className={`absolute -bottom-0.5 left-0 h-0.5 w-full bg-[#10c8e0] transition-transform duration-300 ${activePage === link.label ? "scale-x-100 origin-left" : "scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left"}`} />
+                </span>
               </a>
             ))}
-            <a
-              className="mt-2 rounded-full bg-[#10c8e0] px-5 py-3 text-center text-sm font-bold text-[#050b1c] transition-colors hover:bg-[#079bb0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
+            <Button
+              className="mt-2 !w-full !py-3 text-center"
               href="#contact"
               onClick={() => setMenuOpen(false)}
             >
               Contact Us
-            </a>
+            </Button>
           </div>
         </nav>
       )}

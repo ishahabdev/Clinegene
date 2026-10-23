@@ -1,3 +1,5 @@
+import Button from "./Button.jsx";
+
 export default function UnderConstructionPage({ pageTitle }) {
   return (
     <section
@@ -17,9 +19,9 @@ export default function UnderConstructionPage({ pageTitle }) {
           We’re working on this page and will share updates as soon as it’s ready.
           Please check back soon.
         </p>
-        <a className="construction-home-link" href="#home">
+        <Button className="construction-home-link" href="#home">
           Return to Home <span aria-hidden="true">→</span>
-        </a>
+        </Button>
       </div>
     </section>
   );

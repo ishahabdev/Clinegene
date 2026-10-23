@@ -2,7 +2,8 @@ import home1 from "../assets/home1.png";
 import micro from "../assets/micro.jpg";
 import sig from "../assets/sig.png";
 import dnaStrand from "../assets/dna_strand.png";
-import { UserRound } from "lucide-react";
+import { ArrowRight, UserRound } from "lucide-react";
+import Button from "../components/Button.jsx";
 
 const C = {
   cyan: "#12c5df",
@@ -139,25 +140,6 @@ function ProfileSidebar() {
           <div className="mt-3.5 h-0.5 w-9 rounded-full bg-[#12c5df]" />
         </div>
 
-        {/* Circular Arrow Button */}
-        <a
-          href="#vision"
-          className="absolute bottom-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-[#12c5df]/60 bg-[#06384c]/70 text-[#12c5df] transition hover:scale-105 hover:bg-[#12c5df] hover:text-[#022338]"
-          aria-label="Our Vision details"
-        >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        </a>
       </div>
     </div>
   );
@@ -389,12 +371,9 @@ function Commitment() {
             research, collaboration and capacity building. Our work today lays
             the foundation for healthier communities and a brighter future.
           </p>
-          <a
-            href="#research"
-            className="mt-6 inline-flex items-center gap-3 rounded-full bg-[#12c5df] px-6 py-3 text-[12px] font-semibold text-[#01192b] transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            Explore Our Research <span>→</span>
-          </a>
+          <Button className="mt-6 !text-[12px]" href="#research">
+            Explore Our Research <ArrowRight aria-hidden="true" className="h-4 w-4" strokeWidth={2.5} />
+          </Button>
         </div>
 
         {/* The three-word handwritten tagline in the middle */}
@@ -429,25 +408,6 @@ export default function CeoMessagePage() {
 
       <Commitment />
 
-      {/* Floating Bottom Scroll Button as seen in reference */}
-      <a
-        href="#top"
-        className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-black text-white shadow-2xl transition hover:scale-105"
-        aria-label="Scroll to top"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M12 5v14M19 12l-7 7-7-7" />
-        </svg>
-      </a>
     </div>
   );
 }

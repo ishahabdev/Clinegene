@@ -1,4 +1,5 @@
 import { ArrowRight, Dna, Play, ShieldPlus } from "lucide-react";
+import Button from "../components/Button.jsx";
 import SectionHeading from "../components/SectionHeading";
 import serviceHero from "../assets/Service hero.jpg";
 import services from "../data/services";
@@ -40,13 +41,10 @@ export default function ServicesPage() {
               health and discovery.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-4">
-              <a
-                className="group inline-flex min-h-11 items-center justify-center gap-3 rounded-full bg-[#10c8e0] px-6 font-inter text-xs font-bold text-[#031b37] shadow-[0_8px_22px_rgba(16,200,224,0.28)] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                href="#service-catalog"
-              >
+              <Button className="font-inter" href="#service-catalog">
                 Explore Services
                 <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
-              </a>
+              </Button>
               <a
                 className="group inline-flex min-h-11 items-center gap-2.5 font-inter text-xs font-semibold text-white transition-colors hover:text-[#12c5df] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 href="#contact"
@@ -92,13 +90,10 @@ export default function ServicesPage() {
                 clear descriptions of the work each service supports.
               </p>
             </div>
-            <a
-              className="group inline-flex items-center gap-2 rounded-full border border-[#9edce7] px-4 py-2.5 font-inter text-xs font-bold text-[#0a7a94] transition-colors hover:bg-[#10c8e0] hover:text-[#0c2b48] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
-              href="#contact"
-            >
+            <Button className="!min-h-0 !border-[#9edce7] !px-4 !py-2.5 font-inter !text-[#0a7a94]" href="#contact" variant="transparent">
               Contact ClinGene
               <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
-            </a>
+            </Button>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {services.map(({ name, description, Icon, image }, index) => (
@@ -143,13 +138,10 @@ export default function ServicesPage() {
                 Contact our team to discuss your sample, project goals and the services that fit your work.
               </p>
             </div>
-            <a
-              className="group mt-5 inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-[#10c8e0] px-5 font-inter text-xs font-bold text-[#031b37] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:mt-0"
-              href="#contact"
-            >
+            <Button className="mt-5 shrink-0 !px-5 font-inter sm:mt-0" href="#contact">
               Contact our team
               <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
-            </a>
+            </Button>
           </div>
         </div>
       </section>
