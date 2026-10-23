@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { ArrowRight } from "lucide-react";
+import ScrollReveal from "./ScrollReveal.jsx";
 
 export default function SectionHeading({
   eyebrow,
@@ -19,7 +20,8 @@ export default function SectionHeading({
   const headingId = id || generatedId;
 
   return (
-    <div
+    <ScrollReveal
+      as="div"
       className={`${compact ? "mb-5" : "mb-10"} flex flex-wrap items-end justify-between gap-6 ${
         center ? "flex-col items-center text-center" : ""
       }`}
@@ -77,6 +79,6 @@ export default function SectionHeading({
           )}
         </div>
       )}
-    </div>
+    </ScrollReveal>
   );
 }

@@ -1,4 +1,5 @@
 import Button from "../components/Button.jsx";
+import ScrollReveal from "../components/ScrollReveal.jsx";
 
 const homeBackground = "/images/home1.webp";
 
@@ -82,7 +83,7 @@ export default function ContactPage() {
         <div className="site-container contact-hero-content">
           <p className="contact-breadcrumb"><a href="#home">Home</a><span aria-hidden="true">›</span> Contact</p>
           <p className="contact-eyebrow">We’re here to help</p>
-          <h1 id="contact-page-title">Contact Us</h1>
+          <ScrollReveal as="h1" id="contact-page-title">Contact Us</ScrollReveal>
           <p>Have a question about our research or services? Get in touch with the ClinGene team.</p>
         </div>
       </section>
@@ -90,8 +91,10 @@ export default function ContactPage() {
       <section aria-label="ClinGene contact details" className="contact-details-section">
         <div className="site-container contact-cards">
           {contactCards.map((card, index) => (
-            <article
+            <ScrollReveal
+              as="article"
               className={`contact-info-card${index === 1 ? " contact-info-card-featured" : ""}`}
+              delay={index * 60}
               key={card.title}
             >
               <span className="contact-info-icon"><ContactIcon type={card.icon} /></span>
@@ -106,7 +109,7 @@ export default function ContactPage() {
                 target={card.href.startsWith("https:") ? "_blank" : undefined}>
                 {index === 2 ? "Get directions" : "Contact us"} <span aria-hidden="true">→</span>
               </a>
-            </article>
+            </ScrollReveal>
           ))}
         </div>
       </section>

@@ -1,6 +1,7 @@
 import { ArrowRight, Building2, GraduationCap, Lightbulb, Stethoscope, Users, UsersRound } from "lucide-react";
 import Button from "../Button";
 import SectionHeading from "../SectionHeading";
+import ScrollReveal from "../ScrollReveal.jsx";
 import microscopeImage from "../../assets/micro.jpg";
 export default function AboutSection() {
     return (
@@ -60,7 +61,7 @@ export default function AboutSection() {
         </div>
       </div>
 
-      <div className="relative isolate w-full pb-30">
+      <ScrollReveal as="div" className="relative isolate w-full pb-30">
         <div className="absolute -right-3 -top-3 z-0 hidden aspect-3/2 w-full rounded-[28px] border-2 border-[#12c5df]/40 sm:block" />
         <div className="relative z-0 aspect-3/2 w-full overflow-hidden rounded-[28px] bg-[#071e34] shadow-xl">
           <img
@@ -99,7 +100,7 @@ export default function AboutSection() {
             </p>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
     </div>
   </section>
     );

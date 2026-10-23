@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Button from "../Button";
 import SectionHeading from "../SectionHeading";
+import ScrollReveal from "../ScrollReveal.jsx";
 import homeBackground from "../../assets/homepic.png";
 export default function GalleryContactSection() {
     return (
@@ -28,10 +29,12 @@ export default function GalleryContactSection() {
             { label: "Genomics research", position: "65% center" },
             { label: "DNA sequencing", position: "82% center" },
             { label: "Biomedical science", position: "48% center" },
-          ].map(({ label, position }) => (
-            <a
+          ].map(({ label, position }, index) => (
+            <ScrollReveal
+              as="a"
               aria-label={`View gallery: ${label}`}
               className="group relative block h-52 overflow-hidden rounded-xl bg-[#102943] sm:h-48 lg:h-56"
+              delay={index * 60}
               href="#gallery"
               key={label}
             >
@@ -47,7 +50,7 @@ export default function GalleryContactSection() {
               <span className="absolute inset-x-3 bottom-3 text-xs font-semibold text-white sm:text-sm">
                 {label}
               </span>
-            </a>
+            </ScrollReveal>
           ))}
         </div>
       </div>

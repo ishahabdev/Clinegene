@@ -4,6 +4,7 @@ import sig from "../assets/sig.png";
 import dnaStrand from "../assets/dna_strand.png";
 import { ArrowRight, UserRound } from "lucide-react";
 import Button from "../components/Button.jsx";
+import ScrollReveal from "../components/ScrollReveal.jsx";
 
 const C = {
   cyan: "#12c5df",
@@ -33,9 +34,9 @@ function Hero() {
           <span className="h-px w-8 bg-[#12c5df]" />
           LEADERSHIP
         </div>
-        <h1 className="mt-2 font-['Outfit',sans-serif] text-[40px] font-bold leading-tight text-white md:text-[50px]">
+        <ScrollReveal as="h1" className="mt-2 font-['Outfit',sans-serif] text-[40px] font-bold leading-tight text-white md:text-[50px]">
           CEO <span style={{ color: C.cyan }}>Message</span>
-        </h1>
+        </ScrollReveal>
         <p className="mt-3 max-w-[320px] text-[15px] leading-relaxed text-slate-200">
           Science today. Healthier generations tomorrow.
         </p>

@@ -5,10 +5,17 @@ import SectionHeading from "../SectionHeading";
 import services from "../../data/services";
 export default function ServicesSection() {
   const [serviceIndex, setServiceIndex] = useState(0);
-  const [servicesViewportWidth, setServicesViewportWidth] = useState(0);
+  const [servicesViewportWidth, setServicesViewportWidth] = useState(() => {
+    if (typeof window === "undefined") return 0;
+    return Math.max(
+      0,
+      Math.min(window.innerWidth, 1212) - (window.innerWidth < 1280 ? 48 : 0),
+    );
+  });
   const servicesViewportRef = useRef(null);
+  const scrollFrameRef = useRef(null);
   const cardsPerView = servicesViewportWidth >= 1024 ? 4 : servicesViewportWidth >= 640 ? 2 : 1;
-  const cardGap = 16;
+  const cardGap = 18;
   const cardWidth = servicesViewportWidth ? (servicesViewportWidth - cardGap * (cardsPerView - 1)) / cardsPerView : 0;
   const carouselServices = [...services, ...services.slice(0, cardsPerView - 1)];
   const touchStartX = useRef(null);
@@ -17,11 +24,56 @@ export default function ServicesSection() {
     if (!viewport) return undefined;
     viewport.scrollLeft = 0;
     setServiceIndex(0);
-    const resizeObserver = new ResizeObserver(([entry]) => setServicesViewportWidth(entry.contentRect.width));
+    const measureViewport = () => setServicesViewportWidth(viewport.clientWidth);
+    measureViewport();
+    const resizeObserver = new ResizeObserver(measureViewport);
     resizeObserver.observe(viewport);
     return () => resizeObserver.disconnect();
   }, []);
   const goToService = (index) => { setServiceIndex((index + services.length) % services.length); };
+  useEffect(() => {
+    const viewport = servicesViewportRef.current;
+    if (!viewport || !cardWidth) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const start = viewport.scrollLeft;
+    const target = Math.min(
+      serviceIndex * (cardWidth + cardGap),
+      viewport.scrollWidth - viewport.clientWidth,
+    );
+    if (scrollFrameRef.current !== null) {
+      window.cancelAnimationFrame(scrollFrameRef.current);
+      scrollFrameRef.current = null;
+    }
+    if (reduceMotion || Math.abs(target - start) < 1) {
+      viewport.scrollLeft = target;
+      return undefined;
+    }
+
+    const duration = 700;
+    const startedAt = performance.now();
+    const animate = (now) => {
+      const progress = Math.min((now - startedAt) / duration, 1);
+      const eased = progress < 0.5
+        ? 4 * progress * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+      viewport.scrollLeft = start + (target - start) * eased;
+
+      if (progress < 1) {
+        scrollFrameRef.current = window.requestAnimationFrame(animate);
+      } else {
+        scrollFrameRef.current = null;
+      }
+    };
+
+    scrollFrameRef.current = window.requestAnimationFrame(animate);
+    return () => {
+      if (scrollFrameRef.current !== null) {
+        window.cancelAnimationFrame(scrollFrameRef.current);
+        scrollFrameRef.current = null;
+      }
+    };
+  }, [cardGap, cardWidth, serviceIndex]);
     return (
 <section
     aria-labelledby="services-title"
@@ -29,31 +81,9 @@ export default function ServicesSection() {
     id="key-services"
   >
     <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_10%,rgba(35,133,209,0.08),transparent_32%),linear-gradient(135deg,#eaf6fa,#eaf6fa)]" />
-    <div className="mx-auto max-w-310 px-6 lg:px-12">
+    <div className="mx-auto w-full max-w-[1212px] px-6 xl:px-0">
       <SectionHeading
         action={{ label: "View All", href: "/services" }}
-        controls={
-          <>
-            <Button
-              aria-label="Previous services"
-              className="!h-11 !min-h-11 !w-11 !rounded-full !border !border-slate-200 !p-0 !text-[#0c2b48] shadow-[0_4px_14px_rgba(12,43,72,0.14)] disabled:cursor-not-allowed disabled:opacity-40"
-              disabled={serviceIndex === 0}
-              onClick={() => goToService(serviceIndex - 1)}
-              variant="white"
-            >
-              <ChevronLeft aria-hidden="true" size={18} />
-            </Button>
-            <Button
-              aria-label="Next services"
-              className="!h-11 !min-h-11 !w-11 !rounded-full !border !border-slate-200 !p-0 !text-[#0c2b48] shadow-[0_4px_14px_rgba(12,43,72,0.14)] disabled:cursor-not-allowed disabled:opacity-40"
-              disabled={serviceIndex === services.length - 1}
-              onClick={() => goToService(serviceIndex + 1)}
-              variant="white"
-            >
-              <ChevronRight aria-hidden="true" size={18} />
-            </Button>
-          </>
-        }
         description="From research to real-world applications, we provide genomic services to help unlock the potential of life's code."
         eyebrow="Our Services"
         id="services-title"
@@ -61,9 +91,27 @@ export default function ServicesSection() {
         title="Comprehensive"
       />
 
-      <div className="min-w-0">
+      <div className="relative mx-auto w-full">
+        <Button
+          variant="cyan"
+          aria-label="Previous services"
+          className="service-carousel-control !absolute !left-[-56px] !top-1/2 !z-10 !hidden !h-11 !min-h-11 !w-11 !-translate-y-1/2 !rounded-full !border !border-slate-200 !p-0 !text-[#04152b] shadow-[0_4px_14px_rgba(12,43,72,0.14)] !transition-all duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 2xl:!flex"
+          disabled={serviceIndex === 0}
+          onClick={() => goToService(serviceIndex - 1)}
+        >
+          <ChevronLeft aria-hidden="true" size={18} />
+        </Button>
+        <Button
+          variant="cyan"
+          aria-label="Next services"
+          className="service-carousel-control !absolute !right-[-56px] !top-1/2 !z-10 !hidden !h-11 !min-h-11 !w-11 !-translate-y-1/2 !rounded-full !border !border-slate-200 !p-0 !text-[#04152b] shadow-[0_4px_14px_rgba(12,43,72,0.14)] !transition-all duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 2xl:!flex"
+          disabled={serviceIndex === services.length - 1}
+          onClick={() => goToService(serviceIndex + 1)}
+        >
+          <ChevronRight aria-hidden="true" size={18} />
+        </Button>
         <div
-          className="relative"
+          className="relative w-full overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           onTouchStart={(event) => {
             touchStartX.current = event.touches[0].clientX;
           }}
@@ -80,24 +128,22 @@ export default function ServicesSection() {
           aria-label="Genomic services"
           style={{ touchAction: "pan-y" }}
         >
-          <div className="overflow-x-clip overflow-y-visible">
           <div
-            className="flex transition-transform duration-500 ease-in-out"
+            className="flex w-max"
             style={{
               gap: `${cardGap}px`,
-              transform: `translateX(-${serviceIndex * (cardWidth + cardGap)}px)`,
-              width: cardWidth ? `${carouselServices.length * cardWidth + (carouselServices.length - 1) * cardGap}px` : "100%",
+              width: `${carouselServices.length * cardWidth + (carouselServices.length - 1) * cardGap}px`,
             }}
           >
             {carouselServices.map((service, index) => {
               return (
                 <a
-                  className="group flex min-h-100 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] bg-[#f7fbff] text-[#102744] shadow-[0_12px_30px_rgba(12,43,72,0.18)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#12c5df] hover:shadow-[0_16px_36px_rgba(12,43,72,0.24)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12c5df] group-focus-within:-translate-y-1.5 group-focus-within:border-[#12c5df] group-focus-within:shadow-[0_16px_36px_rgba(12,43,72,0.24)] motion-reduce:transform-none motion-reduce:transition-none"
+                  className="group flex min-h-[29.25rem] shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] bg-[#f7fbff] text-[#102744] shadow-[0_10px_24px_rgba(12,43,72,0.16)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#12c5df] hover:shadow-[0_16px_32px_rgba(12,43,72,0.22)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12c5df] group-focus-within:-translate-y-1.5 group-focus-within:border-[#12c5df] group-focus-within:shadow-[0_16px_32px_rgba(12,43,72,0.22)] motion-reduce:transform-none motion-reduce:transition-none"
                   href="#services"
                   key={`${service}-${index}`}
                   style={{ width: `${cardWidth}px` }}
                 >
-                  <div className="relative aspect-4/3 w-full min-w-0 overflow-hidden bg-[#102943]">
+                  <div className="relative aspect-[4/3] w-full min-w-0 overflow-hidden bg-[#102943]">
                     <img
                       alt=""
                       aria-hidden="true"
@@ -112,13 +158,13 @@ export default function ServicesSection() {
                       src={service.image}
                     />
                   </div>
-                  <div className="relative flex flex-1 flex-col px-5 pb-5 pt-9">
-                    <span className="absolute -top-7 left-5 grid h-14 w-14 place-items-center rounded-xl border border-[#d4e5f2] bg-[#f7fbff] text-[#0a7a94] shadow-sm transition-all duration-300 ease-out group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-[#12c5df] group-hover:text-white group-focus-within:scale-110 group-focus-within:-rotate-6 group-focus-within:bg-[#12c5df] group-focus-within:text-white motion-reduce:transform-none motion-reduce:transition-none">
+                  <div className="relative flex flex-1 flex-col px-5 pb-5 pt-11">
+                    <span className="absolute -top-[30px] left-5 grid h-[60px] w-[60px] place-items-center rounded-[15px] border border-[#d4e5f2] bg-[#f7fbff] text-[#0a7a94] shadow-[0_3px_8px_rgba(12,43,72,0.12)] transition-all duration-300 ease-out group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-[#12c5df] group-hover:text-white group-focus-within:scale-110 group-focus-within:-rotate-6 group-focus-within:bg-[#12c5df] group-focus-within:text-white motion-reduce:transform-none motion-reduce:transition-none">
                       <service.Icon aria-hidden="true" size={22} strokeWidth={1.8} />
                     </span>
-                    <h3 className="mt-4 text-base font-bold leading-6 transition-colors duration-300 ease-out group-hover:text-[#0a5265] group-focus-within:text-[#0a5265] motion-reduce:transition-none sm:text-[17px]">{service.name}</h3>
-                    <p className="mt-3 text-sm leading-[1.6] text-[#58748d]">{service.description}</p>
-                    <span className="mt-auto inline-flex items-center gap-2 whitespace-nowrap pt-5 text-sm font-bold text-[#0a7a94]">
+                    <h3 className="mt-4 text-[18px] font-bold leading-[1.35] transition-colors duration-300 ease-out group-hover:text-[#0a5265] group-focus-within:text-[#0a5265] motion-reduce:transition-none">{service.name}</h3>
+                    <p className="mt-3 text-base leading-[1.6] text-[#58748d]">{service.description}</p>
+                    <span className="mt-auto inline-flex items-center gap-2 whitespace-nowrap pt-5 text-base font-bold text-[#0a7a94]">
                       Explore
                       <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-1 group-focus-within:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
                     </span>
@@ -126,7 +172,6 @@ export default function ServicesSection() {
                 </a>
               );
             })}
-          </div>
           </div>
         </div>
       </div>

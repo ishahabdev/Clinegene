@@ -1,5 +1,6 @@
 import { BarChart3, Dna, Droplet, Lightbulb } from "lucide-react";
 import SectionHeading from "../SectionHeading";
+import ScrollReveal from "../ScrollReveal.jsx";
 export default function WorkStepsSection() {
     return (
 <section
@@ -43,7 +44,12 @@ export default function WorkStepsSection() {
             description: "Expert interpretation turns results into meaningful scientific and clinical insights",
           },
         ].map(({ Icon, title, description }, index) => (
-          <div className="group relative xl:px-2" key={title}>
+          <ScrollReveal
+            as="div"
+            className="group relative xl:px-2"
+            delay={index * 55}
+            key={title}
+          >
             <div className="mb-5 flex justify-center">
               <div
                 aria-label={`Step ${index + 1}`}
@@ -66,7 +72,7 @@ export default function WorkStepsSection() {
                 {description}
               </p>
             </article>
-          </div>
+          </ScrollReveal>
         ))}
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { ArrowRight, Dna, Play, ShieldPlus } from "lucide-react";
 import Button from "../components/Button.jsx";
 import SectionHeading from "../components/SectionHeading";
+import ScrollReveal from "../components/ScrollReveal.jsx";
 import serviceHero from "../assets/Service hero.jpg";
 import services from "../data/services";
 
@@ -31,10 +32,10 @@ export default function ServicesPage() {
               <span aria-hidden="true" className="h-0.5 w-9 bg-[#12c5df]" />
               Our Services
             </p>
-            <h1 className="font-outfit text-[32px] font-bold leading-[1.1] tracking-tight sm:text-[40px]" id="services-hero-title">
+            <ScrollReveal as="h1" className="font-outfit text-[32px] font-bold leading-[1.1] tracking-tight sm:text-[40px]" id="services-hero-title">
               Comprehensive Genomic
               <span className="block text-[#12c5df]">Services for a Healthier Tomorrow</span>
-            </h1>
+            </ScrollReveal>
             <p className="mt-3 max-w-122.5 font-inter text-[13px] leading-[1.55] text-slate-200 sm:text-sm">
               We provide advanced genomic, genetic testing, bioinformatics and research services to
               help individuals, clinicians and researchers make data-driven decisions for better
@@ -75,7 +76,7 @@ export default function ServicesPage() {
 
       <section aria-labelledby="service-catalog-title" className="bg-linear-to-b from-[#eaf8fc] to-[#f7fbfd] py-12 md:py-16" id="service-catalog">
         <div className="mx-auto max-w-310 px-6 lg:px-12">
-          <div className="mb-7 flex flex-wrap items-end justify-between gap-5">
+          <ScrollReveal as="div" className="mb-7 flex flex-wrap items-end justify-between gap-5">
             <div>
               <p className="mb-2 flex items-center gap-2.5 font-inter text-[10px] font-bold uppercase tracking-[0.22em] text-[#0a7a94]">
                 <span aria-hidden="true" className="h-0.5 w-7 bg-[#12c5df]" />
@@ -94,11 +95,13 @@ export default function ServicesPage() {
               Contact ClinGene
               <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
             </Button>
-          </div>
+          </ScrollReveal>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {services.map(({ name, description, Icon, image }, index) => (
-              <article
+              <ScrollReveal
+                as="article"
                 className="group flex min-h-[253px] flex-col overflow-hidden rounded-xl border border-[#c9e2ef] bg-[#f8fcff] shadow-[0_7px_18px_rgba(12,43,72,0.09)] transition-all duration-300 hover:-translate-y-1 hover:border-[#10c8e0] hover:shadow-[0_13px_28px_rgba(12,43,72,0.16)]"
+                delay={Math.min(index % 4, 3) * 55}
                 key={name}
               >
                 <div className="relative aspect-2.5/1 overflow-hidden bg-[#102943]">
@@ -127,7 +130,7 @@ export default function ServicesPage() {
                     <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
                   </a>
                 </div>
-              </article>
+              </ScrollReveal>
             ))}
           </div>
           <div className="mt-9 overflow-hidden rounded-2xl bg-[#062b47] p-6 text-white shadow-[0_12px_28px_rgba(12,43,72,0.18)] sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-8">

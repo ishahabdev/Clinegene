@@ -1,4 +1,5 @@
 import Button from "./Button.jsx";
+import ScrollReveal from "./ScrollReveal.jsx";
 
 export default function UnderConstructionPage({ pageTitle }) {
   return (
@@ -14,7 +15,9 @@ export default function UnderConstructionPage({ pageTitle }) {
           </svg>
         </span>
         <p className="construction-eyebrow">{pageTitle}</p>
-        <h1 id="under-construction-title">This page is under construction</h1>
+        <ScrollReveal as="h1" id="under-construction-title">
+          This page is under construction
+        </ScrollReveal>
         <p className="construction-description">
           We’re working on this page and will share updates as soon as it’s ready.
           Please check back soon.

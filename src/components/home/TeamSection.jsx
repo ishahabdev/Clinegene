@@ -1,5 +1,6 @@
 import { UserRound } from "lucide-react";
 import SectionHeading from "../SectionHeading";
+import ScrollReveal from "../ScrollReveal.jsx";
 export default function TeamSection() {
     return (
 <section
@@ -36,9 +37,11 @@ export default function TeamSection() {
             designation: "HUMAN GENETICS",
             details: [],
           },
-        ].map(({ name, designation, details, image }) => (
-          <article
+        ].map(({ name, designation, details, image }, index) => (
+          <ScrollReveal
+            as="article"
             className="flex min-h-57 items-center gap-4 rounded-2xl border border-[#d4e5f2] bg-white/85 p-4 shadow-[0_8px_24px_rgba(29,78,116,0.06)] transition-all duration-500 ease-out hover:-translate-y-1 hover:border-[#10c8e0] hover:bg-white hover:shadow-[0_14px_30px_rgba(12,43,72,0.12)] motion-reduce:transform-none motion-reduce:transition-none sm:gap-5"
+            delay={index * 70}
             key={name}
           >
             <div className="relative h-48 w-[38%] max-w-38 shrink-0 overflow-hidden rounded-xl bg-[#dceaf2]">
@@ -77,7 +80,7 @@ export default function TeamSection() {
                 </svg>
               </a>
             </div>
-          </article>
+          </ScrollReveal>
         ))}
       </div>
     </div>
