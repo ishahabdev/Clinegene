@@ -63,6 +63,8 @@ export default function HeaderNav({ activePage }) {
         <a aria-label="Clingene home" className="shrink-0" href="#home">
           <img
             alt="Clingene"
+            width="450"
+            height="189"
             className="h-11 w-36 object-contain sm:h-12 sm:w-44"
             src={clingeneLogo}
           />

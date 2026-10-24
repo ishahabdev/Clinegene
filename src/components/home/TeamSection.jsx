@@ -48,6 +48,8 @@ export default function TeamSection() {
               {image ? (
                 <img
                   alt={name}
+                  width="480"
+                  height="600"
                   className="h-full w-full object-cover object-[center_20%]"
                   loading="lazy"
                   src={image}

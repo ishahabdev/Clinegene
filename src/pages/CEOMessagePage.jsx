@@ -1,4 +1,3 @@
-import home1 from "../assets/home1.png";
 import micro from "../assets/micro.jpg";
 import sig from "../assets/sig.png";
 import dnaStrand from "../assets/dna_strand.png";
@@ -15,6 +14,7 @@ const C = {
 
 /* ─── Hero Banner ─── */
 function Hero() {
+  const home1 = "/images/home1.webp";
   return (
     <section className="relative overflow-hidden bg-[#031f31]">
      <div
@@ -191,6 +191,8 @@ function CeoMessageBody() {
         <img
           src={sig}
           alt="Amjad Ali Tanoli Signature"
+          width="216"
+          height="40"
           className="h-10 mix-blend-multiply"
         />
         <div className="mt-2 text-[12.5px] font-bold text-[#0c2b48]">
@@ -212,6 +214,8 @@ function QuoteCard() {
       <img
         src={dnaStrand}
         alt=""
+        width="121"
+        height="105"
         className="pointer-events-none absolute -bottom-2 -right-1 w-28 object-contain opacity-75 select-none"
       />
 
@@ -368,7 +372,7 @@ function Commitment() {
             <span className="text-[#12c5df]">Through Science</span>
           </h2>
           <p className="mt-4 text-[12.5px] leading-[1.75] text-slate-200">
-            We are dedicated to advancing human health through cutting-edge
+            We are dedicated to advancing human  health through cutting-edge
             research, collaboration and capacity building. Our work today lays
             the foundation for healthier communities and a brighter future.
           </p>

@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Button from "../Button";
-import homeBackground from "../../assets/homepic.png";
+const homeBackground = "/images/homepic.webp";
+const homeBackgroundMobile = "/images/homepic-1200.webp";
 
 function FeatureIcon({ type }) {
   if (type === "technology") {
@@ -36,11 +37,15 @@ export default function HeroSection() {
     <img
       alt=""
       aria-hidden="true"
+      width="2014"
+      height="781"
+      srcSet={`${homeBackgroundMobile} 1200w, ${homeBackground} 2014w`}
+      sizes="100vw"
       className="absolute inset-0 -z-10 h-full w-full object-cover object-center"
       fetchPriority="high"
       src={homeBackground}
     />
-    <div className="site-container grid grid-cols-1 items-center gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_300px]">
+    <div className="site-container py-12 sm:py-16 lg:py-20">
       <div className="max-w-152.5">
         <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.18em] text-white/90 sm:text-xs">
           Human Genetics <span className="mx-1 text-[#10c8e0]">|</span> Omic Sciences{" "}
@@ -83,6 +88,19 @@ export default function HeroSection() {
         </div>
       </div>
 
+      <div className="absolute bottom-[68px] right-10 hidden min-h-[106px] w-[208px] flex-col justify-center overflow-hidden rounded-[12px] border border-[#12c5df]/70 bg-[#031b37]/85 px-5 py-4 shadow-[0_0_24px_rgba(18,197,223,0.16)] backdrop-blur-sm lg:flex xl:right-16">
+        <span
+          aria-hidden="true"
+          className="mb-2.5 block h-[2px] w-7 shrink-0 bg-[#12c5df]"
+        />
+        <p className="font-inter text-[11px] font-medium uppercase leading-[1.55] tracking-[0.2em] text-white/95">
+          Genomics
+          <br />
+          for a healthier
+          <br />
+          tomorrow
+        </p>
+      </div>
       <div className="absolute bottom-[68px] right-10 hidden min-h-[106px] w-[208px] flex-col justify-center overflow-hidden rounded-[12px] border border-[#12c5df]/70 bg-[#031b37]/85 px-5 py-4 shadow-[0_0_24px_rgba(18,197,223,0.16)] backdrop-blur-sm lg:flex xl:right-16">
         <span
           aria-hidden="true"

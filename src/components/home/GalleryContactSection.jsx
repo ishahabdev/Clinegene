@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import Button from "../Button";
 import SectionHeading from "../SectionHeading";
 import ScrollReveal from "../ScrollReveal.jsx";
-import homeBackground from "../../assets/homepic.png";
+const homeBackground = "/images/homepic.webp";
 export default function GalleryContactSection() {
     return (
 <section
@@ -40,6 +40,8 @@ export default function GalleryContactSection() {
             >
               <img
                 alt={label}
+                width="2014"
+                height="781"
                 className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 decoding="async"
                 loading="lazy"

@@ -12,6 +12,8 @@ export default function SiteFooter({ compact = false, showJoinCta }) {
             <a aria-label="ClinGene home" className="ceo-footer-brand shrink-0" href="#home">
               <img
                 alt="ClinGene"
+                width="450"
+                height="189"
                 className="h-10 w-36 rounded-lg bg-white object-contain px-2.5 py-1 sm:h-11 sm:w-40"
                 src={clingeneLogo}
               />
@@ -81,6 +83,8 @@ export default function SiteFooter({ compact = false, showJoinCta }) {
           <a aria-label="ClinGene home" className="flex w-[150px] self-start items-center rounded-xl bg-white/95 p-3 shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12c5df]" href="#home">
             <img
               alt="ClinGene — Human Genetics and Biomedical Research"
+              width="450"
+              height="189"
               className="w-full object-contain"
               src={clingeneLogo}
             />

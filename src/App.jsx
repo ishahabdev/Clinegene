@@ -5,7 +5,8 @@ import HomePage from "./pages/HomePage.jsx";
 import PageNotFoundPage from "./pages/PageNotFoundPage.jsx";
 import Button from "./components/Button.jsx";
 import LenisProvider, { useLenisRef } from "./components/LenisProvider.jsx";
-import GsapScrollEffects from "./components/GsapScrollEffects.jsx";
+import SectionScrollEffects from "./components/SectionScrollEffects.jsx";
+import ScrollEnhancements from "./components/ScrollEnhancements.jsx";
 
 const AboutPage = lazy(() => import("./pages/AboutPage.jsx"));
 const CEOMessagePage = lazy(() => import("./pages/CEOMessagePage.jsx"));
@@ -40,6 +41,8 @@ function LoadingScreen() {
     >
       <img
         alt="ClinGene"
+        width="450"
+        height="189"
         className="preloader-logo h-28 w-80 max-w-[85vw] object-contain sm:h-36 sm:w-md lg:h-44 lg:w-xl"
         src="/images/clingene-logo.webp"
       />
@@ -185,7 +188,7 @@ function AppContent() {
       {showPreloader && pageId !== "not-found" && <LoadingScreen />}
       {pageId !== "not-found" && <HeaderNav activePage={pages[pageId].label} />}
       <main>
-        <GsapScrollEffects key={pageId} />
+        <SectionScrollEffects key={pageId} />
         <Suspense fallback={<LoadingScreen />}>
           <CurrentPage />
         </Suspense>
@@ -234,6 +237,7 @@ function AppContent() {
 export default function App() {
   return (
     <LenisProvider>
+      <ScrollEnhancements />
       <AppContent />
     </LenisProvider>
   );

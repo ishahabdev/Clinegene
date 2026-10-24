@@ -22,8 +22,6 @@ export default function ServicesSection() {
   useEffect(() => {
     const viewport = servicesViewportRef.current;
     if (!viewport) return undefined;
-    viewport.scrollLeft = 0;
-    setServiceIndex(0);
     const measureViewport = () => setServicesViewportWidth(viewport.clientWidth);
     measureViewport();
     const resizeObserver = new ResizeObserver(measureViewport);
@@ -147,6 +145,8 @@ export default function ServicesSection() {
                     <img
                       alt=""
                       aria-hidden="true"
+                      width={service.width}
+                      height={service.height}
                       className={`block h-full w-full object-cover object-center transition-transform duration-300 ease-out motion-reduce:transform-none motion-reduce:transition-none ${
                         service.name === "Whole Exome/Genome Sequencing"
                           ? "scale-[1.16] group-hover:scale-[1.24] group-focus-within:scale-[1.24]"

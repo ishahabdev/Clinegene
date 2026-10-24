@@ -66,6 +66,8 @@ export default function AboutSection() {
         <div className="relative z-0 aspect-3/2 w-full overflow-hidden rounded-[28px] bg-[#071e34] shadow-xl">
           <img
             alt="Microscope in a biomedical research setting"
+            width="604"
+            height="272"
             className="absolute inset-0 h-full w-full object-cover object-center"
             loading="lazy"
             src={microscopeImage}

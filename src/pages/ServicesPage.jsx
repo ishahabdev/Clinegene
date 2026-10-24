@@ -2,7 +2,7 @@ import { ArrowRight, Dna, Play, ShieldPlus } from "lucide-react";
 import Button from "../components/Button.jsx";
 import SectionHeading from "../components/SectionHeading";
 import ScrollReveal from "../components/ScrollReveal.jsx";
-import serviceHero from "../assets/Service hero.jpg";
+import serviceHero from "../assets/service-hero.webp";
 import services from "../data/services";
 
 export default function ServicesPage() {
@@ -15,15 +15,17 @@ export default function ServicesPage() {
         <img
           alt=""
           aria-hidden="true"
+          width="1376"
+          height="768"
           className="absolute inset-0 -z-20 h-full w-full object-cover object-[64%_center]"
           fetchPriority="high"
           src={serviceHero}
         />
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-linear-to-r from-[#031b37]/95 via-[#031b37]/75 to-[#031b37]/10" />
 
-        <div className="mx-auto w-full max-w-310 px-6 py-8 lg:px-12">
+        <div className="mx-auto w-full max-w-310 px-6 py-12 sm:py-16 lg:px-12 lg:py-20">
           <div className="max-w-155">
-            <nav aria-label="Breadcrumb" className="mb-7 flex items-center gap-3 font-inter text-sm">
+            <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-3 font-inter text-sm">
               <a className="text-[#12c5df] transition-colors hover:text-white" href="#home">Home</a>
               <span aria-hidden="true" className="text-[#12c5df]">›</span>
               <span aria-current="page" className="text-slate-300">Services</span>
@@ -41,7 +43,7 @@ export default function ServicesPage() {
               help individuals, clinicians and researchers make data-driven decisions for better
               health and discovery.
             </p>
-            <div className="mt-5 flex flex-wrap items-center gap-4">
+            <div className="mt-6 flex flex-wrap items-center gap-4">
               <Button className="font-inter" href="#service-catalog">
                 Explore Services
                 <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
@@ -97,7 +99,7 @@ export default function ServicesPage() {
             </Button>
           </ScrollReveal>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map(({ name, description, Icon, image }, index) => (
+            {services.map(({ name, description, Icon, image, width, height }, index) => (
               <ScrollReveal
                 as="article"
                 className="group flex min-h-[253px] flex-col overflow-hidden rounded-xl border border-[#c9e2ef] bg-[#f8fcff] shadow-[0_7px_18px_rgba(12,43,72,0.09)] transition-all duration-300 hover:-translate-y-1 hover:border-[#10c8e0] hover:shadow-[0_13px_28px_rgba(12,43,72,0.16)]"
@@ -108,6 +110,8 @@ export default function ServicesPage() {
                   <img
                     alt=""
                     aria-hidden="true"
+                    width={width}
+                    height={height}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:transition-none"
                     loading="lazy"
                     src={image}

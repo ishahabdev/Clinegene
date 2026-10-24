@@ -8,7 +8,7 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import Button from "../components/Button.jsx";
-import pageNotFoundImage from "../assets/pagenot.png";
+import pageNotFoundImage from "../assets/pagenot.webp";
 
 const values = [
   { label: "Better Science", Icon: FlaskConical },
@@ -25,6 +25,8 @@ export default function PageNotFoundPage() {
       <img
         alt=""
         aria-hidden="true"
+        width="1862"
+        height="845"
         className="absolute inset-0 -z-20 h-full w-full object-cover object-[58%_center]"
         src={pageNotFoundImage}
       />

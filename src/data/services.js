@@ -28,19 +28,19 @@ import proteinDockingImage from "../assets/services/cropped/protein-docking-mole
 import statisticsImage from "../assets/services/cropped/statistical-data-analysis.webp";
 
 const services = [
-  { name: "Clinical Genetic Testing", description: "Genetic testing services for clinical and research needs.", Icon: Stethoscope, image: clinicalTestingImage },
-  { name: "Sanger Sequencing", description: "Targeted DNA sequencing and sequence analysis.", Icon: TestTubes, image: sangerImage },
-  { name: "Whole Exome/Genome Sequencing", description: "Comprehensive sequencing for genomic research.", Icon: Dna, image: exomeSequencingImage },
-  { name: "RNA-Seq", description: "RNA sequencing services for gene expression research.", Icon: FlaskConical, image: clinicalSampleImage },
-  { name: "Single-cell RNA seq data analysis", description: "Analysis of single-cell RNA sequencing datasets.", Icon: Microscope, image: cellCultureImage },
-  { name: "16SrRNA Metagenome Sequencing", description: "Sequencing and analysis of 16S rRNA metagenomes.", Icon: Bug, image: metagenomeImage },
-  { name: "Whole Genome Metagenome", description: "Whole-genome metagenomic sequencing and analysis.", Icon: Layers, image: wholeGenomeMetagenomeImage },
-  { name: "Whole Fungal Genome Sequencing", description: "Genome sequencing services for fungal research.", Icon: Sprout, image: fungalGenomeImage },
-  { name: "Pangenome Analysis", description: "Comparative analysis across multiple genomes.", Icon: Network, image: pangenomeImage },
-  { name: "Phylogenetic Tree Construction", description: "Phylogenetic analysis and tree construction.", Icon: GitBranch, image: phylogeneticImage },
-  { name: "Plant Genome Sequencing", description: "Genome sequencing services for plant research.", Icon: Leaf, image: plantGenomeImage },
-  { name: "Protein Docking & Molecular Dynamic Simulation", description: "Computational protein docking and molecular simulation.", Icon: Atom, image: proteinDockingImage },
-  { name: "Statistical Data Analysis", description: "Statistical analysis to support research data.", Icon: BarChart3, image: statisticsImage },
+  { name: "Clinical Genetic Testing", description: "Genetic testing services for clinical and research needs.", Icon: Stethoscope, image: clinicalTestingImage, width: 322, height: 304 },
+  { name: "Sanger Sequencing", description: "Targeted DNA sequencing and sequence analysis.", Icon: TestTubes, image: sangerImage, width: 320, height: 304 },
+  { name: "Whole Exome/Genome Sequencing", description: "Comprehensive sequencing for genomic research.", Icon: Dna, image: exomeSequencingImage, width: 338, height: 301 },
+  { name: "RNA-Seq", description: "RNA sequencing services for gene expression research.", Icon: FlaskConical, image: clinicalSampleImage, width: 319, height: 304 },
+  { name: "Single-cell RNA seq data analysis", description: "Analysis of single-cell RNA sequencing datasets.", Icon: Microscope, image: cellCultureImage, width: 320, height: 302 },
+  { name: "16SrRNA Metagenome Sequencing", description: "Sequencing and analysis of 16S rRNA metagenomes.", Icon: Bug, image: metagenomeImage, width: 406, height: 309 },
+  { name: "Whole Genome Metagenome", description: "Whole-genome metagenomic sequencing and analysis.", Icon: Layers, image: wholeGenomeMetagenomeImage, width: 310, height: 301 },
+  { name: "Whole Fungal Genome Sequencing", description: "Genome sequencing services for fungal research.", Icon: Sprout, image: fungalGenomeImage, width: 403, height: 297 },
+  { name: "Pangenome Analysis", description: "Comparative analysis across multiple genomes.", Icon: Network, image: pangenomeImage, width: 387, height: 331 },
+  { name: "Phylogenetic Tree Construction", description: "Phylogenetic analysis and tree construction.", Icon: GitBranch, image: phylogeneticImage, width: 405, height: 295 },
+  { name: "Plant Genome Sequencing", description: "Genome sequencing services for plant research.", Icon: Leaf, image: plantGenomeImage, width: 406, height: 297 },
+  { name: "Protein Docking & Molecular Dynamic Simulation", description: "Computational protein docking and molecular simulation.", Icon: Atom, image: proteinDockingImage, width: 431, height: 291 },
+  { name: "Statistical Data Analysis", description: "Statistical analysis to support research data.", Icon: BarChart3, image: statisticsImage, width: 547, height: 309 },
 ];
 
 export default services;
