@@ -392,7 +392,7 @@ export default function TeamCarousel({ members = [] }) {
 
   return (
     <section 
-      className="relative bg-white py-12 md:py-16 overflow-hidden" 
+      className="relative bg-white py-12 md:py-16 overflow-hidden z-[1]" 
       id="team-carousel"
     >
       {/* Diagnostic grid background pattern */}
@@ -524,12 +524,7 @@ export default function TeamCarousel({ members = [] }) {
           </button>
         </div>
 
-        {/* Interaction hints */}
-        <div className="mt-6 text-center">
-          <p className="text-[11px] text-[#94a3b8] uppercase tracking-[0.1em] font-['Inter'] font-medium">
-            Click side cards • Use arrow keys • Swipe on mobile
-          </p>
-        </div>
+       
       </div>
     </section>
   );

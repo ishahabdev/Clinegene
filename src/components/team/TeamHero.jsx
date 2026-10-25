@@ -1,4 +1,3 @@
-import { ArrowDown } from "lucide-react";
 import ScrollReveal from "../ScrollReveal.jsx";
 import teamPhoto from "../../assets/team.png";
 import { companyStats } from "../../data/teamConfig.js";
@@ -7,7 +6,7 @@ export default function TeamHero() {
   return (
     <section
       aria-labelledby="team-hero-title"
-      className="relative isolate min-h-[38vh] overflow-hidden bg-[#031b37] text-white sm:min-h-[42vh] lg:min-h-[46vh]"
+      className="relative isolate min-h-[38vh] overflow-hidden bg-[#031b37] text-white sm:min-h-[42vh] lg:min-h-[46vh] z-[1]"
       id="team-hero"
     >
       {/* Full-screen background image */}
@@ -121,18 +120,6 @@ export default function TeamHero() {
         </div>
       </div>
 
-      {/* Scroll hint with animation */}
-      <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce"
-        aria-label="Scroll to explore the team"
-        role="img"
-      >
-        <ArrowDown
-          aria-hidden="true"
-          className="h-6 w-6 text-[#10c8e0]"
-          strokeWidth={2}
-        />
-      </div>
     </section>
   );
 }

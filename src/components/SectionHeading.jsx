@@ -32,9 +32,9 @@ export default function SectionHeading({
             dark ? "text-[#12c5df]" : "text-[#0a7a94]"
           }`}
         >
-          <span aria-hidden="true" className="h-[2px] w-9 bg-[#12c5df]" />
+          <span aria-hidden="true" className={`h-[2px] w-9 ${dark ? "bg-[#12c5df]" : "bg-[#12c5df]"}`} />
           {eyebrow}
-          {center && <span aria-hidden="true" className="h-[2px] w-9 bg-[#12c5df]" />}
+          {center && <span aria-hidden="true" className={`h-[2px] w-9 ${dark ? "bg-[#12c5df]" : "bg-[#12c5df]"}`} />}
         </div>
 
         <h2

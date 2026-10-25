@@ -82,7 +82,7 @@ function LeadershipCard({ leader, index }) {
 export default function LeadershipSection() {
   return (
     <section 
-      className="relative bg-white py-16 md:py-20"
+      className="relative bg-white py-16 md:py-20 z-[1]"
       id="leadership"
       aria-labelledby="leadership-title"
     >
@@ -92,35 +92,6 @@ export default function LeadershipSection() {
       />
 
       <div className="relative mx-auto max-w-[1400px] px-6 lg:px-12">
-        <div className="mb-12 text-center">
-          <ScrollReveal>
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#e5f8fb] px-6 py-2">
-              <div className="h-2 w-2 rounded-full bg-[#10c8e0] animate-pulse" aria-hidden="true" />
-              <span className="text-xs font-bold uppercase tracking-[0.15em] text-[#0a7a94]">
-                Our Leadership
-              </span>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={100}>
-            <h2 
-              id="leadership-title"
-              className="font-['Inter'] text-[36px] font-extrabold leading-tight text-[#0c2b48] sm:text-[42px] lg:text-[48px]"
-            >
-              Meet Our{" "}
-              <span className="bg-gradient-to-r from-[#10c8e0] to-[#0a7a94] bg-clip-text text-transparent">
-                Executive Leadership
-              </span>
-            </h2>
-          </ScrollReveal>
-
-          <ScrollReveal delay={200}>
-            <p className="mx-auto mt-6 max-w-2xl text-[16px] leading-relaxed text-[#334155] lg:text-[17px]">
-              Driving innovation and excellence in genomic science through visionary leadership and decades of combined expertise in diagnostic medicine and laboratory management.
-            </p>
-          </ScrollReveal>
-        </div>
-
         <div className="space-y-8 lg:space-y-10">
           {executiveTeam.map((leader, index) => (
             <LeadershipCard key={leader.id} leader={leader} index={index} />
@@ -147,7 +118,20 @@ export default function LeadershipSection() {
         
         .leadership-photo-wrapper[data-position="right"]::after {
           left: 0;
-          background: linear-gradient(to left, rgba(10,35,66,0), rgba(10,35,66,0.10));
+          background: linear-gradient(to left, rgba(10,35,66,0), rgba(10,35,66,0.15));
+        }
+        
+        /* Additional shadow on left side of CEO photo (right positioned) */
+        .leadership-photo-wrapper[data-position="right"]::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          width: 40px;
+          background: linear-gradient(to right, rgba(0,0,0,0.25), transparent);
+          pointer-events: none;
+          z-index: 1;
         }
         
         @media (max-width: 899px) {
@@ -173,7 +157,8 @@ export default function LeadershipSection() {
             height: auto !important;
           }
           
-          .leadership-photo-wrapper::after {
+          .leadership-photo-wrapper::after,
+          .leadership-photo-wrapper::before {
             display: none;
           }
         }

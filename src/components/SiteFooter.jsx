@@ -52,7 +52,7 @@ export default function SiteFooter({ compact = false, showJoinCta }) {
 
   return (
     <footer
-      className="relative isolate overflow-hidden bg-[#031b37] text-white"
+      className="relative isolate overflow-hidden bg-[#031b37] text-white z-[1]"
       style={{
         backgroundImage: `linear-gradient(105deg, rgba(2, 19, 42, 0.97), rgba(3, 28, 57, 0.94)), url(${homeBackground})`,
         backgroundPosition: "center 38%",

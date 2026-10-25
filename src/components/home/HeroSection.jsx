@@ -101,19 +101,6 @@ export default function HeroSection() {
           tomorrow
         </p>
       </div>
-      <div className="absolute bottom-[68px] right-10 hidden min-h-[106px] w-[208px] flex-col justify-center overflow-hidden rounded-[12px] border border-[#12c5df]/70 bg-[#031b37]/85 px-5 py-4 shadow-[0_0_24px_rgba(18,197,223,0.16)] backdrop-blur-sm lg:flex xl:right-16">
-        <span
-          aria-hidden="true"
-          className="mb-2.5 block h-[2px] w-7 shrink-0 bg-[#12c5df]"
-        />
-        <p className="font-inter text-[11px] font-medium uppercase leading-[1.55] tracking-[0.2em] text-white/95">
-          Genomics
-          <br />
-          for a healthier
-          <br />
-          tomorrow
-        </p>
-      </div>
     </div>
   </section>
     );

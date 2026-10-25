@@ -3,6 +3,12 @@
 @theme {
   --font-outfit: "Outfit", sans-serif;
   --font-inter: "Inter", sans-serif;
+  --brand-cyan: #1CC8E8;
+  --brand-white: #FFFFFF;
+  --brand-red: #c90f23;
+  --brand-red-hover: #a60c1d;
+  --brand-red-soft: rgba(201, 15, 35, 0.10);
+  --neutral-dark: #0c2b48;
 }
 
 /* =================================================================
@@ -2975,3 +2981,4 @@ header[data-theme="ceo"] > div:first-child > button {
 .animate-spin-slow {
   animation: spin-slow 3s linear infinite;
 }
+
