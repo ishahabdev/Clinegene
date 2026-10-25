@@ -4,13 +4,34 @@ import SectionHeading from "../components/SectionHeading";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import serviceHero from "../assets/service-hero.webp";
 import services from "../data/services";
+import { useTheme } from "../context/ThemeContext.jsx";
 
 export default function ServicesPage() {
+  const { theme } = useTheme();
+
+  const sectionBg =
+    theme === "red"
+      ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97), rgba(60, 6, 10, 0.95))"
+      : theme === "green"
+        ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97), rgba(4, 42, 24, 0.95))"
+        : "linear-gradient(105deg, rgba(2, 19, 42, 0.97), rgba(3, 28, 57, 0.94))";
+
+  const overlayColor =
+    theme === "red" ? "rgba(45, 3, 6, " : theme === "green" ? "rgba(2, 30, 18, " : "rgba(2, 19, 42, ";
+
+  const badgeBg =
+    theme === "red"
+      ? "rgba(45, 3, 6, 0.88)"
+      : theme === "green"
+        ? "rgba(2, 30, 18, 0.88)"
+        : "rgba(2, 19, 42, 0.88)";
+
   return (
     <>
       <section
         aria-labelledby="services-hero-title"
-        className="relative isolate flex min-h-75 items-center overflow-hidden bg-[#031b37] text-white sm:min-h-80"
+        className="relative isolate flex min-h-75 items-center overflow-hidden text-white sm:min-h-80"
+        style={{ backgroundImage: sectionBg }}
       >
         <img
           alt=""
@@ -21,7 +42,13 @@ export default function ServicesPage() {
           fetchPriority="high"
           src={serviceHero}
         />
-        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-linear-to-r from-[#031b37]/95 via-[#031b37]/75 to-[#031b37]/10" />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10"
+          style={{
+            backgroundImage: `linear-gradient(to right, ${overlayColor}/95, ${overlayColor}/75, ${overlayColor}/10)`,
+          }}
+        />
 
         <div className="mx-auto w-full max-w-310 px-6 py-12 sm:py-16 lg:px-12 lg:py-20">
           <div className="max-w-155">
@@ -116,7 +143,10 @@ export default function ServicesPage() {
                     loading="lazy"
                     src={image}
                   />
-                  <span className="absolute left-2 top-2 rounded-md bg-[#031b37]/80 px-2 py-1 font-inter text-[10px] font-bold tracking-wide text-white">
+                  <span
+                    className="absolute left-2 top-2 rounded-md px-2 py-1 font-inter text-[10px] font-bold tracking-wide text-white"
+                    style={{ backgroundColor: badgeBg }}
+                  >
                     {String(index + 1).padStart(2, "0")}
                   </span>
                 </div>

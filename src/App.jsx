@@ -7,6 +7,7 @@ import Button from "./components/Button.jsx";
 import LenisProvider, { useLenisRef } from "./components/LenisProvider.jsx";
 import SectionScrollEffects from "./components/SectionScrollEffects.jsx";
 import ScrollEnhancements from "./components/ScrollEnhancements.jsx";
+import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 const AboutPage = lazy(() => import("./pages/AboutPage.jsx"));
 const CEOMessagePage = lazy(() => import("./pages/CEOMessagePage.jsx"));
@@ -199,35 +200,56 @@ function AppContent() {
             compact={pageId === "ceo-message"}
             showJoinCta={pageId === "home"}
           />
-          <Button
-            variant="cyan"
+          {/* ── Back to top — fully theme-driven ── */}
+          <button
             aria-label="Scroll to top"
-            className={`!fixed bottom-6 right-6 z-40 !h-12 !min-h-12 !w-12 !rounded-full !p-0 !text-[#031b37] shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-[#079bb0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10c8e0] ${
-              showBackToTop
-                ? "translate-y-0 opacity-100"
-                : "pointer-events-none translate-y-3 opacity-0"
-            }`}
+            tabIndex={showBackToTop ? 0 : -1}
             onClick={() => {
               if (lenisRef.current) {
                 lenisRef.current.scrollTo(0, {
                   duration: 0.7,
                   easing: (time) => 1 - Math.pow(1 - time, 4),
                 });
-              }
-              else window.scrollTo({ top: 0, behavior: "smooth" });
+              } else window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            tabIndex={showBackToTop ? 0 : -1}
+            style={{
+              position:        "fixed",
+              bottom:          "24px",
+              right:           "24px",
+              zIndex:          40,
+              height:          "48px",
+              width:           "48px",
+              borderRadius:    "50%",
+              border:          "none",
+              cursor:          "pointer",
+              display:         "grid",
+              placeItems:      "center",
+              /* Theme-driven fill & icon color */
+              backgroundColor: "var(--accent-btn-bg, var(--accent))",
+              color:           "var(--accent-btn-text, #04152b)",
+              /* Theme-driven outer glow ring */
+              boxShadow:       "0 0 0 3px var(--accent-glow), 0 4px 18px var(--accent-glow)",
+              /* Visibility */
+              opacity:         showBackToTop ? 1 : 0,
+              pointerEvents:   showBackToTop ? "auto" : "none",
+              transform:       showBackToTop ? "translateY(0)" : "translateY(10px)",
+              /* Smooth transitions for everything */
+              transition:
+                "background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, opacity 0.3s ease, transform 0.3s ease",
+            }}
+            onMouseEnter={e => (e.currentTarget.style.transform = showBackToTop ? "translateY(-4px)" : "translateY(10px)")}
+            onMouseLeave={e => (e.currentTarget.style.transform = showBackToTop ? "translateY(0)"   : "translateY(10px)")}
           >
-            <svg aria-hidden="true" className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+            <svg aria-hidden="true" width="20" height="20" fill="none" viewBox="0 0 24 24">
               <path
                 d="M12 19V5m-7 7 7-7 7 7"
                 stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
+                strokeWidth="2.2"
               />
             </svg>
-          </Button>
+          </button>
         </>
       )}
     </>
@@ -236,9 +258,11 @@ function AppContent() {
 
 export default function App() {
   return (
-    <LenisProvider>
-      <ScrollEnhancements />
-      <AppContent />
-    </LenisProvider>
+    <ThemeProvider>
+      <LenisProvider>
+        <ScrollEnhancements />
+        <AppContent />
+      </LenisProvider>
+    </ThemeProvider>
   );
 }

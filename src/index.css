@@ -12,6 +12,45 @@
 }
 
 /* =================================================================
+   THEME CSS VARIABLES (defaults = cyan; overridden by ThemeContext)
+   ================================================================= */
+:root {
+  --accent:          #10c8e0;
+  --accent-2:        #06b6d4;
+  --accent-hover:    #079bb0;
+  --accent-glow:     rgba(16, 200, 224, 0.28);
+  --accent-soft:     #eaf6fa;
+  --accent-soft-2:   #effafc;
+  --accent-muted:    #0a7a94;
+  --accent-dark:     #0891b2;
+  --accent-btn-bg:   #10c8e0;   /* button background */
+  --accent-btn-text: #04152b;   /* button text color */
+}
+
+/* Smooth accent transitions on accent-colored elements */
+.hero-bg-img {
+  transition: opacity 0.45s ease-in-out;
+  animation: hero-bg-fade-in 0.45s ease-in-out both;
+}
+
+@keyframes hero-bg-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Theme-switcher dropdown animation */
+@keyframes theme-dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =================================================================
    SMOOTH SCROLL & ACCESSIBILITY
    ================================================================= */
 html {
@@ -41,9 +80,9 @@ html {
   left: 0;
   z-index: 9999;
   height: 3px;
-  background: linear-gradient(90deg, #10c8e0, #079bb0);
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
   transform-origin: left;
-  transition: transform 0.1s ease-out;
+  transition: transform 0.1s ease-out, background 0.4s ease-in-out;
   will-change: transform;
 }
 
@@ -54,51 +93,47 @@ html {
 }
 
 /* =================================================================
-   BACK TO TOP BUTTON
+   SERVICE CARDS — themed border, shadow & icon badge
    ================================================================= */
-.back-to-top {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  z-index: 1000;
-  display: grid;
-  width: 48px;
-  height: 48px;
-  place-items: center;
-  border-radius: 50%;
-  background: #10c8e0;
-  box-shadow: 0 4px 16px rgba(16, 200, 224, 0.3);
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
-  cursor: pointer;
+
+/* Default card shadow */
+.service-card {
+  box-shadow: 0 10px 24px rgba(12, 43, 72, 0.16);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.back-to-top.visible {
-  opacity: 1;
-  pointer-events: auto;
+/* Hover: accent-colored border + glow shadow */
+.service-card:hover,
+.service-card:focus-within {
+  border-color: var(--accent) !important;
+  box-shadow:
+    0 0 0 1px var(--accent),
+    0 16px 32px var(--accent-glow),
+    0 8px 20px rgba(12, 43, 72, 0.18) !important;
+  outline-color: var(--accent);
 }
 
-.back-to-top:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(16, 200, 224, 0.4);
+/* Icon badge — resting state uses accent-soft bg + muted color */
+.service-card-icon {
+  background-color: var(--accent-soft, #f7fbff);
+  color: var(--accent-muted);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
-.back-to-top:focus-visible {
-  outline: 3px solid #10c8e0;
-  outline-offset: 4px;
+/* Icon badge hover — solid accent fill + button-text color */
+.service-card:hover .service-card-icon,
+.service-card:focus-within .service-card-icon {
+  background-color: var(--accent-btn-bg, var(--accent));
+  color: var(--accent-btn-text, #04152b);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .back-to-top {
-    transition: none;
-  }
-  
-  .back-to-top:hover {
-    transform: none;
-  }
+/* "Explore" link */
+.service-card-explore {
+  color: var(--accent-muted);
+  transition: color 0.3s ease;
 }
+
+
 
 .preloader-logo {
   opacity: 0;

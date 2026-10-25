@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Button from "./Button";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const clingeneLogo = "/images/clingene-logo.webp";
 
@@ -16,14 +17,6 @@ const links = [
   { label: "Contact", href: "#contact" },
 ];
 
-function SearchIcon() {
-  return (
-    <svg aria-hidden="true" className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24">
-      <circle cx="10.8" cy="10.8" r="6.3" stroke="currentColor" strokeWidth="1.8" />
-      <path d="m15.5 15.5 4.2 4.2" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
-    </svg>
-  );
-}
 
 function MenuIcon({ open }) {
   return open ? (
@@ -44,13 +37,13 @@ export default function HeaderNav({ activePage }) {
     <a
       key={label}
       aria-current={activePage === label ? "page" : undefined}
-      className={`whitespace-nowrap py-2 text-[13px] font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${activePage === label ? "text-[#0a7a94]" : "text-[#1f2937]"}`}
+      className={`whitespace-nowrap py-2 text-[13px] font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${activePage === label ? "text-[var(--accent-muted)]" : "text-[#1f2937]"}`}
       href={href}
       onClick={() => setMenuOpen(false)}
     >
       <span className="group relative inline-block">
         {label}
-        <span aria-hidden="true" className={`absolute -bottom-2 left-0 h-0.5 w-full bg-[#10c8e0] transition-transform duration-300 ${activePage === label ? "scale-x-100 origin-left" : "scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left"}`} />
+        <span aria-hidden="true" className={`absolute -bottom-2 left-0 h-0.5 w-full bg-[var(--accent)] transition-transform duration-300 ${activePage === label ? "scale-x-100 origin-left" : "scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left"}`} />
       </span>
     </a>
   );
@@ -75,13 +68,7 @@ export default function HeaderNav({ activePage }) {
         </nav>
 
         <div className="hidden shrink-0 items-center gap-4 min-[1200px]:flex">
-          <Button
-            aria-label="Search"
-            className="!h-9 !min-h-9 !w-9 !rounded-full !border !border-slate-100 !p-0 !text-slate-600 hover:!border-slate-300 hover:!text-white"
-            variant="white"
-          >
-            <SearchIcon />
-          </Button>
+          <ThemeSwitcher />
           <Button className="!min-h-0 !px-5 !py-[11px] !text-[11px]" href="#contact">Contact Us</Button>
         </div>
 
@@ -107,17 +94,21 @@ export default function HeaderNav({ activePage }) {
                 key={link.label}
                 aria-current={activePage === link.label ? "page" : undefined}
                 className={`group rounded-md px-3 py-2.5 text-sm font-semibold hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${
-                  activePage === link.label ? "text-[#0a7a94]" : "text-slate-700"
+                  activePage === link.label ? "text-[var(--accent-muted)]" : "text-slate-700"
                 }`}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
               >
                 <span className="relative inline-block">
                   {link.label}
-                  <span aria-hidden="true" className={`absolute -bottom-0.5 left-0 h-0.5 w-full bg-[#10c8e0] transition-transform duration-300 ${activePage === link.label ? "scale-x-100 origin-left" : "scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left"}`} />
+                  <span aria-hidden="true" className={`absolute -bottom-0.5 left-0 h-0.5 w-full bg-[var(--accent)] transition-transform duration-300 ${activePage === link.label ? "scale-x-100 origin-left" : "scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left"}`} />
                 </span>
               </a>
             ))}
+            <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-3">
+              <span className="text-xs font-semibold text-slate-500">Color Theme</span>
+              <ThemeSwitcher />
+            </div>
             <Button
               className="mt-2 !w-full !py-3 text-center"
               href="#contact"

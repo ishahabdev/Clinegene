@@ -256,22 +256,7 @@ export default function TeamMemberCard({ member }) {
           </div>
         )}
 
-        {/* Expertise tags with enhanced styling */}
-        {expertise.length > 0 && (
-          <div className="mt-5 flex flex-wrap gap-2">
-            {expertise.map((skill, idx) => (
-              <span
-                key={skill}
-                className={`inline-flex items-center rounded-lg border ${deptColors.border} bg-gradient-to-r ${deptColors.gradient} bg-clip-text px-3 py-1.5 text-[10px] font-semibold text-transparent transition-all duration-300 hover:scale-105 motion-reduce:transform-none`}
-                style={{
-                  animation: `fadeInUp 0.5s ease-out ${idx * 0.05}s backwards`,
-                }}
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-        )}
+        {/* Expertise tags removed per user request */}
 
         {/* Social links with enhanced hover effects */}
         {social && (

@@ -2,53 +2,73 @@ import { ArrowRight } from "lucide-react";
 import Button from "../Button";
 import SectionHeading from "../SectionHeading";
 import ScrollReveal from "../ScrollReveal.jsx";
+import { useTheme } from "../../context/ThemeContext.jsx";
 const homeBackground = "/images/homepic.webp";
 export default function GalleryContactSection() {
-    return (
-<section
-    aria-labelledby="home-gallery-title"
-    className="bg-white py-16 md:py-24"
-    id="gallery-contact"
-  >
-    <div className="mx-auto grid max-w-310 items-stretch gap-5 px-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,0.72fr)] lg:gap-6 lg:px-12">
-      <div
-        className="rounded-2xl bg-[#f6f8fb] p-6 sm:p-8"
-        id="gallery"
-      >
-        <SectionHeading
-          action={{ label: "View All Gallery", href: "/gallery" }}
-          description="Glimpses of our research, training and collaboration."
-          eyebrow="Our Gallery"
-          id="home-gallery-title"
-          highlight="Our Journey"
-          title="Moments from"
-        />
+  const { theme } = useTheme();
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {[
-            { label: "Genomics research", position: "65% center" },
-            { label: "DNA sequencing", position: "82% center" },
-            { label: "Biomedical science", position: "48% center" },
-          ].map(({ label, position }, index) => (
-            <ScrollReveal
-              as="a"
-              aria-label={`View gallery: ${label}`}
-              className="group relative block h-52 overflow-hidden rounded-xl bg-[#102943] sm:h-48 lg:h-56"
-              delay={index * 60}
-              href="#gallery"
-              key={label}
-            >
-              <img
-                alt={label}
-                width="2014"
-                height="781"
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                decoding="async"
-                loading="lazy"
-                src={homeBackground}
-                style={{ objectPosition: position }}
-              />
-              <span className="absolute inset-0 bg-linear-to-t from-[#031b37]/65 via-transparent to-transparent opacity-70 transition-opacity group-hover:opacity-90" />
+  const overlayColor =
+    theme === "red"
+      ? "rgba(45, 3, 6, 0.65)"
+      : theme === "green"
+        ? "rgba(2, 30, 18, 0.65)"
+        : "rgba(2, 19, 42, 0.65)";
+
+  const buttonColor =
+    theme === "red"
+      ? "!bg-red-600 hover:!bg-red-700"
+      : theme === "green"
+        ? "!bg-green-600 hover:!bg-green-700"
+        : "!bg-[#2385d1] hover:!bg-[#1a6fb8]";
+
+  return (
+    <section
+      aria-labelledby="home-gallery-title"
+      className="bg-white py-16 md:py-24"
+      id="gallery-contact"
+    >
+      <div className="mx-auto grid max-w-310 items-stretch gap-5 px-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,0.72fr)] lg:gap-6 lg:px-12">
+        <div
+          className="rounded-2xl bg-[#f6f8fb] p-6 sm:p-8"
+          id="gallery"
+        >
+          <SectionHeading
+            action={{ label: "View All Gallery", href: "/gallery" }}
+            description="Glimpses of our research, training and collaboration."
+            eyebrow="Our Gallery"
+            id="home-gallery-title"
+            highlight="Our Journey"
+            title="Moments from"
+          />
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {[
+              { label: "Genomics research", position: "65% center" },
+              { label: "DNA sequencing", position: "82% center" },
+              { label: "Biomedical science", position: "48% center" },
+            ].map(({ label, position }, index) => (
+              <ScrollReveal
+                as="a"
+                aria-label={`View gallery: ${label}`}
+                className="group relative block h-52 overflow-hidden rounded-xl sm:h-48 lg:h-56"
+                delay={index * 60}
+                href="#gallery"
+                key={label}
+              >
+                <img
+                  alt={label}
+                  width="2014"
+                  height="781"
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  decoding="async"
+                  loading="lazy"
+                  src={homeBackground}
+                  style={{ objectPosition: position }}
+                />
+                <span
+                  className="absolute inset-0 bg-linear-to-t via-transparent to-transparent opacity-70 transition-opacity group-hover:opacity-90"
+                  style={{ backgroundColor: overlayColor }}
+                />
               <span className="absolute inset-x-3 bottom-3 text-xs font-semibold text-white sm:text-sm">
                 {label}
               </span>
@@ -68,7 +88,7 @@ export default function GalleryContactSection() {
         <p className="mt-4 text-sm leading-6 text-slate-600">
           Have a question or need assistance? We’re here to help.
         </p>
-        <Button className="mt-6 !bg-[#2385d1] !text-white hover:!text-white" href="#contact">
+        <Button className={`mt-6 !text-white hover:!text-white ${buttonColor}`} href="#contact">
           Contact Us <ArrowRight aria-hidden="true" className="h-4 w-4" />
         </Button>
         <address className="mt-7 space-y-5 not-italic text-sm leading-6 text-slate-600">

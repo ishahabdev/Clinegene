@@ -136,37 +136,32 @@ export default function ServicesSection() {
             {carouselServices.map((service, index) => {
               return (
                 <a
-                  className="group flex min-h-[29.25rem] shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] bg-[#f7fbff] text-[#102744] shadow-[0_10px_24px_rgba(12,43,72,0.16)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#12c5df] hover:shadow-[0_16px_32px_rgba(12,43,72,0.22)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12c5df] group-focus-within:-translate-y-1.5 group-focus-within:border-[#12c5df] group-focus-within:shadow-[0_16px_32px_rgba(12,43,72,0.22)] motion-reduce:transform-none motion-reduce:transition-none"
+                  className="service-card group flex min-h-[29.25rem] shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] border-t-4 border-t-[#d4e5f2] hover:border-t-[var(--accent)] bg-[#f7fbff] text-[#102744] transition-all duration-[800ms] ease-in-out hover:-translate-y-1 motion-reduce:transform-none motion-reduce:transition-none"
                   href="#services"
                   key={`${service}-${index}`}
                   style={{ width: `${cardWidth}px` }}
                 >
-                  <div className="relative aspect-[4/3] w-full min-w-0 overflow-hidden bg-[#102943]">
+                  <div className="relative aspect-[3.5/2.5] w-full min-w-0 overflow-hidden bg-[#102943]">
                     <img
                       alt=""
                       aria-hidden="true"
                       width={service.width}
                       height={service.height}
-                      className={`block h-full w-full object-cover object-center transition-transform duration-300 ease-out motion-reduce:transform-none motion-reduce:transition-none ${
-                        service.name === "Whole Exome/Genome Sequencing"
-                          ? "scale-[1.16] group-hover:scale-[1.24] group-focus-within:scale-[1.24]"
-                          : service.name === "16SrRNA Metagenome Sequencing"
-                            ? "origin-bottom scale-[1.16] group-hover:scale-[1.24] group-focus-within:scale-[1.24]"
-                          : "scale-[1.03] group-hover:scale-110 group-focus-within:scale-110"
-                      }`}
+                      className="block h-full w-full object-cover object-center scale-100 transition-transform duration-[800ms] ease-in-out group-hover:scale-105 group-focus-within:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
                       loading="lazy"
                       src={service.image}
                     />
                   </div>
                   <div className="relative flex flex-1 flex-col px-5 pb-5 pt-11">
-                    <span className="absolute -top-[30px] left-5 grid h-[60px] w-[60px] place-items-center rounded-[15px] border border-[#d4e5f2] bg-[#f7fbff] text-[#0a7a94] shadow-[0_3px_8px_rgba(12,43,72,0.12)] transition-all duration-300 ease-out group-hover:scale-110 group-hover:-rotate-6 group-hover:bg-[#12c5df] group-hover:text-white group-focus-within:scale-110 group-focus-within:-rotate-6 group-focus-within:bg-[#12c5df] group-focus-within:text-white motion-reduce:transform-none motion-reduce:transition-none">
+                    {/* Icon badge — rests & hover both themed via CSS vars */}
+                    <span className="service-card-icon absolute -top-[30px] left-5 grid h-[60px] w-[60px] place-items-center rounded-[15px] border border-[#d4e5f2] shadow-[0_3px_8px_rgba(12,43,72,0.12)] transition-all duration-[800ms] ease-in-out group-hover:scale-110 group-hover:-rotate-6 group-focus-within:scale-110 group-focus-within:-rotate-6 motion-reduce:transform-none motion-reduce:transition-none">
                       <service.Icon aria-hidden="true" size={22} strokeWidth={1.8} />
                     </span>
-                    <h3 className="mt-4 text-[18px] font-bold leading-[1.35] transition-colors duration-300 ease-out group-hover:text-[#0a5265] group-focus-within:text-[#0a5265] motion-reduce:transition-none">{service.name}</h3>
+                    <h3 className="mt-4 text-[18px] font-bold leading-[1.35] transition-colors duration-[800ms] ease-in-out group-hover:text-[#0a5265] group-focus-within:text-[#0a5265] motion-reduce:transition-none">{service.name}</h3>
                     <p className="mt-3 text-base leading-[1.6] text-[#58748d]">{service.description}</p>
-                    <span className="mt-auto inline-flex items-center gap-2 whitespace-nowrap pt-5 text-base font-bold text-[#0a7a94]">
+                    <span className="service-card-explore mt-auto inline-flex items-center gap-2 whitespace-nowrap pt-5 text-base font-bold">
                       Explore
-                      <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-1 group-focus-within:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
+                      <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform duration-[800ms] ease-in-out group-hover:translate-x-1 group-focus-within:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
                     </span>
                   </div>
                 </a>
@@ -183,8 +178,8 @@ export default function ServicesSection() {
             aria-label={`Show ${service.name}`}
                 className={`!h-1.75 !min-h-1.75 !rounded-full !border-0 !p-0 transition-all duration-300 motion-reduce:transition-none ${
               serviceIndex === index
-                ? "w-7 bg-[#10c8e0]"
-                : "w-1.75 bg-[#9aafc1] hover:bg-[#10c8e0]/70"
+                ? "w-7"
+                : "w-1.75 !bg-[#9aafc1] hover:!bg-[var(--accent)]"
             }`}
             key={service.name}
             onClick={() => goToService(index)}

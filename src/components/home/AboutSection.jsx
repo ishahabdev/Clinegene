@@ -38,10 +38,16 @@ export default function AboutSection() {
             { label: "Teamwork", Icon: Users },
           ].map(({ label, Icon }) => (
             <span
-              className="inline-flex items-center gap-2 rounded-full border border-[#12c5df]/30 bg-[#effafc] px-3.5 py-2 font-inter text-[13px] font-medium text-[#0a7a94]"
+              className="inline-flex items-center gap-2 rounded-full border px-3.5 py-2 font-inter text-[13px] font-medium"
               key={label}
+              style={{
+                borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
+                background: "var(--accent-soft)",
+                color: "var(--accent-muted)",
+                transition: "all 0.4s ease-in-out",
+              }}
             >
-              <Icon aria-hidden="true" className="h-4 w-4 text-[#0a7a94]" strokeWidth={1.8} />
+              <Icon aria-hidden="true" className="h-4 w-4" strokeWidth={1.8} style={{ color: "var(--accent-muted)" }} />
               {label}
             </span>
           ))}
@@ -52,8 +58,9 @@ export default function AboutSection() {
           </Button>
          
           <a
-            className="group inline-flex min-h-12 items-center gap-2.5 px-2 font-outfit text-sm font-bold text-[#0a7a94] transition-colors hover:text-[#0c2b48] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
+            className="group inline-flex min-h-12 items-center gap-2.5 px-2 font-outfit text-sm font-bold transition-colors hover:text-[#0c2b48] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
             href="#ceo-message"
+            style={{ color: "var(--accent-muted)", transition: "color 0.4s ease-in-out" }}
           >
             Message from CEO
             <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
@@ -62,7 +69,9 @@ export default function AboutSection() {
       </div>
 
       <ScrollReveal as="div" className="relative isolate w-full pb-30">
-        <div className="absolute -right-3 -top-3 z-0 hidden aspect-3/2 w-full rounded-[28px] border-2 border-[#12c5df]/40 sm:block" />
+        <div className="absolute -right-3 -top-3 z-0 hidden aspect-3/2 w-full rounded-[28px] border-2 sm:block"
+          style={{ borderColor: "color-mix(in srgb, var(--accent) 40%, transparent)", transition: "border-color 0.4s ease-in-out" }}
+        />
         <div className="relative z-0 aspect-3/2 w-full overflow-hidden rounded-[28px] bg-[#071e34] shadow-xl">
           <img
             alt="Microscope in a biomedical research setting"
@@ -81,20 +90,30 @@ export default function AboutSection() {
               { label: "Clinicians", Icon: Stethoscope },
               { label: "Industry Partners", Icon: Building2 },
             ].map(({ label, Icon }) => (
-              <div className="flex flex-col items-center gap-2 text-center font-inter text-[#0a7a94]" key={label}>
-                <span className="grid h-12 w-12 place-items-center rounded-full bg-[#e6f8fb]">
-                  <Icon aria-hidden="true" className="h-6 w-6 text-[#0a7a94]" strokeWidth={1.8} />
+              <div className="flex flex-col items-center gap-2 text-center font-inter" key={label}
+                style={{ color: "var(--accent-muted)", transition: "color 0.4s ease-in-out" }}
+              >
+                <span className="grid h-12 w-12 place-items-center rounded-full"
+                  style={{ background: "var(--accent-soft)", transition: "background 0.4s ease-in-out" }}
+                >
+                  <Icon aria-hidden="true" className="h-6 w-6" strokeWidth={1.8}
+                    style={{ color: "var(--accent-muted)" }}
+                  />
                 </span>
                 <span className="text-[9px] font-semibold leading-tight sm:text-xs">{label}</span>
               </div>
             ))}
           </div>
-          <svg aria-hidden="true" className="mt-2 h-8 w-full text-[#12c5df]" fill="none" viewBox="0 0 300 30" preserveAspectRatio="none">
+          <svg aria-hidden="true" className="mt-2 h-8 w-full" fill="none" viewBox="0 0 300 30" preserveAspectRatio="none"
+            style={{ color: "var(--accent)", transition: "color 0.4s ease-in-out" }}
+          >
             <path d="M45 2 C76 2 87 23 150 23 M150 2 V23 M255 2 C224 2 213 23 150 23" stroke="currentColor" strokeDasharray="3 4" strokeLinecap="round" strokeWidth="1.5" />
           </svg>
           <div className="mt-1 flex flex-col items-center text-center">
             <p className="inline-flex items-center gap-2 rounded-full bg-[#0c2b48] px-4 py-1.5 font-outfit text-sm font-bold tracking-[0.18em] text-white">
-              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[#12c5df]" />
+              <span aria-hidden="true" className="h-2 w-2 rounded-full"
+                style={{ background: "var(--accent)", transition: "background 0.4s ease-in-out" }}
+              />
               CLINGENE
             </p>
             <p className="mt-2 font-inter text-[12.5px] font-medium leading-snug text-[#4a6e8b]">

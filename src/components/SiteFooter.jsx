@@ -1,9 +1,20 @@
 import Button from "./Button.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
 
 const clingeneLogo = "/images/clingene-logo.webp";
 const homeBackground = "/images/home1.webp";
 
 export default function SiteFooter({ compact = false, showJoinCta }) {
+  const { theme } = useTheme();
+
+  // Per-theme footer overlay & accent tint
+  const footerBgOverlay =
+    theme === "red"
+      ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97), rgba(60, 6, 10, 0.95))"
+      : theme === "green"
+        ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97), rgba(4, 42, 24, 0.95))"
+        : "linear-gradient(105deg, rgba(2, 19, 42, 0.97), rgba(3, 28, 57, 0.94))";
+
   if (compact) {
     return (
       <footer className="ceo-footer">
@@ -52,18 +63,24 @@ export default function SiteFooter({ compact = false, showJoinCta }) {
 
   return (
     <footer
-      className="relative isolate overflow-hidden bg-[#031b37] text-white z-[1]"
+      className="relative isolate overflow-hidden text-white z-[1]"
       style={{
-        backgroundImage: `linear-gradient(105deg, rgba(2, 19, 42, 0.97), rgba(3, 28, 57, 0.94)), url(${homeBackground})`,
+        backgroundImage: `${footerBgOverlay}, url(${homeBackground})`,
         backgroundPosition: "center 38%",
         backgroundSize: "cover",
+        transition: "background-image 0.4s ease-in-out",
       }}
     >
       <div className="site-container pb-5 pt-8 sm:pt-10">
+
+        {/* ── Join CTA banner ───────────────────────────────────────── */}
         {showJoinCta && (
           <div className="flex flex-col justify-between gap-5 border-b border-white/15 pb-7 sm:flex-row sm:items-center">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#9fb6ce]">
+              <p
+                className="text-[10px] font-bold uppercase tracking-[0.16em]"
+                style={{ color: "var(--accent)", transition: "color 0.4s ease-in-out" }}
+              >
                 Open Positions
               </p>
               <h2 className="mt-1 text-xl font-bold tracking-tight sm:text-2xl">
@@ -79,8 +96,15 @@ export default function SiteFooter({ compact = false, showJoinCta }) {
           </div>
         )}
 
+        {/* ── Footer columns ────────────────────────────────────────── */}
         <div className="grid gap-8 py-8 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.8fr_0.8fr_1.15fr_0.7fr] lg:gap-7">
-          <a aria-label="ClinGene home" className="flex w-[150px] self-start items-center rounded-xl bg-white/95 p-3 shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#12c5df]" href="#home">
+
+          {/* Logo */}
+          <a
+            aria-label="ClinGene home"
+            className="flex w-[150px] self-start items-center rounded-xl bg-white/95 p-3 shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+            href="#home"
+          >
             <img
               alt="ClinGene — Human Genetics and Biomedical Research"
               width="450"
@@ -90,18 +114,25 @@ export default function SiteFooter({ compact = false, showJoinCta }) {
             />
           </a>
 
+          {/* Quick Links */}
           <nav aria-label="Footer quick links">
             <h3 className="mb-3 text-sm font-bold text-white">Quick Links</h3>
             <ul className="space-y-2.5 text-sm text-white/80">
               {[
-                ["Home", "#home"],
+                ["Home",        "#home"],
                 ["CEO Message", "#ceo-message"],
-                ["About", "#about"],
-                ["Team", "#team"],
-                ["Services", "#services"],
+                ["About",       "#about"],
+                ["Team",        "#team"],
+                ["Services",    "#services"],
               ].map(([label, href]) => (
                 <li key={label}>
-                  <a className="transition-colors hover:text-[#10c8e0] hover:underline" href={href}>
+                  <a
+                    className="transition-colors hover:underline"
+                    href={href}
+                    style={{ transition: "color 0.3s ease" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "var(--accent)")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "")}
+                  >
                     {label}
                   </a>
                 </li>
@@ -109,18 +140,25 @@ export default function SiteFooter({ compact = false, showJoinCta }) {
             </ul>
           </nav>
 
+          {/* Research Links */}
           <nav aria-label="Footer research links">
             <h3 className="mb-3 text-sm font-bold text-white">Research</h3>
             <ul className="space-y-2.5 text-sm text-white/80">
               {[
-                ["Research", "#research"],
-                ["Gallery", "#gallery"],
+                ["Research",       "#research"],
+                ["Gallery",        "#gallery"],
                 ["Open Positions", "#open-positions"],
-                ["News", "#news"],
-                ["Contact", "#contact"],
+                ["News",           "#news"],
+                ["Contact",        "#contact"],
               ].map(([label, href]) => (
                 <li key={label}>
-                  <a className="transition-colors hover:text-[#10c8e0] hover:underline" href={href}>
+                  <a
+                    className="transition-colors hover:underline"
+                    href={href}
+                    style={{ transition: "color 0.3s ease" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "var(--accent)")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "")}
+                  >
                     {label}
                   </a>
                 </li>
@@ -128,37 +166,64 @@ export default function SiteFooter({ compact = false, showJoinCta }) {
             </ul>
           </nav>
 
+          {/* Contact */}
           <div>
             <h3 className="mb-3 text-sm font-bold text-white">Contact Information</h3>
             <a
-              className="text-sm leading-6 text-white/80 transition-colors hover:text-[#10c8e0]"
+              className="text-sm leading-6 text-white/80"
               href="#contact"
+              style={{ transition: "color 0.3s ease" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--accent)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "")}
             >
               For inquiries, please get in touch with our team.
               <span className="mt-1 block font-semibold text-white">Contact ClinGene →</span>
             </a>
           </div>
 
+          {/* Follow Us */}
           <div>
             <h3 className="mb-3 text-sm font-bold text-white">Follow Us</h3>
             <a
               aria-label="Contact ClinGene about social media"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 text-xs font-bold text-white transition-colors hover:border-white hover:bg-white/10"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 text-xs font-bold text-white transition-all hover:bg-white/10"
               href="#contact"
+              style={{ transition: "border-color 0.3s ease, color 0.3s ease" }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = "var(--accent)";
+                e.currentTarget.style.color = "var(--accent)";
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = "";
+                e.currentTarget.style.color = "";
+              }}
             >
               in
             </a>
           </div>
         </div>
 
+        {/* ── Bottom bar ────────────────────────────────────────────── */}
         <div className="flex flex-col gap-3 border-t border-white/15 pt-4 text-xs text-slate-300 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} ClinGene (Pvt.) Ltd. All Rights Reserved.</p>
           <div className="flex gap-4 text-sm">
-            <a className="transition-colors hover:text-[#10c8e0]" href="#privacy-policy">
+            <a
+              className="transition-colors"
+              href="#privacy-policy"
+              style={{ transition: "color 0.3s ease" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--accent)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "")}
+            >
               Privacy Policy
             </a>
             <span aria-hidden="true" className="text-white/30">|</span>
-            <a className="transition-colors hover:text-[#10c8e0]" href="#terms-of-use">
+            <a
+              className="transition-colors"
+              href="#terms-of-use"
+              style={{ transition: "color 0.3s ease" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--accent)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "")}
+            >
               Terms of Use
             </a>
           </div>

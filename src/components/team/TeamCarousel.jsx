@@ -97,22 +97,13 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
           Math.abs(offset) > 0 ? 'cursor-pointer' : 'cursor-default'
         } ${
           isActive
-            ? 'border-2 border-[#10C8E0] shadow-[0_25px_70px_rgba(16,200,224,0.6)]'
-            : 'bg-white border-2 border-[#e2e8f0] shadow-[0_10px_30px_rgba(15,23,42,0.12)] hover:shadow-[0_15px_40px_rgba(16,200,224,0.2)] hover:-translate-y-1'
+            ? 'border-2 border-[#10C8E0] shadow-[0_10px_30px_rgba(15,23,42,0.15)]'
+            : 'bg-white border-2 border-[#e2e8f0] shadow-[0_10px_30px_rgba(15,23,42,0.12)] hover:shadow-[0_15px_40px_rgba(15,23,42,0.18)] hover:-translate-y-1'
         }`}
       >
-        {/* Subtle animated glow for active card */}
+        {/* Remove the animated glow effects */}
         {isActive && (
-          <>
-            <div
-              className="absolute inset-0 rounded-2xl opacity-25 pointer-events-none"
-              style={{
-                background: 'conic-gradient(from 0deg, transparent 0%, rgba(6,182,212,0.9) 10%, transparent 20%)',
-                animation: 'spin-slow 6s linear infinite',
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] via-transparent to-white/[0.05] pointer-events-none" />
-          </>
+          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] via-transparent to-white/[0.05] pointer-events-none" />
         )}
 
         {/* Card Content */}
@@ -215,23 +206,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
               </div>
             )}
 
-            {/* Tags - compact */}
-            {member.tags && member.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 justify-center mb-3">
-                {member.tags.slice(0, 3).map((tag, idx) => (
-                  <span
-                    key={idx}
-                    className={`rounded-lg px-2 py-1 text-[8px] font-semibold uppercase tracking-wide transition-all ${
-                      isActive
-                        ? 'bg-white/90 text-black border border-white'
-                        : 'bg-[#e0f2fe] text-[#10C8E0] border border-[#10C8E0]/20'
-                    }`}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
+            {/* Tags - removed per user request */}
 
             {/* Contact button - compact */}
             {member.social?.email && (
@@ -405,12 +380,6 @@ export default function TeamCarousel({ members = [] }) {
           `,
           backgroundSize: '40px 40px'
         }}
-        aria-hidden="true"
-      />
-
-      {/* Radial cyan glow */}
-      <div 
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(16,200,224,0.1),transparent_65%)]"
         aria-hidden="true"
       />
 

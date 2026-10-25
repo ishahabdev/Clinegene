@@ -2,15 +2,29 @@ import { ArrowRight, Bell } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import serviceHero from "../assets/service-hero.webp";
+import { useTheme } from "../context/ThemeContext.jsx";
 
 export default function OpenPositionsPage() {
+  const { theme } = useTheme();
+
+  const sectionBg =
+    theme === "red"
+      ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97), rgba(60, 6, 10, 0.95))"
+      : theme === "green"
+        ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97), rgba(4, 42, 24, 0.95))"
+        : "linear-gradient(105deg, rgba(2, 19, 42, 0.97), rgba(3, 28, 57, 0.94))";
+
+  const overlayColor =
+    theme === "red" ? "rgba(45, 3, 6, " : theme === "green" ? "rgba(2, 30, 18, " : "rgba(2, 19, 42, ";
+
   return (
     <>
       {/* Hero Section */}
       <section
         aria-labelledby="open-positions-hero-title"
-        className="relative isolate flex min-h-75 items-center overflow-hidden bg-[#031b37] text-white sm:min-h-80"
+        className="relative isolate flex min-h-75 items-center overflow-hidden text-white sm:min-h-80"
         id="open-positions-hero"
+        style={{ backgroundImage: sectionBg }}
       >
         <img
           alt=""
@@ -23,7 +37,10 @@ export default function OpenPositionsPage() {
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-linear-to-r from-[#031b37]/95 via-[#031b37]/75 to-[#031b37]/10"
+          className="absolute inset-0 -z-10"
+          style={{
+            backgroundImage: `linear-gradient(to right, ${overlayColor}/95, ${overlayColor}/75, ${overlayColor}/10)`,
+          }}
         />
         <div className="mx-auto w-full max-w-310 px-6 py-8 lg:px-12">
           <nav
@@ -153,7 +170,8 @@ export default function OpenPositionsPage() {
       {/* Footer / Related Links */}
       <section
         aria-label="Related pages"
-        className="bg-[#031b37] pb-6 pt-4 md:pb-8 md:pt-6 border-t border-[#12c5df]/20"
+        className="pb-6 pt-4 md:pb-8 md:pt-6 border-t border-[#12c5df]/20"
+        style={{ backgroundImage: sectionBg }}
       >
         <div className="mx-auto max-w-310 px-6 lg:px-12">
           <ScrollReveal className="flex flex-wrap justify-center gap-4 text-sm">

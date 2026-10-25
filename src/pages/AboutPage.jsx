@@ -4,15 +4,29 @@ import ScrollReveal from "../components/ScrollReveal.jsx";
 import promiseImage from "../assets/about us/promise.jpeg";
 import injectionImage from "../assets/about us/about-injection.jpeg";
 import aimImage from "../assets/about us/aim-pic.jpeg";
+import { useTheme } from "../context/ThemeContext.jsx";
 
 export default function AboutPage() {
+  const { theme } = useTheme();
+
+  const sectionBg =
+    theme === "red"
+      ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97), rgba(60, 6, 10, 0.95))"
+      : theme === "green"
+        ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97), rgba(4, 42, 24, 0.95))"
+        : "linear-gradient(105deg, rgba(2, 19, 42, 0.97), rgba(3, 28, 57, 0.94))";
+
+  const overlayColor =
+    theme === "red" ? "rgba(45, 3, 6, " : theme === "green" ? "rgba(2, 30, 18, " : "rgba(2, 19, 42, ";
+
   return (
     <>
       {/* --- About Hero Section --- */}
       <section
         aria-labelledby="about-hero-title"
-        className="relative isolate min-h-[38vh] overflow-hidden bg-[#031b37] text-white sm:min-h-[42vh] lg:min-h-[46vh]"
+        className="relative isolate min-h-[38vh] overflow-hidden text-white sm:min-h-[42vh] lg:min-h-[46vh]"
         id="about-hero"
+        style={{ backgroundImage: sectionBg }}
       >
         {/* Full-screen background image */}
         <img
@@ -27,7 +41,10 @@ export default function AboutPage() {
         {/* Dark overlay for text readability */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-[#031b37]/98 via-[#031b37]/85 to-[#031b37]/60"
+          className="absolute inset-0 -z-10 bg-gradient-to-r"
+          style={{
+            backgroundImage: `linear-gradient(to right, ${overlayColor}/98, ${overlayColor}/85, ${overlayColor}/60)`,
+          }}
         />
 
         {/* Text content */}

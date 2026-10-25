@@ -29,12 +29,12 @@ export default function SectionHeading({
       <div className={center ? "flex flex-col items-center" : "min-w-0 flex-1"}>
         <div
           className={`flex items-center gap-3 font-inter text-[11px] font-bold uppercase tracking-[0.25em] ${
-            dark ? "text-[#12c5df]" : "text-[#0a7a94]"
+            dark ? "text-[var(--accent)]" : "text-[var(--accent-muted)]"
           }`}
         >
-          <span aria-hidden="true" className={`h-[2px] w-9 ${dark ? "bg-[#12c5df]" : "bg-[#12c5df]"}`} />
+          <span aria-hidden="true" className={`h-[2px] w-9 bg-[var(--accent)]`} />
           {eyebrow}
-          {center && <span aria-hidden="true" className={`h-[2px] w-9 ${dark ? "bg-[#12c5df]" : "bg-[#12c5df]"}`} />}
+          {center && <span aria-hidden="true" className={`h-[2px] w-9 bg-[var(--accent)]`} />}
         </div>
 
         <h2
@@ -44,7 +44,7 @@ export default function SectionHeading({
           id={headingId}
         >
           {title}{" "}
-          <span className={highlightClassName || (dark ? "text-[#12c5df]" : "text-[#0891b2]")}>
+          <span className={highlightClassName || (dark ? "text-[var(--accent)]" : "text-[var(--accent-dark)]")}>
             {highlight}
           </span>
         </h2>
@@ -66,7 +66,7 @@ export default function SectionHeading({
           {action && (
             <a
               className={`group inline-flex w-fit items-center gap-2.5 font-inter text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${
-                dark ? "text-[#12c5df] hover:text-white" : "text-[#0a7a94] hover:text-[#0c2b48]"
+                dark ? "text-[var(--accent)] hover:text-white" : "text-[var(--accent-muted)] hover:text-[#0c2b48]"
               }`}
               href={action.href}
             >

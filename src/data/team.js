@@ -30,11 +30,15 @@ const departmentIcons = {
   training: GraduationCap,
 };
 
-import team1 from "../assets/team/1team.png";
-import team2 from "../assets/team/2team.png";
-import team3 from "../assets/team/3team.png";
-import team4 from "../assets/team/4team.png";
-import team5 from "../assets/team/5team.png";
+import amjadAli from "../assets/team/Amjad Ali.jpeg";
+import safdarAli from "../assets/team/Safdar Ali.jpeg";
+import kifayatUllah from "../assets/team/Kifayat ullah.jpeg";
+import abidAli from "../assets/team/Abid Ali.jpeg";
+import tahirUllah from "../assets/team/Tahir Ali.jpeg";
+import mudassirAlvi from "../assets/team/Mudassir.jpeg";
+import saadKhan from "../assets/team/Saad.jpeg";
+import imadAli from "../assets/team/Imad Ali.jpeg";
+import samrana from "../assets/team/samrana.jpeg";
 
 export const teamMembers = [
   {
@@ -42,8 +46,8 @@ export const teamMembers = [
     name: "Dr. Amjad Ali Tanoli Ph.D",
     designation: "CEO",
     department: "leadership",
-    image: team1,
-    details: ["Human Geneticist", "Consultant Genetic Counselor"],
+    image: amjadAli,
+    details: ["CEO/Director", "Human Geneticist", "Consultant Genetic Counselor"],
     bio: "Dr. Amjad Ali Tanoli is the founder and CEO of ClinGene, driving Pakistan's first human genetics and precision medicine platform. With over 15 years of international research experience, he bridges clinical genetics and genomic technology to advance healthcare innovation in the region.",
     expertise: ["Clinical Genetics", "Precision Medicine", "Genetic Counseling"],
     tags: ["Clinical Genetics", "Precision Medicine", "Leadership"],
@@ -55,12 +59,12 @@ export const teamMembers = [
   },
   {
     id: "dr-safdar-ali-tanoli",
-    name: "Dr. Safdar Ali Tanoli Ph.D",
-    designation: "Co-CEO & Postdoc Lead",
+    name: "Dr. Safdar Ali Ph.D, Postdoc",
+    designation: "POSTDOC",
     department: "leadership",
-    image: team2,
-    details: ["Co-CEO", "Medical Physicist"],
-    bio: "Dr. Safdar Ali Tanoli serves as Co-CEO and Postdoc Lead at ClinGene. A medical physicist by training, he previously worked at the Princess Margaret Cancer Research Centre in Toronto, Canada. His expertise lies in computational oncology and translational research pipelines.",
+    image: safdarAli,
+    details: ["Managing Director", "Medical Physicist", "Princess Margaret Cancer Research Centre, Toronto, Canada"],
+    bio: "Dr. Safdar Ali serves as Managing Director and Postdoc Lead at ClinGene. A medical physicist by training, he previously worked at the Princess Margaret Cancer Research Centre in Toronto, Canada. His expertise lies in computational oncology and translational research pipelines.",
     expertise: ["Medical Physics", "Computational Oncology", "Translational Research"],
     tags: ["Medical Physics", "Oncology", "Research"],
     social: {
@@ -74,7 +78,7 @@ export const teamMembers = [
     name: "Dr. Kifayat Ullah Ph.D",
     designation: "Head of Human Genetics",
     department: "genetics",
-    image: team3,
+    image: kifayatUllah,
     details: ["Human Geneticist", "Molecular Diagnostics"],
     bio: "Dr. Kifayat Ullah leads the Human Genetics division at ClinGene, overseeing clinical genetic testing and molecular diagnostics. His research focuses on identifying novel genetic variants associated with rare diseases in the South Asian population.",
     expertise: ["Molecular Diagnostics", "Rare Disease Genetics", "Population Genomics"],
@@ -86,41 +90,99 @@ export const teamMembers = [
     },
   },
   {
-    id: "dr-elena-rostova",
-    name: "Dr. Elena Rostova Ph.D",
-    designation: "Chief Laboratory Director",
+    id: "dr-abid-ali",
+    name: "Dr. Abid Ali Ph.D, Postdoc",
+    designation: "Postdoctoral Researcher",
     department: "laboratory",
-    image: team4,
-    details: ["Pathologist", "Quality Assurance Lead"],
-    bio: "Dr. Elena Rostova serves as Chief Laboratory Director, overseeing all diagnostic operations and quality assurance protocols. With expertise in clinical pathology and laboratory accreditation, she ensures the highest standards of diagnostic excellence.",
-    expertise: ["Clinical Pathology", "Quality Assurance", "Laboratory Operations"],
-    tags: ["Pathology", "QA Control", "Lab Ops"],
+    image: abidAli,
+    details: ["Horticulture/Olericulture", "Zhejiang University, China"],
+    bio: "Dr. Abid Ali is a Postdoctoral Researcher specializing in Horticulture and Olericulture. He completed his postdoctoral work at Zhejiang University, China, focusing on plant genetics and molecular breeding.",
+    expertise: ["Horticulture", "Plant Genetics", "Molecular Breeding"],
+    tags: ["Horticulture", "Plant Science", "Research"],
     social: {
-      email: "elena.rostova@clingene.pk",
-      linkedin: "https://linkedin.com/in/elena-rostova-phd",
-      orcid: "https://orcid.org/0000-0002-3456-7890",
+      email: "abid.ali@clingene.pk",
+      linkedin: "https://linkedin.com/in/abid-ali-phd",
     },
   },
   {
-    id: "dr-tariq-mahmood",
-    name: "Dr. Tariq Mahmood Ph.D",
-    designation: "Lead Bioinformatician",
-    department: "bioinformatics",
-    image: team5,
-    details: ["Data Scientist", "Genomic Analysis"],
-    bio: "Dr. Tariq Mahmood leads the bioinformatics division, specializing in AI-driven diagnostic tools and genomic data analysis. His work integrates machine learning with clinical genomics to enhance diagnostic accuracy and precision medicine approaches.",
-    expertise: ["Bioinformatics", "AI Diagnostics", "Genomic Analysis"],
-    tags: ["Bioinformatics", "AI Diagnostics", "Genomics"],
+    id: "mr-muhammad-tahir-ullah",
+    name: "Mr. Muhammad Tahir Ullah Ph.D",
+    designation: "Molecular Biologist & Human Geneticist",
+    department: "genetics",
+    image: tahirUllah,
+    details: ["Molecular Biologist", "Human Geneticist", "Quaid-i-Azam University, Islamabad", "King's College London, UK"],
+    bio: "Mr. Muhammad Tahir Ullah is a Molecular Biologist and Human Geneticist with expertise from Quaid-i-Azam University, Islamabad, Pakistan and King's College London, UK. His research focuses on molecular mechanisms of genetic diseases.",
+    expertise: ["Molecular Biology", "Human Genetics", "Disease Genetics"],
+    tags: ["Molecular Biology", "Genetics", "Research"],
     social: {
-      email: "tariq.mahmood@clingene.pk",
-      linkedin: "https://linkedin.com/in/tariq-mahmood-phd",
-      orcid: "https://orcid.org/0000-0003-4567-8901",
+      email: "tahir.ullah@clingene.pk",
+      linkedin: "https://linkedin.com/in/tahir-ullah-phd",
+    },
+  },
+  {
+    id: "mudassir-alvi",
+    name: "Mudassir Alvi Ph.D",
+    designation: "Bioinformatician",
+    department: "bioinformatics",
+    image: mudassirAlvi,
+    details: ["Bioinformatician", "National Centre for Bioinformatics", "Quaid-i-Azam University, Islamabad, Pakistan"],
+    bio: "Dr. Mudassir Alvi is a Bioinformatician at the National Centre for Bioinformatics, Quaid-i-Azam University, Islamabad. He specializes in computational genomics and data analysis pipelines for precision medicine.",
+    expertise: ["Bioinformatics", "Computational Genomics", "Data Analysis"],
+    tags: ["Bioinformatics", "Genomics", "Data Science"],
+    social: {
+      email: "mudassir.alvi@clingene.pk",
+      linkedin: "https://linkedin.com/in/mudassir-alvi-phd",
+    },
+  },
+  {
+    id: "saad-khan",
+    name: "Saad Khan M.Phil",
+    designation: "Molecular Biologist & Bioinformatician",
+    department: "bioinformatics",
+    image: saadKhan,
+    details: ["Molecular Biologist", "Bioinformatician", "National Centre for Bioinformatics", "Quaid-i-Azam University, Islamabad, Pakistan"],
+    bio: "Saad Khan is a Molecular Biologist and Bioinformatician at the National Centre for Bioinformatics, Quaid-i-Azam University, Islamabad. He bridges wet-lab molecular biology with computational analysis for genomic research.",
+    expertise: ["Molecular Biology", "Bioinformatics", "Genomic Analysis"],
+    tags: ["Molecular Biology", "Bioinformatics", "Research"],
+    social: {
+      email: "saad.khan@clingene.pk",
+      linkedin: "https://linkedin.com/in/saad-khan-mphil",
+    },
+  },
+  {
+    id: "imad-ali",
+    name: "Imad Ali",
+    designation: "Bioinformatics Specialist",
+    department: "bioinformatics",
+    image: imadAli,
+    details: ["Bioinformatics"],
+    bio: "Imad Ali is a Bioinformatics Specialist at ClinGene, contributing to computational analysis and genomic data interpretation for clinical and research applications.",
+    expertise: ["Bioinformatics", "Data Analysis", "Computational Biology"],
+    tags: ["Bioinformatics", "Genomics", "Analysis"],
+    social: {
+      email: "imad.ali@clingene.pk",
+      linkedin: "https://linkedin.com/in/imad-ali",
+    },
+  },
+  {
+    id: "dr-samrana",
+    name: "Dr. Samrana Ph.D",
+    designation: "Crop Genetics and Breeding Specialist",
+    department: "laboratory",
+    image: samrana,
+    details: ["Crop Genetics and Breeding", "Zhejiang University, China"],
+    bio: "Dr. Samrana specializes in Crop Genetics and Breeding with expertise from Zhejiang University, China. Her research focuses on improving crop varieties through advanced genetic and breeding techniques.",
+    expertise: ["Crop Genetics", "Plant Breeding", "Agricultural Genomics"],
+    tags: ["Crop Genetics", "Plant Breeding", "Research"],
+    social: {
+      email: "samrana@clingene.pk",
+      linkedin: "https://linkedin.com/in/dr-samrana-phd",
     },
   },
 ];
 
-// Carousel members - 5 members for the scrolling carousel
-export const carouselMembers = teamMembers.slice(0, 5);
+// Carousel members - showing all 9 team members
+export const carouselMembers = teamMembers.slice(0, 9);
 
 export const getTeamMemberIcon = (dept) => departmentIcons[dept] || UserRound;
 

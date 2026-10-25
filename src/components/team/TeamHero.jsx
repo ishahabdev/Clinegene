@@ -1,13 +1,27 @@
 import ScrollReveal from "../ScrollReveal.jsx";
 import teamPhoto from "../../assets/team.png";
 import { companyStats } from "../../data/teamConfig.js";
+import { useTheme } from "../../context/ThemeContext.jsx";
 
 export default function TeamHero() {
+  const { theme } = useTheme();
+
+  const sectionBg =
+    theme === "red"
+      ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97), rgba(60, 6, 10, 0.95))"
+      : theme === "green"
+        ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97), rgba(4, 42, 24, 0.95))"
+        : "linear-gradient(105deg, rgba(2, 19, 42, 0.97), rgba(3, 28, 57, 0.94))";
+
+  const overlayColor =
+    theme === "red" ? "rgba(45, 3, 6, " : theme === "green" ? "rgba(2, 30, 18, " : "rgba(2, 19, 42, ";
+
   return (
     <section
       aria-labelledby="team-hero-title"
-      className="relative isolate min-h-[38vh] overflow-hidden bg-[#031b37] text-white sm:min-h-[42vh] lg:min-h-[46vh] z-[1]"
+      className="relative isolate min-h-[38vh] overflow-hidden text-white sm:min-h-[42vh] lg:min-h-[46vh] z-[1]"
       id="team-hero"
+      style={{ backgroundImage: sectionBg }}
     >
       {/* Full-screen background image */}
       <img
@@ -18,11 +32,14 @@ export default function TeamHero() {
         className="absolute inset-0 -z-20 h-full w-full object-cover object-center"
         src={teamPhoto}
       />
-      
+
       {/* Dark overlay for text readability */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-[#031b37]/95 via-[#031b37]/70 to-[#031b37]/40"
+        className="absolute inset-0 -z-10 bg-gradient-to-r"
+        style={{
+          backgroundImage: `linear-gradient(to right, ${overlayColor}/95, ${overlayColor}/70, ${overlayColor}/40)`,
+        }}
       />
 
       {/* Text content */}
