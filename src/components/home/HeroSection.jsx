@@ -163,7 +163,7 @@ export default function HeroSection() {
             background: isRed
               ? "rgba(28, 4, 8, 0.88)"
               : isGreen
-                ? "rgba(3, 18, 38, 0.92)"
+                ? "rgba(4, 51, 27, 0.92)"
                 : "rgba(3, 27, 55, 0.85)",
             /* Per-theme border — consistent use of CSS variable */
             border: isRed

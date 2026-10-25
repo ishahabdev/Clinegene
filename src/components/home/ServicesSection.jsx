@@ -145,9 +145,7 @@ export default function ServicesSection() {
                     <img
                       alt=""
                       aria-hidden="true"
-                      width={service.width}
-                      height={service.height}
-                      className="block h-full w-full object-cover object-center scale-100 transition-transform duration-[800ms] ease-in-out group-hover:scale-105 group-focus-within:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
+                      className="block h-full w-full object-cover object-center transition-transform duration-[800ms] ease-in-out group-hover:scale-105 group-focus-within:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
                       loading="lazy"
                       src={service.image}
                     />
