@@ -5,16 +5,16 @@ import ThemeSwitcher from "./ThemeSwitcher";
 const clingeneLogo = "/images/clingene-logo.webp";
 
 const links = [
-  { label: "Home", href: "#home" },
-  { label: "CEO Message", href: "#ceo-message" },
-  { label: "About", href: "#about" },
-  { label: "Team", href: "#team" },
-  { label: "Services", href: "#services" },
-  { label: "Research", href: "#research" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Open Positions", href: "#open-positions" },
-  { label: "News", href: "#news" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "CEO Message", href: "/ceo-message" },
+  { label: "About", href: "/about" },
+  { label: "Team", href: "/team" },
+  { label: "Services", href: "/services" },
+  { label: "Research", href: "/research" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Open Positions", href: "/open-positions" },
+  { label: "News", href: "/news" },
+  { label: "Contact", href: "/contact" },
 ];
 
 
@@ -52,8 +52,8 @@ export default function HeaderNav({ activePage }) {
     <header
       className="relative z-10 w-full border-b border-slate-100 bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)]"
     >
-      <div className="mx-auto flex min-h-19 max-w-360 items-center justify-between gap-4 px-4 sm:px-6 lg:min-h-21 lg:px-10">
-        <a aria-label="Clingene home" className="shrink-0" href="#home">
+      <div className="site-container flex min-h-19 items-center justify-between gap-4 lg:min-h-21">
+        <a aria-label="Clingene home" className="shrink-0" href="/">
           <img
             alt="Clingene"
             width="450"
@@ -67,20 +67,25 @@ export default function HeaderNav({ activePage }) {
           {links.map(renderLink)}
         </nav>
 
+        {/* Desktop actions (≥1200px) */}
         <div className="hidden shrink-0 items-center gap-4 min-[1200px]:flex">
           <ThemeSwitcher />
-          <Button className="!min-h-0 !px-5 !py-[11px] !text-[11px]" href="#contact">Contact Us</Button>
+          <Button className="!min-h-0 !px-5 !py-[11px] !text-[11px]" href="/contact">Contact Us</Button>
         </div>
 
-        <Button
-          aria-expanded={menuOpen}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          className="!h-10 !min-h-10 !w-10 !shrink-0 !rounded-full !border !border-slate-200 !p-0 !text-slate-700 hover:!text-white min-[1200px]:hidden"
-          onClick={() => setMenuOpen(!menuOpen)}
-          variant="white"
-        >
-          <MenuIcon open={menuOpen} />
-        </Button>
+        {/* Mobile controls (<1200px) */}
+        <div className="flex items-center gap-2.5 min-[1200px]:hidden">
+          <ThemeSwitcher />
+          <Button
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            className="!h-10 !min-h-10 !w-10 !shrink-0 !rounded-full !border !border-slate-200 !p-0 !text-slate-700 hover:!text-white"
+            onClick={() => setMenuOpen(!menuOpen)}
+            variant="white"
+          >
+            <MenuIcon open={menuOpen} />
+          </Button>
+        </div>
       </div>
 
       {menuOpen && (
@@ -105,17 +110,15 @@ export default function HeaderNav({ activePage }) {
                 </span>
               </a>
             ))}
-            <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-3">
-              <span className="text-xs font-semibold text-slate-500">Color Theme</span>
-              <ThemeSwitcher />
+            <div className="mt-3 border-t border-slate-100 pt-3">
+              <Button
+                className="!w-full !py-3 text-center"
+                href="/contact"
+                onClick={() => setMenuOpen(false)}
+              >
+                Contact Us
+              </Button>
             </div>
-            <Button
-              className="mt-2 !w-full !py-3 text-center"
-              href="#contact"
-              onClick={() => setMenuOpen(false)}
-            >
-              Contact Us
-            </Button>
           </div>
         </nav>
       )}

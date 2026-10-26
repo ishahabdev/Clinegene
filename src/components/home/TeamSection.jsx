@@ -13,7 +13,7 @@ export default function TeamSection() {
     id="team"
   >
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_20%_15%,rgba(255,255,255,0.9),transparent_55%)]" />
-    <div className="mx-auto max-w-310 px-6 lg:px-12">
+    <div className="site-container">
       <SectionHeading
         action={{ label: "View Team", href: "/team" }}
         description="Scientists, clinicians and bioinformaticians turning genomic research into healthier futures."

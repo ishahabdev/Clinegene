@@ -33,20 +33,25 @@ export default function HeroSection() {
   const isRed   = theme === "red";
   const isGreen = theme === "green";
 
+  const overlayGradientMobile = isRed
+    ? "linear-gradient(180deg, rgba(45, 3, 6, 0.90) 0%, rgba(45, 3, 6, 0.65) 45%, rgba(45, 3, 6, 0.94) 100%)"
+    : isGreen
+      ? "linear-gradient(180deg, rgba(2, 30, 18, 0.90) 0%, rgba(2, 30, 18, 0.65) 45%, rgba(2, 30, 18, 0.94) 100%)"
+      : "linear-gradient(180deg, rgba(2, 19, 42, 0.90) 0%, rgba(2, 19, 42, 0.65) 45%, rgba(2, 19, 42, 0.94) 100%)";
+
+  const overlayGradientDesktop = isRed
+    ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97) 0%, rgba(45, 3, 6, 0.84) 48%, rgba(45, 3, 6, 0.30) 80%, rgba(45, 3, 6, 0.15) 100%)"
+    : isGreen
+      ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97) 0%, rgba(2, 30, 18, 0.84) 48%, rgba(2, 30, 18, 0.30) 80%, rgba(2, 30, 18, 0.15) 100%)"
+      : "linear-gradient(105deg, rgba(2, 19, 42, 0.97) 0%, rgba(2, 19, 42, 0.84) 48%, rgba(2, 19, 42, 0.30) 80%, rgba(2, 19, 42, 0.15) 100%)";
+
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-140 items-center overflow-hidden text-white sm:min-h-152.5 lg:min-h-[calc(100svh-84px)]"
+      className="relative isolate flex min-h-[580px] sm:min-h-[620px] lg:min-h-[calc(100svh-84px)] items-center overflow-hidden text-white"
       id="home"
-      style={{
-        backgroundImage: isRed
-          ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97), rgba(60, 6, 10, 0.95))"
-          : isGreen
-            ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97), rgba(4, 42, 24, 0.95))"
-          : "linear-gradient(105deg, rgba(2, 19, 42, 0.97), rgba(3, 28, 57, 0.94))",
-      }}
     >
-      {/* Hero background image — cross-fades on theme change */}
+      {/* Hero background image — responsive focal position across screen sizes */}
       <img
         alt=""
         aria-hidden="true"
@@ -55,21 +60,39 @@ export default function HeroSection() {
         height="781"
         srcSet={`${heroImgMobile} 1200w, ${heroImg} 2014w`}
         sizes="100vw"
-        className="hero-bg-img absolute inset-0 -z-10 h-full w-full object-cover object-center"
+        className="hero-bg-img absolute inset-0 -z-20 h-full w-full object-cover object-[72%_center] sm:object-[68%_center] lg:object-center transition-all duration-500"
         fetchPriority="high"
         src={heroImg}
+      />
+
+      {/* Responsive theme-aware gradient overlay */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 block lg:hidden"
+        style={{
+          background: overlayGradientMobile,
+          transition: "background 0.4s ease-in-out",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 hidden lg:block"
+        style={{
+          background: overlayGradientDesktop,
+          transition: "background 0.4s ease-in-out",
+        }}
       />
 
       <div className="site-container py-12 sm:py-16 lg:py-20">
         <div className="max-w-152.5">
 
           {/* ── Eyebrow line ─────────────────────────────────────────── */}
-          <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.18em] text-white/90 sm:text-xs">
+          <p className="mb-3 sm:mb-4 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/90 sm:text-xs">
             Human Genetics{" "}
             <span
               className="mx-1"
               style={{
-                color: "var(--accent)",
+                color: isRed ? "#ef4444" : "var(--accent)",
                 transition: "color 0.4s ease-in-out",
               }}
             >
@@ -79,7 +102,7 @@ export default function HeroSection() {
             <span
               className="mx-1"
               style={{
-                color: "var(--accent)",
+                color: isRed ? "#ef4444" : "var(--accent)",
                 transition: "color 0.4s ease-in-out",
               }}
             >
@@ -90,20 +113,23 @@ export default function HeroSection() {
 
           {/* ── Heading ──────────────────────────────────────────────── */}
           <h1
-            className="max-w-147.5 text-[34px] font-bold leading-[1.12] tracking-tight sm:text-[42px] lg:text-[42px]"
+            className="max-w-147.5 text-[28px] sm:text-[38px] md:text-[44px] lg:text-[44px] font-bold leading-[1.14] tracking-tight"
             id="hero-title"
           >
             Advancing Human Genetics &amp; Precision Medicine
             <span
-              className="mt-1 block"
-              style={{ color: "var(--accent)", transition: "color 0.4s ease-in-out" }}
+              className="mt-1.5 block"
+              style={{
+                color: isRed ? "#ef4444" : "var(--accent)",
+                transition: "color 0.4s ease-in-out",
+              }}
             >
               Through Research
             </span>
           </h1>
 
           {/* ── Body copy ────────────────────────────────────────────── */}
-          <p className="mt-5 max-w-125 text-sm leading-6 text-white/85 sm:text-sm">
+          <p className="mt-4 sm:mt-5 max-w-125 text-sm sm:text-base leading-6 text-white/90">
             ClinGene brings academic researchers, clinicians and industrial partners together
             to translate scientific findings for the well-being of the society.
           </p>
@@ -111,14 +137,14 @@ export default function HeroSection() {
           {/* ── CTA buttons ──────────────────────────────────────────── */}
           <div className="mt-7 flex flex-wrap gap-3">
             {/* Primary button — fill uses --accent-btn-bg (dark maroon on red) */}
-            <Button className="px-6" href="#research">
+            <Button className="px-6" href="/research">
               Explore Our Research <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Button>
 
             {/* Secondary button — transparent outline, white text */}
             <Button
               className="px-6"
-              href="#services"
+              href="/services"
               variant="transparent"
               style={{
                 borderColor: isRed ? "rgba(255,255,255,0.55)" : "rgba(255,255,255,0.70)",
@@ -129,27 +155,27 @@ export default function HeroSection() {
           </div>
 
           {/* ── Feature badges ───────────────────────────────────────── */}
-          <div className="mt-9 grid max-w-152.5 grid-cols-1 gap-4 text-[10px] font-medium text-white/95 sm:grid-cols-3 sm:gap-5">
+          <div className="mt-8 sm:mt-9 grid max-w-152.5 grid-cols-1 gap-3.5 sm:grid-cols-3 sm:gap-5 text-[11px] font-medium text-white/95">
             {[
-              { icon: "technology",   label: <>Advanced<br />Technologies</> },
-              { icon: "collaboration", label: <>Research<br />Collaboration</> },
-              { icon: "capacity",     label: <>Capacity<br />Development</> },
+              { icon: "technology",   label: <>Advanced<br className="hidden sm:block" /> Technologies</> },
+              { icon: "collaboration", label: <>Research<br className="hidden sm:block" /> Collaboration</> },
+              { icon: "capacity",     label: <>Capacity<br className="hidden sm:block" /> Development</> },
             ].map((feature) => (
               <div
-                className="flex items-center gap-2.5 border-r border-white/15 last:border-r-0"
+                className="flex items-center gap-2.5 sm:border-r border-white/15 sm:last:border-r-0"
                 key={feature.icon}
               >
                 <span
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full border"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full border shadow-sm"
                   style={{
-                    borderColor: "var(--accent)",
-                    color: "var(--accent)",
+                    borderColor: isRed ? "#ef4444" : "var(--accent)",
+                    color: isRed ? "#ef4444" : "var(--accent)",
                     transition: "border-color 0.4s ease-in-out, color 0.4s ease-in-out",
                   }}
                 >
                   <FeatureIcon type={feature.icon} />
                 </span>
-                <span className="leading-4">{feature.label}</span>
+                <span className="leading-tight sm:leading-4">{feature.label}</span>
               </div>
             ))}
           </div>

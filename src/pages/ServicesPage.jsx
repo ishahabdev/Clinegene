@@ -53,7 +53,7 @@ export default function ServicesPage() {
         <div className="mx-auto w-full max-w-310 px-6 py-12 sm:py-16 lg:px-12 lg:py-20">
           <div className="max-w-155">
             <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-3 font-inter text-sm">
-              <a className="text-[#12c5df] transition-colors hover:text-white" href="#home">Home</a>
+              <a className="text-[#12c5df] transition-colors hover:text-white" href="/">Home</a>
               <span aria-hidden="true" className="text-[#12c5df]">›</span>
               <span aria-current="page" className="text-slate-300">Services</span>
             </nav>

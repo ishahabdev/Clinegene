@@ -8,7 +8,7 @@ export default function WorkStepsSection() {
     className="overflow-x-clip bg-white py-16 md:py-24"
     id="scientific-journey"
   >
-    <div className="mx-auto max-w-310 px-6 lg:px-12">
+    <div className="site-container">
       <SectionHeading
         description="We turn your biological data into meaningful insights — quickly, accurately and with expert care."
         eyebrow="Work Steps"

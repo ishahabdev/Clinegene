@@ -3,7 +3,8 @@ import Button from "../Button";
 import SectionHeading from "../SectionHeading";
 import ScrollReveal from "../ScrollReveal.jsx";
 import { useTheme } from "../../context/ThemeContext.jsx";
-const homeBackground = "/images/homepic.webp";
+import gallery1 from "../../assets/home/gallery1.jpeg";
+import gallery2 from "../../assets/home/gallery2.jpeg";
 export default function GalleryContactSection() {
   const { theme } = useTheme();
 
@@ -27,7 +28,8 @@ export default function GalleryContactSection() {
       className="bg-white py-16 md:py-24"
       id="gallery-contact"
     >
-      <div className="mx-auto grid max-w-310 items-stretch gap-5 px-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,0.72fr)] lg:gap-6 lg:px-12">
+      <div className="site-container">
+        <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(280px,0.72fr)] lg:gap-6">
         <div
           className="rounded-2xl bg-[#f6f8fb] p-6 sm:p-8"
           id="gallery"
@@ -41,40 +43,44 @@ export default function GalleryContactSection() {
             title="Moments from"
           />
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {[
-              { label: "Genomics research", position: "65% center" },
-              { label: "DNA sequencing", position: "82% center" },
-              { label: "Biomedical science", position: "48% center" },
-            ].map(({ label, position }, index) => (
+              {
+                image: gallery1,
+                label: "Genomics Research",
+              },
+              {
+                image: gallery2,
+                label: "DNA Sequencing & Analysis",
+              },
+            ].map(({ image, label }, index) => (
               <ScrollReveal
                 as="a"
                 aria-label={`View gallery: ${label}`}
-                className="group relative block h-52 overflow-hidden rounded-xl sm:h-48 lg:h-56"
-                delay={index * 60}
+                className="group relative block h-56 overflow-hidden rounded-xl sm:h-52 lg:h-64 shadow-sm"
+                delay={index * 80}
                 href="#gallery"
                 key={label}
               >
                 <img
                   alt={label}
-                  width="2014"
-                  height="781"
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  width="1376"
+                  height="768"
+                  className="h-full w-full object-cover object-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
                   decoding="async"
                   loading="lazy"
-                  src={homeBackground}
-                  style={{ objectPosition: position }}
+                  src={image}
                 />
                 <span
                   className="absolute inset-0 bg-linear-to-t via-transparent to-transparent opacity-70 transition-opacity group-hover:opacity-90"
                   style={{ backgroundColor: overlayColor }}
                 />
-              <span className="absolute inset-x-3 bottom-3 text-xs font-semibold text-white sm:text-sm">
-                {label}
-              </span>
-            </ScrollReveal>
-          ))}
-        </div>
+                <span className="absolute inset-x-4 bottom-4 text-sm font-semibold text-white sm:text-base">
+                  {label}
+                </span>
+              </ScrollReveal>
+            ))}
+          </div>
       </div>
 
       <aside
@@ -88,7 +94,7 @@ export default function GalleryContactSection() {
         <p className="mt-4 text-sm leading-6 text-slate-600">
           Have a question or need assistance? We’re here to help.
         </p>
-        <Button className={`mt-6 !text-white hover:!text-white ${buttonColor}`} href="#contact">
+        <Button className={`mt-6 !text-white hover:!text-white ${buttonColor}`} href="/contact">
           Contact Us <ArrowRight aria-hidden="true" className="h-4 w-4" />
         </Button>
         <address className="mt-7 space-y-5 not-italic text-sm leading-6 text-slate-600">
@@ -98,12 +104,12 @@ export default function GalleryContactSection() {
             </svg>
             <span>+92-3485607051</span>
           </a>
-          <a className="flex items-start gap-3 break-all transition-colors hover:text-[#0a7a94] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="mailto:info.Clinegene@gmail.com">
+          <a className="flex items-start gap-3 break-all transition-colors hover:text-[#0a7a94] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="mailto:Clingene@gmail.com">
             <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#0d9c9c]" fill="none" viewBox="0 0 24 24">
               <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.7" />
               <path d="m4 7 8 6 8-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" />
             </svg>
-            <span>info.cline@gmail.com</span>
+            <span>clingene@gmail.com</span>
           </a>
           <div className="flex items-start gap-3">
             <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#0d9c9c]" fill="none" viewBox="0 0 24 24">
@@ -115,6 +121,7 @@ export default function GalleryContactSection() {
         </address>
       </aside>
     </div>
-  </section>
+  </div>
+</section>
     );
 }

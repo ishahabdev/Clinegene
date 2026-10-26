@@ -81,7 +81,7 @@ export default function ContactPage() {
       >
         <div className="contact-hero-overlay" />
         <div className="site-container contact-hero-content">
-          <p className="contact-breadcrumb"><a href="#home">Home</a><span aria-hidden="true">›</span> Contact</p>
+          <p className="contact-breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span> Contact</p>
           <p className="contact-eyebrow">We’re here to help</p>
           <ScrollReveal as="h1" id="contact-page-title">Contact Us</ScrollReveal>
           <p>Have a question about our research or services? Get in touch with the ClinGene team.</p>

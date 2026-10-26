@@ -10,8 +10,9 @@ export default function AboutSection() {
     className="overflow-x-clip bg-white py-16 md:py-24"
     id="about"
   >
-    <div className="mx-auto grid max-w-310 items-center gap-10 px-6 lg:grid-cols-[1.35fr_0.9fr] lg:gap-16 lg:px-12">
-      <div>
+    <div className="site-container">
+      <div className="grid items-center gap-10 lg:grid-cols-[1.35fr_0.9fr] lg:gap-16">
+        <div>
         <SectionHeading
           compact
           eyebrow="About US"
@@ -53,13 +54,13 @@ export default function AboutSection() {
           ))}
         </div>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <Button className="!min-h-12 !px-7 font-outfit" href="#about" variant="cyan">
+          <Button className="!min-h-12 !px-7 font-outfit" href="/about" variant="cyan">
             More About US <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Button>
          
           <a
             className="group inline-flex min-h-12 items-center gap-2.5 px-2 font-outfit text-sm font-bold transition-colors hover:text-[#0c2b48] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
-            href="#ceo-message"
+            href="/ceo-message"
             style={{ color: "var(--accent-muted)", transition: "color 0.4s ease-in-out" }}
           >
             Message from CEO
@@ -122,6 +123,7 @@ export default function AboutSection() {
           </div>
         </div>
       </ScrollReveal>
+      </div>
     </div>
   </section>
     );

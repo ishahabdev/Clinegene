@@ -57,7 +57,7 @@ export default function AboutPage() {
                   <ol className="flex items-center gap-2 text-[14px] sm:text-[15px]">
                     <li>
                       <a 
-                        href="#home" 
+                        href="/" 
                         className="text-[#10c8e0] transition-colors hover:text-[#10c8e0]/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10c8e0] rounded"
                       >
                         Home

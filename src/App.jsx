@@ -54,10 +54,35 @@ function LoadingScreen() {
 
 function getCurrentPage() {
   const hash = window.location.hash.slice(1);
-  if (pages[hash]) return hash;
-  const pathname = window.location.pathname.replace(/\/$/, "") || "/";
-  if (pathname !== "/" && pathname !== "/index.html") return "not-found";
-  if (!hash) return "home";
+  const pathname = window.location.pathname.replace(/^\/|\/$/g, "");
+
+  // If user landed with #home or an old URL like /services#home, normalize immediately to "/"
+  if (hash === "home") {
+    if (window.location.pathname !== "/" || window.location.hash) {
+      window.history.replaceState(null, "", "/");
+    }
+    return "home";
+  }
+
+  // If there's a legacy hash matching a page (e.g. #services), normalize to clean path /services
+  if (pages[hash]) {
+    const cleanUrl = hash === "home" ? "/" : `/${hash}`;
+    if (window.location.hash || window.location.pathname !== cleanUrl) {
+      window.history.replaceState(null, "", cleanUrl);
+    }
+    return hash;
+  }
+
+  // If pathname is root or index.html:
+  if (pathname === "" || pathname === "index.html") {
+    return "home";
+  }
+
+  // If pathname matches a registered page (e.g. /about, /services, /team):
+  if (pages[pathname]) {
+    return pathname;
+  }
+
   return "not-found";
 }
 
@@ -84,12 +109,10 @@ function AppContent() {
       if (lastHandledLocationRef.current === currentLocation) return;
       lastHandledLocationRef.current = currentLocation;
 
-      const hash = window.location.hash.slice(1);
-      if (pages[hash]) {
-        setPageId(hash);
-        return;
-      }
+      const page = getCurrentPage();
+      setPageId(page);
 
+      const hash = window.location.hash.slice(1);
       const target = hash && getHashTarget(hash);
       if (target) {
         lenisRef.current?.scrollTo(target, {
@@ -97,10 +120,7 @@ function AppContent() {
           easing: (time) => 1 - Math.pow(1 - time, 4),
           offset: -8,
         });
-        return;
       }
-
-      setPageId(getCurrentPage());
     };
 
     const handleAnchorClick = (event) => {
@@ -112,18 +132,35 @@ function AppContent() {
         event.shiftKey ||
         event.altKey
       ) return;
-      const anchor = event.target instanceof Element ? event.target.closest("a[href^='#']") : null;
+
+      const anchor = event.target instanceof Element ? event.target.closest("a") : null;
       if (!anchor) return;
 
-      const hash = anchor.getAttribute("href")?.slice(1);
-      if (!hash) return;
+      const href = anchor.getAttribute("href");
+      if (!href) return;
 
-      if (pages[hash]) {
+      // Ignore external or protocol links
+      if (
+        href.startsWith("http://") ||
+        href.startsWith("https://") ||
+        href.startsWith("mailto:") ||
+        href.startsWith("tel:")
+      ) {
+        return;
+      }
+
+      // Check if it's a page route (handles "/", "#home", "/about", "#about", "about", etc.)
+      const normalized = href.replace(/^\/|#/, "").replace(/\/$/, "");
+      const isHomeTarget = href === "/" || href === "#home" || normalized === "" || normalized === "home";
+      const targetPage = isHomeTarget ? "home" : pages[normalized] ? normalized : null;
+
+      if (targetPage) {
         event.preventDefault();
-        const route = `#${encodeURIComponent(hash)}`;
-        const alreadyOnRoute = getCurrentPage() === hash;
-        if (window.location.hash !== route) {
-          window.history.pushState(null, "", route);
+        const targetUrl = targetPage === "home" ? "/" : `/${targetPage}`;
+        const alreadyOnRoute = pageId === targetPage;
+
+        if (window.location.pathname !== targetUrl || window.location.hash) {
+          window.history.pushState(null, "", targetUrl);
         }
         lastHandledLocationRef.current = window.location.href;
 
@@ -133,22 +170,27 @@ function AppContent() {
             easing: (time) => 1 - Math.pow(1 - time, 4),
           });
         } else {
-          setPageId(hash);
+          setPageId(targetPage);
+          if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true });
+          else window.scrollTo(0, 0);
         }
         return;
       }
 
-      const target = getHashTarget(hash);
-      if (!target) return;
-
-      event.preventDefault();
-      window.history.pushState(null, "", `#${encodeURIComponent(hash)}`);
-      lastHandledLocationRef.current = window.location.href;
-      lenisRef.current?.scrollTo(target, {
-        duration: 0.75,
-        easing: (time) => 1 - Math.pow(1 - time, 4),
-        offset: -8,
-      });
+      // In-page anchor target
+      if (href.startsWith("#")) {
+        const hash = href.slice(1);
+        const target = getHashTarget(hash);
+        if (target) {
+          event.preventDefault();
+          lastHandledLocationRef.current = window.location.href;
+          lenisRef.current?.scrollTo(target, {
+            duration: 0.75,
+            easing: (time) => 1 - Math.pow(1 - time, 4),
+            offset: -8,
+          });
+        }
+      }
     };
 
     window.addEventListener("hashchange", updatePage);
@@ -159,7 +201,7 @@ function AppContent() {
       window.removeEventListener("popstate", updatePage);
       document.removeEventListener("click", handleAnchorClick);
     };
-  }, [lenisRef]);
+  }, [lenisRef, pageId]);
 
   useEffect(() => {
     if (pageId !== getCurrentPage()) return;
