@@ -17,6 +17,7 @@ const NewsPage = lazy(() => import("./pages/NewsPage.jsx"));
 const OpenPositionsPage = lazy(() => import("./pages/OpenPositionsPage.jsx"));
 const ResearchPage = lazy(() => import("./pages/ResearchPage.jsx"));
 const ServicesPage = lazy(() => import("./pages/ServicesPage.jsx"));
+const ServiceDetailPage = lazy(() => import("./pages/ServiceDetailPage.jsx"));
 const TeamPage = lazy(() => import("./pages/TeamPage.jsx"));
 
 const pages = {
@@ -25,6 +26,7 @@ const pages = {
   about: { label: "About", component: AboutPage },
   team: { label: "Team", component: TeamPage },
   services: { label: "Services", component: ServicesPage },
+  "service-detail": { label: "Services", component: ServiceDetailPage },
   research: { label: "Research", component: ResearchPage },
   gallery: { label: "Gallery", component: GalleryPage },
   "open-positions": { label: "Open Positions", component: OpenPositionsPage },
@@ -64,6 +66,16 @@ function getCurrentPage() {
     return "home";
   }
 
+  // If hash has services/<slug>
+  if (hash.startsWith("services/")) {
+    const slug = hash.slice("services/".length);
+    const cleanUrl = `/services/${slug}`;
+    if (window.location.hash || window.location.pathname !== cleanUrl) {
+      window.history.replaceState(null, "", cleanUrl);
+    }
+    return "service-detail";
+  }
+
   // If there's a legacy hash matching a page (e.g. #services), normalize to clean path /services
   if (pages[hash]) {
     const cleanUrl = hash === "home" ? "/" : `/${hash}`;
@@ -78,7 +90,12 @@ function getCurrentPage() {
     return "home";
   }
 
-  // If pathname matches a registered page (e.g. /about, /services, /team):
+  // If pathname matches /services/<slug>
+  if (pathname.startsWith("services/")) {
+    return "service-detail";
+  }
+
+  // If pathname matches a registered page (e.g. /about, /services, /team, /contact):
   if (pages[pathname]) {
     return pathname;
   }
@@ -149,35 +166,7 @@ function AppContent() {
         return;
       }
 
-      // Check if it's a page route (handles "/", "#home", "/about", "#about", "about", etc.)
-      const normalized = href.replace(/^\/|#/, "").replace(/\/$/, "");
-      const isHomeTarget = href === "/" || href === "#home" || normalized === "" || normalized === "home";
-      const targetPage = isHomeTarget ? "home" : pages[normalized] ? normalized : null;
-
-      if (targetPage) {
-        event.preventDefault();
-        const targetUrl = targetPage === "home" ? "/" : `/${targetPage}`;
-        const alreadyOnRoute = pageId === targetPage;
-
-        if (window.location.pathname !== targetUrl || window.location.hash) {
-          window.history.pushState(null, "", targetUrl);
-        }
-        lastHandledLocationRef.current = window.location.href;
-
-        if (alreadyOnRoute) {
-          lenisRef.current?.scrollTo(0, {
-            duration: 0.7,
-            easing: (time) => 1 - Math.pow(1 - time, 4),
-          });
-        } else {
-          setPageId(targetPage);
-          if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true });
-          else window.scrollTo(0, 0);
-        }
-        return;
-      }
-
-      // In-page anchor target
+      // In-page anchor target (e.g. #contact)
       if (href.startsWith("#")) {
         const hash = href.slice(1);
         const target = getHashTarget(hash);
@@ -190,6 +179,52 @@ function AppContent() {
             offset: -8,
           });
         }
+        return;
+      }
+
+      // Check if it's a page route (handles "/", "#home", "/about", "/services/<slug>", "/contact?service=...", etc.)
+      const [pathAndHash, queryPart] = href.split("?");
+      const [pathPart] = pathAndHash.split("#");
+      const normalized = pathPart.replace(/^\/|#/, "").replace(/\/$/, "");
+      const isHomeTarget = href === "/" || href === "#home" || normalized === "" || normalized === "home";
+      
+      let targetPage = null;
+      let targetPath = "/";
+
+      if (isHomeTarget) {
+        targetPage = "home";
+        targetPath = "/";
+      } else if (normalized.startsWith("services/")) {
+        targetPage = "service-detail";
+        targetPath = `/${normalized}`;
+      } else if (pages[normalized]) {
+        targetPage = normalized;
+        targetPath = `/${normalized}`;
+      }
+
+      if (targetPage) {
+        event.preventDefault();
+        const fullTargetUrl = queryPart ? `${targetPath}?${queryPart}` : targetPath;
+        const currentCleanPath = window.location.pathname.replace(/^\/|\/$/g, "");
+        const targetCleanPath = targetPath.replace(/^\/|\/$/g, "");
+        const isSamePage = currentCleanPath === targetCleanPath && window.location.search === (queryPart ? `?${queryPart}` : "");
+
+        if (!isSamePage || window.location.hash) {
+          window.history.pushState(null, "", fullTargetUrl);
+        }
+        lastHandledLocationRef.current = window.location.href;
+
+        if (isSamePage) {
+          lenisRef.current?.scrollTo(0, {
+            duration: 0.7,
+            easing: (time) => 1 - Math.pow(1 - time, 4),
+          });
+        } else {
+          setPageId(targetPage);
+          if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true });
+          else window.scrollTo(0, 0);
+        }
+        return;
       }
     };
 
@@ -233,7 +268,7 @@ function AppContent() {
       <main>
         <SectionScrollEffects key={pageId} />
         <Suspense fallback={<LoadingScreen />}>
-          <CurrentPage />
+          <CurrentPage key={window.location.pathname} />
         </Suspense>
       </main>
       {pageId !== "not-found" && (

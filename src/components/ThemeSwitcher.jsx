@@ -61,10 +61,10 @@ export default function ThemeSwitcher() {
         aria-expanded={open}
         aria-haspopup="true"
         onClick={() => setOpen((v) => !v)}
-        className={`group relative grid h-10 w-10 place-items-center rounded-full border bg-white/95 text-slate-700 shadow-[0_2px_8px_rgba(12,43,72,0.06)] backdrop-blur-sm transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 hover:shadow-[0_4px_18px_var(--accent-glow)] active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] ${
+        className={`group relative grid h-10 w-10 place-items-center rounded-full border bg-white/95 text-slate-700 shadow-[0_2px_8px_rgba(12,43,72,0.06)] backdrop-blur-sm transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 hover:shadow-[0_4px_18px_var(--accent-glow)] active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) ${
           open
-            ? "border-[var(--accent)] ring-2 ring-[var(--accent)]/30 shadow-[0_4px_18px_var(--accent-glow)]"
-            : "border-slate-200 hover:border-[var(--accent)]"
+            ? "border-(--accent) ring-2 ring-(--accent)/30 shadow-[0_4px_18px_var(--accent-glow)]"
+            : "border-slate-200 hover:border-(--accent)"
         }`}
       >
         <PaletteIcon
@@ -96,7 +96,7 @@ export default function ThemeSwitcher() {
           {/* Header */}
           <div className="flex items-center justify-between border-b border-slate-100 px-3 pb-2 pt-1.5">
             <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              <Sparkles className="h-3 w-3 text-[var(--accent)]" />
+              <Sparkles className="h-3 w-3 text-(--accent)" />
               Color Theme
             </span>
             <span className="text-[10px] font-semibold text-slate-400">3 Themes</span>

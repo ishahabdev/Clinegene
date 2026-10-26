@@ -54,22 +54,22 @@ export default function AboutSection() {
           ))}
         </div>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <Button className="!min-h-12 !px-7 font-outfit" href="/about" variant="cyan">
-            More About US <ArrowRight aria-hidden="true" className="h-4 w-4" />
+          <Button className="min-h-9 sm:min-h-12! px-4 sm:px-7! font-outfit text-xs sm:text-sm" href="/about" variant="cyan">
+            More About US <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           </Button>
          
           <a
-            className="group inline-flex min-h-12 items-center gap-2.5 px-2 font-outfit text-sm font-bold transition-colors hover:text-[#0c2b48] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
+            className="group inline-flex min-h-9 sm:min-h-12 items-center gap-2 px-2 font-outfit text-xs sm:text-sm font-bold transition-colors hover:text-[#0c2b48] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
             href="/ceo-message"
             style={{ color: "var(--accent-muted)", transition: "color 0.4s ease-in-out" }}
           >
             Message from CEO
-            <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
+            <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
           </a>
         </div>
       </div>
 
-      <ScrollReveal as="div" className="relative isolate w-full pb-30">
+      <ScrollReveal as="div" className="relative isolate mx-auto w-full max-w-107.5 pb-28">
         <div className="absolute -right-3 -top-3 z-0 hidden aspect-3/2 w-full rounded-[28px] border-2 sm:block"
           style={{ borderColor: "color-mix(in srgb, var(--accent) 40%, transparent)", transition: "border-color 0.4s ease-in-out" }}
         />
@@ -78,11 +78,11 @@ export default function AboutSection() {
             alt="Microscope in a biomedical research setting"
             width="604"
             height="272"
-            className="absolute inset-0 h-full w-full object-cover object-center"
+            className="absolute inset-0 h-full w-full object-cover object-center brightness-90"
             loading="lazy"
             src={microscopeImage}
           />
-          <div className="absolute inset-0 bg-linear-to-b from-[#031e30]/5 via-transparent to-[#031e30]/35" />
+          <div className="absolute inset-0 bg-linear-to-t from-[#021526]/70 via-[#021526]/35 to-[#021526]/20" />
         </div>
         <div className="absolute bottom-0 left-1/2 z-10 w-[90%] -translate-x-1/2 rounded-2xl bg-white px-4 py-4 ring-1 ring-slate-100 shadow-[0_18px_40px_rgba(3,31,49,0.18)] sm:px-5 sm:py-5">
           <div className="grid grid-cols-3 gap-2 sm:gap-4">

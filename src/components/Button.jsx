@@ -29,11 +29,10 @@ export default function Button({
   const mergedStyle = { ...accentStyle, ...propStyle };
 
   const classes = [
-    "group relative inline-flex min-h-11 items-center justify-center overflow-hidden rounded-full px-5",
-    "text-xs font-bold transition-colors duration-500",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
-    "active:opacity-80",
-    "sm:px-6 sm:text-sm",
+    "group relative inline-flex min-h-9 sm:min-h-11 items-center justify-center overflow-hidden rounded-full px-4 sm:px-6",
+    "text-[11.5px] sm:text-sm font-bold transition-all duration-300",
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)",
+    "active:scale-95 active:opacity-85",
     variants[variant] ?? variants.cyan,
     className,
   ]
@@ -41,7 +40,7 @@ export default function Button({
     .join(" ");
 
   // Ripple overlay
-  const rippleBg = variant === "transparent" ? "bg-[var(--accent)]" : "bg-black/25";
+  const rippleBg = variant === "transparent" ? "bg-(--accent)" : "bg-black/25";
 
   const content = (
     <>

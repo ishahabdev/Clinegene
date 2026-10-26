@@ -47,7 +47,7 @@ export default function TeamSection() {
         ].map(({ name, designation, details, image }, index) => (
           <ScrollReveal
             as="article"
-            className="flex min-h-57 items-center gap-4  border border-[#d4e5f2] bg-white/85 p-4 shadow-[0_8px_24px_rgba(29,78,116,0.06)] transition-all duration-100  hover:-translate-y-1 hover:border-3 hover:border-b-[var(--accent)]  hover:bg-white hover:shadow-[0_14px_30px_rgba(12,43,72,0.12)] motion-reduce:transform-none motion-reduce:transition-none sm:gap-5"
+            className="flex min-h-57 items-center gap-4  border border-[#d4e5f2] bg-white/85 p-4 shadow-[0_8px_24px_rgba(29,78,116,0.06)] transition-all duration-100  hover:-translate-y-1 hover:border-3 hover:border-b-(--accent)  hover:bg-white hover:shadow-[0_14px_30px_rgba(12,43,72,0.12)] motion-reduce:transform-none motion-reduce:transition-none sm:gap-5"
             delay={index * 70}
             key={name}
           >
@@ -73,7 +73,7 @@ export default function TeamSection() {
                 {name}
               </h3>
               {designation && (
-                <p className="mt-2 rounded-md bg-[var(--accent-soft)] px-2 py-1 text-[10px] font-bold uppercase leading-tight tracking-[0.04em]"
+                <p className="mt-2 rounded-md bg-(--accent-soft) px-2 py-1 text-[10px] font-bold uppercase leading-tight tracking-[0.04em]"
                   style={{ color: "var(--accent-muted)", transition: "background 0.4s ease-in-out, color 0.4s ease-in-out" }}
                 >
                   {designation}

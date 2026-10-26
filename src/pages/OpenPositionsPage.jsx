@@ -10,23 +10,23 @@ import { useTheme } from "../context/ThemeContext.jsx";
 
 export default function OpenPositionsPage() {
   const { theme } = useTheme();
+  const isRed = theme === "red";
+  const isGreen = theme === "green";
 
-  const sectionBg =
-    theme === "red"
-      ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97), rgba(60, 6, 10, 0.95))"
-      : theme === "green"
-        ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97), rgba(4, 42, 24, 0.95))"
-        : "linear-gradient(105deg, rgba(2, 19, 42, 0.97), rgba(3, 28, 57, 0.94))";
+  const sectionBg = isRed ? "#2d0306" : isGreen ? "#021e12" : "#02132a";
 
-  const overlayColor =
-    theme === "red" ? "rgba(45, 3, 6, " : theme === "green" ? "rgba(2, 30, 18, " : "rgba(2, 19, 42, ";
+  const overlayGradient = isRed
+    ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97) 0%, rgba(45, 3, 6, 0.84) 48%, rgba(45, 3, 6, 0.30) 80%, rgba(45, 3, 6, 0.15) 100%)"
+    : isGreen
+      ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97) 0%, rgba(2, 30, 18, 0.84) 48%, rgba(2, 30, 18, 0.30) 80%, rgba(2, 30, 18, 0.15) 100%)"
+      : "linear-gradient(105deg, rgba(2, 19, 42, 0.97) 0%, rgba(2, 19, 42, 0.84) 48%, rgba(2, 19, 42, 0.30) 80%, rgba(2, 19, 42, 0.15) 100%)";
 
   /* ── theme-aware accent colours ───────────────────────────── */
   const accent =
     theme === "red"
-      ? { primary: "#e53e3e", glow: "rgba(229,62,62,.18)", softBg: "rgba(229,62,62,.08)", border: "rgba(229,62,62,.25)", text: "#feb2b2" }
+      ? { primary: "#ef4444", glow: "rgba(229,62,62,.18)", softBg: "rgba(229,62,62,.08)", border: "rgba(229,62,62,.25)", text: "#feb2b2" }
       : theme === "green"
-        ? { primary: "#38a169", glow: "rgba(56,161,105,.18)", softBg: "rgba(56,161,105,.08)", border: "rgba(56,161,105,.25)", text: "#9ae6b4" }
+        ? { primary: "#10b981", glow: "rgba(56,161,105,.18)", softBg: "rgba(56,161,105,.08)", border: "rgba(56,161,105,.25)", text: "#9ae6b4" }
         : { primary: "#12c5df", glow: "rgba(18,197,223,.18)", softBg: "rgba(18,197,223,.08)", border: "rgba(18,197,223,.25)", text: "#a5f3fc" };
 
   return (
@@ -34,9 +34,9 @@ export default function OpenPositionsPage() {
       {/* ══════════════════════════  HERO  ══════════════════════════ */}
       <section
         aria-labelledby="open-positions-hero-title"
-        className="relative isolate flex min-h-75 items-center overflow-hidden text-white sm:min-h-80"
+        className="relative isolate flex min-h-75 items-center overflow-hidden text-white sm:min-h-80 transition-colors duration-500"
         id="open-positions-hero"
-        style={{ backgroundImage: sectionBg }}
+        style={{ backgroundColor: sectionBg }}
       >
         <img
           alt=""
@@ -44,28 +44,35 @@ export default function OpenPositionsPage() {
           width="1376"
           height="768"
           fetchPriority="high"
-          className="absolute inset-0 -z-20 h-full w-full object-cover object-[64%_center]"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-[64%_center] transition-all duration-500"
           src={serviceHero}
+          style={{
+            filter: isRed
+              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
+              : isGreen
+                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
+                : "none",
+          }}
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10"
+          className="absolute inset-0 -z-10 transition-all duration-500"
           style={{
-            backgroundImage: `linear-gradient(to right, ${overlayColor}/95, ${overlayColor}/75, ${overlayColor}/10)`,
+            background: overlayGradient,
           }}
         />
-        <div className="mx-auto w-full max-w-310 px-6 py-8 lg:px-12">
+        <div className="site-container py-8">
           <nav
             aria-label="Breadcrumb"
             className="mb-7 flex items-center gap-3 font-inter text-sm"
           >
             <a
-              className="text-[var(--accent)] transition-colors hover:text-white"
+              className="text-(--accent) transition-colors hover:text-white"
               href="/"
             >
               Home
             </a>
-            <span aria-hidden="true" className="text-[var(--accent)]">
+            <span aria-hidden="true" className="text-(--accent)">
               ›
             </span>
             <span aria-current="page" className="text-slate-300">
@@ -74,8 +81,8 @@ export default function OpenPositionsPage() {
           </nav>
 
           <div className="max-w-155">
-            <p className="mb-4 flex items-center gap-3 font-inter text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--accent)]">
-              <span aria-hidden="true" className="h-0.5 w-9 bg-[var(--accent)]" />
+            <p className="mb-4 flex items-center gap-3 font-inter text-[11px] font-bold uppercase tracking-[0.24em] text-(--accent)">
+              <span aria-hidden="true" className="h-0.5 w-9 bg-(--accent)" />
               Open Positions
             </p>
             <ScrollReveal
@@ -84,7 +91,7 @@ export default function OpenPositionsPage() {
               id="open-positions-hero-title"
             >
               Join Our{" "}
-              <span className="text-[var(--accent)]">Research Community</span>
+              <span className="text-(--accent)">Research Community</span>
             </ScrollReveal>
             <p className="mt-3 max-w-122.5 font-inter text-[13px] leading-[1.55] text-slate-200 sm:text-sm">
               We're building a world-class team of scientists, clinicians, and
@@ -184,15 +191,15 @@ export default function OpenPositionsPage() {
           </svg>
         </div>
 
-        <div className="mx-auto max-w-310 px-6 lg:px-12">
+        <div className="site-container">
           {/* ── Main glass card ── */}
           <ScrollReveal>
             <div
-              className="relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] border bg-white/80 px-6 py-16 text-center shadow-2xl backdrop-blur-sm sm:px-10 sm:py-20 md:py-24"
+              className="relative mx-auto max-w-4xl overflow-hidden rounded-4xl border bg-white/80 px-6 py-16 text-center shadow-2xl backdrop-blur-sm sm:px-10 sm:py-20 md:py-24"
               style={{ borderColor: accent.border }}
             >
               {/* Shimmer overlay */}
-              <div aria-hidden="true" className="op-shimmer pointer-events-none absolute inset-0 rounded-[2rem]" />
+              <div aria-hidden="true" className="op-shimmer pointer-events-none absolute inset-0 rounded-4xl" />
 
               {/* ── Animated bell icon with orbiting elements ── */}
               <ScrollReveal as="div" className="relative mx-auto mb-10 flex h-44 w-44 items-center justify-center">
@@ -254,7 +261,7 @@ export default function OpenPositionsPage() {
               </ScrollReveal>
 
               {/* ── Title ── */}
-              <ScrollReveal as="h2" delay={80}>
+              <ScrollReveal delay={80}>
                 <h2
                   className="mt-5 font-outfit text-[30px] font-extrabold leading-[1.15] text-[#0c2b48] sm:text-[38px] md:text-[44px]"
                   id="no-positions-title"
@@ -273,7 +280,7 @@ export default function OpenPositionsPage() {
               </ScrollReveal>
 
               {/* ── Description ── */}
-              <ScrollReveal as="p" delay={120}>
+              <ScrollReveal delay={120}>
                 <p className="mx-auto mt-5 max-w-md font-inter text-[15px] leading-[1.8] text-[#4a6e8b] sm:text-base">
                   We're currently reviewing our staffing needs. New opportunities
                   will be posted here as soon as they become available.
@@ -284,15 +291,15 @@ export default function OpenPositionsPage() {
               <ScrollReveal delay={160}>
                 <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
                   <Button
-                    className="!min-h-13 !px-8 !text-sm font-inter shadow-lg"
+                    className="min-h-9 sm:min-h-13! px-4 sm:px-8! text-xs sm:text-sm! font-inter shadow-lg"
                     href="#contact"
                     style={{ boxShadow: `0 4px 24px ${accent.glow}` }}
                   >
                     Contact Us{" "}
-                    <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                    <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </Button>
                   <Button
-                    className="!min-h-13 !px-8 !text-sm font-inter"
+                    className="min-h-9 sm:min-h-13! px-4 sm:px-8! text-xs sm:text-sm! font-inter"
                     href="#team"
                     variant="transparent"
                     style={{
@@ -314,13 +321,13 @@ export default function OpenPositionsPage() {
       {/* ══════════════  FOOTER LINKS  ══════════════ */}
       <section
         aria-label="Related pages"
-        className="pb-6 pt-4 md:pb-8 md:pt-6 border-t border-[var(--accent)]/20"
+        className="pb-6 pt-4 md:pb-8 md:pt-6 border-t border-(--accent)/20"
         style={{ backgroundImage: sectionBg }}
       >
-        <div className="mx-auto max-w-310 px-6 lg:px-12">
+        <div className="site-container">
           <ScrollReveal className="flex flex-wrap justify-center gap-4 text-sm">
             <a
-              className="text-[#9fb6ce] underline-offset-2 hover:text-[var(--accent)] hover:underline focus-visible:text-[var(--accent)] focus-visible:underline focus-visible:outline-none"
+              className="text-[#9fb6ce] underline-offset-2 hover:text-(--accent) hover:underline focus-visible:text-(--accent) focus-visible:underline focus-visible:outline-none"
               href="#team"
             >
               View Our Team
@@ -329,7 +336,7 @@ export default function OpenPositionsPage() {
               |
             </span>
             <a
-              className="text-[#9fb6ce] underline-offset-2 hover:text-[var(--accent)] hover:underline focus-visible:text-[var(--accent)] focus-visible:underline focus-visible:outline-none"
+              className="text-[#9fb6ce] underline-offset-2 hover:text-(--accent) hover:underline focus-visible:text-(--accent) focus-visible:underline focus-visible:outline-none"
               href="#contact"
             >
               Contact Us
@@ -338,7 +345,7 @@ export default function OpenPositionsPage() {
               |
             </span>
             <a
-              className="text-[#9fb6ce] underline-offset-2 hover:text-[var(--accent)] hover:underline focus-visible:text-[var(--accent)] focus-visible:underline focus-visible:outline-none"
+              className="text-[#9fb6ce] underline-offset-2 hover:text-(--accent) hover:underline focus-visible:text-(--accent) focus-visible:underline focus-visible:outline-none"
               href="/"
             >
               Back to Home

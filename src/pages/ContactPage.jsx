@@ -1,5 +1,8 @@
+import { useEffect, useState } from "react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
+import { servicesData } from "../data/servicesData.js";
 
 const homeBackground = "/images/home1.webp";
 
@@ -63,23 +66,76 @@ function ContactIcon({ type }) {
 function handleContactSubmit(event) {
   event.preventDefault();
   const formData = new FormData(event.currentTarget);
-  const subject = encodeURIComponent(`Website inquiry from ${formData.get("name")}`);
+  const serviceSlug = formData.get("service");
+  const matchingService = servicesData.find((s) => s.slug === serviceSlug);
+  const serviceName = matchingService ? matchingService.name : "General Inquiry";
+
+  const subject = encodeURIComponent(`Website inquiry: ${serviceName} - from ${formData.get("name")}`);
   const message = encodeURIComponent(
-    `Name: ${formData.get("name")}\nEmail: ${formData.get("email")}\n\n${formData.get("message")}`,
+    `Name: ${formData.get("name")}\nEmail: ${formData.get("email")}\nPrimary Service of Interest: ${serviceName}\n\n${formData.get("message")}`,
   );
 
   window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${message}`;
 }
 
 export default function ContactPage() {
+  const { theme } = useTheme();
+  const isRed = theme === "red";
+  const isGreen = theme === "green";
+
+  const [selectedService, setSelectedService] = useState(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("service") || "";
+    }
+    return "";
+  });
+
+  useEffect(() => {
+    const updateServiceFromQuery = () => {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        setSelectedService(params.get("service") || "");
+      }
+    };
+
+    updateServiceFromQuery();
+    window.addEventListener("popstate", updateServiceFromQuery);
+    return () => window.removeEventListener("popstate", updateServiceFromQuery);
+  }, []);
+
+  const overlayGradient = isRed
+    ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97) 0%, rgba(45, 3, 6, 0.84) 48%, rgba(45, 3, 6, 0.30) 80%, rgba(45, 3, 6, 0.15) 100%)"
+    : isGreen
+      ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97) 0%, rgba(2, 30, 18, 0.84) 48%, rgba(2, 30, 18, 0.30) 80%, rgba(2, 30, 18, 0.15) 100%)"
+      : "linear-gradient(105deg, rgba(2, 19, 42, 0.97) 0%, rgba(2, 19, 42, 0.84) 48%, rgba(2, 19, 42, 0.30) 80%, rgba(2, 19, 42, 0.15) 100%)";
+
   return (
     <div className="contact-page">
       <section
         aria-labelledby="contact-page-title"
-        className="contact-hero"
-        style={{ backgroundImage: `url(${homeBackground})` }}
+        className="contact-hero relative isolate overflow-hidden transition-colors duration-500"
+        style={{
+          backgroundColor: isRed ? "#2d0306" : isGreen ? "#021e12" : "#050b1c",
+        }}
       >
-        <div className="contact-hero-overlay" />
+        <img
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-center transition-all duration-500"
+          src={homeBackground}
+          style={{
+            filter: isRed
+              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
+              : isGreen
+                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
+                : "none",
+          }}
+        />
+        <div
+          className="contact-hero-overlay transition-all duration-500"
+          style={{ background: overlayGradient }}
+        />
         <div className="site-container contact-hero-content">
           <p className="contact-breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span> Contact</p>
           <p className="contact-eyebrow">We’re here to help</p>
@@ -148,6 +204,22 @@ export default function ContactPage() {
 
               <label htmlFor="contact-email">Email</label>
               <input autoComplete="email" id="contact-email" name="email" placeholder="you@example.com" required type="email" />
+
+              <label htmlFor="contact-service">Primary Service of Interest</label>
+              <select
+                id="contact-service"
+                name="service"
+                value={selectedService}
+                onChange={(e) => setSelectedService(e.target.value)}
+                className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-['Inter',sans-serif] text-slate-800 transition-colors focus:border-[#10b981] focus:outline-none focus:ring-2 focus:ring-[#10b981]/20 mb-4"
+              >
+                <option value="">General Inquiry / Consultation</option>
+                {servicesData.map((s) => (
+                  <option key={s.slug} value={s.slug}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
 
               <label htmlFor="contact-message">Message</label>
               <textarea id="contact-message" name="message" placeholder="How can we help?" required rows="5" />

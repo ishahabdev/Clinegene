@@ -93,7 +93,7 @@ export default function ServicesSection() {
         <Button
           variant="cyan"
           aria-label="Previous services"
-          className="service-carousel-control !absolute !left-[-56px] !top-1/2 !z-10 !hidden !h-11 !min-h-11 !w-11 !-translate-y-1/2 !rounded-full !border !border-slate-200 !p-0 !text-[#04152b] shadow-[0_4px_14px_rgba(12,43,72,0.14)] !transition-all duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 2xl:!flex"
+          className="service-carousel-control absolute! -left-14! top-1/2! z-10! hidden! h-11! min-h-11! w-11! -translate-y-1/2! rounded-full! border! border-slate-200! p-0! text-[#04152b]! shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-all! duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 2xl:flex!"
           disabled={serviceIndex === 0}
           onClick={() => goToService(serviceIndex - 1)}
         >
@@ -102,14 +102,14 @@ export default function ServicesSection() {
         <Button
           variant="cyan"
           aria-label="Next services"
-          className="service-carousel-control !absolute !right-[-56px] !top-1/2 !z-10 !hidden !h-11 !min-h-11 !w-11 !-translate-y-1/2 !rounded-full !border !border-slate-200 !p-0 !text-[#04152b] shadow-[0_4px_14px_rgba(12,43,72,0.14)] !transition-all duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 2xl:!flex"
+          className="service-carousel-control absolute! -right-14! top-1/2! z-10! hidden! h-11! min-h-11! w-11! -translate-y-1/2! rounded-full! border! border-slate-200! p-0! text-[#04152b]! shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-all! duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 2xl:flex!"
           disabled={serviceIndex === services.length - 1}
           onClick={() => goToService(serviceIndex + 1)}
         >
           <ChevronRight aria-hidden="true" size={18} />
         </Button>
         <div
-          className="relative w-full overflow-x-auto overflow-y-hidden pt-3.5 pb-5 -my-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="relative w-full overflow-x-auto overflow-y-hidden pt-3.5 pb-5 -my-2 scrollbar-none [&::-webkit-scrollbar]:hidden"
           onTouchStart={(event) => {
             touchStartX.current = event.touches[0].clientX;
           }}
@@ -136,12 +136,12 @@ export default function ServicesSection() {
             {carouselServices.map((service, index) => {
               return (
                 <a
-                  className="service-card group relative flex min-h-[29.25rem] shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] hover:border-[var(--accent)] focus-within:border-[var(--accent)] bg-[#f7fbff] text-[#102744] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
-                  href="/services"
-                  key={`${service}-${index}`}
+                  className="service-card group relative flex min-h-117 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] hover:border-(--accent) focus-within:border-(--accent) bg-[#f7fbff] text-[#102744] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
+                  href={`/services/${service.slug}`}
+                  key={`${service.slug || service.name}-${index}`}
                   style={{ width: `${cardWidth}px` }}
                 >
-                  <div className="relative aspect-[3.5/2.5] w-full min-w-0 overflow-hidden rounded-t-[15px] bg-[#102943]">
+                  <div className="relative aspect-3.5/2.5 w-full min-w-0 overflow-hidden rounded-t-[15px] bg-[#102943]">
                     <img
                       alt=""
                       aria-hidden="true"
@@ -152,7 +152,7 @@ export default function ServicesSection() {
                   </div>
                   <div className="relative flex flex-1 flex-col px-5 pb-5 pt-11">
                     {/* Icon badge — rests & hover both themed via CSS vars */}
-                    <span className="service-card-icon absolute -top-[30px] left-5 grid h-[60px] w-[60px] place-items-center rounded-[15px] border border-[#d4e5f2] motion-reduce:transform-none motion-reduce:transition-none">
+                    <span className="service-card-icon absolute -top-7.5 left-5 grid h-15 w-15 place-items-center rounded-[15px] border border-[#d4e5f2] motion-reduce:transform-none motion-reduce:transition-none">
                       <service.Icon aria-hidden="true" size={22} strokeWidth={1.8} />
                     </span>
                     <h3 className="mt-4 text-[18px] font-bold leading-[1.35] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[#0a5265] group-focus-within:text-[#0a5265] motion-reduce:transition-none">{service.name}</h3>
@@ -174,10 +174,10 @@ export default function ServicesSection() {
             variant={serviceIndex === index ? "cyan" : "white"}
             aria-current={serviceIndex === index ? "true" : undefined}
             aria-label={`Show ${service.name}`}
-                className={`!h-1.75 !min-h-1.75 !rounded-full !border-0 !p-0 transition-all duration-300 motion-reduce:transition-none ${
+            className={`h-1.75! min-h-1.75! rounded-full! border-0! p-0! transition-all duration-300 motion-reduce:transition-none ${
               serviceIndex === index
                 ? "w-7"
-                : "w-1.75 !bg-[#9aafc1] hover:!bg-[var(--accent)]"
+                : "w-1.75 bg-[#9aafc1]! hover:bg-(--accent)!"
             }`}
             key={service.name}
             onClick={() => goToService(index)}

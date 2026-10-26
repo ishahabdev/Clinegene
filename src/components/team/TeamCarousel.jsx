@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight, Mail } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 // Calculate stacked overlapping position for 5-card deck layout
 function getCardTransform(offset, stageWidth) {
@@ -81,7 +81,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
 
   return (
     <div
-      className="absolute left-1/2 top-1/2 w-[min(340px,88vw)] transition-all duration-[650ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+      className="absolute left-1/2 top-1/2 w-[min(340px,88vw)] transition-all duration-650 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
       style={{
         transform: `translate(-50%, -50%) translate(${transform.x}px, ${transform.y}px) rotateZ(${transform.rotate}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
         opacity: transform.opacity,
@@ -97,13 +97,14 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
           Math.abs(offset) > 0 ? 'cursor-pointer' : 'cursor-default'
         } ${
           isActive
-            ? 'border-2 border-[#10C8E0] shadow-[0_10px_30px_rgba(15,23,42,0.15)]'
+            ? 'border-2 shadow-[0_10px_30px_rgba(15,23,42,0.15)]'
             : 'bg-white border-2 border-[#e2e8f0] shadow-[0_10px_30px_rgba(15,23,42,0.12)] hover:shadow-[0_15px_40px_rgba(15,23,42,0.18)] hover:-translate-y-1'
         }`}
+        style={isActive ? { borderColor: "var(--accent)" } : undefined}
       >
         {/* Remove the animated glow effects */}
         {isActive && (
-          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] via-transparent to-white/[0.05] pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-br from-white/5 via-transparent to-white/5 pointer-events-none" />
         )}
 
         {/* Card Content */}
@@ -126,7 +127,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
             ) : (
               <>
                 {/* Clean minimal pattern fallback */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#f8fafc] to-[#e0f2fe]">
+                <div className="absolute inset-0 bg-linear-to-br from-[#f8fafc] to-[#e0f2fe]">
                   <div className="absolute inset-0 opacity-[0.04]" style={{
                     backgroundImage: `
                       linear-gradient(to right, currentColor 1px, transparent 1px),
@@ -138,7 +139,10 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
                 
                 {/* Initials fallback */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="h-28 w-28 rounded-full bg-gradient-to-br from-[#10C8E0] to-[#10C8E0] flex items-center justify-center shadow-2xl">
+                  <div
+                    className="h-28 w-28 rounded-full flex items-center justify-center shadow-2xl transition-colors"
+                    style={{ backgroundColor: "var(--accent)" }}
+                  >
                     <span className="text-[32px] font-extrabold font-['Inter'] text-white">
                       {initials}
                     </span>
@@ -149,56 +153,77 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
 
             {/* Leadership badge (top right) - on image */}
             {isActive && (
-              <div className="absolute top-3 right-3 rounded-lg bg-[#10C8E0] backdrop-blur-sm border border-[#10C8E0] px-3 py-1 text-[8px] font-bold uppercase tracking-[0.15em] text-white shadow-lg z-10">
+              <div
+                className="absolute top-3 right-3 rounded-lg backdrop-blur-sm px-3 py-1 text-[8px] font-bold uppercase tracking-[0.15em] text-white shadow-lg z-10 transition-colors"
+                style={{ backgroundColor: "var(--accent)", borderColor: "var(--accent)" }}
+              >
                 Leadership
               </div>
             )}
 
             {/* Department badge - on image */}
             {!isActive && (
-              <div className="absolute top-3 left-3 rounded-lg bg-white/95 backdrop-blur-sm border border-[#e2e8f0] px-3 py-1 text-[8px] font-bold uppercase tracking-wider text-[#10C8E0] shadow-md z-10">
+              <div
+                className="absolute top-3 left-3 rounded-lg bg-white/95 backdrop-blur-sm border border-[#e2e8f0] px-3 py-1 text-[8px] font-bold uppercase tracking-wider shadow-md z-10 transition-colors"
+                style={{ color: "var(--accent)" }}
+              >
                 {member.department || 'Team'}
               </div>
             )}
 
             {/* Status indicator - bottom right corner */}
-            <div className={`absolute bottom-3 right-3 flex h-6 w-6 items-center justify-center rounded-full shadow-xl ${isActive ? 'bg-white ring-2 ring-white/50' : 'bg-[#10C8E0] ring-2 ring-white'} z-10`}>
+            <div
+              className={`absolute bottom-3 right-3 flex h-6 w-6 items-center justify-center rounded-full shadow-xl ${isActive ? 'bg-white ring-2 ring-white/50' : 'ring-2 ring-white'} z-10`}
+              style={!isActive ? { backgroundColor: "var(--accent)" } : undefined}
+            >
               <div className="h-2.5 w-2.5 rounded-full bg-[#10b981] animate-pulse" />
             </div>
           </div>
 
-          {/* Content Section - Cyan gradient ONLY on active card content area */}
-          <div className={`px-4 pb-3 pt-3 ${
-            isActive 
-              ? 'bg-[#0991B2]' 
-              : 'bg-white'
-          }`}>
+          {/* Content Section - Theme color on active card content area */}
+          <div
+            className={`px-4 pb-3 pt-3 transition-colors duration-300 ${
+              isActive 
+                ? 'text-white' 
+                : 'bg-white'
+            }`}
+            style={isActive ? { backgroundColor: "var(--accent-dark)", color: "var(--accent-btn-text)" } : undefined}
+          >
             {/* Name - compact */}
             <h3 className={`text-center font-['Poppins'] text-[16px] font-bold leading-tight mb-1 line-clamp-2 ${
-              isActive ? 'text-black' : 'text-[#0f172a]'
+              isActive ? 'text-inherit' : 'text-[#0f172a]'
             }`}>
               {member.name}
             </h3>
 
             {/* Designation - compact */}
-            <p className={`text-center text-[11px] font-semibold mb-2.5 line-clamp-2 ${
-              isActive ? 'text-black' : 'text-[#10C8E0]'
-            }`}>
+            <p
+              className={`text-center text-[11px] font-semibold mb-2.5 line-clamp-2 ${
+                isActive ? 'opacity-90' : ''
+              }`}
+              style={!isActive ? { color: "var(--accent)" } : undefined}
+            >
               {member.designation}
             </p>
 
             {/* Decorative line - compact */}
-            <div className={`mx-auto h-[2px] w-12 rounded-full mb-3 ${
-              isActive ? 'bg-black/60' : 'bg-[#10C8E0]'
-            }`} />
+            <div
+              className={`mx-auto h-0.5 w-12 rounded-full mb-3 ${
+                isActive ? 'bg-white/60' : ''
+              }`}
+              style={!isActive ? { backgroundColor: "var(--accent)" } : undefined}
+            />
 
             {/* Details (bullet points) - compact spacing */}
             {member.details && member.details.length > 0 && (
               <div className="space-y-1.5 mb-3">
                 {member.details.slice(0, 2).map((detail, idx) => (
                   <div key={idx} className="flex items-start gap-2 text-[10px] leading-relaxed">
-                    <div className={`mt-1 h-1 w-1 rounded-full shrink-0 ${isActive ? 'bg-black' : 'bg-[#10C8E0]'}`} />
-                    <span className={`line-clamp-2 ${isActive ? 'text-black/90' : 'text-[#475569]'}`}>
+                    <div
+                      className={`mt-1 h-1 w-1 rounded-full shrink-0 ${isActive ? 'bg-white' : ''}`}
+                      style={!isActive ? { backgroundColor: "var(--accent)" } : undefined}
+                    />
+                    <span className={`line-clamp-2 ${isActive ? 'opacity-95' : 'text-[#475569]'}`}>
                       {detail}
                     </span>
                   </div>
@@ -367,7 +392,7 @@ export default function TeamCarousel({ members = [] }) {
 
   return (
     <section 
-      className="relative bg-white py-12 md:py-16 overflow-hidden z-[1]" 
+      className="relative bg-white py-12 md:py-16 overflow-hidden z-1" 
       id="team-carousel"
     >
       {/* Diagnostic grid background pattern */}
@@ -383,19 +408,36 @@ export default function TeamCarousel({ members = [] }) {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-[1400px] px-6">
+      <div className="relative site-container">
         {/* Section Header */}
         <div className="mb-12 text-center">
-          <div className="mb-4 inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#10C8E0]/10 to-[#10C8E0]/10 border border-[#10C8E0]/30 px-6 py-2 shadow-sm">
-            <div className="h-2 w-2 rounded-full bg-[#10C8E0] animate-pulse shadow-lg shadow-[#10C8E0]/50" />
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#10C8E0] font-['Inter']">
+          <div
+            className="mb-4 inline-flex items-center gap-2.5 rounded-full border px-6 py-2 shadow-sm transition-colors"
+            style={{
+              backgroundColor: "var(--accent-soft)",
+              borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
+            }}
+          >
+            <div
+              className="h-2 w-2 rounded-full animate-pulse shadow-lg transition-colors"
+              style={{ backgroundColor: "var(--accent)" }}
+            />
+            <span
+              className="text-xs font-bold uppercase tracking-[0.25em] font-['Inter'] transition-colors"
+              style={{ color: "var(--accent)" }}
+            >
               Expert Diagnostic Leadership
             </span>
           </div>
 
           <h2 className="font-['Poppins'] text-[32px] font-extrabold leading-[1.15] text-[#0f172a] sm:text-[38px] lg:text-[44px]">
             Meet Our{" "}
-            <span className="bg-gradient-to-r from-[#10C8E0] to-[#10C8E0] bg-clip-text text-transparent">
+            <span
+              style={{
+                color: "var(--accent)",
+                transition: "color 0.4s ease-in-out",
+              }}
+            >
               Board-Certified Specialists
             </span>
           </h2>
@@ -448,7 +490,11 @@ export default function TeamCarousel({ members = [] }) {
           <button
             onClick={goToPrev}
             disabled={members.length <= 1 || isTransitioning}
-            className="group flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#10C8E0] to-[#10C8E0] text-white transition-all duration-300 hover:shadow-xl hover:shadow-[#10C8E0]/40 hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10C8E0] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="group flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 hover:shadow-xl hover:scale-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+            style={{
+              backgroundColor: "var(--accent-btn-bg)",
+              color: "var(--accent-btn-text)",
+            }}
             aria-label="Previous team member"
           >
             <ChevronLeft className="h-6 w-6" strokeWidth={2.5} />
@@ -458,7 +504,7 @@ export default function TeamCarousel({ members = [] }) {
           <div className="flex flex-col items-center gap-3">
             {/* Progress counter */}
             <div className="text-base font-extrabold text-[#0f172a] tabular-nums font-['Inter']">
-              <span className="text-[#10C8E0]">{String(activeIndex + 1).padStart(2, '0')}</span>
+              <span style={{ color: "var(--accent)" }}>{String(activeIndex + 1).padStart(2, '0')}</span>
               {" / "}
               <span className="text-[#94a3b8]">{String(members.length).padStart(2, '0')}</span>
             </div>
@@ -470,11 +516,12 @@ export default function TeamCarousel({ members = [] }) {
                   key={idx}
                   onClick={() => goToIndex(idx)}
                   disabled={isTransitioning}
-                  className={`h-2 rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10C8E0] disabled:cursor-not-allowed ${
+                  className={`h-2 rounded-full transition-all duration-300 disabled:cursor-not-allowed ${
                     idx === activeIndex
-                      ? 'w-8 bg-gradient-to-r from-[#10C8E0] to-[#10C8E0] shadow-lg shadow-[#10C8E0]/40'
-                      : 'w-2 bg-[#cbd5e1] hover:bg-[#10C8E0]/70 hover:w-5'
+                      ? 'w-8 shadow-lg'
+                      : 'w-2 bg-[#cbd5e1] hover:w-5'
                   }`}
+                  style={idx === activeIndex ? { backgroundColor: "var(--accent)" } : undefined}
                   aria-label={`Go to ${members[idx].name}`}
                   aria-current={idx === activeIndex ? 'true' : 'false'}
                 />
@@ -486,7 +533,11 @@ export default function TeamCarousel({ members = [] }) {
           <button
             onClick={goToNext}
             disabled={members.length <= 1 || isTransitioning}
-            className="group flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#10C8E0] to-[#10C8E0] text-white transition-all duration-300 hover:shadow-xl hover:shadow-[#10C8E0]/40 hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10C8E0] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="group flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300 hover:shadow-xl hover:scale-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+            style={{
+              backgroundColor: "var(--accent-btn-bg)",
+              color: "var(--accent-btn-text)",
+            }}
             aria-label="Next team member"
           >
             <ChevronRight className="h-6 w-6" strokeWidth={2.5} />

@@ -37,13 +37,13 @@ export default function HeaderNav({ activePage }) {
     <a
       key={label}
       aria-current={activePage === label ? "page" : undefined}
-      className={`whitespace-nowrap py-2 text-[13px] font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${activePage === label ? "text-[var(--accent-muted)]" : "text-[#1f2937]"}`}
+      className={`whitespace-nowrap py-2 text-[13px] font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${activePage === label ? "text-(--accent-muted)" : "text-[#1f2937]"}`}
       href={href}
       onClick={() => setMenuOpen(false)}
     >
       <span className="group relative inline-block">
         {label}
-        <span aria-hidden="true" className={`absolute -bottom-2 left-0 h-0.5 w-full bg-[var(--accent)] transition-transform duration-300 ${activePage === label ? "scale-x-100 origin-left" : "scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left"}`} />
+        <span aria-hidden="true" className={`absolute -bottom-2 left-0 h-0.5 w-full bg-(--accent) transition-transform duration-300 ${activePage === label ? "scale-x-100 origin-left" : "scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left"}`} />
       </span>
     </a>
   );
@@ -70,7 +70,7 @@ export default function HeaderNav({ activePage }) {
         {/* Desktop actions (≥1200px) */}
         <div className="hidden shrink-0 items-center gap-4 min-[1200px]:flex">
           <ThemeSwitcher />
-          <Button className="!min-h-0 !px-5 !py-[11px] !text-[11px]" href="/contact">Contact Us</Button>
+          <Button className="min-h-0! px-5! py-2.75! text-[11px]!" href="/contact">Contact Us</Button>
         </div>
 
         {/* Mobile controls (<1200px) */}
@@ -79,7 +79,7 @@ export default function HeaderNav({ activePage }) {
           <Button
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
-            className="!h-10 !min-h-10 !w-10 !shrink-0 !rounded-full !border !border-slate-200 !p-0 !text-slate-700 hover:!text-white"
+            className="h-10! min-h-10! w-10! shrink-0! rounded-full! border! border-slate-200! p-0! text-slate-700! hover:text-white!"
             onClick={() => setMenuOpen(!menuOpen)}
             variant="white"
           >
@@ -93,26 +93,26 @@ export default function HeaderNav({ activePage }) {
           aria-label="Mobile navigation"
           className="absolute inset-x-0 top-full border-t border-slate-100 bg-white px-5 py-4 shadow-lg min-[1200px]:hidden"
         >
-          <div className="mx-auto flex max-w-[1440px] flex-col items-stretch gap-1">
+          <div className="mx-auto flex max-w-360 flex-col items-stretch gap-1">
             {links.map((link) => (
               <a
                 key={link.label}
                 aria-current={activePage === link.label ? "page" : undefined}
-                className={`group rounded-md px-3 py-2.5 text-sm font-semibold hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${
-                  activePage === link.label ? "text-[var(--accent-muted)]" : "text-slate-700"
+                className={`group rounded-md px-3 py-2.5 text-sm font-semibold hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${
+                  activePage === link.label ? "text-(--accent-muted)" : "text-slate-700"
                 }`}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
               >
                 <span className="relative inline-block">
                   {link.label}
-                  <span aria-hidden="true" className={`absolute -bottom-0.5 left-0 h-0.5 w-full bg-[var(--accent)] transition-transform duration-300 ${activePage === link.label ? "scale-x-100 origin-left" : "scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left"}`} />
+                  <span aria-hidden="true" className={`absolute -bottom-0.5 left-0 h-0.5 w-full bg-(--accent) transition-transform duration-300 ${activePage === link.label ? "scale-x-100 origin-left" : "scale-x-0 origin-right group-hover:scale-x-100 group-hover:origin-left"}`} />
                 </span>
               </a>
             ))}
             <div className="mt-3 border-t border-slate-100 pt-3">
               <Button
-                className="!w-full !py-3 text-center"
+                className="w-full! py-3! text-center"
                 href="/contact"
                 onClick={() => setMenuOpen(false)}
               >

@@ -29,12 +29,12 @@ export default function SectionHeading({
       <div className={center ? "flex flex-col items-center" : "min-w-0 flex-1"}>
         <div
           className={`flex items-center gap-3 font-inter text-[11px] font-bold uppercase tracking-[0.25em] ${
-            dark ? "text-[var(--accent)]" : "text-[var(--accent-muted)]"
+            dark ? "text-(--accent)" : "text-(--accent-muted)"
           }`}
         >
-          <span aria-hidden="true" className={`h-[2px] w-9 bg-[var(--accent)]`} />
+          <span aria-hidden="true" className="h-0.5 w-9 bg-(--accent)" />
           {eyebrow}
-          {center && <span aria-hidden="true" className={`h-[2px] w-9 bg-[var(--accent)]`} />}
+          {center && <span aria-hidden="true" className="h-0.5 w-9 bg-(--accent)" />}
         </div>
 
         <h2
@@ -44,7 +44,7 @@ export default function SectionHeading({
           id={headingId}
         >
           {title}{" "}
-          <span className={highlightClassName || (dark ? "text-[var(--accent)]" : "text-[var(--accent-dark)]")}>
+          <span className={highlightClassName || (dark ? "text-(--accent)" : "text-(--accent-dark)")}>
             {highlight}
           </span>
         </h2>
@@ -65,8 +65,8 @@ export default function SectionHeading({
           {controls}
           {action && (
             <a
-              className={`group inline-flex w-fit items-center gap-2.5 font-inter text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${
-                dark ? "text-[var(--accent)] hover:text-white" : "text-[var(--accent-muted)] hover:text-[#0c2b48]"
+              className={`group inline-flex w-fit items-center gap-2.5 font-inter text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] ${
+                dark ? "text-(--accent) hover:text-white" : "text-(--accent-muted) hover:text-[#0c2b48]"
               }`}
               href={action.href}
             >

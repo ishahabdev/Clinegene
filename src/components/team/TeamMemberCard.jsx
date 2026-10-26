@@ -315,7 +315,7 @@ export default function TeamMemberCard({ member }) {
         <div className="absolute left-[20%] bottom-[20%] h-1 w-1 rounded-full bg-[#10c8e0]/20 blur-sm" style={{ animation: 'float 3.5s ease-in-out infinite 1s' }} />
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes fadeInUp {
           from {
             opacity: 0;

@@ -6,6 +6,7 @@ import LeadershipSection from "../components/team/LeadershipSection.jsx";
 import TeamCarousel from "../components/team/TeamCarousel.jsx";
 import { carouselMembers } from "../data/team.js";
 import teamPhoto from "../assets/team.png";
+import { useTheme } from "../context/ThemeContext.jsx";
 
 const stats = [
   {
@@ -35,6 +36,17 @@ const stats = [
 ];
 
 export default function TeamPage() {
+  const { theme } = useTheme();
+  const isRed = theme === "red";
+  const isGreen = theme === "green";
+  const promisePhoto = teamPhoto;
+
+  const promiseOverlay = isRed
+    ? "linear-gradient(90deg, rgba(45, 3, 6, 0.97) 0%, rgba(60, 6, 10, 0.88) 45%, rgba(90, 10, 16, 0.45) 100%)"
+    : isGreen
+      ? "linear-gradient(90deg, rgba(2, 30, 18, 0.97) 0%, rgba(4, 42, 24, 0.88) 45%, rgba(6, 60, 34, 0.45) 100%)"
+      : "linear-gradient(90deg, rgba(3,20,43,0.95) 0%, rgba(4,32,64,0.84) 45%, rgba(6,52,96,0.45) 100%)";
+
   return (
     <>
       <TeamHero />
@@ -64,27 +76,33 @@ export default function TeamPage() {
             inset: 0,
             top: '-120px',
             zIndex: -2,
-            backgroundImage: `url(${teamPhoto})`,
+            backgroundImage: `url(${promisePhoto})`,
             backgroundPosition: '50% 35%',
             backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat'
+            backgroundRepeat: 'no-repeat',
+            filter: isRed
+              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
+              : isGreen
+                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
+                : "none",
           }}
           aria-hidden="true"
         />
         
         {/* Dark gradient overlay */}
         <div 
-          className="absolute inset-0 z-[-1]"
+          className="absolute inset-0 z-[-1] transition-all duration-500"
           style={{
-            background: 'linear-gradient(90deg, rgba(3,20,43,0.95) 0%, rgba(4,32,64,0.84) 45%, rgba(6,52,96,0.45) 100%)'
+            background: promiseOverlay
           }}
           aria-hidden="true"
         />
         
-        {/* Cyan glow bottom-right */}
+        {/* Theme glow bottom-right */}
         <div
           aria-hidden="true"
-          className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[#10c8e0]/10 blur-[120px] z-[-1]"
+          className="absolute bottom-0 right-0 h-96 w-96 rounded-full blur-[120px] z-[-1] transition-colors"
+          style={{ backgroundColor: "var(--accent)", opacity: 0.15 }}
         />
 
         {/* Content - using same container as hero section */}
@@ -95,8 +113,15 @@ export default function TeamPage() {
               <div className="text-white">
                 <ScrollReveal>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="h-[2px] w-12 bg-[#19c3dc]" aria-hidden="true" />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#19c3dc]">
+                    <div
+                      className="h-[2px] w-12 transition-colors"
+                      style={{ backgroundColor: "var(--accent)" }}
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="text-[11px] font-bold uppercase tracking-[0.2em] transition-colors"
+                      style={{ color: "var(--accent)" }}
+                    >
                       OUR PROMISE
                     </span>
                   </div>
@@ -109,7 +134,12 @@ export default function TeamPage() {
                   >
                     <span className="text-white">Precision You Can Trust.</span>
                     <br />
-                    <span className="text-[#19c3dc]">
+                    <span
+                      style={{
+                        color: isRed ? "#ef4444" : "var(--accent)",
+                        transition: "color 0.4s ease-in-out",
+                      }}
+                    >
                       Care You Can Feel.
                     </span>
                   </h2>
@@ -123,11 +153,10 @@ export default function TeamPage() {
 
                 <ScrollReveal delay={300}>
                   <Button
-                    className="mt-7 !min-h-[48px] !px-7 font-['Noto_Sans'] !text-[15px] shadow-lg shadow-[#19c3dc]/30 hover:shadow-xl hover:shadow-[#19c3dc]/50 bg-[#19c3dc] hover:bg-[#14a8bf]"
+                    className="mt-7 min-h-9 sm:min-h-12! px-4 sm:px-7! font-['Noto_Sans'] text-xs sm:text-[15px]!"
                     href="/contact"
-                    variant="cyan"
                   >
-                    Join Our Team <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                    Join Our Team <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </Button>
                 </ScrollReveal>
               </div>
@@ -136,7 +165,7 @@ export default function TeamPage() {
         </div>
 
         {/* Respect reduced motion preference */}
-        <style jsx>{`
+        <style>{`
           @media (prefers-reduced-motion: reduce) {
             .promise-bg-fixed {
               position: absolute !important;

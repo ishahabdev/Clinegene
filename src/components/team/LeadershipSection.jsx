@@ -15,9 +15,19 @@ function LeadershipCard({ leader, index }) {
         <div className={`relative grid gap-0 h-full ${isImageLeft ? 'lg:grid-cols-[40%_1fr]' : 'lg:grid-cols-[1fr_40%]'}`}>
           
           <div className={`flex flex-col justify-center px-6 py-6 bg-white ${isImageLeft ? 'lg:col-start-2 lg:order-2 lg:pl-16 lg:pr-8' : 'lg:col-start-1 lg:order-1 lg:pr-16 lg:pl-8'}`}>
-            <div className="mb-2.5 inline-flex items-center gap-2 self-start rounded-full bg-[#e5f8fb] px-3 py-1.5">
-              <div className="h-1.5 w-1.5 rounded-full bg-[#10c8e0]" aria-hidden="true" />
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#0a7a94]">
+            <div
+              className="mb-2.5 inline-flex items-center gap-2 self-start rounded-full px-3 py-1.5 transition-colors"
+              style={{ background: "var(--accent-soft)" }}
+            >
+              <div
+                className="h-1.5 w-1.5 rounded-full transition-colors"
+                style={{ background: "var(--accent)" }}
+                aria-hidden="true"
+              />
+              <span
+                className="text-[10px] font-bold uppercase tracking-wider transition-colors"
+                style={{ color: "var(--accent-muted)" }}
+              >
                 Leadership
               </span>
             </div>
@@ -26,7 +36,10 @@ function LeadershipCard({ leader, index }) {
               {leader.name}
             </h3>
 
-            <p className="mt-1.5 mb-2.5 text-[16px] font-semibold text-[#10c8e0]">
+            <p
+              className="mt-1.5 mb-2.5 text-[16px] font-semibold transition-colors"
+              style={{ color: "var(--accent)" }}
+            >
               {leader.role}
             </p>
 
@@ -37,7 +50,7 @@ function LeadershipCard({ leader, index }) {
             <div className="flex flex-wrap gap-2.5">
               <a
                 href={`mailto:${leader.email}`}
-                className="inline-flex items-center gap-2 rounded-full bg-black px-[18px] py-[11px] text-[14px] font-semibold text-white transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                className="inline-flex items-center gap-2 rounded-full bg-black px-4.5 py-2.75 text-[14px] font-semibold text-white transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                 aria-label={`Email ${leader.name}`}
               >
                 <Mail className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
@@ -47,7 +60,7 @@ function LeadershipCard({ leader, index }) {
                 href={leader.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border-2 border-[#d4e5f2] bg-white px-[18px] py-[11px] text-[14px] font-semibold text-[#0c2b48] transition-all duration-300 hover:border-[#10c8e0] hover:bg-[#10c8e0] hover:text-white hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10c8e0]"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-[#d4e5f2] bg-white px-4.5 py-2.75 text-[14px] font-semibold text-[#0c2b48] transition-all duration-300 hover:border-(--accent) hover:bg-(--accent) hover:text-white hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                 aria-label={`View ${leader.name}'s LinkedIn profile`}
               >
                 <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -82,7 +95,7 @@ function LeadershipCard({ leader, index }) {
 export default function LeadershipSection() {
   return (
     <section 
-      className="relative bg-white py-16 md:py-20 z-[1]"
+      className="relative bg-white py-16 md:py-20 z-1"
       id="leadership"
       aria-labelledby="leadership-title"
     >
@@ -91,7 +104,7 @@ export default function LeadershipSection() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-[1400px] px-6 lg:px-12">
+      <div className="relative site-container">
         <div className="space-y-8 lg:space-y-10">
           {executiveTeam.map((leader, index) => (
             <LeadershipCard key={leader.id} leader={leader} index={index} />
@@ -99,7 +112,7 @@ export default function LeadershipSection() {
         </div>
       </div>
       
-      <style jsx>{`
+      <style>{`
         /* Soft gradient fade on photo edges */
         .leadership-photo-wrapper::after {
           content: '';
