@@ -104,22 +104,25 @@ html {
   position: relative;
   overflow: hidden;
   border: 1px solid #d4e5f2;
+  background-color: #f7fbff;
   box-shadow: 0 4px 20px rgba(12, 43, 72, 0.08);
   transition:
     transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 500ms cubic-bezier(0.22, 1, 0.36, 1);
+    border-color 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 500ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
 }
 
-/* Hover: subtle 8px upward lift, same uniform accent border on all sides, soft expanded shadow with accent glow */
+/* Hover: subtle 8px upward lift, theme accent border on all sides, soft theme background tint, soft shadow with theme accent glow */
 .service-card:hover,
 .service-card:focus-within {
   transform: translateY(-8px);
-  border-color: var(--accent);
+  border-color: var(--accent) !important;
+  background-color: var(--accent-soft, #f7fbff) !important;
   box-shadow:
-    0 16px 36px rgba(12, 43, 72, 0.12),
-    0 4px 16px var(--accent-glow);
+    0 16px 36px rgba(12, 43, 72, 0.10),
+    0 6px 24px var(--accent-glow) !important;
 }
 
 /* Icon badge — resting state */
@@ -139,15 +142,20 @@ html {
 .service-card:hover .service-card-icon,
 .service-card:focus-within .service-card-icon {
   transform: scale(1.06);
-  background-color: var(--accent-btn-bg, var(--accent));
-  color: var(--accent-btn-text, #04152b);
-  box-shadow: 0 6px 16px rgba(12, 43, 72, 0.16);
+  background-color: var(--accent-btn-bg, var(--accent)) !important;
+  color: var(--accent-btn-text, #04152b) !important;
+  box-shadow: 0 6px 16px var(--accent-glow);
 }
 
 /* "Explore" link */
 .service-card-explore {
   color: var(--accent-muted);
   transition: color 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.service-card:hover .service-card-explore,
+.service-card:focus-within .service-card-explore {
+  color: var(--accent-dark, var(--accent)) !important;
 }
 
 /* Accessibility: respect prefers-reduced-motion */
@@ -1866,6 +1874,7 @@ header[data-theme="ceo"] button:focus-visible {
   border-color: var(--contact-navy);
   background: var(--contact-navy);
   color: #fff;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
 }
 
 .contact-info-icon {

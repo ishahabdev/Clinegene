@@ -187,10 +187,10 @@ export const carouselMembers = teamMembers.slice(0, 9);
 export const getTeamMemberIcon = (dept) => departmentIcons[dept] || UserRound;
 
 export const teamStats = [
-  { value: "25+", label: "Researchers", Icon: UsersRound },
+  { value: "9+", label: "Researchers", Icon: UsersRound },
   { value: "6", label: "Departments", Icon: FlaskConical },
-  { value: "15+", label: "Years Avg Experience", Icon: GraduationCap },
-  { value: "200+", label: "Publications", Icon: Dna },
+  { value: "5+", label: "Years Avg Experience", Icon: GraduationCap },
+  { value: "20+", label: "Publications", Icon: Dna },
 ];
 
 export const membersByDepartment = (deptId) =>

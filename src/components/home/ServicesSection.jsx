@@ -136,7 +136,7 @@ export default function ServicesSection() {
             {carouselServices.map((service, index) => {
               return (
                 <a
-                  className="service-card group relative flex min-h-117 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] hover:border-(--accent) focus-within:border-(--accent) bg-[#f7fbff] text-[#102744] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
+                  className="service-card group relative flex min-h-117 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] hover:border-(--accent) focus-within:border-(--accent) text-[#102744] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
                   href={`/services/${service.slug}`}
                   key={`${service.slug || service.name}-${index}`}
                   style={{ width: `${cardWidth}px` }}
@@ -150,12 +150,12 @@ export default function ServicesSection() {
                       src={service.image}
                     />
                   </div>
-                  <div className="relative flex flex-1 flex-col px-5 pb-5 pt-11">
+                  <div className="relative flex flex-1 flex-col px-5 pb-5 pt-11 transition-colors duration-500">
                     {/* Icon badge — rests & hover both themed via CSS vars */}
                     <span className="service-card-icon absolute -top-7.5 left-5 grid h-15 w-15 place-items-center rounded-[15px] border border-[#d4e5f2] motion-reduce:transform-none motion-reduce:transition-none">
                       <service.Icon aria-hidden="true" size={22} strokeWidth={1.8} />
                     </span>
-                    <h3 className="mt-4 text-[18px] font-bold leading-[1.35] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[#0a5265] group-focus-within:text-[#0a5265] motion-reduce:transition-none">{service.name}</h3>
+                    <h3 className="mt-4 text-[18px] font-bold leading-[1.35] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-(--accent-dark) group-focus-within:text-(--accent-dark) motion-reduce:transition-none">{service.name}</h3>
                     <p className="mt-3 text-base leading-[1.6] text-[#58748d]">{service.description}</p>
                     <span className="service-card-explore mt-auto inline-flex items-center gap-2 whitespace-nowrap pt-5 text-base font-bold">
                       Explore

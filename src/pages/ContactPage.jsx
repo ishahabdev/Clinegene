@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ChevronDown, ArrowRight } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
@@ -66,16 +67,32 @@ function ContactIcon({ type }) {
 function handleContactSubmit(event) {
   event.preventDefault();
   const formData = new FormData(event.currentTarget);
-  const serviceSlug = formData.get("service");
+  const fullName = formData.get("fullName") || "";
+  const email = formData.get("email") || "";
+  const phone = formData.get("phone") || "";
+  const organization = formData.get("organization") || "";
+  const serviceSlug = formData.get("service") || "";
   const matchingService = servicesData.find((s) => s.slug === serviceSlug);
-  const serviceName = matchingService ? matchingService.name : "General Inquiry";
+  const serviceName = matchingService ? matchingService.name : (serviceSlug || "Not specified");
+  const subjectInput = formData.get("subject") || "";
+  const message = formData.get("message") || "";
 
-  const subject = encodeURIComponent(`Website inquiry: ${serviceName} - from ${formData.get("name")}`);
-  const message = encodeURIComponent(
-    `Name: ${formData.get("name")}\nEmail: ${formData.get("email")}\nPrimary Service of Interest: ${serviceName}\n\n${formData.get("message")}`,
+  const subject = encodeURIComponent(
+    subjectInput ? `${subjectInput} - ${fullName}` : `Message from ${fullName}`
+  );
+  const body = encodeURIComponent(
+    `Full Name: ${fullName}
+Email Address: ${email}
+Phone: ${phone || "Not specified"}
+Organization: ${organization || "Not specified"}
+Area of Interest: ${serviceName}
+Subject: ${subjectInput || "General Inquiry"}
+
+Message:
+${message}`
   );
 
-  window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${message}`;
+  window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
 }
 
 export default function ContactPage() {
@@ -109,6 +126,26 @@ export default function ContactPage() {
     : isGreen
       ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97) 0%, rgba(2, 30, 18, 0.84) 48%, rgba(2, 30, 18, 0.30) 80%, rgba(2, 30, 18, 0.15) 100%)"
       : "linear-gradient(105deg, rgba(2, 19, 42, 0.97) 0%, rgba(2, 19, 42, 0.84) 48%, rgba(2, 19, 42, 0.30) 80%, rgba(2, 19, 42, 0.15) 100%)";
+
+  // Featured card theme adaptive styling (Dark Green in Green theme, Dark Red in Red theme, Dark Blue in Cyan theme)
+  const featuredBg = isRed ? "#200407" : isGreen ? "#0b1f1a" : "#050b1c";
+  const featuredBorder = isRed
+    ? "rgba(185, 28, 28, 0.35)"
+    : isGreen
+      ? "rgba(16, 185, 129, 0.3)"
+      : "#0c2b48";
+  const featuredAccent = isRed ? "#ef4444" : isGreen ? "#10b981" : "#10c8e0";
+  const featuredIconBg = isRed
+    ? "rgba(185, 28, 28, 0.16)"
+    : isGreen
+      ? "rgba(16, 185, 129, 0.16)"
+      : "rgba(16, 200, 224, 0.12)";
+  const featuredIconBorder = isRed
+    ? "rgba(185, 28, 28, 0.45)"
+    : isGreen
+      ? "rgba(16, 185, 129, 0.4)"
+      : "rgba(16, 200, 224, 0.35)";
+  const featuredMuted = isRed ? "#d4b8bb" : isGreen ? "#9eb5ab" : "#c7d1e0";
 
   return (
     <div className="contact-page">
@@ -146,27 +183,82 @@ export default function ContactPage() {
 
       <section aria-label="ClinGene contact details" className="contact-details-section">
         <div className="site-container contact-cards">
-          {contactCards.map((card, index) => (
-            <ScrollReveal
-              as="article"
-              className={`contact-info-card${index === 1 ? " contact-info-card-featured" : ""}`}
-              delay={index * 60}
-              key={card.title}
-            >
-              <span className="contact-info-icon"><ContactIcon type={card.icon} /></span>
-              <h2>{card.title}</h2>
-              <a href={card.href} rel={card.href.startsWith("https:") ? "noreferrer" : undefined}
-                target={card.href.startsWith("https:") ? "_blank" : undefined}>
-                {card.value}
-              </a>
-              <p>{card.detail}</p>
-              <a className="contact-card-link" href={card.href}
-                rel={card.href.startsWith("https:") ? "noreferrer" : undefined}
-                target={card.href.startsWith("https:") ? "_blank" : undefined}>
-                {index === 2 ? "Get directions" : "Contact us"} <span aria-hidden="true">→</span>
-              </a>
-            </ScrollReveal>
-          ))}
+          {contactCards.map((card, index) => {
+            const isFeatured = index === 1;
+            return (
+              <ScrollReveal
+                as="article"
+                className={`contact-info-card${isFeatured ? " contact-info-card-featured" : ""}`}
+                delay={index * 60}
+                key={card.title}
+                style={
+                  isFeatured
+                    ? {
+                        backgroundColor: featuredBg,
+                        borderColor: featuredBorder,
+                        transition: "background-color 0.4s ease, border-color 0.4s ease",
+                      }
+                    : undefined
+                }
+              >
+                <span
+                  className="contact-info-icon"
+                  style={
+                    isFeatured
+                      ? {
+                          backgroundColor: featuredIconBg,
+                          borderColor: featuredIconBorder,
+                          color: featuredAccent,
+                          transition: "all 0.4s ease",
+                        }
+                      : {
+                          backgroundColor: isRed
+                            ? "rgba(185, 28, 28, 0.08)"
+                            : isGreen
+                              ? "rgba(16, 185, 129, 0.08)"
+                              : "rgba(16, 200, 224, 0.10)",
+                          borderColor: isRed
+                            ? "rgba(185, 28, 28, 0.3)"
+                            : isGreen
+                              ? "rgba(16, 185, 129, 0.3)"
+                              : "rgba(16, 200, 224, 0.35)",
+                          color: isRed ? "#b91c1c" : isGreen ? "#10b981" : "#10c8e0",
+                          transition: "all 0.4s ease",
+                        }
+                  }
+                >
+                  <ContactIcon type={card.icon} />
+                </span>
+                <h2>{card.title}</h2>
+                <a
+                  href={card.href}
+                  rel={card.href.startsWith("https:") ? "noreferrer" : undefined}
+                  target={card.href.startsWith("https:") ? "_blank" : undefined}
+                  style={
+                    isFeatured
+                      ? { color: featuredAccent, transition: "color 0.3s ease" }
+                      : { color: isRed ? "#b91c1c" : isGreen ? "#059669" : "#079bb0", transition: "color 0.3s ease" }
+                  }
+                >
+                  {card.value}
+                </a>
+                <p style={isFeatured ? { color: featuredMuted } : undefined}>{card.detail}</p>
+                <a
+                  className="contact-card-link"
+                  href={card.href}
+                  rel={card.href.startsWith("https:") ? "noreferrer" : undefined}
+                  target={card.href.startsWith("https:") ? "_blank" : undefined}
+                  style={
+                    isFeatured
+                      ? { color: featuredAccent, transition: "color 0.3s ease" }
+                      : undefined
+                  }
+                >
+                  {index === 2 ? "Get directions" : "Contact us"} <span aria-hidden="true">→</span>
+                </a>
+              </ScrollReveal>
+            );
+          })}
         </div>
       </section>
 
@@ -189,43 +281,148 @@ export default function ContactPage() {
             <a className="contact-directions-link" href={mapUrl} rel="noreferrer" target="_blank">
               View directions on Google Maps <span aria-hidden="true">↗</span>
             </a>
-            <div className="contact-hours">
-              <span aria-hidden="true" className="contact-hours-dot" />
-              <p><strong>Need assistance?</strong><br />Call or email us and our team will be happy to help.</p>
-            </div>
           </div>
 
-          <div className="contact-form-card">
-            <p className="contact-section-eyebrow">Send us a message</p>
-            <h2>Get in touch</h2>
-            <form className="contact-form" onSubmit={handleContactSubmit}>
-              <label htmlFor="contact-name">Name</label>
-              <input autoComplete="name" id="contact-name" name="name" placeholder="Your name" required />
+          {/* Send us a message Form Card */}
+          <div className="rounded-2xl sm:rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 lg:p-9 shadow-[0_12px_36px_rgba(5,11,28,0.06)]">
+            <h2 className="font-['Poppins',sans-serif] text-[24px] sm:text-[28px] font-bold leading-snug text-[#0c2b48]">
+              Send us a message
+            </h2>
+            <p className="mt-1 text-xs sm:text-[14px] text-slate-500 font-['Inter',sans-serif]">
+              Fill in the form and our team will get back to you shortly.
+            </p>
 
-              <label htmlFor="contact-email">Email</label>
-              <input autoComplete="email" id="contact-email" name="email" placeholder="you@example.com" required type="email" />
+            <form className="mt-6 space-y-4" onSubmit={handleContactSubmit}>
+              {/* Row 1: Full Name & Email Address */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="contact-full-name" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
+                    Full Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="contact-full-name"
+                    name="fullName"
+                    autoComplete="name"
+                    placeholder="Your name"
+                    required
+                    className="w-full h-11 px-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                  />
+                </div>
 
-              <label htmlFor="contact-service">Primary Service of Interest</label>
-              <select
-                id="contact-service"
-                name="service"
-                value={selectedService}
-                onChange={(e) => setSelectedService(e.target.value)}
-                className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-['Inter',sans-serif] text-slate-800 transition-colors focus:border-[#10b981] focus:outline-none focus:ring-2 focus:ring-[#10b981]/20 mb-4"
-              >
-                <option value="">General Inquiry / Consultation</option>
-                {servicesData.map((s) => (
-                  <option key={s.slug} value={s.slug}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
+                <div>
+                  <label htmlFor="contact-email" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
+                    Email Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    required
+                    className="w-full h-11 px-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                  />
+                </div>
+              </div>
 
-              <label htmlFor="contact-message">Message</label>
-              <textarea id="contact-message" name="message" placeholder="How can we help?" required rows="5" />
+              {/* Row 2: Phone & Organization */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="contact-phone" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
+                    Phone
+                  </label>
+                  <input
+                    id="contact-phone"
+                    name="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder="+92 ..."
+                    className="w-full h-11 px-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                  />
+                </div>
 
-              <Button className="contact-submit hover:!text-white focus-visible:!text-white" type="submit" variant="cyan">Send Message <span aria-hidden="true">→</span></Button>
-              <p className="contact-form-note">Your email app will open with your message ready to send.</p>
+                <div>
+                  <label htmlFor="contact-organization" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
+                    Organization
+                  </label>
+                  <input
+                    id="contact-organization"
+                    name="organization"
+                    placeholder="University / Company"
+                    className="w-full h-11 px-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Row 3: Area of Interest */}
+              <div>
+                <label htmlFor="contact-service" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
+                  Area of Interest
+                </label>
+                <div className="relative">
+                  <select
+                    id="contact-service"
+                    name="service"
+                    value={selectedService}
+                    onChange={(e) => setSelectedService(e.target.value)}
+                    className="w-full h-11 appearance-none px-3.5 pr-10 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none cursor-pointer"
+                  >
+                    <option value="">Select an option</option>
+                    {servicesData.map((s) => (
+                      <option key={s.slug} value={s.slug}>
+                        {s.name}
+                      </option>
+                    ))}
+                    <option value="research-collaboration">Research Collaboration</option>
+                    <option value="training-workshops">Training &amp; Workshops</option>
+                    <option value="other">Other Inquiry</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-400">
+                    <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 4: Subject */}
+              <div>
+                <label htmlFor="contact-subject" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
+                  Subject
+                </label>
+                <input
+                  id="contact-subject"
+                  name="subject"
+                  placeholder="How can we help?"
+                  className="w-full h-11 px-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                />
+              </div>
+
+              {/* Row 5: Message */}
+              <div>
+                <label htmlFor="contact-message" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
+                  Message <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  placeholder="Write your message..."
+                  required
+                  rows={4}
+                  className="w-full p-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 leading-relaxed transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none resize-y"
+                />
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-[#0f2137] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#091524] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f2137] cursor-pointer"
+                >
+                  <span>Send Message</span>
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/20 bg-white/10">
+                    <ArrowRight className="h-3 w-3" aria-hidden="true" />
+                  </span>
+                </button>
+              </div>
             </form>
           </div>
         </div>

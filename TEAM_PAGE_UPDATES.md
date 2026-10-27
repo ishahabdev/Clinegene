@@ -192,8 +192,8 @@ html {
    - Real phone number and address in `contactInfo`
 
 ✅ **Verify stats accuracy:**
-   - "15+ Years Experience"
-   - "50+ Research Publications"
+   - "5+ Years Experience"
+   - "20+ Research Publications"
    - Adjust numbers to match actual achievements
 
 ---

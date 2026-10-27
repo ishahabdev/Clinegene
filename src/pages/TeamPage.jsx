@@ -23,7 +23,7 @@ const stats = [
   },
   {
     icon: TrendingUp,
-    value: "15+",
+    value: "5+",
     label: "Years Experience",
     color: "from-[#10c8e0] to-[#0e8fae]"
   },

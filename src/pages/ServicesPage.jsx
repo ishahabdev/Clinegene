@@ -224,7 +224,7 @@ export default function ServicesPage() {
                 <ScrollReveal
                   as="a"
                   href={serviceUrl}
-                  className="group flex min-h-[253px] flex-col overflow-hidden rounded-xl border border-[#c9e2ef] bg-[#f8fcff] shadow-[0_7px_18px_rgba(12,43,72,0.09)] transition-all duration-300 hover:-translate-y-1 hover:border-[#10b981]/60 hover:shadow-[0_12px_28px_rgba(16,185,129,0.2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#10b981]"
+                  className="group flex min-h-[253px] flex-col overflow-hidden rounded-xl border border-[#c9e2ef] bg-[#f8fcff] hover:bg-(--accent-soft) shadow-[0_7px_18px_rgba(12,43,72,0.09)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_12px_28px_var(--accent-glow)] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
                   delay={Math.min(index % 4, 3) * 55}
                   key={slug || name}
                 >
@@ -245,17 +245,17 @@ export default function ServicesPage() {
                       {String(index + 1).padStart(2, "0")}
                     </span>
                   </div>
-                  <div className="relative flex flex-1 flex-col px-3 pb-3 pt-7">
+                  <div className="relative flex flex-1 flex-col px-3 pb-3 pt-7 transition-colors duration-300">
                     <span
-                      className="absolute -top-5 left-3 grid h-10 w-10 place-items-center rounded-xl border border-[#c9e2ef] bg-white shadow-[0_3px_10px_rgba(12,43,72,0.13)] transition-colors group-hover:bg-[#10b981] group-hover:text-white"
+                      className="absolute -top-5 left-3 grid h-10 w-10 place-items-center rounded-xl border border-[#c9e2ef] bg-white shadow-[0_3px_10px_rgba(12,43,72,0.13)] transition-colors group-hover:bg-(--accent-btn-bg,var(--accent)) group-hover:text-(--accent-btn-text,white)"
                       style={{ color: "var(--accent-muted)" }}
                     >
                       <Icon aria-hidden="true" className="h-5 w-5" strokeWidth={1.8} />
                     </span>
-                    <h3 className="font-outfit text-[15px] font-bold leading-snug text-[#0c2b48] group-hover:text-[#0b6b4c] transition-colors">{name}</h3>
+                    <h3 className="font-outfit text-[15px] font-bold leading-snug text-[#0c2b48] group-hover:text-(--accent-dark) transition-colors">{name}</h3>
                     <p className="mt-1.5 font-inter text-xs leading-normal text-[#4a6e8b]">{description}</p>
                     <span
-                      className="mt-auto inline-flex items-center gap-1.5 pt-3 font-inter text-[11px] font-bold transition-colors text-[#0b6b4c] group-hover:text-[#10b981]"
+                      className="mt-auto inline-flex items-center gap-1.5 pt-3 font-inter text-[11px] font-bold transition-colors text-[#0c2b48] group-hover:text-(--accent)"
                     >
                       Ask about this service
                       <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
