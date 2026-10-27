@@ -71,7 +71,7 @@ export const servicesData = [
       "Blood (EDTA tube) or extracted DNA.",
       "Completed request form with clinical details.",
       "Patient consent.",
-      "[Exact volumes and storage conditions: to be confirmed by the lab]",
+      "Contact us for details regarding exact volumes and storage conditions.",
     ],
     deliverables: [
       "Interpreted report with variants classified by clinical significance.",
@@ -81,7 +81,7 @@ export const servicesData = [
     faq: [
       {
         question: "What quantity of blood or DNA is required?",
-        answer: "Blood collected in an EDTA tube or extracted DNA may be submitted. Exact volume, concentration and storage requirements are to be confirmed by the lab.",
+        answer: "Blood collected in an EDTA tube or extracted DNA may be submitted. Contact our team for details regarding exact volume, concentration and storage requirements.",
       },
       {
         question: "How are the test results reported and delivered?",
@@ -89,7 +89,7 @@ export const servicesData = [
       },
       {
         question: "How can I obtain a project quote or place an order?",
-        answer: "Click 'Request this service' to submit an inquiry through our contact form. Our scientific directors in Islamabad reply within 4 hours during business days.",
+        answer: "Click 'Request this service' to submit an inquiry through our contact form. Our scientific team will reply promptly to assist with your inquiry.",
       },
     ],
     relatedSlugs: ["sanger-sequencing", "whole-exome-genome-sequencing", "rna-seq"],
@@ -137,7 +137,7 @@ export const servicesData = [
     requirements: [
       "Purified PCR product or plasmid DNA.",
       "Primers (or request primer design from our team).",
-      "[Concentration and volume: to be confirmed by the lab]",
+      "Contact us for details regarding concentration and volume specifications.",
     ],
     deliverables: [
       "Chromatogram files (.ab1)",
@@ -155,7 +155,7 @@ export const servicesData = [
       },
       {
         question: "How do I request a quote for high-throughput plate orders?",
-        answer: "Submit your sample count and target details via the 'Request this service' button, and our Islamabad team will reply within 4 hours during business days.",
+        answer: "Submit your sample count and target details via the 'Request this service' button, and our team will reply promptly to assist with your inquiry.",
       },
     ],
     relatedSlugs: ["clinical-genetic-testing", "whole-exome-genome-sequencing", "phylogenetic-tree-construction"],
@@ -210,7 +210,7 @@ export const servicesData = [
     requirementsLabel: "Sample requirements",
     requirements: [
       "High-quality genomic DNA or whole blood.",
-      "[Amount and quality thresholds: to be confirmed by the lab]",
+      "Contact us for details regarding amount and quality thresholds.",
     ],
     deliverables: [
       "Raw reads (FASTQ)",
@@ -230,7 +230,7 @@ export const servicesData = [
       },
       {
         question: "How do I initiate a sequencing project?",
-        answer: "Click 'Request this service' to provide your study design and sample counts. Our scientific team will contact you with specific guidelines within 4 hours.",
+        answer: "Click 'Request this service' to provide your study design and sample counts. Our scientific team will contact you with specific guidelines promptly.",
       },
     ],
     relatedSlugs: ["clinical-genetic-testing", "sanger-sequencing", "rna-seq"],
@@ -278,7 +278,7 @@ export const servicesData = [
     requirements: [
       "Total RNA with good integrity, or tissue/cells preserved in an RNA stabiliser.",
       "Biological replicates recommended (minimum 3 replicates per condition).",
-      "[Quantity and RIN threshold: to be confirmed by the lab]",
+      "Contact us for details regarding sample quantity and RIN thresholds.",
     ],
     deliverables: [
       "Raw reads (FASTQ)",
@@ -412,7 +412,7 @@ export const servicesData = [
     requirementsLabel: "Sample requirements",
     requirements: [
       "Extracted DNA or raw samples such as stool, soil, water or swabs.",
-      "[Preservation and amount: to be confirmed by the lab]",
+      "Contact us for details regarding preservation and amount.",
     ],
     deliverables: [
       "Raw reads (FASTQ)",
@@ -478,7 +478,7 @@ export const servicesData = [
     requirementsLabel: "Sample requirements",
     requirements: [
       "High-quality DNA extracted from stool, soil, water or other mixed samples.",
-      "[Amount: to be confirmed by the lab]",
+      "Contact us for details regarding required amount.",
     ],
     deliverables: [
       "Raw reads (FASTQ)",
@@ -497,7 +497,7 @@ export const servicesData = [
       },
       {
         question: "How do I request a study proposal?",
-        answer: "Click 'Request this service' with details on sample origins and sequencing depth goals, and our scientific team will reply within 4 hours.",
+        answer: "Click 'Request this service' with details on sample origins and sequencing depth goals, and our scientific team will reply promptly.",
       },
     ],
     relatedSlugs: ["16s-rrna-metagenome-sequencing", "whole-fungal-genome-sequencing", "pangenome-analysis"],
@@ -544,7 +544,7 @@ export const servicesData = [
     requirementsLabel: "Sample requirements",
     requirements: [
       "Pure fungal culture or mycelium, or extracted DNA.",
-      "[Amount and shipping conditions: to be confirmed by the lab]",
+      "Contact us for details regarding amount and shipping conditions.",
     ],
     deliverables: [
       "Raw reads (FASTQ)",
@@ -630,7 +630,7 @@ export const servicesData = [
       },
       {
         question: "How do I request a consultation on pangenomics?",
-        answer: "Submit your cohort size and biological objectives via 'Request this service', and our bioinformatics specialists will contact you within 4 hours.",
+        answer: "Submit your cohort size and biological objectives via 'Request this service', and our bioinformatics specialists will contact you promptly.",
       },
     ],
     relatedSlugs: ["phylogenetic-tree-construction", "whole-genome-metagenome", "protein-docking-molecular-dynamics"],
@@ -743,7 +743,7 @@ export const servicesData = [
     requirementsLabel: "Sample requirements",
     requirements: [
       "Fresh young leaf tissue, frozen or silica-dried tissue, or extracted DNA.",
-      "[Amount and shipping: to be confirmed by the lab]",
+      "Contact us for details regarding sample amount and shipping requirements.",
     ],
     deliverables: [
       "Raw reads (FASTQ)",
@@ -830,7 +830,7 @@ export const servicesData = [
       },
       {
         question: "How do I submit my protein and ligand targets for modeling?",
-        answer: "Click 'Request this service' to send your target identifiers and questions. Our computational team will evaluate feasibility within 4 hours.",
+        answer: "Click 'Request this service' to send your target identifiers and questions. Our computational team will evaluate feasibility promptly.",
       },
     ],
     relatedSlugs: ["pangenome-analysis", "single-cell-rna-seq-analysis", "whole-exome-genome-sequencing"],

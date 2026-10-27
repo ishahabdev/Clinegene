@@ -44,14 +44,14 @@ export const teamMembers = [
   },
   {
     id: "dr-safdar-ali",
-    name: "Dr. Safdar Ali Ph.D, Postdoc",
-    role: "Co-CEO & Postdoc Lead",
+    name: "Dr. Safdar Ali, Ph.D, Postdoc",
+    role: "Managing Director",
     department: "Leadership",
     type: "executive",
     image: safdarAli,
-    imageAlt: "Dr. Safdar Ali, Co-CEO and Postdoc Lead at ClinGene",
+    imageAlt: "Dr. Safdar Ali, Managing Director at ClinGene",
     imagePosition: "center 8%",
-    bio: "Dr. Safdar Ali serves as Co-CEO and Postdoc Lead at ClinGene. A medical physicist by training, he previously worked at the Princess Margaret Cancer Research Centre in Toronto, Canada. His expertise lies in computational oncology and translational research pipelines. He champions interdisciplinary approaches to genomic medicine and precision diagnostics.",
+    bio: "Dr. Safdar Ali holds a Ph.D. with postdoctoral experience at the Princess Margaret Cancer Research Center, Toronto, Canada. He is a Medical Physicist and serves as the Managing Director of ClinGene.",
     tags: ["Managing Director", "Medical Physicist", "Princess Margaret Cancer Research Centre, Toronto, Canada"],
     email: "safdar.tanoli@clingene.pk",
     linkedin: "https://linkedin.com/in/safdar-ali-tanoli-phd"

@@ -230,8 +230,7 @@ export default function ServicesPage() {
                 >
                   <div className="relative aspect-2.5/1 overflow-hidden bg-[#102943]">
                     <img
-                      alt=""
-                      aria-hidden="true"
+                      alt={name}
                       width={width}
                       height={height}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:transition-none"

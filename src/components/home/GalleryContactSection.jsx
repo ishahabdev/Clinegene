@@ -98,25 +98,20 @@ export default function GalleryContactSection() {
           Contact Us <ArrowRight aria-hidden="true" className="h-4 w-4" />
         </Button>
         <address className="mt-7 space-y-5 not-italic text-sm leading-6 text-slate-600">
-          <a className="flex items-start gap-3 transition-colors hover:text-[#0a7a94] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="tel:+92515421056">
-            <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#0d9c9c]" fill="none" viewBox="0 0 24 24">
-              <path d="M5 4h4l2 5-3 2a16 16 0 0 0 5 5l2-3 5 2v4c0 1.1-.9 2-2 2C10.3 21 3 13.7 3 5c0-.6.4-1 1-1Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" />
-            </svg>
-            <span>+92-3485607051</span>
-          </a>
-          <a className="flex items-start gap-3 break-all transition-colors hover:text-[#0a7a94] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="mailto:Clingene@gmail.com">
+          {/* Phone hidden until confirmed by client per SECP personal data guidelines */}
+          <a className="flex items-start gap-3 break-all transition-colors hover:text-[#0a7a94] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="mailto:info@clingene.co">
             <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#0d9c9c]" fill="none" viewBox="0 0 24 24">
               <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.7" />
               <path d="m4 7 8 6 8-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" />
             </svg>
-            <span>clingene@gmail.com</span>
+            <span>info@clingene.co</span>
           </a>
           <div className="flex items-start gap-3">
             <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#0d9c9c]" fill="none" viewBox="0 0 24 24">
               <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" strokeLinejoin="round" strokeWidth="1.7" />
               <circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.7" />
             </svg>
-            <span> Street 13, Lane 10, Hostel City, Chatta Bakhtawar, Chak Shahzad, Park Road, Islamabad, Pakistan.</span>
+            <span>Islamabad, Pakistan</span>
           </div>
         </address>
       </aside>

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://clingene.co/sitemap.xml
+Sitemap: https://www.clingene.co/sitemap.xml

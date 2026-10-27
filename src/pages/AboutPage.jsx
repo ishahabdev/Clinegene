@@ -1,4 +1,4 @@
-import { ArrowRight, Users, Award, TrendingUp, Dna, Shield, Lightbulb, Star, Heart, Check, Clock, Package } from "lucide-react";
+import { ArrowRight, Users, Award, TrendingUp, Dna, Lightbulb, Check, ShieldCheck, FileText, Compass, Package } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import promiseImage from "../assets/about us/promise.png";
@@ -7,6 +7,25 @@ import aimImage from "../assets/about us/aim-pic.jpeg";
 import characterImage from "../assets/about us/character.png";
 import amjadAli from "../assets/team/Amjad Ali.jpeg";
 import { useTheme } from "../context/ThemeContext.jsx";
+
+const complianceData = [
+  {
+    id: "secp",
+    shortName: "SECP",
+    fullName: "Securities and Exchange Commission of Pakistan",
+    label: "CUIN",
+    number: "0363023",
+    icon: ShieldCheck,
+  },
+  {
+    id: "fbr",
+    shortName: "FBR",
+    fullName: "Federal Board of Revenue",
+    label: "Registration No.",
+    number: "K555253",
+    icon: FileText,
+  },
+];
 
 export default function AboutPage() {
   const { theme } = useTheme();
@@ -624,7 +643,7 @@ export default function AboutPage() {
               <ScrollReveal delay={180}>
                 <div className="relative mx-auto w-full max-w-[320px] sm:max-w-[360px] min-[900px]:max-w-none">
                   {/* Portrait Card with theme-adaptive tint overlay and filter */}
-                  <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] sm:rounded-3xl border border-slate-100/80 bg-slate-100 shadow-[0_16px_40px_rgba(12,43,72,0.1)]">
+                  <div className="relative aspect-[4/5] min-[900px]:aspect-[3/4.2] min-[900px]:min-h-[490px] w-full overflow-hidden rounded-[28px] sm:rounded-3xl border border-slate-100/80 bg-slate-100 shadow-[0_16px_40px_rgba(12,43,72,0.1)]">
                     <img
                       src={characterImage}
                       alt="ClinGene Laboratory Professional"
@@ -659,38 +678,62 @@ export default function AboutPage() {
               </ScrollReveal>
             </div>
 
-            {/* RIGHT COLUMN: Fast Response & Sample Shipments Card */}
+            {/* RIGHT COLUMN: Quality & Compliance & Expert Guidance Card */}
             <div className="min-[900px]:col-span-3 w-full max-[899px]:mt-6">
               <ScrollReveal delay={250}>
                 <div
-                  className="w-full rounded-[26px] sm:rounded-3xl p-7 sm:p-9 shadow-[0_12px_32px_rgba(0,0,0,0.15)] border border-white/10 transition-colors duration-400"
+                  className="w-full rounded-[26px] sm:rounded-3xl p-6 sm:p-7 shadow-[0_12px_32px_rgba(0,0,0,0.15)] border border-white/10 transition-colors duration-400"
                   style={{ backgroundColor: whyDark }}
                 >
-                  {/* Block 1: Fast Response */}
+                  {/* Block 1: Registered & Compliant */}
                   <div className="group">
                     <div className="flex items-center gap-3.5">
                       <div
                         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border shadow-xs transition-all duration-300 group-hover:-translate-y-[3px] group-hover:rotate-[-5deg]"
                         style={{ backgroundColor: whyTileBg, borderColor: whyTileBorder }}
                       >
-                        <Clock className="h-[22px] w-[22px] transition-colors duration-400" stroke={whyIconAccent} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                        <ShieldCheck className="h-[22px] w-[22px] transition-colors duration-400" stroke={whyIconAccent} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
                       </div>
                       <h3 className="font-['Poppins',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#f1f7fb]">
-                        Fast Response
+                        Registered &amp; Compliant
                       </h3>
                     </div>
-                    <p className="mt-3.5 text-[14px] sm:text-[14.5px] leading-[1.7] text-[#9db3c6]">
-                      Our scientific directors in Islamabad reply to every inquiry within 4 hours during business days.
+                    <p className="mt-3.5 text-[14px] sm:text-[14.5px] leading-[1.65] text-[#9db3c6] text-pretty">
+                      ClinGene (SMC-Private) Limited is incorporated with SECP and registered with the Federal Board of Revenue (FBR).
                     </p>
                   </div>
 
                   {/* Divider line */}
                   <div
-                    className="my-6 border-t"
+                    className="my-5 border-t"
                     style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
                   />
 
-                  {/* Block 2: Sample Shipments */}
+                  {/* Block 2: Expert Guidance */}
+                  <div className="group">
+                    <div className="flex items-center gap-3.5">
+                      <div
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border shadow-xs transition-all duration-300 group-hover:-translate-y-[3px] group-hover:rotate-[-5deg]"
+                        style={{ backgroundColor: whyTileBg, borderColor: whyTileBorder }}
+                      >
+                        <Compass className="h-[22px] w-[22px] transition-colors duration-400" stroke={whyIconAccent} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                      </div>
+                      <h3 className="font-['Poppins',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#f1f7fb]">
+                        Expert Guidance
+                      </h3>
+                    </div>
+                    <p className="mt-3.5 text-[14px] sm:text-[14.5px] leading-[1.65] text-[#9db3c6] text-pretty">
+                      Our team supports you at every step, from planning your project to understanding your results.
+                    </p>
+                  </div>
+
+                  {/* Divider line */}
+                  <div
+                    className="my-5 border-t"
+                    style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                  />
+
+                  {/* Block 3: Sample Support */}
                   <div className="group">
                     <div className="flex items-center gap-3.5">
                       <div
@@ -700,17 +743,111 @@ export default function AboutPage() {
                         <Package className="h-[22px] w-[22px] transition-colors duration-400" stroke={whyIconAccent} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
                       </div>
                       <h3 className="font-['Poppins',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#f1f7fb]">
-                        Sample Shipments
+                        Sample Support
                       </h3>
                     </div>
-                    <p className="mt-3.5 text-[14px] sm:text-[14.5px] leading-[1.7] text-[#9db3c6]">
-                      Please send your samples to Street 13, Lane 10, Hostel City, Chak Shahzad, Islamabad, Pakistan.
+                    <p className="mt-3.5 text-[14px] sm:text-[14.5px] leading-[1.65] text-[#9db3c6] text-pretty">
+                      Contact us before sending samples and we will guide you on packaging, storage and shipping requirements.
                     </p>
                   </div>
                 </div>
               </ScrollReveal>
             </div>
 
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Registrations & Compliance Section ─── */}
+      <section
+        aria-labelledby="compliance-section-title"
+        className="relative bg-[#f8fafc] border-t border-slate-200/60 py-16 sm:py-20 overflow-hidden"
+      >
+        <div className="site-container relative">
+          <ScrollReveal delay={100} className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+            <div className="flex items-center justify-center gap-3 sm:gap-4">
+              <span
+                aria-hidden="true"
+                className="h-[2px] w-6 sm:w-12 md:w-14 shrink-0 rounded-full transition-colors duration-400"
+                style={{ backgroundColor: isRed ? "#b91c1c" : isGreen ? "#10b981" : "var(--accent)" }}
+              />
+              <h2
+                id="compliance-section-title"
+                className="font-['Poppins',sans-serif] text-[22px] sm:text-[30px] md:text-[36px] font-bold text-[#0c2b48] leading-tight tracking-tight"
+              >
+                Registrations &amp;{" "}
+                <span
+                  className="transition-colors duration-400"
+                  style={{ color: isRed ? "#b91c1c" : isGreen ? "#10b981" : "var(--accent)" }}
+                >
+                  Compliance
+                </span>
+              </h2>
+              <span
+                aria-hidden="true"
+                className="h-[2px] w-6 sm:w-12 md:w-14 shrink-0 rounded-full transition-colors duration-400"
+                style={{ backgroundColor: isRed ? "#b91c1c" : isGreen ? "#10b981" : "var(--accent)" }}
+              />
+            </div>
+            <p className="mt-2.5 sm:mt-3 text-[14px] sm:text-[15.5px] leading-relaxed text-slate-500 font-['Inter',sans-serif]">
+              ClinGene (SMC-Private) Limited is a registered private-sector company in Pakistan.
+            </p>
+          </ScrollReveal>
+
+          {/* 2-Card Responsive Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-3xl mx-auto">
+            {complianceData.map((item, idx) => {
+              const IconComponent = item.icon;
+              return (
+                <ScrollReveal key={item.id} delay={150 + idx * 80}>
+                  <div className="group relative rounded-2xl border border-slate-200/90 bg-white p-7 sm:p-8 shadow-[0_4px_24px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(15,23,42,0.1)] hover:border-slate-300 flex flex-col justify-between h-full">
+                    <div>
+                      {/* Top row: Icon in a small tinted square & Bold Short Name */}
+                      <div className="flex items-center gap-4">
+                        <div
+                          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-colors duration-300 group-hover:scale-105"
+                          style={{
+                            backgroundColor: isRed
+                              ? "rgba(185, 28, 28, 0.1)"
+                              : isGreen
+                                ? "rgba(16, 185, 129, 0.12)"
+                                : "rgba(16, 200, 224, 0.12)",
+                            color: isRed
+                              ? "#b91c1c"
+                              : isGreen
+                                ? "#059669"
+                                : "#0891b2",
+                          }}
+                        >
+                          <IconComponent className="h-6 w-6" strokeWidth={2} />
+                        </div>
+                        <h3 className="font-['Poppins',sans-serif] text-[22px] font-bold text-[#0c2b48] leading-none">
+                          {item.shortName}
+                        </h3>
+                      </div>
+
+                      {/* Full Name in muted text */}
+                      <p className="mt-4 text-[13.5px] sm:text-[14px] leading-snug text-slate-500 font-['Inter',sans-serif]">
+                        {item.fullName}
+                      </p>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="my-6 border-t border-slate-100" />
+
+                    {/* Label in small uppercase muted text & Number in bold */}
+                    <div>
+                      <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 font-['Inter',sans-serif]">
+                        {item.label}
+                      </span>
+                      <p className="mt-1 font-['Poppins',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#0c2b48] tracking-wide">
+                        {item.number}
+                      </p>
+                    </div>
+                  </div>
+                </ScrollReveal>
+              );
+            })}
           </div>
         </div>
       </section>

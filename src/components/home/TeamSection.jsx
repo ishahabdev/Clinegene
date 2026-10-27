@@ -27,21 +27,21 @@ export default function TeamSection() {
       <div className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4" id="team-members">
         {[
           {
-            name: "Dr. Amjad Ali Tanoli Ph.D",
-            designation: "CEO",
-            details: ["Human Geneticist", "Consultant Genetic Counselor"],
+            name: "Dr. Amjad Ali Tanoli, Ph.D",
+            designation: "CEO / Director",
+            details: ["Human Geneticist, Consultant Genetic Counselor"],
             image: amjadAli,
           },
           {
-            name: "Dr. Safdar Ali Tanoli Ph.D",
-            designation: "POSTDOC",
-            details: ["Co-CEO", "Medical Physicist", "Princess Margaret Cancer Research Centre, Toronto, Canada"],
+            name: "Dr. Safdar Ali, Ph.D, Postdoc",
+            designation: "Managing Director",
+            details: ["Princess Margaret Cancer Research Centre, Toronto, Canada; Medical Physicist"],
             image: safdarAli,
           },
           {
-            name: "Dr. Kifayat Ullah Ph.D",
-            designation: "HUMAN GENETICS",
-            details: [],
+            name: "Dr. Kifayat Ullah, Ph.D",
+            designation: "Molecular Biologist, Human Geneticist",
+            details: ["Quaid-i-Azam University, Islamabad; Yale School of Medicine, USA"],
             image: kifayatUllah,
           },
         ].map(({ name, designation, details, image }, index) => (

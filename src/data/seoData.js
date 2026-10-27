@@ -1,17 +1,20 @@
 /**
  * ClinGene Pakistan — Centralized SEO & Structured Data Registry
  * Contains unique titles, meta descriptions, canonical URLs, and JSON-LD schemas
- * for every public route on https://clingene.co.
+ * for every public route on https://www.clingene.co.
  */
 
-export const BASE_URL = "https://clingene.co";
+export const BASE_URL = "https://www.clingene.co";
+export const COMPANY_NAME = "ClinGene (SMC-Private) Limited";
+export const COMPANY_EMAIL = "info@clingene.co";
+export const COMPANY_LOCATION = "Islamabad, Pakistan";
 export const DEFAULT_OG_IMAGE = `${BASE_URL}/images/og-image.jpg`;
 
 export const ORGANIZATION_SCHEMA = {
   "@context": "https://schema.org",
-  "@type": "MedicalOrganization",
+  "@type": "Organization",
   "@id": `${BASE_URL}/#organization`,
-  name: "ClinGene (Pvt.) Ltd.",
+  name: "ClinGene (SMC-Private) Limited",
   alternateName: ["ClinGene Pakistan", "ClinGene Genomics", "ClinGene"],
   url: BASE_URL,
   logo: {
@@ -21,30 +24,14 @@ export const ORGANIZATION_SCHEMA = {
     height: 189,
   },
   image: DEFAULT_OG_IMAGE,
+  email: COMPANY_EMAIL,
   description:
-    "ClinGene is Pakistan's premier human genetics and precision genomics laboratory, providing clinical genetic testing, next-generation sequencing, and computational biology services.",
+    "ClinGene provides genetic testing, sequencing and bioinformatics services for researchers, clinicians and industry partners in Pakistan.",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Street 13, Lane 10, Hostel City, Chatta Bakhtawar, Chak Shahzad, Park Road",
     addressLocality: "Islamabad",
-    addressRegion: "Federal Capital",
-    postalCode: "45550",
     addressCountry: "PK",
   },
-  contactPoint: [
-    {
-      "@type": "ContactPoint",
-      telephone: "+92-3485607051",
-      contactType: "customer service",
-      areaServed: "PK",
-      availableLanguage: ["English", "Urdu"],
-    },
-  ],
-  sameAs: [
-    "https://linkedin.com/company/clingene",
-    "https://x.com/clingene",
-    "https://facebook.com/clingene",
-  ],
 };
 
 export const WEBSITE_SCHEMA = {
@@ -62,13 +49,11 @@ export const WEBSITE_SCHEMA = {
 
 export const seoRoutes = {
   "/": {
-    title: "ClinGene (Pvt) Ltd. — Genetic Testing & Genomics in Pakistan",
+    title: "ClinGene | Genetic Testing & Genomics Services in Pakistan",
     description:
-      "ClinGene is Pakistan's premier human genetics platform providing clinical genetic testing, Sanger sequencing, whole exome/genome sequencing, and bioinformatics.",
+      "ClinGene provides genetic testing, sequencing and bioinformatics services for researchers, clinicians and industry partners in Pakistan.",
     canonical: `${BASE_URL}/`,
     ogType: "website",
-    keywords:
-      "genetic testing Pakistan, Sanger sequencing Pakistan, whole genome sequencing Pakistan, bioinformatics services Islamabad, exome sequencing Pakistan",
     schema: [
       ORGANIZATION_SCHEMA,
       WEBSITE_SCHEMA,
@@ -76,13 +61,11 @@ export const seoRoutes = {
   },
 
   "/about": {
-    title: "About Us — ClinGene (Pvt) Ltd.",
+    title: "About Us | ClinGene",
     description:
-      "Learn about ClinGene's mission to advance life sciences in Pakistan through precision genetic testing, applied research, and world-class laboratory facilities.",
+      "Learn about ClinGene's mission to advance life sciences in Pakistan through precision genetic testing, applied research, and registered laboratory services.",
     canonical: `${BASE_URL}/about`,
     ogType: "website",
-    keywords:
-      "about ClinGene, genomics laboratory Islamabad, life sciences Pakistan, human genetics research Pakistan",
     schema: [
       {
         "@context": "https://schema.org",
@@ -103,13 +86,11 @@ export const seoRoutes = {
   },
 
   "/services": {
-    title: "Services — ClinGene (Pvt) Ltd.",
+    title: "Services | ClinGene",
     description:
       "Explore 12 specialized genomic services in Pakistan: clinical genetic testing, Sanger sequencing, WES/WGS, RNA-seq, metagenomics, and molecular dynamics.",
     canonical: `${BASE_URL}/services`,
     ogType: "website",
-    keywords:
-      "genomics services Pakistan, DNA sequencing Pakistan, NGS Pakistan, clinical exome sequencing Islamabad",
     schema: [
       {
         "@context": "https://schema.org",
@@ -123,13 +104,11 @@ export const seoRoutes = {
   },
 
   "/team": {
-    title: "Our Team — ClinGene (Pvt) Ltd.",
+    title: "Our Team | ClinGene",
     description:
       "Meet ClinGene's board of directors, clinical geneticists, molecular biologists, and bioinformaticians advancing genomic science in Islamabad, Pakistan.",
     canonical: `${BASE_URL}/team`,
     ogType: "website",
-    keywords:
-      "ClinGene team, geneticists Pakistan, Dr Amjad Ali Tanoli, molecular biology researchers Islamabad",
     schema: [
       {
         "@context": "https://schema.org",
@@ -143,12 +122,11 @@ export const seoRoutes = {
   },
 
   "/ceo-message": {
-    title: "CEO Message — ClinGene (Pvt) Ltd.",
+    title: "CEO Message | ClinGene",
     description:
       "Read the CEO message from Dr. Amjad Ali Tanoli on building Pakistan's genomic medicine ecosystem and training the next generation of researchers.",
     canonical: `${BASE_URL}/ceo-message`,
     ogType: "article",
-    keywords: "CEO message ClinGene, Dr Amjad Ali Tanoli, precision medicine Pakistan",
     schema: [
       {
         "@context": "https://schema.org",
@@ -162,13 +140,11 @@ export const seoRoutes = {
   },
 
   "/contact": {
-    title: "Contact Us — ClinGene (Pvt) Ltd.",
+    title: "Contact Us | ClinGene",
     description:
-      "Get in touch with ClinGene's scientific directors in Islamabad. Requisitions, sample shipments, quotes, research inquiries, and careers.",
+      "Get in touch with ClinGene in Islamabad, Pakistan. Requisitions, sample shipments, quotes, research inquiries, and collaboration opportunities.",
     canonical: `${BASE_URL}/contact`,
     ogType: "website",
-    keywords:
-      "contact ClinGene, sample shipments Islamabad, genetic testing inquiry Pakistan, ClinGene address",
     schema: [
       {
         "@context": "https://schema.org",
@@ -188,13 +164,11 @@ export const seoRoutes = {
   },
 
   "/careers": {
-    title: "Careers — ClinGene (Pvt) Ltd.",
+    title: "Careers | ClinGene",
     description:
       "Join ClinGene's research community. Explore job openings, research fellowships, and internship opportunities in molecular biology and bioinformatics.",
     canonical: `${BASE_URL}/careers`,
     ogType: "website",
-    keywords:
-      "genomics jobs Pakistan, bioinformatics careers Islamabad, molecular biology internships, ClinGene hiring",
     schema: [
       {
         "@context": "https://schema.org",
@@ -208,22 +182,20 @@ export const seoRoutes = {
   },
 
   "/open-positions": {
-    title: "Open Positions — ClinGene (Pvt) Ltd.",
+    title: "Open Positions | ClinGene",
     description:
       "Join ClinGene's research community. Explore job openings, research fellowships, and internship opportunities in molecular biology and bioinformatics.",
     canonical: `${BASE_URL}/careers`,
     ogType: "website",
-    keywords: "ClinGene careers, open positions, scientific jobs Pakistan",
     schema: [],
   },
 
   "/research": {
-    title: "Research — ClinGene (Pvt) Ltd.",
+    title: "Research | ClinGene",
     description:
       "Discover ClinGene's research initiatives in population genomics, rare genetic disorders, and academic-industry scientific partnerships in Pakistan.",
     canonical: `${BASE_URL}/research`,
     ogType: "website",
-    keywords: "genetics research Pakistan, human genomics Islamabad, academic collaboration",
     schema: [
       {
         "@context": "https://schema.org",
@@ -237,12 +209,11 @@ export const seoRoutes = {
   },
 
   "/gallery": {
-    title: "Gallery — ClinGene (Pvt) Ltd.",
+    title: "Gallery | ClinGene",
     description:
       "Take a look inside ClinGene's laboratory facilities, advanced sequencing hardware, research training workshops, and scientific events in Islamabad.",
     canonical: `${BASE_URL}/gallery`,
     ogType: "website",
-    keywords: "ClinGene lab gallery, genomics facilities Islamabad, laboratory photos",
     schema: [
       {
         "@context": "https://schema.org",
@@ -256,12 +227,11 @@ export const seoRoutes = {
   },
 
   "/news": {
-    title: "News — ClinGene (Pvt) Ltd.",
+    title: "News & Updates | ClinGene",
     description:
       "Stay informed on the latest genomics research milestones, laboratory service announcements, and scientific publications from ClinGene Pakistan.",
     canonical: `${BASE_URL}/news`,
     ogType: "website",
-    keywords: "ClinGene news, genetics announcements Pakistan, genomics updates",
     schema: [
       {
         "@context": "https://schema.org",
@@ -275,21 +245,21 @@ export const seoRoutes = {
   },
 
   "404": {
-    title: "Page Not Found — ClinGene (Pvt) Ltd.",
+    title: "Page Not Found | ClinGene",
     description: "The page you are looking for does not exist on ClinGene Pakistan. Return to our homepage to explore our genomic testing and sequencing services.",
     canonical: `${BASE_URL}/404`,
     ogType: "website",
+    robots: "noindex, follow",
     schema: [],
   },
 
   // ─── 12 Service Detail Pages ───
   "/services/clinical-genetic-testing": {
-    title: "Clinical Genetic Testing — ClinGene (Pvt) Ltd.",
+    title: "Clinical Genetic Testing | ClinGene",
     description:
       "Diagnostic and carrier genetic testing in Pakistan for inherited disorders. Interpreted reports with variant classification by certified geneticists.",
     canonical: `${BASE_URL}/services/clinical-genetic-testing`,
     ogType: "service",
-    keywords: "clinical genetic testing Pakistan, diagnostic DNA testing Islamabad, inherited disorder screening",
     schema: [
       {
         "@context": "https://schema.org",
@@ -314,12 +284,11 @@ export const seoRoutes = {
   },
 
   "/services/sanger-sequencing": {
-    title: "Sanger Sequencing — ClinGene (Pvt) Ltd.",
+    title: "Sanger Sequencing | ClinGene",
     description:
       "High-accuracy Sanger DNA sequencing in Pakistan for PCR products and plasmids. Forward and reverse reads with quality-checked chromatograms (.ab1).",
     canonical: `${BASE_URL}/services/sanger-sequencing`,
     ogType: "service",
-    keywords: "Sanger sequencing Pakistan, capillary sequencing Islamabad, plasmid sequencing, PCR sequencing",
     schema: [
       {
         "@context": "https://schema.org",
@@ -344,12 +313,11 @@ export const seoRoutes = {
   },
 
   "/services/whole-exome-genome-sequencing": {
-    title: "Whole Exome / Genome Sequencing — ClinGene (Pvt) Ltd.",
+    title: "Whole Exome / Genome Sequencing | ClinGene",
     description:
       "Comprehensive Whole Exome and Whole Genome Sequencing in Pakistan. FASTQ, BAM, VCF variant calling, and clinical trio annotation for rare diseases.",
     canonical: `${BASE_URL}/services/whole-exome-genome-sequencing`,
     ogType: "service",
-    keywords: "whole exome sequencing Pakistan, WGS Pakistan, WES sequencing Islamabad, clinical exome Pakistan",
     schema: [
       {
         "@context": "https://schema.org",
@@ -374,12 +342,11 @@ export const seoRoutes = {
   },
 
   "/services/rna-seq": {
-    title: "RNA-Seq — ClinGene (Pvt) Ltd.",
+    title: "RNA-Seq | ClinGene",
     description:
       "RNA sequencing and differential gene expression analysis in Pakistan. mRNA and total RNA-seq with PCA, volcano plots, and pathway enrichment.",
     canonical: `${BASE_URL}/services/rna-seq`,
     ogType: "service",
-    keywords: "RNA-Seq Pakistan, transcriptome sequencing Islamabad, differential gene expression, RNA sequencing lab",
     schema: [
       {
         "@context": "https://schema.org",
@@ -404,12 +371,11 @@ export const seoRoutes = {
   },
 
   "/services/single-cell-rna-seq-analysis": {
-    title: "Single-cell RNA-seq Analysis — ClinGene (Pvt) Ltd.",
+    title: "Single-cell RNA-seq Analysis | ClinGene",
     description:
       "Bioinformatics analysis for 10x Genomics scRNA-seq datasets in Pakistan. Quality control, UMAP clustering, cell-type annotation, and trajectory inference.",
     canonical: `${BASE_URL}/services/single-cell-rna-seq-analysis`,
     ogType: "service",
-    keywords: "single cell RNA seq Pakistan, scRNA-seq bioinformatics Islamabad, 10x Genomics analysis, UMAP clustering",
     schema: [
       {
         "@context": "https://schema.org",
@@ -434,12 +400,11 @@ export const seoRoutes = {
   },
 
   "/services/16s-rrna-metagenome-sequencing": {
-    title: "16S rRNA Metagenome Sequencing — ClinGene (Pvt) Ltd.",
+    title: "16S rRNA Metagenome Sequencing | ClinGene",
     description:
       "Microbiome profiling using 16S/18S/ITS amplicon sequencing in Pakistan. OTU/ASV clustering, alpha/beta diversity metrics, and taxonomic classification.",
     canonical: `${BASE_URL}/services/16s-rrna-metagenome-sequencing`,
     ogType: "service",
-    keywords: "16S rRNA sequencing Pakistan, microbiome sequencing Islamabad, amplicon metagenomics, gut microbiome test",
     schema: [
       {
         "@context": "https://schema.org",
@@ -464,12 +429,11 @@ export const seoRoutes = {
   },
 
   "/services/whole-genome-metagenome": {
-    title: "Whole Genome Metagenome — ClinGene (Pvt) Ltd.",
+    title: "Whole Genome Metagenome | ClinGene",
     description:
       "Shotgun metagenomic sequencing and functional gene profiling in Pakistan. Metagenome assembly, MAG binning, and metabolic pathway reconstruction.",
     canonical: `${BASE_URL}/services/whole-genome-metagenome`,
     ogType: "service",
-    keywords: "shotgun metagenomics Pakistan, metagenome assembly Islamabad, MAG binning, microbial functional profiling",
     schema: [
       {
         "@context": "https://schema.org",
@@ -494,12 +458,11 @@ export const seoRoutes = {
   },
 
   "/services/whole-fungal-genome-sequencing": {
-    title: "Whole Fungal Genome Sequencing — ClinGene (Pvt) Ltd.",
+    title: "Whole Fungal Genome Sequencing | ClinGene",
     description:
       "De novo sequencing and annotation for fungal pathogens and industrial strains in Pakistan. High-accuracy assemblies and secondary metabolite profiling.",
     canonical: `${BASE_URL}/services/whole-fungal-genome-sequencing`,
     ogType: "service",
-    keywords: "fungal genome sequencing Pakistan, mycology genomics Islamabad, de novo fungal assembly",
     schema: [
       {
         "@context": "https://schema.org",
@@ -524,12 +487,11 @@ export const seoRoutes = {
   },
 
   "/services/pangenome-analysis": {
-    title: "Pangenome Analysis — ClinGene (Pvt) Ltd.",
+    title: "Pangenome Analysis | ClinGene",
     description:
       "Multi-strain pangenome construction and comparative genomics in Pakistan. Characterize core, dispensable, and strain-specific accessory genes.",
     canonical: `${BASE_URL}/services/pangenome-analysis`,
     ogType: "service",
-    keywords: "pangenome analysis Pakistan, comparative genomics Islamabad, core genome analysis, gene presence absence",
     schema: [
       {
         "@context": "https://schema.org",
@@ -554,12 +516,11 @@ export const seoRoutes = {
   },
 
   "/services/phylogenetic-tree-construction": {
-    title: "Phylogenetic Tree Construction — ClinGene (Pvt) Ltd.",
+    title: "Phylogenetic Tree Construction | ClinGene",
     description:
       "Phylogenetic analysis and evolutionary tree construction in Pakistan using Maximum Likelihood, Bayesian, and Neighbor-Joining algorithms.",
     canonical: `${BASE_URL}/services/phylogenetic-tree-construction`,
     ogType: "service",
-    keywords: "phylogenetic tree Pakistan, evolutionary analysis Islamabad, molecular phylogenetics, Maximum Likelihood tree",
     schema: [
       {
         "@context": "https://schema.org",
@@ -584,12 +545,11 @@ export const seoRoutes = {
   },
 
   "/services/plant-genome-sequencing": {
-    title: "Plant Genome Sequencing — ClinGene (Pvt) Ltd.",
+    title: "Plant Genome Sequencing | ClinGene",
     description:
       "De novo and re-sequencing for crop and medicinal plant species in Pakistan. Genome assembly, structural variant discovery, and marker development.",
     canonical: `${BASE_URL}/services/plant-genome-sequencing`,
     ogType: "service",
-    keywords: "plant genome sequencing Pakistan, crop genomics Islamabad, agricultural genetics Pakistan",
     schema: [
       {
         "@context": "https://schema.org",
@@ -614,12 +574,11 @@ export const seoRoutes = {
   },
 
   "/services/protein-docking-molecular-dynamics": {
-    title: "Protein Docking & Molecular Dynamics — ClinGene (Pvt) Ltd.",
+    title: "Protein Docking & Molecular Dynamics | ClinGene",
     description:
       "Computational drug discovery and protein-ligand docking in Pakistan. GROMACS/AMBER molecular dynamics simulations with binding free energy analysis.",
     canonical: `${BASE_URL}/services/protein-docking-molecular-dynamics`,
     ogType: "service",
-    keywords: "molecular dynamics Pakistan, protein docking Islamabad, in silico drug design, GROMACS simulation Pakistan",
     schema: [
       {
         "@context": "https://schema.org",
@@ -643,4 +602,3 @@ export const seoRoutes = {
     ],
   },
 };
-

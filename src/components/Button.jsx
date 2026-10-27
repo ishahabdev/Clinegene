@@ -28,9 +28,16 @@ export default function Button({
   // Merge: accentStyle first, then caller overrides (propStyle wins for same keys)
   const mergedStyle = { ...accentStyle, ...propStyle };
 
+  const hasMinH = className.includes("min-h-");
+  const hasPx = className.includes("px-");
+  const hasTextSize = className.includes("text-");
+
   const classes = [
-    "group relative inline-flex min-h-9 sm:min-h-11 items-center justify-center overflow-hidden rounded-full px-4 sm:px-6",
-    "text-[11.5px] sm:text-sm font-bold transition-all duration-300",
+    "group relative inline-flex items-center justify-center overflow-hidden rounded-full",
+    !hasMinH && "min-h-9 sm:min-h-11",
+    !hasPx && "px-4 sm:px-6",
+    !hasTextSize && "text-[11.5px] sm:text-sm",
+    "font-bold transition-all duration-300",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)",
     "active:scale-95 active:opacity-85",
     variants[variant] ?? variants.cyan,

@@ -11,7 +11,10 @@ export const THEMES = {
     "--accent-soft":     "#eaf6fa",
     "--accent-soft-2":   "#effafc",
     "--accent-muted":    "#0a7a94",
-    "--accent-dark":     "#0891b2",
+    "--accent-dark":     "#0c2b48",   // Dark Blue
+    "--card-active-bg":  "#0c2b48",   // Dark Blue
+    "--card-active-border": "#10c8e0",
+    "--card-active-badge":  "#0c2b48",
     "--accent-btn-bg":   "#10c8e0",   // button fill = accent cyan
     "--accent-btn-text": "#04152b",   // dark navy text on light-cyan button
     heroImg: "/images/homepic.webp",
@@ -28,7 +31,10 @@ export const THEMES = {
     "--accent-soft":     "#ecfdf5",
     "--accent-soft-2":   "#d1fae5",
     "--accent-muted":    "#047857",
-    "--accent-dark":     "#059669",
+    "--accent-dark":     "#064e3b",   // Dark Green
+    "--card-active-bg":  "#064e3b",   // Dark Green
+    "--card-active-border": "#10b981",
+    "--card-active-badge":  "#064e3b",
     "--accent-btn-bg":   "#059669",   // deep emerald button fill
     "--accent-btn-text": "#ffffff",   // white text on green button
     heroImg: "/images/greenhero.jpg",
@@ -45,7 +51,10 @@ export const THEMES = {
     "--accent-soft":     "#fff1f2",
     "--accent-soft-2":   "#ffe4e6",
     "--accent-muted":    "#991b1b",
-    "--accent-dark":     "#b91c1c",
+    "--accent-dark":     "#6b1218",   // Dark Red
+    "--card-active-bg":  "#6b1218",   // Dark Red
+    "--card-active-border": "#b91c1c",
+    "--card-active-badge":  "#6b1218",
     "--accent-btn-bg":   "#b91c1c",   // SAME logo crimson → button fill (unified)
     "--accent-btn-text": "#ffffff",   // white text on crimson button
     heroImg: "/images/redhero.jpg",

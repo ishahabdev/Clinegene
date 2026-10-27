@@ -75,7 +75,7 @@ export default function SiteFooter({ showJoinCta }) {
               <div className="mt-3.5 sm:mt-5 flex flex-col items-start gap-2.5 sm:gap-4 w-full">
                 {/* Email us */}
                 <a
-                  href="mailto:info@clingene.com"
+                  href="mailto:info@clingene.co"
                   className="group flex items-start gap-2.5 sm:gap-3 text-left transition-colors"
                 >
                   <div
@@ -105,7 +105,7 @@ export default function SiteFooter({ showJoinCta }) {
                       Email us
                     </p>
                     <p className="mt-0.5 text-[10.5px] sm:text-[11px] text-slate-400">Send us your inquiry</p>
-                    <p className="mt-0.5 text-[10.5px] sm:text-[11px] text-slate-300 font-medium">info@clingene.com</p>
+                    <p className="mt-0.5 text-[10.5px] sm:text-[11px] text-slate-300 font-medium">info@clingene.co</p>
                   </div>
                 </a>
 
@@ -142,69 +142,6 @@ export default function SiteFooter({ showJoinCta }) {
                   </div>
                 </a>
               </div>
-            </div>
-
-            {/* 3 Social Icons Row: in, x, f */}
-            <div className="mt-3.5 sm:mt-5 flex items-center gap-2 sm:gap-2.5">
-              {/* in */}
-              <a
-                aria-label="ClinGene LinkedIn"
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-7 w-7 sm:h-7.5 sm:w-7.5 items-center justify-center rounded-full border border-white/20 bg-white/5 text-[10px] sm:text-[11px] font-bold text-white transition-all hover:bg-white/10"
-                style={{ transition: "border-color 0.25s ease, color 0.25s ease" }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = "var(--accent)";
-                  e.currentTarget.style.color = "var(--accent)";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = "";
-                  e.currentTarget.style.color = "";
-                }}
-              >
-                in
-              </a>
-
-              {/* x */}
-              <a
-                aria-label="ClinGene X"
-                href="https://x.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-7 w-7 sm:h-7.5 sm:w-7.5 items-center justify-center rounded-full border border-white/20 bg-white/5 text-[9.5px] sm:text-[10.5px] font-bold text-white transition-all hover:bg-white/10"
-                style={{ transition: "border-color 0.25s ease, color 0.25s ease" }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = "var(--accent)";
-                  e.currentTarget.style.color = "var(--accent)";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = "";
-                  e.currentTarget.style.color = "";
-                }}
-              >
-                x
-              </a>
-
-              {/* f */}
-              <a
-                aria-label="ClinGene Facebook"
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-7 w-7 sm:h-7.5 sm:w-7.5 items-center justify-center rounded-full border border-white/20 bg-white/5 text-[10.5px] sm:text-[11.5px] font-bold text-white transition-all hover:bg-white/10"
-                style={{ transition: "border-color 0.25s ease, color 0.25s ease" }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = "var(--accent)";
-                  e.currentTarget.style.color = "var(--accent)";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = "";
-                  e.currentTarget.style.color = "";
-                }}
-              >
-                f
-              </a>
             </div>
           </div>
 
@@ -337,7 +274,7 @@ export default function SiteFooter({ showJoinCta }) {
             <span className="font-semibold transition-colors" style={{ color: "var(--accent)" }}>
               ClinGene
             </span>{" "}
-            (Pvt.) Ltd. All rights reserved.
+            (SMC-Private) Limited. All rights reserved.
           </p>
           <div className="flex items-center gap-3 text-xs text-slate-400">
             <a

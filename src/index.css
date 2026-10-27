@@ -25,7 +25,10 @@
   --accent-soft:     #eaf6fa;
   --accent-soft-2:   #effafc;
   --accent-muted:    #0a7a94;
-  --accent-dark:     #0891b2;
+  --accent-dark:     #0c2b48;
+  --card-active-bg:  #0c2b48;
+  --card-active-border: #10c8e0;
+  --card-active-badge:  #0c2b48;
   --accent-btn-bg:   #10c8e0;   /* button background */
   --accent-btn-text: #04152b;   /* button text color */
 }
@@ -1990,7 +1993,7 @@ header[data-theme="ceo"] button:focus-visible {
 
 .contact-map {
   position: relative;
-  height: 220px;
+  height: 230px;
   margin-top: 14px;
   overflow: hidden;
   border: 1px solid #d8e0eb;

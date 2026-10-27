@@ -49,6 +49,17 @@
   ],
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "clingene.co"
+        }
+      ],
+      "destination": "https://www.clingene.co/:path*",
+      "permanent": true
+    },
+    {
       "source": "/open-positions",
       "destination": "/careers",
       "permanent": true

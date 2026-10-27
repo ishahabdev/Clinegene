@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Mail } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 // Calculate stacked overlapping position for 5-card deck layout
@@ -64,7 +64,7 @@ function getCardTransform(offset, stageWidth) {
 }
 
 // Individual Card Component
-function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
+function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenModal }) {
   const transform = getCardTransform(offset, stageWidth);
   
   const getInitials = (name) => {
@@ -100,7 +100,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
             ? 'border-2 shadow-[0_10px_30px_rgba(15,23,42,0.15)]'
             : 'bg-white border-2 border-[#e2e8f0] shadow-[0_10px_30px_rgba(15,23,42,0.12)] hover:shadow-[0_15px_40px_rgba(15,23,42,0.18)] hover:-translate-y-1'
         }`}
-        style={isActive ? { borderColor: "var(--accent)" } : undefined}
+        style={isActive ? { borderColor: "var(--card-active-border, var(--accent))" } : undefined}
       >
         {/* Remove the animated glow effects */}
         {isActive && (
@@ -151,26 +151,6 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
               </>
             )}
 
-            {/* Leadership badge (top right) - on image */}
-            {isActive && (
-              <div
-                className="absolute top-3 right-3 rounded-lg backdrop-blur-sm px-3 py-1 text-[8px] font-bold uppercase tracking-[0.15em] text-white shadow-lg z-10 transition-colors"
-                style={{ backgroundColor: "var(--accent)", borderColor: "var(--accent)" }}
-              >
-                Leadership
-              </div>
-            )}
-
-            {/* Department badge - on image */}
-            {!isActive && (
-              <div
-                className="absolute top-3 left-3 rounded-lg bg-white/95 backdrop-blur-sm border border-[#e2e8f0] px-3 py-1 text-[8px] font-bold uppercase tracking-wider shadow-md z-10 transition-colors"
-                style={{ color: "var(--accent)" }}
-              >
-                {member.department || 'Team'}
-              </div>
-            )}
-
             {/* Status indicator - bottom right corner */}
             <div
               className={`absolute bottom-3 right-3 flex h-6 w-6 items-center justify-center rounded-full shadow-xl ${isActive ? 'bg-white ring-2 ring-white/50' : 'ring-2 ring-white'} z-10`}
@@ -182,74 +162,67 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
 
           {/* Content Section - Theme color on active card content area */}
           <div
-            className={`px-4 pb-3 pt-3 transition-colors duration-300 ${
+            className={`px-4 pb-4 pt-3.5 transition-colors duration-300 min-h-[175px] flex flex-col justify-between ${
               isActive 
                 ? 'text-white' 
                 : 'bg-white'
             }`}
-            style={isActive ? { backgroundColor: "var(--accent-dark)", color: "var(--accent-btn-text)" } : undefined}
+            style={isActive ? { backgroundColor: "var(--card-active-bg, var(--accent-dark))", color: "#ffffff" } : undefined}
           >
-            {/* Name - compact */}
-            <h3 className={`text-center font-['Poppins'] text-[16px] font-bold leading-tight mb-1 line-clamp-2 ${
-              isActive ? 'text-inherit' : 'text-[#0f172a]'
-            }`}>
-              {member.name}
-            </h3>
+            <div>
+              {/* 1. Name: bold, blue (existing brand blue), larger text */}
+              <h3 className={`text-center font-['Poppins'] text-[16px] sm:text-[17px] font-bold leading-tight mb-1 line-clamp-2 ${
+                isActive ? 'text-white' : 'text-[#0c2b48]'
+              }`}>
+                {member.name}
+              </h3>
 
-            {/* Designation - compact */}
-            <p
-              className={`text-center text-[11px] font-semibold mb-2.5 line-clamp-2 ${
-                isActive ? 'opacity-90' : ''
-              }`}
-              style={!isActive ? { color: "var(--accent)" } : undefined}
-            >
-              {member.designation}
-            </p>
-
-            {/* Decorative line - compact */}
-            <div
-              className={`mx-auto h-0.5 w-12 rounded-full mb-3 ${
-                isActive ? 'bg-white/60' : ''
-              }`}
-              style={!isActive ? { backgroundColor: "var(--accent)" } : undefined}
-            />
-
-            {/* Details (bullet points) - compact spacing */}
-            {member.details && member.details.length > 0 && (
-              <div className="space-y-1.5 mb-3">
-                {member.details.slice(0, 2).map((detail, idx) => (
-                  <div key={idx} className="flex items-start gap-2 text-[10px] leading-relaxed">
-                    <div
-                      className={`mt-1 h-1 w-1 rounded-full shrink-0 ${isActive ? 'bg-white' : ''}`}
-                      style={!isActive ? { backgroundColor: "var(--accent)" } : undefined}
-                    />
-                    <span className={`line-clamp-2 ${isActive ? 'opacity-95' : 'text-[#475569]'}`}>
-                      {detail}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Tags - removed per user request */}
-
-            {/* Contact button - compact */}
-            {member.social?.email && (
-              <button
-                className={`w-full flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-[11px] font-bold transition-all duration-300 ${
-                  isActive
-                    ? 'bg-black text-white hover:bg-gray-800 shadow-xl hover:shadow-2xl'
-                    : 'bg-black text-white hover:bg-gray-800 shadow-lg hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5'
+              {/* 2. Designation: blue, semi-bold, smaller than the name */}
+              <p
+                className={`text-center text-[12px] font-semibold mb-2 line-clamp-1 ${
+                  isActive ? 'text-white/90' : ''
                 }`}
+                style={!isActive ? { color: "var(--accent)" } : undefined}
+              >
+                {member.designation}
+              </p>
+
+              {/* Decorative line */}
+              <div
+                className={`mx-auto h-0.5 w-12 rounded-full mb-2.5 ${
+                  isActive ? 'bg-white/40' : ''
+                }`}
+                style={!isActive ? { backgroundColor: "var(--accent)" } : undefined}
+              />
+
+              {/* 3. Description: grey paragraph, clamped to 3 lines with ellipsis */}
+              <p
+                className={`text-center text-[11px] leading-[1.55] line-clamp-3 mb-2 font-['Inter'] ${
+                  isActive ? 'text-white/85' : 'text-slate-500'
+                }`}
+              >
+                {member.description}
+              </p>
+            </div>
+
+            {/* 4. Below description: "Read more" link with thin blue underline */}
+            <div className="text-center pt-1">
+              <button
+                type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  window.location.href = `mailto:${member.social.email}`;
+                  onOpenModal?.(member);
                 }}
+                className={`inline-block text-[11px] font-semibold pb-0.5 border-b cursor-pointer transition-all ${
+                  isActive
+                    ? 'text-white border-white/80 hover:text-white hover:border-white'
+                    : 'border-(--accent) hover:opacity-80'
+                }`}
+                style={!isActive ? { color: "var(--accent)" } : undefined}
               >
-                <Mail className="h-3.5 w-3.5" strokeWidth={2.5} />
-                {isActive ? 'Contact Specialist' : 'Contact'}
+                Read more
               </button>
-            )}
+            </div>
           </div>
         </div>
       </article>
@@ -262,9 +235,26 @@ export default function TeamCarousel({ members = [] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [stageWidth, setStageWidth] = useState(1200);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [activeModalMember, setActiveModalMember] = useState(null);
   const stageRef = useRef(null);
   const touchStartRef = useRef({ x: 0, time: 0 });
   const isDraggingRef = useRef(false);
+
+  // Manage modal open body scroll lock and escape key
+  useEffect(() => {
+    if (!activeModalMember) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setActiveModalMember(null);
+      }
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeModalMember]);
 
   // Measure stage width
   useEffect(() => {
@@ -473,12 +463,13 @@ export default function TeamCarousel({ members = [] }) {
             const offset = getCardOffset(index);
             return (
               <CarouselCard
-                key={member.id || index}
+                key={member.name || index}
                 member={member}
                 offset={offset}
                 stageWidth={stageWidth}
                 isActive={index === activeIndex}
                 onClick={() => handleCardClick(index)}
+                onOpenModal={(m) => setActiveModalMember(m)}
               />
             );
           })}
@@ -544,7 +535,63 @@ export default function TeamCarousel({ members = [] }) {
           </button>
         </div>
 
-       
+        {/* Member Full Details Modal */}
+        {activeModalMember && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200"
+            onClick={() => setActiveModalMember(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="member-modal-title"
+          >
+            <div
+              className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl border border-slate-200 p-6 sm:p-7 animate-in zoom-in-95 duration-200"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button
+                type="button"
+                onClick={() => setActiveModalMember(null)}
+                className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition-colors cursor-pointer"
+                aria-label="Close details"
+              >
+                <X className="h-4 w-4" />
+              </button>
+
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+                {/* Member Photo */}
+                {activeModalMember.image && (
+                  <div className="relative h-28 w-28 sm:h-32 sm:w-32 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-sm">
+                    <img
+                      src={activeModalMember.image}
+                      alt={activeModalMember.name}
+                      className="h-full w-full object-cover object-[center_20%]"
+                    />
+                  </div>
+                )}
+
+                <div className="flex-1 text-center sm:text-left">
+                  <h3 id="member-modal-title" className="font-['Poppins'] text-[20px] font-bold text-[#0c2b48] leading-tight">
+                    {activeModalMember.name}
+                  </h3>
+                  <p
+                    className="mt-1 text-[13px] font-semibold"
+                    style={{ color: "var(--accent)" }}
+                  >
+                    {activeModalMember.designation}
+                  </p>
+                  <div
+                    className="my-3 h-0.5 w-12 rounded-full sm:mx-0 mx-auto"
+                    style={{ backgroundColor: "var(--accent)" }}
+                  />
+                  <p className="text-[13px] leading-relaxed text-slate-600 font-['Inter']">
+                    {activeModalMember.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

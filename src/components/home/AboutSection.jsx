@@ -18,11 +18,11 @@ export default function AboutSection() {
           eyebrow="About US"
           id="about-title"
           highlight="Life Sciences Research"
-          title={<>Pakistan’s Pioneer in<br className="hidden md:block" /></>}
+          title={<>Advancing<br className="hidden md:block" /></>}
         />
         <div className="max-w-212.5 space-y-4 font-inter text-base leading-7 text-slate-600 sm:text-[17px] sm:leading-[1.9]">
           <p>
-            ClinGene (Pvt) Ltd. is a human genetics and precision medicine platform in Pakistan,
+            ClinGene (SMC-Private) Limited is a human genetics and precision medicine platform in Pakistan,
             bringing academic researchers, clinicians, and industrial partners together to
             advance research and contribute to the well-being of society.
           </p>

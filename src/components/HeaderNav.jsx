@@ -68,20 +68,20 @@ export default function HeaderNav({ activePage }) {
 
         {/* Desktop actions (≥1200px) */}
         <div className="hidden shrink-0 items-center gap-4 min-[1200px]:flex">
-          <Button className="min-h-0! px-5! py-2.75! text-[11px]!" href="/contact">Contact Us</Button>
+          <Button className="px-5 py-2.5 text-[11px]" href="/contact">Contact Us</Button>
         </div>
 
         {/* Mobile controls (<1200px) */}
         <div className="flex items-center gap-2.5 min-[1200px]:hidden">
-          <Button
+          <button
+            type="button"
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
-            className="h-10! min-h-10! w-10! shrink-0! rounded-full! border! border-slate-200! p-0! text-slate-700! hover:text-white!"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white p-0 text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] cursor-pointer"
             onClick={() => setMenuOpen(!menuOpen)}
-            variant="white"
           >
             <MenuIcon open={menuOpen} />
-          </Button>
+          </button>
         </div>
       </div>
 

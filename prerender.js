@@ -51,6 +51,14 @@ async function prerender() {
       );
     }
 
+    // 3b. Inject Robots (noindex for 404 or specified routes)
+    if (seo.robots || route === "404") {
+      pageHtml = pageHtml.replace(
+        /<meta\s+name="robots"\s+content=".*?"\s*\/?>/i,
+        `<meta name="robots" content="${seo.robots || 'noindex, follow'}" />`
+      );
+    }
+
     // 4. Inject Canonical URL
     const canonicalUrl = seo.canonical || (route === "404" ? `${BASE_URL}/404` : `${BASE_URL}${route}`);
     pageHtml = pageHtml.replace(

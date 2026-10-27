@@ -281,7 +281,7 @@ function CeoMessageBody() {
       </div>
 
       {/* Heading */}
-      <h2 className="mt-3 font-['Outfit',sans-serif] text-[30px] md:text-[34px] font-bold leading-[1.2] text-[#0c2b48]">
+      <h1 className="mt-3 font-['Outfit',sans-serif] text-[30px] md:text-[34px] font-bold leading-[1.2] text-[#0c2b48]">
         Advancing Science for a<br />
         <span
           style={{
@@ -291,7 +291,7 @@ function CeoMessageBody() {
         >
           Healthier Tomorrow
         </span>
-      </h2>
+      </h1>
 
       {/* Paragraphs */}
       <div className="mt-5 space-y-4">
@@ -329,7 +329,7 @@ function CeoMessageBody() {
           Dr. Amjad Ali Tanoli Ph.D
         </div>
         <div className="text-[12.5px] text-[#557b9c]">
-          CEO, ClinGene (Pvt) Ltd.
+          CEO, ClinGene (SMC-Private) Limited
         </div>
       </div>
     </div>
@@ -611,35 +611,17 @@ function Commitment() {
           </Button>
         </div>
 
-        {/* The three-word handwritten tagline in the middle — 100% identical to the reference pic */}
+        {/* The three-word handwritten tagline in the middle */}
         <div 
-          className="pointer-events-none mt-8 md:mt-0 md:absolute md:left-[46%] md:top-[22%] lg:top-[24%] select-none z-10 w-[240px] sm:w-[270px] lg:w-[290px]"
+          className="pointer-events-none mt-4 sm:mt-6 md:mt-0 md:absolute md:left-[46%] md:top-[16%] lg:top-[17%] select-none z-10 w-[220px] sm:w-[250px] lg:w-[270px]"
           aria-hidden="true"
         >
           <div className="relative w-full aspect-[255/228]">
             <img
               src={taglineText}
               alt="Science Collaboration Impact"
-              className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
+              className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
               loading="eager"
-            />
-            {/* Dynamic theme-adaptive underline positioned exactly like the pic */}
-            <span
-              className="absolute rounded-full transition-colors duration-400"
-              style={{
-                left: "29.8%",
-                top: "95.6%",
-                width: "17%",
-                height: "3.5px",
-                transform: "rotate(-8deg)",
-                transformOrigin: "left center",
-                backgroundColor: isRed ? "#ef4444" : isGreen ? "#10b981" : "#19c4de",
-                boxShadow: isRed
-                  ? "0 0 10px rgba(239, 68, 68, 0.6)"
-                  : isGreen
-                    ? "0 0 10px rgba(16, 185, 129, 0.6)"
-                    : "0 0 10px rgba(25, 196, 222, 0.6)",
-              }}
             />
           </div>
           <span className="sr-only">Science Collaboration Impact</span>

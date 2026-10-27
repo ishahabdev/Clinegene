@@ -7,29 +7,22 @@ import { servicesData } from "../data/servicesData.js";
 
 const homeBackground = "/images/home1.webp";
 
-const contactPhone = "+92-3485607051";
-const contactEmail = "Clinene@gmail.com";
-const contactAddress =
-  "Street 13, Lane 10, Hostel City, Chatta Bakhtawar, Chak Shahzad, Park Road, Islamabad, Pakistan.";
-const mapUrl =
-  "https://maps.google.com/?q=Street+13,+Lane+10,+Hostel+City,+Chatta+Bakhtawar,+Chak+Shahzad,+Park+Road,+Islamabad,+Pakistan";
-const mapEmbedUrl =
-  "https://maps.google.com/maps?q=Street+13,+Lane+10,+Hostel+City,+Chatta+Bakhtawar,+Chak+Shahzad,+Park+Road,+Islamabad,+Pakistan&output=embed";
+// Phone number hidden until client confirms official company number (SECP personal number hidden)
+// TODO: Obtain official company phone number from client
+const contactEmail = "info@clingene.co";
+const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contactEmail)}&su=${encodeURIComponent("Inquiry - ClinGene")}`;
+const contactAddress = "Islamabad, Pakistan";
+const mapUrl = "https://maps.google.com/?q=Islamabad,+Pakistan";
+const mapEmbedUrl = "https://maps.google.com/maps?q=Islamabad,+Pakistan&output=embed";
 
 const contactCards = [
-  {
-    icon: "phone",
-    title: "Call us",
-    value: contactPhone,
-    href: "tel:+923485607051",
-    detail: "Speak with our team about your inquiry.",
-  },
   {
     icon: "email",
     title: "Email us",
     value: contactEmail,
-    href: `mailto:${contactEmail}`,
+    href: gmailComposeUrl,
     detail: "Send us a message and we’ll get back to you.",
+    isFeatured: true,
   },
   {
     icon: "location",
@@ -37,6 +30,7 @@ const contactCards = [
     value: "Islamabad, Pakistan",
     href: mapUrl,
     detail: contactAddress,
+    isFeatured: false,
   },
 ];
 
@@ -248,7 +242,7 @@ export default function ContactPage() {
       console.error("[Submission Error]", err);
       setSubmitStatus({
         type: "error",
-        message: err.message || "Failed to send message. Please try again or email us directly at info@clingene.com.",
+        message: err.message || "Failed to send message. Please try again or email us directly at info@clingene.co.",
       });
     } finally {
       setIsSubmitting(false);
@@ -329,21 +323,29 @@ export default function ContactPage() {
       </section>
 
       <section aria-label="ClinGene contact details" className="contact-details-section">
-        <div className="site-container contact-cards">
+        <div className="site-container contact-cards !grid-cols-1 sm:!grid-cols-2 max-w-4xl mx-auto">
           {contactCards.map((card, index) => {
-            const isFeatured = index === 1;
+            const isFeatured = card.isFeatured;
             return (
               <ScrollReveal
                 as="article"
-                className={`contact-info-card${isFeatured ? " contact-info-card-featured" : ""}`}
+                className={`contact-info-card${isFeatured ? " contact-info-card-featured" : ""} cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg`}
                 delay={index * 60}
                 key={card.title}
+                onClick={(e) => {
+                  if (e.target.closest("a")) return;
+                  if (card.href.startsWith("https:")) {
+                    window.open(card.href, "_blank", "noopener,noreferrer");
+                  } else {
+                    window.location.href = card.href;
+                  }
+                }}
                 style={
                   isFeatured
                     ? {
                         backgroundColor: featuredBg,
                         borderColor: featuredBorder,
-                        transition: "background-color 0.4s ease, border-color 0.4s ease",
+                        transition: "background-color 0.4s ease, border-color 0.4s ease, transform 0.25s ease, box-shadow 0.25s ease",
                       }
                     : undefined
                 }
@@ -379,8 +381,9 @@ export default function ContactPage() {
                 <h2>{card.title}</h2>
                 <a
                   href={card.href}
-                  rel={card.href.startsWith("https:") ? "noreferrer" : undefined}
+                  rel={card.href.startsWith("https:") ? "noopener noreferrer" : undefined}
                   target={card.href.startsWith("https:") ? "_blank" : undefined}
+                  title={isFeatured ? "Compose email in Gmail" : undefined}
                   style={
                     isFeatured
                       ? { color: featuredAccent, transition: "color 0.3s ease" }
@@ -393,8 +396,9 @@ export default function ContactPage() {
                 <a
                   className="contact-card-link"
                   href={card.href}
-                  rel={card.href.startsWith("https:") ? "noreferrer" : undefined}
+                  rel={card.href.startsWith("https:") ? "noopener noreferrer" : undefined}
                   target={card.href.startsWith("https:") ? "_blank" : undefined}
+                  title={isFeatured ? "Compose email in Gmail" : undefined}
                   style={
                     isFeatured
                       ? { color: featuredAccent, transition: "color 0.3s ease" }
@@ -425,7 +429,7 @@ export default function ContactPage() {
                 referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
-            <a className="contact-directions-link" href={mapUrl} rel="noreferrer" target="_blank">
+            <a className="contact-directions-link" href={mapUrl} rel="noopener noreferrer" target="_blank">
               View directions on Google Maps <span aria-hidden="true">↗</span>
             </a>
           </div>
