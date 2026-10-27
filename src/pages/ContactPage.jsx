@@ -222,7 +222,7 @@ export default function ContactPage() {
       try {
         result = responseText ? JSON.parse(responseText) : {};
       } catch (parseError) {
-        console.warn("[Contact Form API Non-JSON Response]", responseText);
+        console.warn("[Contact API Non-JSON Response]", responseText);
         result = { error: `Server returned status ${response.status}. Please check your connection or server configuration.` };
       }
 

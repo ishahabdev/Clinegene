@@ -4,11 +4,12 @@ import tailwindcss from "@tailwindcss/vite";
 
 function devApiPlugin() {
   return {
-    name: "dev-api-contact-middleware",
+    name: "dev-api-middleware",
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url ? req.url.split("?")[0] : "";
-        if (url === "/api/contact" && req.method === "POST") {
+        if (url.startsWith("/api/") && req.method === "POST") {
+          const endpoint = url.replace(/^\/api\//, "");
           const chunks = [];
           req.on("data", (chunk) => chunks.push(chunk));
           req.on("end", async () => {
@@ -26,8 +27,17 @@ function devApiPlugin() {
                 return res;
               };
 
-              const contactHandler = (await import("./api/contact.js")).default;
-              await contactHandler(req, res);
+              let handlerModule;
+              if (endpoint === "send-email") {
+                handlerModule = await import("./api/send-email.js");
+              } else if (endpoint === "contact") {
+                handlerModule = await import("./api/contact.js");
+              } else {
+                res.statusCode = 404;
+                return res.end(JSON.stringify({ error: `Not found: /api/${endpoint}` }));
+              }
+
+              await handlerModule.default(req, res);
             } catch (err) {
               console.error("[Dev Server API Error]", err);
               res.statusCode = 500;

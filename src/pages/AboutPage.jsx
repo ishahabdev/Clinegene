@@ -11,7 +11,7 @@ import { useTheme } from "../context/ThemeContext.jsx";
 export default function AboutPage() {
   const { theme } = useTheme();
 
-  const isRed   = theme === "red";
+  const isRed = theme === "red";
   const isGreen = theme === "green";
 
   // Panel background and RGB values for seamless gradient blend
@@ -29,21 +29,21 @@ export default function AboutPage() {
     : isGreen
       ? "0 12px 28px -4px rgba(16, 185, 129, 0.45)"
       : "0 12px 28px -4px rgba(2, 132, 199, 0.45)";
-  const whyOverlay = isRed 
-    ? "none" 
-    : isGreen 
-      ? "linear-gradient(135deg, rgba(16,185,129,0.16), rgba(2,10,7,0.10))" 
+  const whyOverlay = isRed
+    ? "none"
+    : isGreen
+      ? "linear-gradient(135deg, rgba(16,185,129,0.16), rgba(2,10,7,0.10))"
       : "none";
   const whyImageFilter = "none";
-  const whyTileBg = isRed 
-    ? "rgba(185, 28, 28, 0.14)" 
-    : isGreen 
-      ? "rgba(16, 185, 129, 0.14)" 
+  const whyTileBg = isRed
+    ? "rgba(185, 28, 28, 0.14)"
+    : isGreen
+      ? "rgba(16, 185, 129, 0.14)"
       : "rgba(16, 200, 224, 0.14)";
-  const whyTileBorder = isRed 
-    ? "rgba(185, 28, 28, 0.25)" 
-    : isGreen 
-      ? "rgba(16, 185, 129, 0.25)" 
+  const whyTileBorder = isRed
+    ? "rgba(185, 28, 28, 0.25)"
+    : isGreen
+      ? "rgba(16, 185, 129, 0.25)"
       : "rgba(16, 200, 224, 0.25)";
   const whyParagraphColor = isRed ? "#5c3d42" : isGreen ? "#3d5a50" : "#3d4f5a";
   const whyChecklistTextColor = isRed ? "#2d1f21" : isGreen ? "#1f2d28" : "#1f252d";
@@ -85,7 +85,7 @@ export default function AboutPage() {
                 : "none",
           }}
         />
-        
+
         {/* Dark overlay: 90-95% opacity on left, 70-80% in middle, lighter on right */}
         <div
           aria-hidden="true"
@@ -112,8 +112,8 @@ export default function AboutPage() {
               <nav aria-label="Breadcrumb" className="mb-6">
                 <ol className="flex items-center gap-2 text-[14px] sm:text-[15px]">
                   <li>
-                    <a 
-                      href="/" 
+                    <a
+                      href="/"
                       className="font-medium transition-colors hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) rounded"
                       style={{ color: isRed ? "#EF4444" : "var(--accent)", transition: "color 0.4s ease-in-out" }}
                     >
@@ -160,7 +160,7 @@ export default function AboutPage() {
 
       {/* --- Who We Are Section --- */}
       <section className="relative bg-linear-to-br from-[#f8fafb] to-white py-16 md:py-20 overflow-hidden">
-        <div 
+        <div
           className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(16,200,224,0.03),transparent_60%)]"
           aria-hidden="true"
         />
@@ -233,12 +233,12 @@ export default function AboutPage() {
                 </div>
 
                 {/* Decorative blur circles */}
-                <div 
+                <div
                   className="absolute top-0 right-0 h-32 w-32 rounded-full blur-3xl -z-10"
                   style={{ backgroundColor: "var(--accent)", opacity: 0.08 }}
                   aria-hidden="true"
                 />
-                <div 
+                <div
                   className="absolute bottom-0 left-0 h-32 w-32 rounded-full blur-3xl -z-10"
                   style={{ backgroundColor: "var(--accent-dark)", opacity: 0.08 }}
                   aria-hidden="true"
@@ -353,7 +353,7 @@ export default function AboutPage() {
       <section className="relative bg-linear-to-br from-[#F4FAFC] to-[#EAF5F8] py-8 sm:py-10 overflow-hidden">
         <div className="relative w-full">
           <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-8 lg:gap-0 items-center">
-            
+
             {/* LEFT - Our Aim Banner */}
             <ScrollReveal delay={100}>
               <style>{`
@@ -387,7 +387,7 @@ export default function AboutPage() {
                 }
               `}</style>
 
-              <div 
+              <div
                 className="dna-aim-banner relative flex flex-col lg:flex-row overflow-hidden mx-4 sm:mx-6 lg:mx-0 rounded-3xl lg:rounded-l-none lg:rounded-r-[210px] min-h-[420px] lg:min-h-97.5 shadow-xl transition-colors duration-500"
                 style={{
                   backgroundColor: panelDark,
@@ -396,7 +396,7 @@ export default function AboutPage() {
                 }}
               >
                 {/* DNA Image Container: 40% of banner width on desktop, full-width on mobile */}
-                <div 
+                <div
                   className="dna-aim-image relative w-full h-52 sm:h-60 lg:h-auto lg:w-[40%] lg:shrink-0"
                   style={{
                     backgroundImage: `url(${aimImage})`,
@@ -413,13 +413,13 @@ export default function AboutPage() {
                 {/* Dark Content Panel: relative, z-index: 1 so text stays above fade */}
                 <div className="relative z-1 flex-1 flex flex-col justify-center px-6 py-8 sm:px-8 sm:py-10 lg:pl-10 lg:pr-20 lg:py-10">
                   <div className="mb-2.5 sm:mb-3 flex items-center gap-2">
-                    <div 
-                      className="h-0.5 w-8 sm:w-10 transition-colors duration-400" 
-                      style={{ backgroundColor: isRed ? "#EF4444" : "var(--accent)" }} 
-                      aria-hidden="true" 
+                    <div
+                      className="h-0.5 w-8 sm:w-10 transition-colors duration-400"
+                      style={{ backgroundColor: isRed ? "#EF4444" : "var(--accent)" }}
+                      aria-hidden="true"
                     />
-                    <span 
-                      className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] transition-colors duration-400" 
+                    <span
+                      className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] transition-colors duration-400"
                       style={{ color: isRed ? "#EF4444" : "var(--accent)" }}
                     >
                       OUR AIM
@@ -428,7 +428,7 @@ export default function AboutPage() {
 
                   <h2 className="font-['Poppins',sans-serif] text-[26px] sm:text-[30px] lg:text-[34px] font-bold leading-[1.18] text-white mb-2.5 sm:mb-3.5">
                     Better Answers.<br />
-                    <span 
+                    <span
                       className="transition-colors duration-400"
                       style={{ color: isRed ? "#EF4444" : "var(--accent)" }}
                     >
@@ -440,8 +440,8 @@ export default function AboutPage() {
                     Our aim is to advance genetic science and make it accessible to everyone. We strive to provide accurate testing, innovative research, and personalized solutions that lead to better diagnosis, treatment, and prevention of genetic and complex diseases.
                   </p>
 
-                  <button 
-                    className="inline-flex items-center gap-2 bg-white font-semibold text-[13px] sm:text-[13.5px] px-6 py-2.5 rounded-full hover:bg-white/95 transition-all shadow-md w-fit" 
+                  <button
+                    className="inline-flex items-center gap-2 bg-white font-semibold text-[13px] sm:text-[13.5px] px-6 py-2.5 rounded-full hover:bg-white/95 transition-all shadow-md w-fit"
                     style={{ color: isRed ? "#b91c1c" : isGreen ? "#064e3b" : "var(--accent-dark)" }}
                   >
                     Our Mission
@@ -456,7 +456,7 @@ export default function AboutPage() {
                 {/* Premium Container with Subtle Gray Background */}
                 <div className="bg-linear-to-br from-[#F8FAFB] to-[#F0F4F7] rounded-3xl shadow-[0_8px_30px_rgba(15,23,42,0.08)] p-6 lg:p-7 border border-white/60 w-full max-w-md mx-auto lg:mx-0">
                   <div className="grid grid-cols-2">
-                    
+
                     {/* Stat 1 - Expert Researchers */}
                     <div className="text-center pb-5 sm:pb-6 pr-4 sm:pr-6 border-r border-b border-slate-300/80">
                       <div className="mb-2.5 flex justify-center">
@@ -542,41 +542,41 @@ export default function AboutPage() {
       </section>
 
       {/* --- Why Choose Us (Genomic Excellence, Mission & Vision) Section --- */}
-      <section 
-        aria-labelledby="why-choose-us-title" 
-        className="relative bg-white py-16 sm:py-20 lg:py-24 overflow-hidden transition-colors duration-400" 
+      <section
+        aria-labelledby="why-choose-us-title"
+        className="relative bg-white py-16 sm:py-20 lg:py-24 overflow-hidden transition-colors duration-400"
         id="why-choose-us"
         style={{ '--dark': whyDark }}
       >
         <div className="relative site-container">
           <div className="grid grid-cols-1 items-center gap-10 min-[900px]:grid-cols-12 min-[900px]:gap-10 xl:gap-12">
-            
+
             {/* LEFT COLUMN: Why Choose Us info & checklist */}
             <div className="min-[900px]:col-span-5">
               <ScrollReveal delay={100}>
                 <div>
-                  <span 
-                    className="text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.25em] transition-colors duration-400" 
+                  <span
+                    className="text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.25em] transition-colors duration-400"
                     style={{ color: whyAccent }}
                   >
                     WHY CHOOSE US
                   </span>
 
-                  <h2 
-                    id="why-choose-us-title" 
+                  <h2
+                    id="why-choose-us-title"
                     className="mt-3 font-['Poppins',sans-serif] text-[30px] sm:text-[36px] lg:text-[40px] font-bold leading-[1.18] transition-colors duration-400"
                     style={{ color: whyDark }}
                   >
                     Your Trusted Partner<br />
-                    <span 
-                      className="transition-colors duration-400" 
+                    <span
+                      className="transition-colors duration-400"
                       style={{ color: whyAccent }}
                     >
                       in Genomic Excellence
                     </span>
                   </h2>
 
-                  <p 
+                  <p
                     className="mt-4 text-[14px] sm:text-[15px] leading-[1.7] transition-colors duration-400"
                     style={{ color: whyParagraphColor }}
                   >
@@ -593,13 +593,13 @@ export default function AboutPage() {
                       "Industry-academia partnerships",
                     ].map((item) => (
                       <li key={item} className="flex items-center gap-3">
-                        <span 
+                        <span
                           className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white shadow-xs transition-colors duration-400"
                           style={{ backgroundColor: whyCheckmarkBg }}
                         >
                           <Check className="h-3 w-3 stroke-[3]" />
                         </span>
-                        <span 
+                        <span
                           className="font-['Inter',sans-serif] text-[13.5px] sm:text-[14.5px] font-medium transition-colors duration-400"
                           style={{ color: whyChecklistTextColor }}
                         >
@@ -633,7 +633,7 @@ export default function AboutPage() {
                       loading="lazy"
                     />
                     {whyOverlay && whyOverlay !== "none" && (
-                      <div 
+                      <div
                         className="pointer-events-none absolute inset-0 mix-blend-multiply transition-all duration-400"
                         style={{ background: whyOverlay }}
                         aria-hidden="true"
@@ -642,7 +642,7 @@ export default function AboutPage() {
                   </div>
 
                   {/* Floating Circular Badge at bottom right (z-10 above overlay) */}
-                  <div 
+                  <div
                     className="absolute -bottom-5 -right-2 sm:-bottom-6 sm:-right-4 flex h-28 w-28 sm:h-32 sm:w-32 flex-col items-center justify-center rounded-full p-2 text-center text-white shadow-xl transition-all hover:scale-105 duration-300 z-10"
                     style={{
                       backgroundColor: whyBadgeBg,
@@ -662,14 +662,14 @@ export default function AboutPage() {
             {/* RIGHT COLUMN: Fast Response & Sample Shipments Card */}
             <div className="min-[900px]:col-span-3 w-full max-[899px]:mt-6">
               <ScrollReveal delay={250}>
-                <div 
+                <div
                   className="w-full rounded-[26px] sm:rounded-3xl p-7 sm:p-9 shadow-[0_12px_32px_rgba(0,0,0,0.15)] border border-white/10 transition-colors duration-400"
                   style={{ backgroundColor: whyDark }}
                 >
                   {/* Block 1: Fast Response */}
                   <div className="group">
                     <div className="flex items-center gap-3.5">
-                      <div 
+                      <div
                         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border shadow-xs transition-all duration-300 group-hover:-translate-y-[3px] group-hover:rotate-[-5deg]"
                         style={{ backgroundColor: whyTileBg, borderColor: whyTileBorder }}
                       >
@@ -685,15 +685,15 @@ export default function AboutPage() {
                   </div>
 
                   {/* Divider line */}
-                  <div 
-                    className="my-6 border-t" 
+                  <div
+                    className="my-6 border-t"
                     style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
                   />
 
                   {/* Block 2: Sample Shipments */}
                   <div className="group">
                     <div className="flex items-center gap-3.5">
-                      <div 
+                      <div
                         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border shadow-xs transition-all duration-300 group-hover:-translate-y-[3px] group-hover:rotate-[-5deg]"
                         style={{ backgroundColor: whyTileBg, borderColor: whyTileBorder }}
                       >
