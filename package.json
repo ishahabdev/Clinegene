@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build:client": "vite build",
+    "build:server": "vite build --ssr src/entry-server.jsx --outDir dist-ssr",
+    "build:prerender": "node prerender.js",
+    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node prerender.js",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -15,6 +18,7 @@
     "lucide-react": "^1.60.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "resend": "^6.35.0",
     "tailwindcss": "^4.1.14",
     "vite": "^6.3.5"
   }

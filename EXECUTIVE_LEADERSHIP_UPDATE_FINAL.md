@@ -6,7 +6,7 @@
 
 From both CEO and Co-CEO cards:
 - ❌ **Stats/facts row removed** (2 boxes with icons):
-  - CEO: "15+ Years Experience", "50+ Research Publications"
+  - CEO: "5+ Years Experience", "50+ Research Publications"
   - Co-CEO: "Medical Physics Expert", "10+ Years in Research"
 - ❌ **"Open for Collaboration" availability badge** removed from photos
 - ❌ **Decorative line** below role text removed
@@ -148,8 +148,8 @@ REDUCTION:              8px ✅
 **Removed:**
 ```javascript
 stats: [
-  { label: "15+ Years Experience", icon: "award" },
-  { label: "50+ Research Publications", icon: "trendingUp" }
+  { label: "5+ Years Experience", icon: "award" },
+  { label: "20+ Research Publications", icon: "trendingUp" }
 ],
 availabilityStatus: "Open for Collaboration"
 ```

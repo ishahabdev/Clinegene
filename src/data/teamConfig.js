@@ -19,8 +19,8 @@ import samrana from "../assets/team/samrana.jpeg";
 export const companyStats = {
   teamMembers: "9+",
   departments: 5,
-  yearsExperience: "15+",
-  projectsCompleted: "200+",
+  yearsExperience: "5+",
+  projectsCompleted: "20+",
 };
 
 // -----------------------------------------------------------------------------

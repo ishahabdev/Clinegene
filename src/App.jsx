@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import HeaderNav from "./components/HeaderNav.jsx";
 import SiteFooter from "./components/SiteFooter.jsx";
+import ThemeSwitcher from "./components/ThemeSwitcher.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import PageNotFoundPage from "./pages/PageNotFoundPage.jsx";
 import Button from "./components/Button.jsx";
@@ -8,6 +9,7 @@ import LenisProvider, { useLenisRef } from "./components/LenisProvider.jsx";
 import SectionScrollEffects from "./components/SectionScrollEffects.jsx";
 import ScrollEnhancements from "./components/ScrollEnhancements.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
+import { seoRoutes } from "./data/seoData.js";
 
 const AboutPage = lazy(() => import("./pages/AboutPage.jsx"));
 const CEOMessagePage = lazy(() => import("./pages/CEOMessagePage.jsx"));
@@ -29,7 +31,8 @@ const pages = {
   "service-detail": { label: "Services", component: ServiceDetailPage },
   research: { label: "Research", component: ResearchPage },
   gallery: { label: "Gallery", component: GalleryPage },
-  "open-positions": { label: "Open Positions", component: OpenPositionsPage },
+  careers: { label: "Careers", component: OpenPositionsPage },
+  "open-positions": { label: "Careers", component: OpenPositionsPage },
   news: { label: "News", component: NewsPage },
   contact: { label: "Contact", component: ContactPage },
   "not-found": { label: "Page Not Found", component: PageNotFoundPage },
@@ -54,7 +57,17 @@ function LoadingScreen() {
   );
 }
 
-function getCurrentPage() {
+function getCurrentPage(ssrUrl) {
+  if (typeof window === "undefined") {
+    if (!ssrUrl) return "home";
+    const clean = ssrUrl.replace(/^\/|\/$/g, "");
+    if (clean === "" || clean === "index.html") return "home";
+    if (clean.startsWith("services/")) return "service-detail";
+    if (clean === "careers" || clean === "open-positions") return "careers";
+    if (pages[clean]) return clean;
+    return "not-found";
+  }
+
   const hash = window.location.hash.slice(1);
   const pathname = window.location.pathname.replace(/^\/|\/$/g, "");
 
@@ -76,6 +89,14 @@ function getCurrentPage() {
     return "service-detail";
   }
 
+  if (hash === "careers" || hash === "open-positions") {
+    const cleanUrl = "/careers";
+    if (window.location.hash || window.location.pathname !== cleanUrl) {
+      window.history.replaceState(null, "", cleanUrl);
+    }
+    return "careers";
+  }
+
   // If there's a legacy hash matching a page (e.g. #services), normalize to clean path /services
   if (pages[hash]) {
     const cleanUrl = hash === "home" ? "/" : `/${hash}`;
@@ -95,6 +116,10 @@ function getCurrentPage() {
     return "service-detail";
   }
 
+  if (pathname === "careers" || pathname === "open-positions") {
+    return "careers";
+  }
+
   // If pathname matches a registered page (e.g. /about, /services, /team, /contact):
   if (pages[pathname]) {
     return pathname;
@@ -111,14 +136,28 @@ function getHashTarget(hash) {
   }
 }
 
-function AppContent() {
-  const [pageId, setPageId] = useState(getCurrentPage);
-  const [showPreloader, setShowPreloader] = useState(true);
+function AppContent({ ssrUrl }) {
+  const [pageId, setPageId] = useState(() => getCurrentPage(ssrUrl));
+  const [showPreloader, setShowPreloader] = useState(() => typeof window !== "undefined" && !ssrUrl);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const lenisRef = useLenisRef();
-  const lastHandledLocationRef = useRef(window.location.href);
+  const lastHandledLocationRef = useRef(typeof window !== "undefined" ? window.location.href : (ssrUrl || "/"));
   const backToTopVisibleRef = useRef(false);
-  const CurrentPage = pages[pageId].component;
+  const CurrentPage = pages[pageId]?.component || PageNotFoundPage;
+
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      const pathname = window.location.pathname.replace(/\/$/, "") || "/";
+      const title =
+        seoRoutes[pathname]?.title ||
+        (pageId === "home"
+          ? "ClinGene (Pvt) Ltd. — Genetic Testing & Genomics in Pakistan"
+          : `${pages[pageId]?.label || "ClinGene"} — ClinGene (Pvt) Ltd.`);
+      if (title && pageId !== "service-detail") {
+        document.title = title;
+      }
+    }
+  }, [pageId]);
 
   useEffect(() => {
     const updatePage = () => {
@@ -268,7 +307,10 @@ function AppContent() {
       <main>
         <SectionScrollEffects key={pageId} />
         <Suspense fallback={<LoadingScreen />}>
-          <CurrentPage key={window.location.pathname} />
+          <CurrentPage
+            key={typeof window !== "undefined" ? window.location.pathname : (ssrUrl || "/")}
+            ssrUrl={ssrUrl}
+          />
         </Suspense>
       </main>
       {pageId !== "not-found" && (
@@ -277,7 +319,16 @@ function AppContent() {
             compact={pageId === "ceo-message"}
             showJoinCta={pageId === "home"}
           />
-          {/* ── Floating Action Buttons (WhatsApp & Scroll to top) ── */}
+          {/* ── Floating Action Buttons (Theme Switcher on bottom-left, WhatsApp & Scroll on bottom-right) ── */}
+          <div
+            className="fixed bottom-6 left-6 z-50 pointer-events-none"
+            aria-label="Theme switcher"
+          >
+            <div className="pointer-events-auto">
+              <ThemeSwitcher placement="bottom-left" />
+            </div>
+          </div>
+
           <div
             className="fixed bottom-6 right-6 z-40 flex flex-col items-center gap-3 pointer-events-none"
             aria-label="Quick actions"
@@ -343,12 +394,12 @@ function AppContent() {
   );
 }
 
-export default function App() {
+export default function App({ ssrUrl }) {
   return (
     <ThemeProvider>
       <LenisProvider>
         <ScrollEnhancements />
-        <AppContent />
+        <AppContent ssrUrl={ssrUrl} />
       </LenisProvider>
     </ThemeProvider>
   );

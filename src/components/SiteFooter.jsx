@@ -264,7 +264,7 @@ export default function SiteFooter({ showJoinCta }) {
                 ["CEO Message",    "/ceo-message"],
                 ["Research",       "/research"],
                 ["Gallery",        "/gallery"],
-                ["Open Positions", "/open-positions"],
+                ["Careers",        "/careers"],
                 ["News",           "/news"],
               ].map(([label, href]) => (
                 <li key={label}>

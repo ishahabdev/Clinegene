@@ -5,7 +5,7 @@
 ### 1. REMOVED ELEMENTS
 
 **From both CEO and Co-CEO cards:**
-- ❌ **Stats/facts row removed** (2 boxes with icons showing "15+ Years Experience", "50+ Research Publications", "Medical Physics Expert", "10+ Years in Research")
+- ❌ **Stats/facts row removed** (2 boxes with icons showing "5+ Years Experience", "50+ Research Publications", "Medical Physics Expert", "10+ Years in Research")
 - ❌ **"Open for Collaboration" badge removed** from photos
 - ❌ **Decorative corner accent** removed from photos
 - ❌ **Decorative line** below role removed

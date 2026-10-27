@@ -48,7 +48,7 @@ export const teamMembers = [
     department: "leadership",
     image: amjadAli,
     details: ["CEO/Director", "Human Geneticist", "Consultant Genetic Counselor"],
-    bio: "Dr. Amjad Ali Tanoli is the founder and CEO of ClinGene, driving Pakistan's first human genetics and precision medicine platform. With over 15 years of international research experience, he bridges clinical genetics and genomic technology to advance healthcare innovation in the region.",
+    bio: "Dr. Amjad Ali Tanoli is the founder and CEO of ClinGene, driving Pakistan's first human genetics and precision medicine platform. With over 5 years of international research experience, he bridges clinical genetics and genomic technology to advance healthcare innovation in the region.",
     expertise: ["Clinical Genetics", "Precision Medicine", "Genetic Counseling"],
     tags: ["Clinical Genetics", "Precision Medicine", "Leadership"],
     social: {

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { ChevronDown, ArrowRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, ArrowRight, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
@@ -64,41 +64,17 @@ function ContactIcon({ type }) {
   );
 }
 
-function handleContactSubmit(event) {
-  event.preventDefault();
-  const formData = new FormData(event.currentTarget);
-  const fullName = formData.get("fullName") || "";
-  const email = formData.get("email") || "";
-  const phone = formData.get("phone") || "";
-  const organization = formData.get("organization") || "";
-  const serviceSlug = formData.get("service") || "";
-  const matchingService = servicesData.find((s) => s.slug === serviceSlug);
-  const serviceName = matchingService ? matchingService.name : (serviceSlug || "Not specified");
-  const subjectInput = formData.get("subject") || "";
-  const message = formData.get("message") || "";
-
-  const subject = encodeURIComponent(
-    subjectInput ? `${subjectInput} - ${fullName}` : `Message from ${fullName}`
-  );
-  const body = encodeURIComponent(
-    `Full Name: ${fullName}
-Email Address: ${email}
-Phone: ${phone || "Not specified"}
-Organization: ${organization || "Not specified"}
-Area of Interest: ${serviceName}
-Subject: ${subjectInput || "General Inquiry"}
-
-Message:
-${message}`
-  );
-
-  window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
-}
-
 export default function ContactPage() {
   const { theme } = useTheme();
   const isRed = theme === "red";
   const isGreen = theme === "green";
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [turnstileToken, setTurnstileToken] = useState("");
+
+  const formRef = useRef(null);
+  const turnstileContainerRef = useRef(null);
 
   const [selectedService, setSelectedService] = useState(() => {
     if (typeof window !== "undefined") {
@@ -107,6 +83,177 @@ export default function ContactPage() {
     }
     return "";
   });
+
+  const isCareerOption =
+    selectedService === "job" ||
+    selectedService === "job-application" ||
+    selectedService === "internship";
+
+  // Cloudflare Turnstile Integration (optional / non-blocking)
+  useEffect(() => {
+    const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
+    if (!siteKey || typeof window === "undefined") return;
+
+    let widgetId = null;
+    const scriptId = "cf-turnstile-script";
+
+    const renderWidget = () => {
+      if (window.turnstile && turnstileContainerRef.current) {
+        try {
+          widgetId = window.turnstile.render(turnstileContainerRef.current, {
+            sitekey: siteKey,
+            callback: (token) => setTurnstileToken(token),
+            "expired-callback": () => setTurnstileToken(""),
+            "error-callback": () => setTurnstileToken(""),
+          });
+        } catch (e) {
+          console.warn("Turnstile render warning:", e);
+        }
+      }
+    };
+
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+      script.async = true;
+      script.defer = true;
+      script.onload = renderWidget;
+      document.head.appendChild(script);
+    } else {
+      renderWidget();
+    }
+
+    return () => {
+      if (widgetId && window.turnstile) {
+        try {
+          window.turnstile.remove(widgetId);
+        } catch (_) {}
+      }
+    };
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitStatus(null);
+
+    const form = formRef.current || e.currentTarget;
+    const formData = new FormData(form);
+
+    const fullName = (formData.get("fullName") || "").toString().trim();
+    const email = (formData.get("email") || "").toString().trim();
+    const phone = (formData.get("phone") || "").toString().trim();
+    const organization = (formData.get("organization") || "").toString().trim();
+    const serviceSlug = (formData.get("service") || "").toString().trim();
+    const subjectInput = (formData.get("subject") || "").toString().trim();
+    const message = (formData.get("message") || "").toString().trim();
+    const position = (formData.get("position") || "").toString().trim();
+    const coverNote = (formData.get("coverNote") || "").toString().trim();
+    const websiteHoneypot = (formData.get("website") || "").toString().trim();
+
+    // Inline field validation
+    if (!fullName || fullName.length < 2) {
+      setSubmitStatus({ type: "error", message: "Please enter your full name (minimum 2 characters)." });
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      setSubmitStatus({ type: "error", message: "Please enter a valid email address." });
+      return;
+    }
+    if (!serviceSlug) {
+      setSubmitStatus({ type: "error", message: "Please select a primary service of interest." });
+      return;
+    }
+
+    const isCareer =
+      serviceSlug === "job" ||
+      serviceSlug === "job-application" ||
+      serviceSlug === "internship";
+
+    if (!isCareer && (!message || message.length < 5)) {
+      setSubmitStatus({
+        type: "error",
+        message: "Please provide your project requirements or inquiry details.",
+      });
+      return;
+    }
+
+    const matchingService = servicesData.find((s) => s.slug === serviceSlug);
+    const serviceDisplayName = matchingService
+      ? matchingService.name
+      : serviceSlug === "job" || serviceSlug === "job-application"
+        ? "Job Application"
+        : serviceSlug === "internship"
+          ? "Internship Application"
+          : serviceSlug === "general-inquiry"
+            ? "General Inquiry / Consultation"
+            : serviceSlug === "research-collaboration"
+              ? "Research Collaboration"
+              : serviceSlug;
+
+    const payload = {
+      fullName,
+      email,
+      phone,
+      organization,
+      service: serviceDisplayName,
+      subject: subjectInput,
+      message,
+      position,
+      coverNote,
+      website: websiteHoneypot,
+      turnstileToken,
+    };
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      let result = {};
+      const responseText = await response.text();
+      try {
+        result = responseText ? JSON.parse(responseText) : {};
+      } catch (parseError) {
+        console.warn("[Contact Form API Non-JSON Response]", responseText);
+        result = { error: `Server returned status ${response.status}. Please check your connection or server configuration.` };
+      }
+
+      if (!response.ok) {
+        throw new Error(result.error || `Failed to send message (Status: ${response.status}). Please try again later.`);
+      }
+
+      setSubmitStatus({
+        type: "success",
+        message: result.message || "Thank you! Your message has been sent. Our team will get back to you shortly.",
+      });
+
+      // Clear the form
+      form.reset();
+      setTurnstileToken("");
+      setSelectedService("");
+      if (typeof window !== "undefined" && window.turnstile && typeof window.turnstile.reset === "function") {
+        try {
+          window.turnstile.reset();
+        } catch (_) {}
+      }
+    } catch (err) {
+      console.error("[Submission Error]", err);
+      setSubmitStatus({
+        type: "error",
+        message: err.message || "Failed to send message. Please try again or email us directly at info@clingene.com.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     const updateServiceFromQuery = () => {
@@ -292,7 +439,38 @@ export default function ContactPage() {
               Fill in the form and our team will get back to you shortly.
             </p>
 
-            <form className="mt-6 space-y-4" onSubmit={handleContactSubmit}>
+            <form ref={formRef} className="mt-6 space-y-4" onSubmit={handleSubmit}>
+              {/* Spam Protection Honeypot Field */}
+              <div style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }} aria-hidden="true">
+                <label htmlFor="website">Leave this field blank</label>
+                <input
+                  id="website"
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+
+              {submitStatus && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className={`p-4 rounded-xl text-xs sm:text-sm font-medium flex items-start gap-3 transition-all ${
+                    submitStatus.type === "success"
+                      ? "bg-emerald-50 border border-emerald-200 text-emerald-800"
+                      : "bg-rose-50 border border-rose-200 text-rose-800"
+                  }`}
+                >
+                  {submitStatus.type === "success" ? (
+                    <CheckCircle className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
+                  ) : (
+                    <AlertCircle className="h-5 w-5 text-rose-600 shrink-0 mt-0.5" aria-hidden="true" />
+                  )}
+                  <div className="flex-1 leading-relaxed">{submitStatus.message}</div>
+                </div>
+              )}
+
               {/* Row 1: Full Name & Email Address */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -343,21 +521,21 @@ export default function ContactPage() {
 
                 <div>
                   <label htmlFor="contact-organization" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
-                    Organization
+                    {isCareerOption ? "Current Institution / University" : "Organization"}
                   </label>
                   <input
                     id="contact-organization"
                     name="organization"
-                    placeholder="University / Company"
+                    placeholder={isCareerOption ? "e.g. NUST / Quaid-i-Azam University" : "University / Company"}
                     className="w-full h-11 px-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
                   />
                 </div>
               </div>
 
-              {/* Row 3: Area of Interest */}
+              {/* Row 3: Area of Interest with optgroup */}
               <div>
                 <label htmlFor="contact-service" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
-                  Area of Interest
+                  Primary Service of Interest <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <select
@@ -365,17 +543,28 @@ export default function ContactPage() {
                     name="service"
                     value={selectedService}
                     onChange={(e) => setSelectedService(e.target.value)}
+                    required
                     className="w-full h-11 appearance-none px-3.5 pr-10 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none cursor-pointer"
                   >
-                    <option value="">Select an option</option>
-                    {servicesData.map((s) => (
-                      <option key={s.slug} value={s.slug}>
-                        {s.name}
-                      </option>
-                    ))}
-                    <option value="research-collaboration">Research Collaboration</option>
-                    <option value="training-workshops">Training &amp; Workshops</option>
-                    <option value="other">Other Inquiry</option>
+                    <option value="">Select an option...</option>
+                    
+                    <optgroup label="General">
+                      <option value="general-inquiry">General Inquiry / Consultation</option>
+                      <option value="research-collaboration">Research Collaboration</option>
+                    </optgroup>
+
+                    <optgroup label="Services">
+                      {servicesData.map((s) => (
+                        <option key={s.slug} value={s.slug}>
+                          {s.name}
+                        </option>
+                      ))}
+                    </optgroup>
+
+                    <optgroup label="Careers">
+                      <option value="job">Job Application</option>
+                      <option value="internship">Internship</option>
+                    </optgroup>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-400">
                     <ChevronDown className="h-4 w-4" aria-hidden="true" />
@@ -383,44 +572,96 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Row 4: Subject */}
-              <div>
-                <label htmlFor="contact-subject" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
-                  Subject
-                </label>
-                <input
-                  id="contact-subject"
-                  name="subject"
-                  placeholder="How can we help?"
-                  className="w-full h-11 px-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
-                />
-              </div>
+              {/* Conditional Careers Fields: Position & CV upload */}
+              {isCareerOption && (
+                <div className="space-y-4 rounded-xl border border-blue-200/80 bg-blue-50/40 p-4 transition-all">
+                  <div className="flex items-center justify-between text-xs font-semibold text-blue-900">
+                    <span>Careers Intake Desk</span>
+                    <span className="text-[11px] font-normal text-blue-700">Routed to careers@clingene.co</span>
+                  </div>
 
-              {/* Row 5: Message */}
-              <div>
-                <label htmlFor="contact-message" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
-                  Message <span className="text-red-500">*</span>
-                </label>
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  placeholder="Write your message..."
-                  required
-                  rows={4}
-                  className="w-full p-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 leading-relaxed transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none resize-y"
-                />
-              </div>
+                  <div>
+                    <label htmlFor="contact-position" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
+                      Position / Research Area Applied For <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="contact-position"
+                      name="position"
+                      required
+                      placeholder="e.g. Molecular Biologist / Bioinformatician / Lab Intern"
+                      className="w-full h-11 px-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="contact-cover-note" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
+                      Cover Note / Statement of Interest <span className="text-[11px] font-normal text-slate-500">(Optional)</span>
+                    </label>
+                    <textarea
+                      id="contact-cover-note"
+                      name="coverNote"
+                      placeholder="Briefly describe your research experience, technical skills, and career motivation..."
+                      rows={3}
+                      className="w-full p-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 leading-relaxed transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none resize-y"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Standard Subject & Message (when not careers) */}
+              {!isCareerOption && (
+                <>
+                  <div>
+                    <label htmlFor="contact-subject" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
+                      Subject
+                    </label>
+                    <input
+                      id="contact-subject"
+                      name="subject"
+                      placeholder="How can we help?"
+                      className="w-full h-11 px-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="contact-message" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
+                      Project Requirements / Sample Details <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      name="message"
+                      placeholder="Give details or text here..."
+                      required
+                      rows={4}
+                      className="w-full p-3.5 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 placeholder:text-slate-400 leading-relaxed transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none resize-y"
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Cloudflare Turnstile Verification Widget */}
+              <div ref={turnstileContainerRef} className="my-2" />
 
               {/* Submit Button */}
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-[#0f2137] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#091524] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f2137] cursor-pointer"
+                  disabled={isSubmitting}
+                  className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-[#0f2137] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#091524] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f2137] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <span>Send Message</span>
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/20 bg-white/10">
-                    <ArrowRight className="h-3 w-3" aria-hidden="true" />
-                  </span>
+                  {isSubmitting ? (
+                    <>
+                      <span>Sending...</span>
+                      <Loader2 className="h-4 w-4 animate-spin text-white" aria-hidden="true" />
+                    </>
+                  ) : (
+                    <>
+                      <span>{isCareerOption ? "Submit Application" : "Send Message"}</span>
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/20 bg-white/10">
+                        <ArrowRight className="h-3 w-3" aria-hidden="true" />
+                      </span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>

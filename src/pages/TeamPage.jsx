@@ -11,7 +11,7 @@ import { useTheme } from "../context/ThemeContext.jsx";
 const stats = [
   {
     icon: Users,
-    value: "30+",
+    value: "9+",
     label: "Team Members",
     color: "from-[#10c8e0] to-[#0a7a94]"
   },
@@ -29,7 +29,7 @@ const stats = [
   },
   {
     icon: Target,
-    value: "200+",
+    value: "20+",
     label: "Projects Completed",
     color: "from-[#0a7a94] to-[#08536a]"
   }

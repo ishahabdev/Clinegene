@@ -16,9 +16,11 @@ import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import { servicesData, getServiceBySlug } from "../data/servicesData.js";
 
-export default function ServiceDetailPage({ currentSlug }) {
-  // Determine slug from prop or window.location.pathname
-  const path = typeof window !== "undefined" ? window.location.pathname.replace(/^\/|\/$/g, "") : "";
+export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
+  // Determine slug from prop, ssrUrl, or window.location.pathname
+  const path = ssrUrl
+    ? ssrUrl.replace(/^\/|\/$/g, "")
+    : (typeof window !== "undefined" ? window.location.pathname.replace(/^\/|\/$/g, "") : "");
   const activeSlug = currentSlug || (path.startsWith("services/") ? path.slice("services/".length) : "");
   const service = getServiceBySlug(activeSlug) || servicesData[0];
 
@@ -28,7 +30,7 @@ export default function ServiceDetailPage({ currentSlug }) {
   // Set document title and meta description
   useEffect(() => {
     if (typeof document !== "undefined") {
-      document.title = `${service.name} | ClinGene Services`;
+      document.title = `${service.name} — ClinGene (Pvt) Ltd.`;
       let metaDesc = document.querySelector('meta[name="description"]');
       if (!metaDesc) {
         metaDesc = document.createElement("meta");

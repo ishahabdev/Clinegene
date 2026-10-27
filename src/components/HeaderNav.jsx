@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Button from "./Button";
-import ThemeSwitcher from "./ThemeSwitcher";
 
 const clingeneLogo = "/images/clingene-logo.webp";
 
@@ -12,7 +11,7 @@ const links = [
   { label: "Services", href: "/services" },
   { label: "Research", href: "/research" },
   { label: "Gallery", href: "/gallery" },
-  { label: "Open Positions", href: "/open-positions" },
+  { label: "Careers", href: "/careers" },
   { label: "News", href: "/news" },
   { label: "Contact", href: "/contact" },
 ];
@@ -69,13 +68,11 @@ export default function HeaderNav({ activePage }) {
 
         {/* Desktop actions (≥1200px) */}
         <div className="hidden shrink-0 items-center gap-4 min-[1200px]:flex">
-          <ThemeSwitcher />
           <Button className="min-h-0! px-5! py-2.75! text-[11px]!" href="/contact">Contact Us</Button>
         </div>
 
         {/* Mobile controls (<1200px) */}
         <div className="flex items-center gap-2.5 min-[1200px]:hidden">
-          <ThemeSwitcher />
           <Button
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Close menu" : "Open menu"}

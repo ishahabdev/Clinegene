@@ -2,6 +2,7 @@ import micro from "../assets/micro.jpg";
 import sig from "../assets/sig.png";
 import dnaStrand from "../assets/dna_strand.png";
 import amjadAli from "../assets/team/Amjad Ali.jpeg";
+import taglineText from "../assets/tagline-text@2x.png";
 import { ArrowRight } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
@@ -610,24 +611,38 @@ function Commitment() {
           </Button>
         </div>
 
-        {/* The three-word handwritten tagline in the middle */}
+        {/* The three-word handwritten tagline in the middle — 100% identical to the reference pic */}
         <div 
-          className="pointer-events-none mt-8 md:mt-0 md:absolute md:left-[48%] md:top-[28%] lg:top-[30%] rotate-[-14deg] text-white select-none z-10 w-fit"
-          style={{
-            fontFamily: '"Segoe Script", "Dancing Script", "Brush Script MT", cursive',
-            fontStyle: "italic",
-            fontWeight: 700,
-          }}
+          className="pointer-events-none mt-8 md:mt-0 md:absolute md:left-[46%] md:top-[22%] lg:top-[24%] select-none z-10 w-[240px] sm:w-[270px] lg:w-[290px]"
+          aria-hidden="true"
         >
-          <div className="text-[26px] sm:text-[30px] lg:text-[35px] leading-[1.25] tracking-wide text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
-            Science<br />
-            <span className="ml-4 block">Collaboration</span>
-            <span className="ml-9 block">Impact</span>
+          <div className="relative w-full aspect-[255/228]">
+            <img
+              src={taglineText}
+              alt="Science Collaboration Impact"
+              className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
+              loading="eager"
+            />
+            {/* Dynamic theme-adaptive underline positioned exactly like the pic */}
+            <span
+              className="absolute rounded-full transition-colors duration-400"
+              style={{
+                left: "29.8%",
+                top: "95.6%",
+                width: "17%",
+                height: "3.5px",
+                transform: "rotate(-8deg)",
+                transformOrigin: "left center",
+                backgroundColor: isRed ? "#ef4444" : isGreen ? "#10b981" : "#19c4de",
+                boxShadow: isRed
+                  ? "0 0 10px rgba(239, 68, 68, 0.6)"
+                  : isGreen
+                    ? "0 0 10px rgba(16, 185, 129, 0.6)"
+                    : "0 0 10px rgba(25, 196, 222, 0.6)",
+              }}
+            />
           </div>
-          <span
-            className="ml-12 mt-3 block h-[2.5px] w-10 rounded-full transition-colors"
-            style={{ backgroundColor: isRed ? "#ef4444" : "var(--accent)" }}
-          />
+          <span className="sr-only">Science Collaboration Impact</span>
         </div>
       </div>
     </section>

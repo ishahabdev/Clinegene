@@ -25,10 +25,11 @@ function PaletteIcon({ className = "h-5 w-5" }) {
   );
 }
 
-export default function ThemeSwitcher() {
+export default function ThemeSwitcher({ placement = "bottom-left" }) {
   const { theme, setTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
+  const isBottomLeft = placement === "bottom-left";
 
   // Close on outside click
   useEffect(() => {
@@ -61,14 +62,22 @@ export default function ThemeSwitcher() {
         aria-expanded={open}
         aria-haspopup="true"
         onClick={() => setOpen((v) => !v)}
-        className={`group relative grid h-10 w-10 place-items-center rounded-full border bg-white/95 text-slate-700 shadow-[0_2px_8px_rgba(12,43,72,0.06)] backdrop-blur-sm transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 hover:shadow-[0_4px_18px_var(--accent-glow)] active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) ${
+        className={`group relative grid ${
+          isBottomLeft ? "h-12 w-12" : "h-10 w-10"
+        } place-items-center rounded-full bg-white text-slate-700 cursor-pointer backdrop-blur-sm transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) ${
           open
-            ? "border-(--accent) ring-2 ring-(--accent)/30 shadow-[0_4px_18px_var(--accent-glow)]"
-            : "border-slate-200 hover:border-(--accent)"
+            ? "ring-2 ring-(--accent)/40 scale-105"
+            : ""
         }`}
+        style={{
+          border: isBottomLeft ? "2.5px solid #ffffff" : "1px solid #e2e8f0",
+          boxShadow: isBottomLeft
+            ? "0 0 0 3px rgba(12, 43, 72, 0.08), 0 4px 18px rgba(12, 43, 72, 0.16)"
+            : "0 2px 8px rgba(12, 43, 72, 0.06)",
+        }}
       >
         <PaletteIcon
-          className={`h-5 w-5 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          className={`${isBottomLeft ? "h-5.5 w-5.5" : "h-5 w-5"} transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
             open
               ? "scale-110 -rotate-12"
               : "group-hover:scale-110 group-hover:rotate-6"
@@ -78,7 +87,9 @@ export default function ThemeSwitcher() {
         {/* Live active theme badge dot */}
         <span
           aria-hidden="true"
-          className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white shadow-[0_1px_4px_rgba(12,43,72,0.25)] transition-colors duration-500"
+          className={`absolute -bottom-0.5 -right-0.5 ${
+            isBottomLeft ? "h-3.5 w-3.5" : "h-3 w-3"
+          } rounded-full border-2 border-white shadow-[0_1px_4px_rgba(12,43,72,0.25)] transition-colors duration-500`}
           style={{ backgroundColor: "var(--accent)" }}
         />
       </button>
@@ -88,9 +99,15 @@ export default function ThemeSwitcher() {
         <div
           role="menu"
           aria-label="Color theme options"
-          className="absolute right-0 top-full z-50 mt-2.5 w-56 overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 p-2 shadow-[0_16px_40px_rgba(12,43,72,0.14),0_2px_8px_rgba(0,0,0,0.04)] backdrop-blur-xl"
+          className={`absolute z-50 w-56 overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 p-2 shadow-[0_16px_40px_rgba(12,43,72,0.18),0_2px_8px_rgba(0,0,0,0.06)] backdrop-blur-xl ${
+            isBottomLeft
+              ? "left-0 bottom-full mb-3"
+              : "right-0 top-full mt-2.5"
+          }`}
           style={{
-            animation: "theme-dropdown-in 0.2s cubic-bezier(0.22,1,0.36,1) both",
+            animation: `${
+              isBottomLeft ? "theme-dropdown-up" : "theme-dropdown-in"
+            } 0.22s cubic-bezier(0.22,1,0.36,1) both`,
           }}
         >
           {/* Header */}

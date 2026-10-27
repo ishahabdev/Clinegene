@@ -99,8 +99,8 @@ export default function OpenPositionsPage() {
               now, we're always looking for passionate talent.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-4">
-              <Button className="font-inter" href="#contact">
-                Contact Us{" "}
+              <Button className="font-inter" href="/contact?service=job-application">
+                Submit CV / Application{" "}
                 <ArrowRight
                   aria-hidden="true"
                   className="h-4 w-4"
@@ -108,10 +108,10 @@ export default function OpenPositionsPage() {
               </Button>
               <Button
                 className="border-white/70 font-inter"
-                href="#team"
+                href="/team"
                 variant="transparent"
               >
-                View Our Team
+                Meet Our Team
               </Button>
             </div>
           </div>
@@ -289,25 +289,25 @@ export default function OpenPositionsPage() {
 
               {/* ── CTA buttons ── */}
               <ScrollReveal delay={160}>
-                <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+                <div className="mt-8 flex flex-col justify-center gap-3.5 sm:flex-row">
                   <Button
                     className="min-h-9 sm:min-h-13! px-4 sm:px-8! text-xs sm:text-sm! font-inter shadow-lg"
-                    href="#contact"
+                    href="/contact?service=job-application"
                     style={{ boxShadow: `0 4px 24px ${accent.glow}` }}
                   >
-                    Contact Us{" "}
+                    Submit General Application{" "}
                     <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </Button>
                   <Button
                     className="min-h-9 sm:min-h-13! px-4 sm:px-8! text-xs sm:text-sm! font-inter"
-                    href="#team"
+                    href="/contact?service=internship"
                     variant="transparent"
                     style={{
                       borderColor: accent.border,
                       color: accent.primary,
                     }}
                   >
-                    View Our Team
+                    Apply for Internship
                   </Button>
                 </div>
               </ScrollReveal>
@@ -328,7 +328,7 @@ export default function OpenPositionsPage() {
           <ScrollReveal className="flex flex-wrap justify-center gap-4 text-sm">
             <a
               className="text-[#9fb6ce] underline-offset-2 hover:text-(--accent) hover:underline focus-visible:text-(--accent) focus-visible:underline focus-visible:outline-none"
-              href="#team"
+              href="/team"
             >
               View Our Team
             </a>
@@ -337,7 +337,7 @@ export default function OpenPositionsPage() {
             </span>
             <a
               className="text-[#9fb6ce] underline-offset-2 hover:text-(--accent) hover:underline focus-visible:text-(--accent) focus-visible:underline focus-visible:outline-none"
-              href="#contact"
+              href="/contact"
             >
               Contact Us
             </a>
