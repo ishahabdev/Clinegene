@@ -234,6 +234,7 @@ export default function ServicesPage() {
                       width={width}
                       height={height}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:transition-none"
+                      decoding="async"
                       loading="lazy"
                       src={image}
                     />

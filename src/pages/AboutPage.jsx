@@ -91,9 +91,10 @@ export default function AboutPage() {
         {/* Full-screen background image — same picture recolored to theme in green and red */}
         <img
           alt="ClinGene laboratory professional at microscope"
-          width="1920"
-          height="1080"
+          width="2014"
+          height="781"
           loading="eager"
+          fetchPriority="high"
           className="hero-bg-img absolute inset-0 -z-20 h-full w-full object-cover object-[80%_center] sm:object-[72%_center] lg:object-center transition-all duration-500"
           src={promiseImage}
           style={{
@@ -229,7 +230,10 @@ export default function AboutPage() {
                   <img
                     src={injectionImage}
                     alt="Genetic testing laboratory professional handling sample"
+                    width="1343"
+                    height="800"
                     className="w-full h-full min-h-65 sm:min-h-70 object-cover aspect-4/3 sm:aspect-video"
+                    decoding="async"
                     loading="lazy"
                   />
                 </div>
@@ -322,6 +326,10 @@ export default function AboutPage() {
                 <img
                   src={amjadAli}
                   alt="Dr. Amjad Ali Tanoli Ph.D - CEO"
+                  width="879"
+                  height="1024"
+                  decoding="async"
+                  loading="lazy"
                   className="w-full h-full object-cover object-[top_center] md:object-[center_20%]"
                 />
               </div>
@@ -685,8 +693,11 @@ export default function AboutPage() {
                     <img
                       src={characterImage}
                       alt="ClinGene Laboratory Professional"
+                      width="1024"
+                      height="1536"
                       className="h-full w-full object-cover object-[center_15%] transition-all duration-400"
                       style={{ filter: whyImageFilter }}
+                      decoding="async"
                       loading="lazy"
                     />
                     {whyOverlay && whyOverlay !== "none" && (

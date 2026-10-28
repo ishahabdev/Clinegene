@@ -91,8 +91,9 @@ function LeadershipCard({ leader, index }) {
               <img
                 src={leader.image}
                 alt={leader.imageAlt}
-                width="340"
-                height="452"
+                width={leader.width || 879}
+                height={leader.height || 1024}
+                decoding="async"
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-700"
                 style={{ 

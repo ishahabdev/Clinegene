@@ -159,6 +159,10 @@ function ProfileSidebar() {
             <img
               src={amjadAli}
               alt="Dr. Amjad Ali Tanoli Ph.D"
+              width="879"
+              height="1024"
+              loading="lazy"
+              decoding="async"
               className="h-full w-full object-cover object-[center_20%]"
             />
           </div>
@@ -620,6 +624,8 @@ function Commitment() {
             <img
               src={taglineText}
               alt="Science Collaboration Impact"
+              width="510"
+              height="456"
               className="absolute inset-0 w-full h-full object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
               loading="eager"
             />

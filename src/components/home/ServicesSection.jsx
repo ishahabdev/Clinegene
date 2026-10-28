@@ -144,9 +144,10 @@ export default function ServicesSection() {
                   <div className="relative aspect-3.5/2.5 w-full min-w-0 overflow-hidden rounded-t-[15px] bg-[#102943]">
                     <img
                       alt={service.name}
-                      width="480"
-                      height="340"
+                      width={service.width || 400}
+                      height={service.height || 300}
                       className="h-full w-full object-cover object-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 group-focus-within:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
+                      decoding="async"
                       loading="lazy"
                       src={service.image}
                     />

@@ -31,20 +31,26 @@ export default function TeamSection() {
             designation: "CEO / Director",
             details: ["Human Geneticist, Consultant Genetic Counselor"],
             image: amjadAli,
+            width: 879,
+            height: 1024,
           },
           {
             name: "Dr. Safdar Ali, Ph.D, Postdoc",
             designation: "Managing Director",
             details: ["Princess Margaret Cancer Research Centre, Toronto, Canada; Medical Physicist"],
             image: safdarAli,
+            width: 554,
+            height: 526,
           },
           {
             name: "Dr. Kifayat Ullah, Ph.D",
             designation: "Molecular Biologist, Human Geneticist",
             details: ["Quaid-i-Azam University, Islamabad; Yale School of Medicine, USA"],
             image: kifayatUllah,
+            width: 341,
+            height: 238,
           },
-        ].map(({ name, designation, details, image }, index) => (
+        ].map(({ name, designation, details, image, width, height }, index) => (
           <ScrollReveal
             as="article"
             className="flex min-h-57 items-center gap-4  border border-[#d4e5f2] bg-white/85 p-4 shadow-[0_8px_24px_rgba(29,78,116,0.06)] transition-all duration-100  hover:-translate-y-1 hover:border-3 hover:border-b-(--accent)  hover:bg-white hover:shadow-[0_14px_30px_rgba(12,43,72,0.12)] motion-reduce:transform-none motion-reduce:transition-none sm:gap-5"
@@ -55,9 +61,10 @@ export default function TeamSection() {
               {image ? (
                 <img
                   alt={name}
-                  width="480"
-                  height="600"
+                  width={width}
+                  height={height}
                   className="h-full w-full object-cover object-[center_20%]"
+                  decoding="async"
                   loading="lazy"
                   src={image}
                 />

@@ -103,7 +103,7 @@ export const servicesData = [
     Icon: TestTubes,
     image: sangerImage,
     width: 320,
-    height: 304,
+    height: 302,
     description: "Targeted DNA sequencing and sequence analysis.",
     overview: [
       "A reliable method for reading a specific stretch of DNA.",
@@ -243,7 +243,7 @@ export const servicesData = [
     tagline: "RNA sequencing for gene expression research.",
     Icon: FlaskConical,
     image: rnaSeqImage,
-    width: 319,
+    width: 320,
     height: 304,
     description: "RNA sequencing services for gene expression research.",
     overview: [
@@ -311,8 +311,8 @@ export const servicesData = [
     tagline: "Analysis of single-cell RNA sequencing datasets.",
     Icon: Microscope,
     image: singleCellImage,
-    width: 320,
-    height: 302,
+    width: 319,
+    height: 304,
     description: "Analysis of single-cell RNA sequencing datasets.",
     overview: [
       "A data analysis service for datasets you already have.",

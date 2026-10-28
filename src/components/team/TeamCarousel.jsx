@@ -178,6 +178,10 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
                 <img 
                   src={member.image} 
                   alt={member.imageAlt || member.name}
+                  width={member.width || 800}
+                  height={member.height || 800}
+                  decoding="async"
+                  loading="lazy"
                   className="h-full w-full object-cover object-[top_center] sm:object-[center_20%]"
                 />
               </div>
@@ -643,6 +647,9 @@ export default function TeamCarousel({ members = [] }) {
                     <img
                       src={activeModalMember.image}
                       alt={activeModalMember.name}
+                      width={activeModalMember.width || 800}
+                      height={activeModalMember.height || 800}
+                      decoding="async"
                       className="h-full w-full object-cover object-[center_20%]"
                     />
                   </div>

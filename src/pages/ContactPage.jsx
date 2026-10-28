@@ -308,6 +308,9 @@ export default function ContactPage() {
         <img
           alt=""
           aria-hidden="true"
+          width="1672"
+          height="941"
+          fetchPriority="high"
           className="absolute inset-0 -z-20 h-full w-full object-cover object-center transition-all duration-500"
           src={homeBackground}
           style={{
@@ -439,6 +442,8 @@ export default function ContactPage() {
               <iframe
                 title="Map showing ClinGene’s location in Islamabad"
                 src={mapEmbedUrl}
+                width="600"
+                height="450"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />

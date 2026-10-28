@@ -252,6 +252,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                         height={service.height}
                         className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                         loading="eager"
+                        fetchPriority="high"
                       />
                     </div>
                   </div>
@@ -765,9 +766,10 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                       <img
                         src={rel.image}
                         alt={rel.name}
-                        width="480"
-                        height="270"
+                        width={rel.width || 400}
+                        height={rel.height || 300}
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        decoding="async"
                         loading="lazy"
                       />
                     </div>

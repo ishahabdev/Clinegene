@@ -79,6 +79,7 @@ export default function AboutSection() {
             width="604"
             height="272"
             className="absolute inset-0 h-full w-full object-cover object-center brightness-90"
+            decoding="async"
             loading="lazy"
             src={microscopeImage}
           />
