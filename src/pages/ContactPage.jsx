@@ -7,8 +7,8 @@ import { servicesData } from "../data/servicesData.js";
 
 const homeBackground = "/images/home1.webp";
 
-// Phone number hidden until client confirms official company number (SECP personal number hidden)
-// TODO: Obtain official company phone number from client
+const contactPhone = "+92 348 5607051";
+const contactPhoneRaw = "+923485607051";
 const contactEmail = "info@clingene.co";
 const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contactEmail)}&su=${encodeURIComponent("Inquiry - ClinGene")}`;
 const contactAddress = "Islamabad, Pakistan";
@@ -16,6 +16,14 @@ const mapUrl = "https://maps.google.com/?q=Islamabad,+Pakistan";
 const mapEmbedUrl = "https://maps.google.com/maps?q=Islamabad,+Pakistan&output=embed";
 
 const contactCards = [
+  {
+    icon: "phone",
+    title: "Call us",
+    value: contactPhone,
+    href: `tel:${contactPhoneRaw}`,
+    detail: "Speak with our team about your inquiry.",
+    isFeatured: false,
+  },
   {
     icon: "email",
     title: "Email us",
@@ -323,13 +331,13 @@ export default function ContactPage() {
       </section>
 
       <section aria-label="ClinGene contact details" className="contact-details-section">
-        <div className="site-container contact-cards !grid-cols-1 sm:!grid-cols-2 max-w-4xl mx-auto">
+        <div className="site-container contact-cards !grid-cols-1 md:!grid-cols-3 max-w-6xl mx-auto">
           {contactCards.map((card, index) => {
             const isFeatured = card.isFeatured;
             return (
               <ScrollReveal
                 as="article"
-                className={`contact-info-card${isFeatured ? " contact-info-card-featured" : ""} cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg`}
+                className={`contact-info-card${isFeatured ? " contact-info-card-featured" : ""} cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_22px_45px_-6px_rgba(12,43,72,0.18)]`}
                 delay={index * 60}
                 key={card.title}
                 onClick={(e) => {
@@ -345,9 +353,15 @@ export default function ContactPage() {
                     ? {
                         backgroundColor: featuredBg,
                         borderColor: featuredBorder,
+                        boxShadow: "0 18px 45px -8px rgba(5, 11, 28, 0.45)",
                         transition: "background-color 0.4s ease, border-color 0.4s ease, transform 0.25s ease, box-shadow 0.25s ease",
                       }
-                    : undefined
+                    : {
+                        backgroundColor: "#ffffff",
+                        borderColor: "#dbe5ee",
+                        boxShadow: "0 14px 34px -4px rgba(12, 43, 72, 0.12), 0 4px 14px rgba(12, 43, 72, 0.05)",
+                        transition: "background-color 0.4s ease, border-color 0.4s ease, transform 0.25s ease, box-shadow 0.25s ease",
+                      }
                 }
               >
                 <span
@@ -405,7 +419,7 @@ export default function ContactPage() {
                       : undefined
                   }
                 >
-                  {index === 2 ? "Get directions" : "Contact us"} <span aria-hidden="true">→</span>
+                  {index === 2 ? "Get directions" : index === 0 ? "Call now" : "Contact us"} <span aria-hidden="true">→</span>
                 </a>
               </ScrollReveal>
             );
