@@ -33,10 +33,10 @@ export default function Button({
   const hasTextSize = className.includes("text-");
 
   const classes = [
-    "group relative inline-flex items-center justify-center overflow-hidden rounded-full",
-    !hasMinH && "min-h-9 sm:min-h-11",
-    !hasPx && "px-4 sm:px-6",
-    !hasTextSize && "text-[11.5px] sm:text-sm",
+    "group relative inline-flex items-center justify-center overflow-hidden rounded-full touch-manipulation",
+    !hasMinH && "min-h-[44px] sm:min-h-11",
+    !hasPx && "px-4.5 sm:px-6",
+    !hasTextSize && "text-[12px] sm:text-sm",
     "font-bold transition-all duration-300",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)",
     "active:scale-95 active:opacity-85",

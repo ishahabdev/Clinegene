@@ -7,14 +7,13 @@ function LeadershipCard({ leader, index }) {
   const isImageLeft = index % 2 !== 0;
   
   return (
-    <ScrollReveal delay={index * 100}>
+    <ScrollReveal delay={index * 100} className="w-full max-w-full min-w-0">
       <article 
-        className="group relative overflow-hidden rounded-[20px] bg-white border border-slate-200 shadow-[0_20px_50px_-20px_rgba(10,35,66,0.18)] transition-all duration-300"
-        style={{ minHeight: '452px' }}
+        className="group relative w-full max-w-full min-w-0 box-border overflow-hidden rounded-[20px] bg-white border border-slate-200 shadow-[0_20px_50px_-20px_rgba(10,35,66,0.18)] transition-all duration-300 min-h-auto lg:min-h-[452px]"
       >
-        <div className={`relative grid gap-0 h-full ${isImageLeft ? 'lg:grid-cols-[40%_1fr]' : 'lg:grid-cols-[1fr_40%]'}`}>
+        <div className={`relative grid grid-cols-1 w-full max-w-full min-w-0 box-border gap-0 h-full ${isImageLeft ? 'lg:grid-cols-[40%_1fr]' : 'lg:grid-cols-[1fr_40%]'}`}>
           
-          <div className={`flex flex-col justify-center px-6 py-6 bg-white ${isImageLeft ? 'lg:col-start-2 lg:order-2 lg:pl-16 lg:pr-8' : 'lg:col-start-1 lg:order-1 lg:pr-16 lg:pl-8'}`}>
+          <div className={`flex flex-col justify-center w-full max-w-full min-w-0 box-border p-4.5 sm:p-6 bg-white ${isImageLeft ? 'lg:col-start-2 lg:order-2 lg:pl-16 lg:pr-8' : 'lg:col-start-1 lg:order-1 lg:pr-16 lg:pl-8'}`}>
             <div
               className="mb-2.5 inline-flex items-center gap-2 self-start rounded-full px-3 py-1.5 transition-colors"
               style={{ background: "var(--accent-soft)" }}
@@ -32,47 +31,63 @@ function LeadershipCard({ leader, index }) {
               </span>
             </div>
 
-            <h3 className="font-['Inter'] text-[28px] font-extrabold leading-tight text-[#0c2b48]">
+            <h3
+              className="font-['Inter'] font-extrabold text-[#0c2b48] break-words [overflow-wrap:anywhere]"
+              style={{
+                fontSize: "clamp(1.4rem, 6vw, 2rem)",
+                lineHeight: 1.2,
+              }}
+            >
               {leader.name}
             </h3>
 
             <p
-              className="mt-1.5 mb-2.5 text-[16px] font-semibold transition-colors"
-              style={{ color: "var(--accent)" }}
+              className="mt-1.5 mb-2.5 font-semibold transition-colors break-words [overflow-wrap:anywhere]"
+              style={{
+                color: "var(--accent)",
+                fontSize: "clamp(0.9rem, 3.8vw, 1.1rem)",
+                lineHeight: 1.35,
+              }}
             >
               {leader.role}
             </p>
 
-            <p className="text-[16px] leading-[1.7] text-[#334155] max-w-[56ch] mb-4">
+            <p
+              className="text-[#334155] max-w-full lg:max-w-[56ch] mb-4.5 break-words [overflow-wrap:anywhere]"
+              style={{
+                fontSize: "clamp(0.9rem, 3.6vw, 1rem)",
+                lineHeight: 1.6,
+              }}
+            >
               {leader.bio}
             </p>
 
-            <div className="flex flex-wrap gap-2.5">
+            <div className="flex flex-wrap items-center gap-2.5 w-full">
               <a
                 href={`mailto:${leader.email}`}
-                className="inline-flex items-center gap-2 rounded-full bg-black px-4.5 py-2.75 text-[14px] font-semibold text-white transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                className="inline-flex min-h-[44px] flex-1 sm:flex-initial min-w-[120px] items-center justify-center gap-2 rounded-full bg-black px-5 py-2.5 text-[14px] font-semibold text-white transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black touch-manipulation"
                 aria-label={`Email ${leader.name}`}
               >
-                <Mail className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
-                Email
+                <Mail className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" />
+                <span>Email</span>
               </a>
               <a
                 href={leader.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border-2 border-[#d4e5f2] bg-white px-4.5 py-2.75 text-[14px] font-semibold text-[#0c2b48] transition-all duration-300 hover:border-(--accent) hover:bg-(--accent) hover:text-white hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+                className="inline-flex min-h-[44px] flex-1 sm:flex-initial min-w-[120px] items-center justify-center gap-2 rounded-full border-2 border-[#d4e5f2] bg-white px-5 py-2.5 text-[14px] font-semibold text-[#0c2b48] transition-all duration-300 hover:border-(--accent) hover:bg-(--accent) hover:text-white hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) touch-manipulation"
                 aria-label={`View ${leader.name}'s LinkedIn profile`}
               >
-                <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg className="h-4 w-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
-                LinkedIn
+                <span>LinkedIn</span>
               </a>
             </div>
           </div>
 
-          <div className={`relative ${isImageLeft ? 'lg:col-start-1 lg:order-1' : 'lg:col-start-2 lg:order-2'}`}>
-            <div className="relative h-full w-full leadership-photo-wrapper" data-position={isImageLeft ? 'left' : 'right'}>
+          <div className={`relative w-full max-w-full min-w-0 ${isImageLeft ? 'lg:col-start-1 lg:order-1' : 'lg:col-start-2 lg:order-2'}`}>
+            <div className="relative h-full w-full min-h-[260px] sm:min-h-[340px] lg:min-h-[452px] aspect-[4/3] sm:aspect-[16/10] lg:aspect-auto leadership-photo-wrapper overflow-hidden" data-position={isImageLeft ? 'left' : 'right'}>
               <img
                 src={leader.image}
                 alt={leader.imageAlt}
@@ -95,7 +110,7 @@ function LeadershipCard({ leader, index }) {
 export default function LeadershipSection() {
   return (
     <section 
-      className="relative bg-white py-16 md:py-20 z-1"
+      className="relative bg-white pt-14 pb-24 sm:pt-16 sm:pb-20 md:py-20 z-1"
       id="leadership"
       aria-labelledby="leadership-title"
     >
@@ -147,18 +162,18 @@ export default function LeadershipSection() {
           z-index: 1;
         }
         
-        @media (max-width: 899px) {
+        @media (max-width: 1023px) {
           article {
             min-height: auto !important;
           }
           
           article > div {
-            grid-template-columns: 1fr !important;
+            grid-template-columns: 100% !important;
           }
           
           article > div > div:first-child {
             order: 2 !important;
-            padding: 1.5rem !important;
+            padding: 1.125rem !important;
           }
           
           article > div > div:last-child {
@@ -166,13 +181,13 @@ export default function LeadershipSection() {
           }
           
           article > div > div:last-child img {
-            aspect-ratio: 4 / 3 !important;
+            aspect-ratio: 16 / 10 !important;
             height: auto !important;
           }
           
           .leadership-photo-wrapper::after,
           .leadership-photo-wrapper::before {
-            display: none;
+            display: none !important;
           }
         }
       `}</style>

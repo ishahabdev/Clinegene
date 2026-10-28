@@ -1,4 +1,4 @@
-import { ArrowRight, Users, Award, TrendingUp, Dna, Lightbulb, Check, ShieldCheck, FileText, Compass, Package } from "lucide-react";
+import { ArrowRight, Users, Award, TrendingUp, Dna, Lightbulb, Check, ShieldCheck, FileText, Compass } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import promiseImage from "../assets/about us/promise.png";
@@ -225,26 +225,29 @@ export default function AboutPage() {
             <ScrollReveal delay={300}>
               <div className="relative mx-auto max-w-120">
                 {/* Main Image */}
-                <div className="relative overflow-hidden rounded-3xl shadow-[0_20px_60px_rgba(15,23,42,0.12)]">
+                <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-[0_20px_60px_rgba(15,23,42,0.12)] min-h-[260px] sm:min-h-[280px]">
                   <img
                     src={injectionImage}
                     alt="Genetic testing laboratory professional handling sample"
-                    className="w-full h-auto object-cover aspect-video"
+                    className="w-full h-full min-h-[260px] sm:min-h-[280px] object-cover aspect-[4/3] sm:aspect-video"
                     loading="lazy"
                   />
                 </div>
 
-                {/* Floating Badge - Compact & shifted further right */}
-                <div className="absolute top-1/2 -translate-y-1/2 -right-4 sm:-right-8 lg:-right-12 xl:-right-16 bg-white rounded-2xl shadow-[0_20px_50px_rgba(15,23,42,0.18)] p-3.5 sm:p-4 w-48.75 sm:w-53.75 z-10 transition-all">
-                  <div className="flex flex-col items-center text-center gap-2 sm:gap-2.5">
-                    <div className="shrink-0 h-10 w-10 sm:h-11 sm:w-11 rounded-full flex items-center justify-center shadow-md" style={{ background: "linear-gradient(135deg, var(--accent), var(--accent-dark))" }}>
-                      <Dna className="h-5 w-5 sm:h-5.5 sm:w-5.5 text-white" strokeWidth={2} />
+                {/* Floating Badge - Responsive corner positioning on mobile/tablet, right-overlap on desktop */}
+                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 lg:-right-12 xl:-right-16 bg-white rounded-[16px] sm:rounded-2xl shadow-[0_16px_40px_rgba(15,23,42,0.18)] p-3 sm:p-3.5 lg:p-4 w-fit max-w-[58%] sm:max-w-[50%] lg:max-w-none lg:w-48.75 xl:w-53.75 z-10 transition-all">
+                  <div className="flex flex-col items-center text-center gap-1.5 sm:gap-2 lg:gap-2.5">
+                    <div
+                      className="shrink-0 h-8.5 w-8.5 sm:h-9.5 sm:w-9.5 lg:h-11 lg:w-11 rounded-full flex items-center justify-center shadow-md transition-all"
+                      style={{ background: "linear-gradient(135deg, var(--accent), var(--accent-dark))" }}
+                    >
+                      <Dna className="h-4 w-4 sm:h-4.5 sm:w-4.5 lg:h-5.5 lg:w-5.5 text-white" strokeWidth={2} />
                     </div>
                     <div>
-                      <h3 className="font-['Inter'] text-[13.5px] sm:text-[14.5px] font-bold text-[#0c2b48] leading-tight mb-0.5 sm:mb-1">
+                      <h3 className="font-['Inter'] text-[13px] sm:text-[13.5px] lg:text-[14.5px] font-bold text-[#0c2b48] leading-tight mb-0.5 sm:mb-1">
                         Advanced<br />Genetic Solutions
                       </h3>
-                      <p className="text-[11px] sm:text-[12px] text-[#94a3b8] leading-relaxed">
+                      <p className="text-[10.5px] sm:text-[11px] lg:text-[12px] text-[#94a3b8] leading-tight sm:leading-relaxed">
                         From diagnosis to<br />personalized care
                       </p>
                     </div>
@@ -273,7 +276,7 @@ export default function AboutPage() {
         <div className="site-container">
           <ScrollReveal delay={150}>
             <div
-              className="relative isolate overflow-hidden rounded-3xl p-6 sm:p-8 lg:p-10 transition-all duration-500 flex flex-col md:flex-row items-center gap-6 lg:gap-10 shadow-2xl"
+              className="relative isolate overflow-hidden rounded-3xl px-5 pt-12 pb-24 sm:p-8 lg:p-10 transition-all duration-500 flex flex-col md:flex-row items-center gap-5 sm:gap-6 lg:gap-10 shadow-2xl w-full max-w-full min-w-0 box-border"
               style={{
                 background: isRed
                   ? "linear-gradient(135deg, #320408 0%, #4f080e 50%, #200305 100%)"
@@ -288,6 +291,19 @@ export default function AboutPage() {
                     : "0 20px 50px rgba(2, 36, 56, 0.35)",
               }}
             >
+              {/* Subtle radial highlight behind photo for mobile depth */}
+              <div
+                className="pointer-events-none absolute inset-0 -z-0 opacity-80"
+                style={{
+                  background: isRed
+                    ? "radial-gradient(circle at 50% 18%, rgba(255, 60, 60, 0.18), transparent 60%)"
+                    : isGreen
+                      ? "radial-gradient(circle at 50% 18%, rgba(16, 185, 129, 0.18), transparent 60%)"
+                      : "radial-gradient(circle at 50% 18%, rgba(18, 197, 223, 0.18), transparent 60%)",
+                }}
+                aria-hidden="true"
+              />
+
               {/* Subtle ambient theme glow in the card */}
               <div
                 className="pointer-events-none absolute -right-10 -bottom-10 h-64 w-64 rounded-full blur-3xl opacity-25"
@@ -297,38 +313,43 @@ export default function AboutPage() {
 
               {/* Photo Frame */}
               <div
-                className="shrink-0 relative w-32 h-32 sm:w-36 sm:h-36 lg:w-40 lg:h-40 rounded-2xl overflow-hidden shadow-xl border-2 transition-all duration-500"
+                className="shrink-0 relative w-[clamp(150px,42vw,190px)] aspect-[1/1.1] md:w-36 md:h-36 lg:w-40 lg:h-40 md:aspect-square rounded-[20px] md:rounded-2xl overflow-hidden border-2 transition-all duration-500 mt-1 md:mt-0"
                 style={{
                   borderColor: isRed ? "#ef4444" : isGreen ? "#10b981" : "var(--accent)",
-                  boxShadow: isRed
-                    ? "0 8px 24px rgba(239, 68, 68, 0.3)"
-                    : isGreen
-                      ? "0 8px 24px rgba(16, 185, 129, 0.3)"
-                      : "0 8px 24px rgba(18, 197, 223, 0.3)",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
                 }}
               >
                 <img
                   src={amjadAli}
                   alt="Dr. Amjad Ali Tanoli Ph.D - CEO"
-                  className="w-full h-full object-cover object-[center_20%]"
+                  className="w-full h-full object-cover object-[top_center] md:object-[center_20%]"
                 />
               </div>
 
               {/* Content */}
-              <div className="flex-1 text-center md:text-left text-white z-10">
-                <div className="inline-flex items-center gap-2 mb-2.5">
+              <div className="flex-1 w-full max-w-full min-w-0 text-center md:text-left text-white z-10 flex flex-col items-center md:items-start">
+                {/* Label */}
+                <div className="inline-flex items-center gap-2 mb-3">
                   <span
-                    className="h-0.5 w-6 transition-colors"
+                    className="h-0.5 w-[26px] transition-colors"
                     style={{ backgroundColor: isRed ? "#ef4444" : "var(--accent)" }}
                   />
                   <span
-                    className="text-[11px] font-bold uppercase tracking-[0.22em] transition-colors"
+                    className="text-[12px] font-bold uppercase tracking-[0.18em] transition-colors"
                     style={{ color: isRed ? "#ef4444" : "var(--accent)" }}
                   >
                     Founder &amp; CEO
                   </span>
                 </div>
-                <h3 className="font-['Outfit',sans-serif] text-[22px] sm:text-[26px] font-bold leading-tight text-white">
+
+                {/* Heading */}
+                <h3
+                  className="font-['Outfit',sans-serif] font-bold text-white mb-4 [text-wrap:balance]"
+                  style={{
+                    fontSize: "clamp(1.5rem, 6.4vw, 1.85rem)",
+                    lineHeight: 1.2,
+                  }}
+                >
                   “Advancing Science for a{" "}
                   <span
                     style={{
@@ -339,26 +360,43 @@ export default function AboutPage() {
                     Healthier Tomorrow
                   </span>”
                 </h3>
-                <p className="mt-2.5 text-sm sm:text-base text-slate-200 max-w-2xl leading-relaxed">
+
+                {/* Quote */}
+                <p
+                  className="text-white/85 max-w-[34ch] md:max-w-2xl leading-[1.7] [text-wrap:pretty] [hyphens:auto] mx-auto md:mx-0 mb-5 font-['Inter',sans-serif]"
+                  style={{
+                    fontSize: "clamp(0.92rem, 3.8vw, 1.02rem)",
+                  }}
+                >
                   “At ClinGene, we are committed to bridging the gap between cutting-edge science and real-world impact, training the next generation of researchers to enhance global advancements in genetics.”
                 </p>
-                <div className="mt-3.5 flex items-center justify-center md:justify-start gap-4">
-                  <div>
-                    <div className="font-['Outfit',sans-serif] text-[15px] font-bold text-white">
-                      Dr. Amjad Ali Tanoli Ph.D
-                    </div>
-                    <div
-                      className="text-xs font-semibold transition-colors mt-0.5"
-                      style={{ color: isRed ? "#fca5a5" : isGreen ? "#86efac" : "var(--accent)" }}
-                    >
-                      Human Geneticist &amp; Consultant Genetic Counselor
-                    </div>
+
+                {/* Name & Designation Block */}
+                <div className="w-full pt-4 border-t border-white/15 md:border-t-0 md:pt-0 flex flex-col items-center md:items-start">
+                  <div
+                    className="font-['Outfit',sans-serif] font-bold text-white tracking-wide"
+                    style={{ fontSize: "clamp(1.05rem, 4.6vw, 1.2rem)" }}
+                  >
+                    Dr. Amjad Ali Tanoli Ph.D
+                  </div>
+                  <div
+                    className="mt-1 font-semibold transition-colors px-2 text-center md:text-left break-words"
+                    style={{
+                      color: isRed ? "#fca5a5" : isGreen ? "#86efac" : "var(--accent)",
+                      fontSize: "clamp(0.8rem, 3.4vw, 0.9rem)",
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    <span>Human Geneticist</span>
+                    <span className="hidden sm:inline"> &amp; </span>
+                    <br className="sm:hidden" />
+                    <span>Consultant Genetic Counselor</span>
                   </div>
                 </div>
               </div>
 
               {/* Action Button */}
-              <div className="shrink-0 z-10">
+              <div className="shrink-0 z-10 mt-6 md:mt-0">
                 <Button href="/ceo-message" className="px-6">
                   CEO Message <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -568,10 +606,10 @@ export default function AboutPage() {
         style={{ '--dark': whyDark }}
       >
         <div className="relative site-container">
-          <div className="grid grid-cols-1 items-center gap-10 min-[900px]:grid-cols-12 min-[900px]:gap-10 xl:gap-12">
+          <div className="grid grid-cols-1 items-center min-[900px]:items-stretch gap-10 min-[900px]:grid-cols-12 min-[900px]:gap-10 xl:gap-12">
 
             {/* LEFT COLUMN: Why Choose Us info & checklist */}
-            <div className="min-[900px]:col-span-5">
+            <div className="min-[900px]:col-span-5 min-[900px]:self-center">
               <ScrollReveal delay={100}>
                 <div>
                   <span
@@ -640,7 +678,7 @@ export default function AboutPage() {
 
             {/* MIDDLE COLUMN: Character Portrait with Floating Badge */}
             <div className="min-[900px]:col-span-4 flex justify-center">
-              <ScrollReveal delay={180}>
+              <ScrollReveal delay={180} className="w-full">
                 <div className="relative mx-auto w-full max-w-[320px] sm:max-w-[360px] min-[900px]:max-w-none">
                   {/* Portrait Card with theme-adaptive tint overlay and filter */}
                   <div className="relative aspect-[4/5] min-[900px]:aspect-[3/4.2] min-[900px]:min-h-[490px] w-full overflow-hidden rounded-[28px] sm:rounded-3xl border border-slate-100/80 bg-slate-100 shadow-[0_16px_40px_rgba(12,43,72,0.1)]">
@@ -679,75 +717,51 @@ export default function AboutPage() {
             </div>
 
             {/* RIGHT COLUMN: Quality & Compliance & Expert Guidance Card */}
-            <div className="min-[900px]:col-span-3 w-full max-[899px]:mt-6">
-              <ScrollReveal delay={250}>
+            <div className="min-[900px]:col-span-3 w-full max-[899px]:mt-6 flex justify-center min-[900px]:h-full">
+              <ScrollReveal delay={250} className="w-full max-w-[340px] min-[900px]:max-w-none min-[900px]:h-full flex flex-col">
                 <div
-                  className="w-full rounded-[26px] sm:rounded-3xl p-6 sm:p-7 shadow-[0_12px_32px_rgba(0,0,0,0.15)] border border-white/10 transition-colors duration-400"
+                  className="w-full min-[900px]:h-full min-[900px]:min-h-[490px] rounded-[24px] sm:rounded-3xl p-6 sm:p-7 xl:p-8 shadow-[0_12px_32px_rgba(0,0,0,0.15)] border border-white/10 transition-colors duration-400 flex flex-col justify-between"
                   style={{ backgroundColor: whyDark }}
                 >
                   {/* Block 1: Registered & Compliant */}
-                  <div className="group">
+                  <div className="group flex-1 flex flex-col justify-center">
                     <div className="flex items-center gap-3.5">
                       <div
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border shadow-xs transition-all duration-300 group-hover:-translate-y-[3px] group-hover:rotate-[-5deg]"
+                        className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl border shadow-xs transition-all duration-300 group-hover:-translate-y-[2px]"
                         style={{ backgroundColor: whyTileBg, borderColor: whyTileBorder }}
                       >
-                        <ShieldCheck className="h-[22px] w-[22px] transition-colors duration-400" stroke={whyIconAccent} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                        <ShieldCheck className="h-5 w-5 sm:h-5.5 sm:w-5.5 transition-colors duration-400" stroke={whyIconAccent} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
                       </div>
-                      <h3 className="font-['Poppins',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#f1f7fb]">
+                      <h3 className="font-['Poppins',sans-serif] text-[16px] sm:text-[17px] font-bold text-[#f1f7fb] leading-tight">
                         Registered &amp; Compliant
                       </h3>
                     </div>
-                    <p className="mt-3.5 text-[14px] sm:text-[14.5px] leading-[1.65] text-[#9db3c6] text-pretty">
-                      ClinGene (SMC-Private) Limited is incorporated with SECP and registered with the Federal Board of Revenue (FBR).
+                    <p className="mt-3 text-[12.5px] sm:text-[13px] leading-[1.65] text-[#9db3c6] text-pretty">
+                      ClinGene (SMC-Private) Limited is incorporated with SECP and registered with the Federal Board of Revenue (FBR), adhering to stringent quality benchmarks and standardized laboratory workflows.
                     </p>
                   </div>
 
                   {/* Divider line */}
                   <div
-                    className="my-5 border-t"
+                    className="my-4 sm:my-5 border-t"
                     style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
                   />
 
                   {/* Block 2: Expert Guidance */}
-                  <div className="group">
+                  <div className="group flex-1 flex flex-col justify-center">
                     <div className="flex items-center gap-3.5">
                       <div
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border shadow-xs transition-all duration-300 group-hover:-translate-y-[3px] group-hover:rotate-[-5deg]"
+                        className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl border shadow-xs transition-all duration-300 group-hover:-translate-y-[2px]"
                         style={{ backgroundColor: whyTileBg, borderColor: whyTileBorder }}
                       >
-                        <Compass className="h-[22px] w-[22px] transition-colors duration-400" stroke={whyIconAccent} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                        <Compass className="h-5 w-5 sm:h-5.5 sm:w-5.5 transition-colors duration-400" stroke={whyIconAccent} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
                       </div>
-                      <h3 className="font-['Poppins',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#f1f7fb]">
+                      <h3 className="font-['Poppins',sans-serif] text-[16px] sm:text-[17px] font-bold text-[#f1f7fb] leading-tight">
                         Expert Guidance
                       </h3>
                     </div>
-                    <p className="mt-3.5 text-[14px] sm:text-[14.5px] leading-[1.65] text-[#9db3c6] text-pretty">
-                      Our team supports you at every step, from planning your project to understanding your results.
-                    </p>
-                  </div>
-
-                  {/* Divider line */}
-                  <div
-                    className="my-5 border-t"
-                    style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
-                  />
-
-                  {/* Block 3: Sample Support */}
-                  <div className="group">
-                    <div className="flex items-center gap-3.5">
-                      <div
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border shadow-xs transition-all duration-300 group-hover:-translate-y-[3px] group-hover:rotate-[-5deg]"
-                        style={{ backgroundColor: whyTileBg, borderColor: whyTileBorder }}
-                      >
-                        <Package className="h-[22px] w-[22px] transition-colors duration-400" stroke={whyIconAccent} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                      </div>
-                      <h3 className="font-['Poppins',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#f1f7fb]">
-                        Sample Support
-                      </h3>
-                    </div>
-                    <p className="mt-3.5 text-[14px] sm:text-[14.5px] leading-[1.65] text-[#9db3c6] text-pretty">
-                      Contact us before sending samples and we will guide you on packaging, storage and shipping requirements.
+                    <p className="mt-3 text-[12.5px] sm:text-[13px] leading-[1.65] text-[#9db3c6] text-pretty">
+                      Our multidisciplinary scientific team supports you at every step—from experimental design and sample preparation protocols to high-throughput sequencing and accurate data interpretation.
                     </p>
                   </div>
                 </div>

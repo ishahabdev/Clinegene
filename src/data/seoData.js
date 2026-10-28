@@ -7,15 +7,17 @@
 export const BASE_URL = "https://www.clingene.co";
 export const COMPANY_NAME = "ClinGene (SMC-Private) Limited";
 export const COMPANY_EMAIL = "info@clingene.co";
+export const COMPANY_PHONE = "+923485607051";
 export const COMPANY_LOCATION = "Islamabad, Pakistan";
 export const DEFAULT_OG_IMAGE = `${BASE_URL}/images/og-image.jpg`;
 
 export const ORGANIZATION_SCHEMA = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["MedicalOrganization", "ResearchOrganization"],
   "@id": `${BASE_URL}/#organization`,
-  name: "ClinGene (SMC-Private) Limited",
-  alternateName: ["ClinGene Pakistan", "ClinGene Genomics", "ClinGene"],
+  name: "ClinGene",
+  legalName: "ClinGene (SMC-Private) Limited",
+  alternateName: ["ClinGene Pakistan", "ClinGene Genomics", "ClinGene Lab"],
   url: BASE_URL,
   logo: {
     "@type": "ImageObject",
@@ -25,12 +27,30 @@ export const ORGANIZATION_SCHEMA = {
   },
   image: DEFAULT_OG_IMAGE,
   email: COMPANY_EMAIL,
+  telephone: COMPANY_PHONE,
   description:
-    "ClinGene provides genetic testing, sequencing and bioinformatics services for researchers, clinicians and industry partners in Pakistan.",
+    "ClinGene is a pioneer in life sciences, clinical genetic testing, Sanger sequencing, next-generation sequencing (NGS), and bioinformatics services in Islamabad, Pakistan.",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Islamabad",
+    addressRegion: "Islamabad Capital Territory",
     addressCountry: "PK",
+  },
+  knowsAbout: [
+    "Human Genetics",
+    "Clinical Genetic Testing",
+    "Sanger Sequencing",
+    "Whole Exome Sequencing",
+    "Whole Genome Sequencing",
+    "Next Generation Sequencing",
+    "Bioinformatics Analysis",
+    "RNA Sequencing",
+    "Metagenomics",
+    "Precision Medicine"
+  ],
+  areaServed: {
+    "@type": "Country",
+    name: "Pakistan",
   },
 };
 
@@ -39,29 +59,97 @@ export const WEBSITE_SCHEMA = {
   "@type": "WebSite",
   "@id": `${BASE_URL}/#website`,
   url: BASE_URL,
-  name: "ClinGene Pakistan",
-  description: "Advancing precision medicine, genetic testing and genomic research in Pakistan.",
+  name: "ClinGene",
+  alternateName: ["ClinGene Pakistan", "ClinGene (SMC-Private) Limited"],
+  description: "Pioneer in life sciences, clinical genetic testing, DNA sequencing and genomics research in Pakistan.",
   publisher: {
     "@id": `${BASE_URL}/#organization`,
   },
   inLanguage: "en",
 };
 
+export const SITELINKS_NAV_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${BASE_URL}/#sitelinks-navigation`,
+  name: "ClinGene Main Sitelinks",
+  description: "Primary site hierarchy and navigational directories of ClinGene Pakistan.",
+  itemListElement: [
+    {
+      "@type": "SiteNavigationElement",
+      position: 1,
+      name: "About ClinGene",
+      description: "Life sciences research, mission, and regulatory compliance in Islamabad, Pakistan",
+      url: `${BASE_URL}/about`,
+    },
+    {
+      "@type": "SiteNavigationElement",
+      position: 2,
+      name: "Genomic Services",
+      description: "Comprehensive genetic testing, Sanger sequencing, NGS, and bioinformatics solutions",
+      url: `${BASE_URL}/services`,
+    },
+    {
+      "@type": "SiteNavigationElement",
+      position: 3,
+      name: "Clinical Genetic Testing",
+      description: "Diagnostic and carrier screening for inherited and rare genetic conditions in Pakistan",
+      url: `${BASE_URL}/services/clinical-genetic-testing`,
+    },
+    {
+      "@type": "SiteNavigationElement",
+      position: 4,
+      name: "Sanger Sequencing",
+      description: "Gold-standard Sanger DNA sequencing for mutation analysis and variant confirmation",
+      url: `${BASE_URL}/services/sanger-sequencing`,
+    },
+    {
+      "@type": "SiteNavigationElement",
+      position: 5,
+      name: "Whole Genome Sequencing",
+      description: "High-throughput whole exome and whole genome sequencing for clinical and research applications",
+      url: `${BASE_URL}/services/whole-exome-genome-sequencing`,
+    },
+    {
+      "@type": "SiteNavigationElement",
+      position: 6,
+      name: "Scientific Team",
+      description: "Meet our board of directors, clinical geneticists, molecular biologists, and bioinformaticians",
+      url: `${BASE_URL}/team`,
+    },
+    {
+      "@type": "SiteNavigationElement",
+      position: 7,
+      name: "Research Insights",
+      description: "Genomics research, academic collaborations, and precision medicine insights",
+      url: `${BASE_URL}/research`,
+    },
+    {
+      "@type": "SiteNavigationElement",
+      position: 8,
+      name: "Contact Lab",
+      description: "Specimen receiving, test requisitions, sample storage, and laboratory consultations in Islamabad",
+      url: `${BASE_URL}/contact`,
+    },
+  ],
+};
+
 export const seoRoutes = {
   "/": {
-    title: "ClinGene | Genetic Testing & Genomics Services in Pakistan",
+    title: "ClinGene | Pioneer in Life Sciences & Genetic Testing in Pakistan",
     description:
-      "ClinGene provides genetic testing, sequencing and bioinformatics services for researchers, clinicians and industry partners in Pakistan.",
+      "ClinGene provides genetic testing, Sanger sequencing, NGS, and bioinformatics services for researchers, clinicians and industry partners in Islamabad, Pakistan.",
     canonical: `${BASE_URL}/`,
     ogType: "website",
     schema: [
       ORGANIZATION_SCHEMA,
       WEBSITE_SCHEMA,
+      SITELINKS_NAV_SCHEMA,
     ],
   },
 
   "/about": {
-    title: "About Us | ClinGene",
+    title: "About ClinGene | Life Sciences Research in Islamabad, Pakistan",
     description:
       "Learn about ClinGene's mission to advance life sciences in Pakistan through precision genetic testing, applied research, and registered laboratory services.",
     canonical: `${BASE_URL}/about`,
@@ -72,7 +160,7 @@ export const seoRoutes = {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
-          { "@type": "ListItem", position: 2, name: "About Us", item: `${BASE_URL}/about` },
+          { "@type": "ListItem", position: 2, name: "About ClinGene", item: `${BASE_URL}/about` },
         ],
       },
       {
@@ -86,7 +174,7 @@ export const seoRoutes = {
   },
 
   "/services": {
-    title: "Services | ClinGene",
+    title: "Comprehensive Genomic Solutions & Genetic Testing | ClinGene",
     description:
       "Explore 12 specialized genomic services in Pakistan: clinical genetic testing, Sanger sequencing, WES/WGS, RNA-seq, metagenomics, and molecular dynamics.",
     canonical: `${BASE_URL}/services`,
@@ -97,14 +185,14 @@ export const seoRoutes = {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
-          { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
+          { "@type": "ListItem", position: 2, name: "Genomic Services", item: `${BASE_URL}/services` },
         ],
       },
     ],
   },
 
   "/team": {
-    title: "Our Team | ClinGene",
+    title: "Our Scientific Team & Geneticists | ClinGene",
     description:
       "Meet ClinGene's board of directors, clinical geneticists, molecular biologists, and bioinformaticians advancing genomic science in Islamabad, Pakistan.",
     canonical: `${BASE_URL}/team`,
@@ -115,14 +203,14 @@ export const seoRoutes = {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
-          { "@type": "ListItem", position: 2, name: "Team", item: `${BASE_URL}/team` },
+          { "@type": "ListItem", position: 2, name: "Scientific Team", item: `${BASE_URL}/team` },
         ],
       },
     ],
   },
 
   "/ceo-message": {
-    title: "CEO Message | ClinGene",
+    title: "CEO Message | ClinGene (SMC-Private) Limited",
     description:
       "Read the CEO message from Dr. Amjad Ali Tanoli on building Pakistan's genomic medicine ecosystem and training the next generation of researchers.",
     canonical: `${BASE_URL}/ceo-message`,
@@ -140,9 +228,9 @@ export const seoRoutes = {
   },
 
   "/contact": {
-    title: "Contact Us | ClinGene",
+    title: "Contact ClinGene | Specimen Receiving & Lab in Islamabad",
     description:
-      "Get in touch with ClinGene in Islamabad, Pakistan. Requisitions, sample shipments, quotes, research inquiries, and collaboration opportunities.",
+      "Contact ClinGene in Islamabad, Pakistan. Sample shipments, requisitions, pricing quotes, research inquiries, and genetic testing consultations.",
     canonical: `${BASE_URL}/contact`,
     ogType: "website",
     schema: [
@@ -151,7 +239,7 @@ export const seoRoutes = {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
-          { "@type": "ListItem", position: 2, name: "Contact", item: `${BASE_URL}/contact` },
+          { "@type": "ListItem", position: 2, name: "Contact ClinGene", item: `${BASE_URL}/contact` },
         ],
       },
       {
@@ -164,7 +252,7 @@ export const seoRoutes = {
   },
 
   "/careers": {
-    title: "Careers | ClinGene",
+    title: "Careers & Open Positions | ClinGene Pakistan",
     description:
       "Join ClinGene's research community. Explore job openings, research fellowships, and internship opportunities in molecular biology and bioinformatics.",
     canonical: `${BASE_URL}/careers`,
@@ -182,7 +270,7 @@ export const seoRoutes = {
   },
 
   "/open-positions": {
-    title: "Open Positions | ClinGene",
+    title: "Careers & Open Positions | ClinGene Pakistan",
     description:
       "Join ClinGene's research community. Explore job openings, research fellowships, and internship opportunities in molecular biology and bioinformatics.",
     canonical: `${BASE_URL}/careers`,
@@ -191,9 +279,9 @@ export const seoRoutes = {
   },
 
   "/research": {
-    title: "Research | ClinGene",
+    title: "Genomics Research & Precision Medicine Insights | ClinGene",
     description:
-      "Discover ClinGene's research initiatives in population genomics, rare genetic disorders, and academic-industry scientific partnerships in Pakistan.",
+      "Explore ClinGene's genomics research, biomedical collaborations, and scientific publications advancing precision medicine in Pakistan.",
     canonical: `${BASE_URL}/research`,
     ogType: "website",
     schema: [
@@ -202,7 +290,7 @@ export const seoRoutes = {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
-          { "@type": "ListItem", position: 2, name: "Research", item: `${BASE_URL}/research` },
+          { "@type": "ListItem", position: 2, name: "Research Insights", item: `${BASE_URL}/research` },
         ],
       },
     ],
@@ -255,7 +343,7 @@ export const seoRoutes = {
 
   // ─── 12 Service Detail Pages ───
   "/services/clinical-genetic-testing": {
-    title: "Clinical Genetic Testing | ClinGene",
+    title: "Clinical Genetic Testing in Pakistan | ClinGene",
     description:
       "Diagnostic and carrier genetic testing in Pakistan for inherited disorders. Interpreted reports with variant classification by certified geneticists.",
     canonical: `${BASE_URL}/services/clinical-genetic-testing`,
@@ -266,7 +354,7 @@ export const seoRoutes = {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
-          { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
+          { "@type": "ListItem", position: 2, name: "Genomic Services", item: `${BASE_URL}/services` },
           { "@type": "ListItem", position: 3, name: "Clinical Genetic Testing", item: `${BASE_URL}/services/clinical-genetic-testing` },
         ],
       },
@@ -284,7 +372,7 @@ export const seoRoutes = {
   },
 
   "/services/sanger-sequencing": {
-    title: "Sanger Sequencing | ClinGene",
+    title: "Sanger & DNA Sequencing Services in Pakistan | ClinGene",
     description:
       "High-accuracy Sanger DNA sequencing in Pakistan for PCR products and plasmids. Forward and reverse reads with quality-checked chromatograms (.ab1).",
     canonical: `${BASE_URL}/services/sanger-sequencing`,
@@ -295,7 +383,7 @@ export const seoRoutes = {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
-          { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
+          { "@type": "ListItem", position: 2, name: "Genomic Services", item: `${BASE_URL}/services` },
           { "@type": "ListItem", position: 3, name: "Sanger Sequencing", item: `${BASE_URL}/services/sanger-sequencing` },
         ],
       },
@@ -313,7 +401,7 @@ export const seoRoutes = {
   },
 
   "/services/whole-exome-genome-sequencing": {
-    title: "Whole Exome / Genome Sequencing | ClinGene",
+    title: "Whole Genome & Exome Sequencing in Pakistan | ClinGene",
     description:
       "Comprehensive Whole Exome and Whole Genome Sequencing in Pakistan. FASTQ, BAM, VCF variant calling, and clinical trio annotation for rare diseases.",
     canonical: `${BASE_URL}/services/whole-exome-genome-sequencing`,

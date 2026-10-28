@@ -113,7 +113,7 @@ export default function HeroSection() {
 
           {/* ── Heading ──────────────────────────────────────────────── */}
           <h1
-            className="max-w-147.5 text-[28px] sm:text-[38px] md:text-[44px] lg:text-[44px] font-bold leading-[1.14] tracking-tight"
+            className="max-w-147.5 text-[clamp(28px,4.5vw+8px,46px)] font-bold leading-[1.15] tracking-tight"
             id="hero-title"
           >
             Advancing Human Genetics &amp; Precision Medicine
@@ -137,13 +137,13 @@ export default function HeroSection() {
           {/* ── CTA buttons ──────────────────────────────────────────── */}
           <div className="mt-7 flex flex-wrap gap-3">
             {/* Primary button — fill uses --accent-btn-bg (dark maroon on red) */}
-            <Button className="px-6" href="/research">
+            <Button className="min-h-[44px] px-6" href="/research">
               Explore Our Research <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Button>
 
             {/* Secondary button — transparent outline, white text */}
             <Button
-              className="px-6"
+              className="min-h-[44px] px-6"
               href="/services"
               variant="transparent"
               style={{

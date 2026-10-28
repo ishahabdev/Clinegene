@@ -84,7 +84,7 @@ export default function TeamSection() {
               </div>
               <a
                 aria-label={`View ${name}`}
-                className="mt-auto grid h-10 w-10 place-items-center rounded-full border transition-all duration-500 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
+                className="mt-auto grid h-11 w-11 min-h-[44px] min-w-[44px] place-items-center rounded-full border transition-all duration-500 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] touch-manipulation"
                 href="/team"
                 style={{
                   borderColor: "color-mix(in srgb, var(--accent) 60%, transparent)",

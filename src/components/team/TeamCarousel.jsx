@@ -3,7 +3,67 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 // Calculate stacked overlapping position for 5-card deck layout
 function getCardTransform(offset, stageWidth) {
-  // Wider horizontal spacing for excellent visibility (180-210px)
+  const isMobile = stageWidth < 640;
+  
+  if (isMobile) {
+    // Mobile: tighter spread so neighbouring cards peek in by ~45-60px from the edges
+    const baseOffset = Math.round(Math.min(stageWidth * 0.76, 280));
+    const mobilePositions = {
+      0: {
+        x: 0,
+        y: 0,
+        rotate: 0,
+        rotateY: 0,
+        scale: 1,
+        opacity: 1,
+        zIndex: 50,
+        blur: 0,
+      },
+      1: {
+        x: baseOffset,
+        y: 6,
+        rotate: 2,
+        rotateY: -8,
+        scale: 0.95,
+        opacity: 0.8,
+        zIndex: 40,
+        blur: 0,
+      },
+      '-1': {
+        x: -baseOffset,
+        y: 6,
+        rotate: -2,
+        rotateY: 8,
+        scale: 0.95,
+        opacity: 0.8,
+        zIndex: 40,
+        blur: 0,
+      },
+      2: {
+        x: baseOffset * 1.85,
+        y: 14,
+        rotate: 4,
+        rotateY: -12,
+        scale: 0.88,
+        opacity: 0.35,
+        zIndex: 30,
+        blur: 0,
+      },
+      '-2': {
+        x: -baseOffset * 1.85,
+        y: 14,
+        rotate: -4,
+        rotateY: 12,
+        scale: 0.88,
+        opacity: 0.35,
+        zIndex: 30,
+        blur: 0,
+      },
+    };
+    return mobilePositions[offset] || { x: baseOffset * 2.5, y: 24, rotate: 6, rotateY: -16, scale: 0.75, opacity: 0, zIndex: 10, blur: 0.5 };
+  }
+
+  // Wider horizontal spacing for excellent visibility on desktop (180-210px)
   const baseOffset = Math.min(Math.max(stageWidth * 0.26, 180), 210);
   
   // Stacked deck with wider spread and less vertical offset
@@ -81,9 +141,10 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
 
   return (
     <div
-      className="absolute left-1/2 top-1/2 w-[min(340px,88vw)] transition-all duration-650 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+      className="absolute left-1/2 top-1/2 w-[min(320px,84vw)] sm:w-[min(340px,88vw)] transition-all duration-650 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
       style={{
-        transform: `translate(-50%, -50%) translate(${transform.x}px, ${transform.y}px) rotateZ(${transform.rotate}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
+        transform: `translate3d(-50%, -50%, 0) translate3d(${transform.x}px, ${transform.y}px, 0) rotateZ(${transform.rotate}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
+        willChange: 'transform, opacity',
         opacity: transform.opacity,
         zIndex: transform.zIndex,
         filter: `blur(${transform.blur}px)`,
@@ -93,12 +154,12 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
       onClick={onClick}
     >
       <article
-        className={`relative overflow-hidden rounded-2xl transition-all duration-500 ${
+        className={`relative overflow-hidden rounded-[16px] sm:rounded-2xl transition-all duration-500 ${
           Math.abs(offset) > 0 ? 'cursor-pointer' : 'cursor-default'
         } ${
           isActive
-            ? 'border-2 shadow-[0_10px_30px_rgba(15,23,42,0.15)]'
-            : 'bg-white border-2 border-[#e2e8f0] shadow-[0_10px_30px_rgba(15,23,42,0.12)] hover:shadow-[0_15px_40px_rgba(15,23,42,0.18)] hover:-translate-y-1'
+            ? 'border sm:border-2 shadow-[0_8px_24px_rgba(0,0,0,0.12)] sm:shadow-[0_10px_30px_rgba(15,23,42,0.15)]'
+            : 'bg-white border sm:border-2 border-[#e2e8f0] shadow-[0_8px_24px_rgba(0,0,0,0.08)] sm:shadow-[0_10px_30px_rgba(15,23,42,0.12)] hover:shadow-[0_15px_40px_rgba(15,23,42,0.18)] hover:-translate-y-1'
         }`}
         style={isActive ? { borderColor: "var(--card-active-border, var(--accent))" } : undefined}
       >
@@ -109,19 +170,15 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
 
         {/* Card Content */}
         <div className="relative z-10">
-          {/* Header Section with Full Image - Increased height for fuller picture */}
-          <div className="relative h-64 overflow-hidden bg-white">
-            {/* Profile Image - Full Header, Focused on Face */}
+          {/* Header Section with Profile Photo */}
+          <div className="relative h-[clamp(200px,54vw,240px)] sm:h-64 overflow-hidden bg-white">
+            {/* Profile Image - Focused on Face */}
             {member.image ? (
               <div className="absolute inset-0">
                 <img 
                   src={member.image} 
                   alt={member.imageAlt || member.name}
-                  className="h-full w-full"
-                  style={{ 
-                    objectFit: 'cover',
-                    objectPosition: member.imagePosition || 'center 20%' // Use per-member focal point
-                  }}
+                  className="h-full w-full object-cover object-[top_center] sm:object-[center_20%]"
                 />
               </div>
             ) : (
@@ -140,10 +197,10 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
                 {/* Initials fallback */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div
-                    className="h-28 w-28 rounded-full flex items-center justify-center shadow-2xl transition-colors"
+                    className="h-24 w-24 sm:h-28 sm:w-28 rounded-full flex items-center justify-center shadow-2xl transition-colors"
                     style={{ backgroundColor: "var(--accent)" }}
                   >
-                    <span className="text-[32px] font-extrabold font-['Inter'] text-white">
+                    <span className="text-[28px] sm:text-[32px] font-extrabold font-['Inter'] text-white">
                       {initials}
                     </span>
                   </div>
@@ -153,16 +210,16 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
 
             {/* Status indicator - bottom right corner */}
             <div
-              className={`absolute bottom-3 right-3 flex h-6 w-6 items-center justify-center rounded-full shadow-xl ${isActive ? 'bg-white ring-2 ring-white/50' : 'ring-2 ring-white'} z-10`}
+              className={`absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full shadow-xl ${isActive ? 'bg-white ring-2 ring-white/50' : 'ring-2 ring-white'} z-10`}
               style={!isActive ? { backgroundColor: "var(--accent)" } : undefined}
             >
-              <div className="h-2.5 w-2.5 rounded-full bg-[#10b981] animate-pulse" />
+              <div className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-[#10b981] animate-pulse" />
             </div>
           </div>
 
           {/* Content Section - Theme color on active card content area */}
           <div
-            className={`px-4 pb-4 pt-3.5 transition-colors duration-300 min-h-[175px] flex flex-col justify-between ${
+            className={`px-3.5 py-3 sm:px-4 sm:pb-4 sm:pt-3.5 transition-colors duration-300 min-h-0 sm:min-h-[175px] flex flex-col justify-between ${
               isActive 
                 ? 'text-white' 
                 : 'bg-white'
@@ -170,55 +227,72 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
             style={isActive ? { backgroundColor: "var(--card-active-bg, var(--accent-dark))", color: "#ffffff" } : undefined}
           >
             <div>
-              {/* 1. Name: bold, blue (existing brand blue), larger text */}
-              <h3 className={`text-center font-['Poppins'] text-[16px] sm:text-[17px] font-bold leading-tight mb-1 line-clamp-2 ${
-                isActive ? 'text-white' : 'text-[#0c2b48]'
-              }`}>
+              {/* 1. Name: serif for the name */}
+              <h3
+                className={`text-center font-serif font-bold mb-1 line-clamp-2 ${
+                  isActive ? 'text-white' : 'text-[#0c2b48]'
+                }`}
+                style={{
+                  fontSize: "clamp(1rem, 4.4vw, 1.15rem)",
+                  lineHeight: 1.25,
+                }}
+              >
                 {member.name}
               </h3>
 
-              {/* 2. Designation: blue, semi-bold, smaller than the name */}
+              {/* 2. Designation: smaller, clean font */}
               <p
-                className={`text-center text-[12px] font-semibold mb-2 line-clamp-1 ${
+                className={`text-center font-semibold mb-1.5 sm:mb-2 line-clamp-1 font-['Inter',sans-serif] ${
                   isActive ? 'text-white/90' : ''
                 }`}
-                style={!isActive ? { color: "var(--accent)" } : undefined}
+                style={{
+                  fontSize: "clamp(0.8rem, 3.4vw, 0.9rem)",
+                  lineHeight: 1.3,
+                  ...(!isActive ? { color: "var(--accent)" } : {}),
+                }}
               >
                 {member.designation}
               </p>
 
-              {/* Decorative line */}
+              {/* Decorative line: subtle ~6px margin on mobile */}
               <div
-                className={`mx-auto h-0.5 w-12 rounded-full mb-2.5 ${
+                className={`mx-auto h-0.5 w-10 sm:w-12 rounded-full my-1.5 sm:my-2.5 ${
                   isActive ? 'bg-white/40' : ''
                 }`}
                 style={!isActive ? { backgroundColor: "var(--accent)" } : undefined}
               />
 
-              {/* 3. Description: grey paragraph, clamped to 3 lines with ellipsis */}
+              {/* 3. Description: 2 lines on mobile, 3 lines on desktop with ellipsis */}
               <p
-                className={`text-center text-[11px] leading-[1.55] line-clamp-3 mb-2 font-['Inter'] ${
+                className={`text-center line-clamp-2 sm:line-clamp-3 mb-1.5 sm:mb-2 font-['Inter',sans-serif] ${
                   isActive ? 'text-white/85' : 'text-slate-500'
                 }`}
+                style={{
+                  fontSize: "clamp(0.78rem, 3.2vw, 0.85rem)",
+                  lineHeight: 1.5,
+                }}
               >
                 {member.description}
               </p>
             </div>
 
-            {/* 4. Below description: "Read more" link with thin blue underline */}
-            <div className="text-center pt-1">
+            {/* 4. Below description: "Read more" link with thin underline */}
+            <div className="text-center pt-0.5 sm:pt-1">
               <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   onOpenModal?.(member);
                 }}
-                className={`inline-block text-[11px] font-semibold pb-0.5 border-b cursor-pointer transition-all ${
+                className={`inline-flex min-h-[36px] sm:min-h-[44px] items-center font-semibold pb-0.5 border-b cursor-pointer transition-all touch-manipulation ${
                   isActive
-                    ? 'text-white border-white/80 hover:text-white hover:border-white'
+                    ? 'text-white border-white/70 hover:border-white'
                     : 'border-(--accent) hover:opacity-80'
                 }`}
-                style={!isActive ? { color: "var(--accent)" } : undefined}
+                style={{
+                  fontSize: "clamp(0.8rem, 3.2vw, 0.85rem)",
+                  ...(!isActive ? { color: "var(--accent)" } : {}),
+                }}
               >
                 Read more
               </button>
@@ -382,7 +456,7 @@ export default function TeamCarousel({ members = [] }) {
 
   return (
     <section 
-      className="relative bg-white py-12 md:py-16 overflow-hidden z-1" 
+      className="relative bg-white py-10 pb-20 sm:py-12 sm:pb-16 md:py-16 overflow-hidden z-1" 
       id="team-carousel"
     >
       {/* Diagnostic grid background pattern */}
@@ -400,9 +474,9 @@ export default function TeamCarousel({ members = [] }) {
 
       <div className="relative site-container">
         {/* Section Header */}
-        <div className="mb-12 text-center">
+        <div className="mb-6 sm:mb-10 lg:mb-12 text-center">
           <div
-            className="mb-4 inline-flex items-center gap-2.5 rounded-full border px-6 py-2 shadow-sm transition-colors"
+            className="mb-3 sm:mb-4 inline-flex items-center gap-2 sm:gap-2.5 rounded-full border px-4 sm:px-6 py-1.5 sm:py-2 shadow-xs transition-colors"
             style={{
               backgroundColor: "var(--accent-soft)",
               borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
@@ -413,14 +487,14 @@ export default function TeamCarousel({ members = [] }) {
               style={{ backgroundColor: "var(--accent)" }}
             />
             <span
-              className="text-xs font-bold uppercase tracking-[0.25em] font-['Inter'] transition-colors"
+              className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] font-['Inter'] transition-colors"
               style={{ color: "var(--accent)" }}
             >
               Expert Diagnostic Leadership
             </span>
           </div>
 
-          <h2 className="font-['Poppins'] text-[32px] font-extrabold leading-[1.15] text-[#0f172a] sm:text-[38px] lg:text-[44px]">
+          <h2 className="font-['Poppins'] text-[26px] font-extrabold leading-[1.18] text-[#0f172a] sm:text-[36px] lg:text-[44px]">
             Meet Our{" "}
             <span
               style={{
@@ -432,7 +506,7 @@ export default function TeamCarousel({ members = [] }) {
             </span>
           </h2>
 
-          <p className="mx-auto mt-4 max-w-2xl text-[14px] leading-relaxed text-[#64748b] lg:text-[15px] font-['Inter']">
+          <p className="mx-auto mt-2.5 sm:mt-4 max-w-2xl text-[13px] leading-relaxed text-[#64748b] sm:text-[14px] lg:text-[15px] font-['Inter']">
             Our leadership team combines decades of expertise in clinical diagnostics,<br className="hidden sm:block" />
             genomic medicine, and laboratory science to deliver world-class healthcare solutions.
           </p>
@@ -443,7 +517,7 @@ export default function TeamCarousel({ members = [] }) {
           ref={stageRef}
           className="relative mx-auto touch-pan-y select-none"
           style={{ 
-            height: 'clamp(520px, 60vh, 620px)',
+            height: stageWidth < 640 ? 'clamp(430px, 55vh, 465px)' : 'clamp(520px, 60vh, 620px)',
             perspective: '2000px',
             perspectiveOrigin: '50% 50%'
           }}
@@ -476,7 +550,7 @@ export default function TeamCarousel({ members = [] }) {
         </div>
 
         {/* Navigation Controls */}
-        <div className="mt-10 flex items-center justify-center gap-8">
+        <div className="mt-3 sm:mt-8 lg:mt-10 flex items-center justify-center gap-6 sm:gap-8">
           {/* Previous button */}
           <button
             onClick={goToPrev}
@@ -500,22 +574,26 @@ export default function TeamCarousel({ members = [] }) {
               <span className="text-[#94a3b8]">{String(members.length).padStart(2, '0')}</span>
             </div>
 
-            {/* Dot indicators */}
-            <div className="flex gap-2">
+            {/* Dot indicators — 44px touch targets */}
+            <div className="flex items-center gap-1">
               {members.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => goToIndex(idx)}
                   disabled={isTransitioning}
-                  className={`h-2 rounded-full transition-all duration-300 disabled:cursor-not-allowed ${
-                    idx === activeIndex
-                      ? 'w-8 shadow-lg'
-                      : 'w-2 bg-[#cbd5e1] hover:w-5'
-                  }`}
-                  style={idx === activeIndex ? { backgroundColor: "var(--accent)" } : undefined}
+                  className="flex min-h-[44px] min-w-[28px] sm:min-w-[32px] items-center justify-center p-1 cursor-pointer touch-manipulation disabled:cursor-not-allowed"
                   aria-label={`Go to ${members[idx].name}`}
                   aria-current={idx === activeIndex ? 'true' : 'false'}
-                />
+                >
+                  <span
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      idx === activeIndex
+                        ? 'w-8 shadow-md'
+                        : 'w-2 bg-[#cbd5e1] hover:w-4'
+                    }`}
+                    style={idx === activeIndex ? { backgroundColor: "var(--accent)" } : undefined}
+                  />
+                </button>
               ))}
             </div>
           </div>

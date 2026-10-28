@@ -169,20 +169,25 @@ export default function ServicesSection() {
           </div>
         </div>
       </div>
-      <div aria-label="Choose a service" className="mt-6 flex items-center justify-center gap-2" role="group">
+      <div aria-label="Choose a service" className="mt-6 flex flex-wrap items-center justify-center gap-0.5 sm:gap-1.5" role="group">
         {services.map((service, index) => (
-          <Button
-            variant={serviceIndex === index ? "cyan" : "white"}
+          <button
+            key={service.name}
+            type="button"
             aria-current={serviceIndex === index ? "true" : undefined}
             aria-label={`Show ${service.name}`}
-            className={`h-1.75! min-h-1.75! rounded-full! border-0! p-0! transition-all duration-300 motion-reduce:transition-none ${
-              serviceIndex === index
-                ? "w-7"
-                : "w-1.75 bg-[#9aafc1]! hover:bg-(--accent)!"
-            }`}
-            key={service.name}
+            className="flex min-h-[44px] min-w-[28px] sm:min-w-[34px] items-center justify-center p-1.5 cursor-pointer touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
             onClick={() => goToService(index)}
-          />
+          >
+            <span
+              className={`h-2 rounded-full transition-all duration-300 motion-reduce:transition-none ${
+                serviceIndex === index
+                  ? "w-7"
+                  : "w-2 bg-[#9aafc1] hover:bg-(--accent)"
+              }`}
+              style={serviceIndex === index ? { backgroundColor: "var(--accent)" } : undefined}
+            />
+          </button>
         ))}
       </div>
     </div>
