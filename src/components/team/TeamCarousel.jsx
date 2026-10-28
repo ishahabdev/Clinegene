@@ -154,7 +154,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
       onClick={onClick}
     >
       <article
-        className={`relative overflow-hidden rounded-[16px] sm:rounded-2xl transition-all duration-500 ${
+        className={`relative overflow-hidden rounded-2xl transition-all duration-500 ${
           Math.abs(offset) > 0 ? 'cursor-pointer' : 'cursor-default'
         } ${
           isActive
@@ -219,7 +219,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
 
           {/* Content Section - Theme color on active card content area */}
           <div
-            className={`px-3.5 py-3 sm:px-4 sm:pb-4 sm:pt-3.5 transition-colors duration-300 min-h-0 sm:min-h-[175px] flex flex-col justify-between ${
+            className={`px-3.5 py-3 sm:px-4 sm:pb-4 sm:pt-3.5 transition-colors duration-300 min-h-0 sm:min-h-43.75 flex flex-col justify-between ${
               isActive 
                 ? 'text-white' 
                 : 'bg-white'
@@ -284,7 +284,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
                   e.stopPropagation();
                   onOpenModal?.(member);
                 }}
-                className={`inline-flex min-h-[36px] sm:min-h-[44px] items-center font-semibold pb-0.5 border-b cursor-pointer transition-all touch-manipulation ${
+                className={`inline-flex min-h-9 sm:min-h-11 items-center font-semibold pb-0.5 border-b cursor-pointer transition-all touch-manipulation ${
                   isActive
                     ? 'text-white border-white/70 hover:border-white'
                     : 'border-(--accent) hover:opacity-80'
@@ -581,7 +581,7 @@ export default function TeamCarousel({ members = [] }) {
                   key={idx}
                   onClick={() => goToIndex(idx)}
                   disabled={isTransitioning}
-                  className="flex min-h-[44px] min-w-[28px] sm:min-w-[32px] items-center justify-center p-1 cursor-pointer touch-manipulation disabled:cursor-not-allowed"
+                  className="flex min-h-11 min-w-[28px] sm:min-w-[32px] items-center justify-center p-1 cursor-pointer touch-manipulation disabled:cursor-not-allowed"
                   aria-label={`Go to ${members[idx].name}`}
                   aria-current={idx === activeIndex ? 'true' : 'false'}
                 >

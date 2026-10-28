@@ -48,7 +48,7 @@ export default function HeroSection() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-[580px] sm:min-h-[620px] lg:min-h-[calc(100svh-84px)] items-center overflow-hidden text-white"
+      className="relative isolate flex min-h-145 sm:min-h-155 lg:min-h-[calc(100svh-84px)] items-center overflow-hidden text-white"
       id="home"
     >
       {/* Hero background image — responsive focal position across screen sizes */}
@@ -137,13 +137,13 @@ export default function HeroSection() {
           {/* ── CTA buttons ──────────────────────────────────────────── */}
           <div className="mt-7 flex flex-wrap gap-3">
             {/* Primary button — fill uses --accent-btn-bg (dark maroon on red) */}
-            <Button className="min-h-[44px] px-6" href="/research">
+            <Button className="min-h-11 px-6" href="/research">
               Explore Our Research <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Button>
 
             {/* Secondary button — transparent outline, white text */}
             <Button
-              className="min-h-[44px] px-6"
+              className="min-h-11 px-6"
               href="/services"
               variant="transparent"
               style={{
@@ -206,7 +206,7 @@ export default function HeroSection() {
           {/* Themed accent top bar */}
           <span
             aria-hidden="true"
-            className="mb-3 block h-[2px] w-8 shrink-0 rounded-full"
+            className="mb-3 block h-0.5 w-8 shrink-0 rounded-full"
             style={{
               background: "var(--accent)",
               transition: "background 0.4s ease-in-out",

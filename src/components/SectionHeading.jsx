@@ -38,7 +38,7 @@ export default function SectionHeading({
         </div>
 
         <h2
-          className={`mt-3 font-outfit text-[32px] font-bold leading-[1.15] [text-wrap:balance] md:text-[44px] ${
+          className={`mt-3 font-outfit text-[32px] font-bold leading-[1.15] text-balance md:text-[44px] ${
             dark ? "text-white" : "text-[#0c2b48]"
           }`}
           id={headingId}

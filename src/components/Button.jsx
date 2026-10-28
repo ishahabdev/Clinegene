@@ -34,7 +34,7 @@ export default function Button({
 
   const classes = [
     "group relative inline-flex items-center justify-center overflow-hidden rounded-full touch-manipulation",
-    !hasMinH && "min-h-[44px] sm:min-h-11",
+    !hasMinH && "min-h-11",
     !hasPx && "px-4.5 sm:px-6",
     !hasTextSize && "text-[12px] sm:text-sm",
     "font-bold transition-all duration-300",

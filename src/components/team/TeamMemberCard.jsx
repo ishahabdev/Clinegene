@@ -74,13 +74,13 @@ function Avatar({ name, department }) {
       {/* Animated gradient background */}
       <div
         aria-hidden="true"
-        className={`absolute inset-0 bg-gradient-to-br ${deptColors.gradient} transition-all duration-500 group-hover:scale-110`}
+        className={`absolute inset-0 bg-linear-to-br ${deptColors.gradient} transition-all duration-500 group-hover:scale-110`}
       />
       
       {/* Shimmer effect on hover */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"
+        className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"
       />
       
       {/* DNA helix pattern overlay */}
@@ -193,7 +193,7 @@ export default function TeamMemberCard({ member }) {
       />
 
       {/* Top decorative accent bar */}
-      <div className={`h-1.5 w-full bg-gradient-to-r ${deptColors.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
+      <div className={`h-1.5 w-full bg-linear-to-r ${deptColors.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
 
       {/* Content wrapper */}
       <div className="relative flex flex-col p-6">
@@ -251,7 +251,7 @@ export default function TeamMemberCard({ member }) {
             {/* Subtle bottom fade for long text */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-30"
+              className="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-linear-to-t from-white to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-30"
             />
           </div>
         )}
@@ -264,7 +264,7 @@ export default function TeamMemberCard({ member }) {
             {social.email && (
               <a
                 aria-label={`Email ${name}`}
-                className={`group/social relative grid h-10 w-10 place-items-center rounded-full border ${deptColors.border} ${deptColors.text} transition-all duration-300 hover:scale-110 hover:border-transparent hover:bg-gradient-to-br ${deptColors.gradient} hover:text-white hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a7a94] motion-reduce:transform-none`}
+                className={`group/social relative grid h-10 w-10 place-items-center rounded-full border ${deptColors.border} ${deptColors.text} transition-all duration-300 hover:scale-110 hover:border-transparent hover:bg-linear-to-br ${deptColors.gradient} hover:text-white hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a7a94] motion-reduce:transform-none`}
                 href={`mailto:${social.email}`}
               >
                 <Mail
@@ -276,7 +276,7 @@ export default function TeamMemberCard({ member }) {
             )}
             {social.linkedin && (
               <SocialLink
-                colorClass={`border-${deptColors.border} ${deptColors.text} hover:border-transparent hover:bg-gradient-to-br ${deptColors.gradient} hover:text-white hover:shadow-lg`}
+                colorClass={`border-${deptColors.border} ${deptColors.text} hover:border-transparent hover:bg-linear-to-br ${deptColors.gradient} hover:text-white hover:shadow-lg`}
                 href={social.linkedin}
                 icon={LinkedInIcon}
                 label={`LinkedIn profile for ${name}`}
@@ -284,7 +284,7 @@ export default function TeamMemberCard({ member }) {
             )}
             {social.orcid && (
               <SocialLink
-                colorClass={`border-${deptColors.border} ${deptColors.text} hover:border-transparent hover:bg-gradient-to-br ${deptColors.gradient} hover:text-white hover:shadow-lg`}
+                colorClass={`border-${deptColors.border} ${deptColors.text} hover:border-transparent hover:bg-linear-to-br ${deptColors.gradient} hover:text-white hover:shadow-lg`}
                 href={social.orcid}
                 icon={ORCIDIcon}
                 label={`ORCID profile for ${name}`}
@@ -292,7 +292,7 @@ export default function TeamMemberCard({ member }) {
             )}
             {social.website && (
               <SocialLink
-                colorClass={`border-${deptColors.border} ${deptColors.text} hover:border-transparent hover:bg-gradient-to-br ${deptColors.gradient} hover:text-white hover:shadow-lg`}
+                colorClass={`border-${deptColors.border} ${deptColors.text} hover:border-transparent hover:bg-linear-to-br ${deptColors.gradient} hover:text-white hover:shadow-lg`}
                 href={social.website}
                 icon={ExternalLink}
                 label={`${name}'s website`}
@@ -304,7 +304,7 @@ export default function TeamMemberCard({ member }) {
         {/* Bottom decorative element */}
         <div
           aria-hidden="true"
-          className={`mt-5 h-1 w-16 mx-auto rounded-full bg-gradient-to-r ${deptColors.gradient} opacity-0 transition-all duration-500 group-hover:w-24 group-hover:opacity-100`}
+          className={`mt-5 h-1 w-16 mx-auto rounded-full bg-linear-to-r ${deptColors.gradient} opacity-0 transition-all duration-500 group-hover:w-24 group-hover:opacity-100`}
         />
       </div>
 

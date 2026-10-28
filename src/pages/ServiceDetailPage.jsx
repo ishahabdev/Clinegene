@@ -137,7 +137,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
   ];
 
   return (
-    <div className="service-detail-page bg-white text-[#0c2b48] selection:bg-[var(--accent)] selection:text-white font-['Inter',sans-serif]">
+    <div className="service-detail-page bg-white text-[#0c2b48] selection:bg-(--accent) selection:text-white font-['Inter',sans-serif]">
       
       {/* ================= 1. HERO SECTION ================= */}
       <section 
@@ -150,7 +150,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
         {/* Decorative DNA watermark strand on right */}
         <div 
           aria-hidden="true" 
-          className="pointer-events-none absolute right-0 top-0 bottom-0 w-[40%] opacity-15 mix-blend-multiply bg-no-repeat bg-right-top hidden md:block"
+          className="pointer-events-none absolute right-0 top-0 bottom-0 w-[40%] opacity-15 mix-blend-multiply bg-no-repeat bg-top-right hidden md:block"
           style={{
             backgroundImage: `url(${dnaStrand})`,
             backgroundSize: "contain",
@@ -163,18 +163,18 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
           <nav aria-label="Breadcrumb" className="mb-3.5">
             <ol className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
               <li>
-                <a href="/" className="hover:text-[var(--accent)] transition-colors">
+                <a href="/" className="hover:text-(--accent) transition-colors">
                   Home
                 </a>
               </li>
               <li aria-hidden="true" className="text-slate-300">›</li>
               <li>
-                <a href="/services" className="hover:text-[var(--accent)] transition-colors">
+                <a href="/services" className="hover:text-(--accent) transition-colors">
                   Services
                 </a>
               </li>
               <li aria-hidden="true" className="text-slate-300">›</li>
-              <li aria-current="page" className="font-semibold text-[#0c2b48] truncate max-w-[200px] sm:max-w-none">
+              <li aria-current="page" className="font-semibold text-[#0c2b48] truncate max-w-50 sm:max-w-none">
                 {service.name}
               </li>
             </ol>
@@ -213,7 +213,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                 <div className="mt-5 flex flex-wrap items-center gap-3">
                   <a
                     href={`/contact?service=${service.slug}`}
-                    className="inline-flex min-h-9 items-center justify-center rounded-full px-5 py-2 text-xs sm:text-[13px] font-bold text-white shadow-xs transition-all duration-300 hover:shadow-md hover:brightness-105 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+                    className="inline-flex min-h-9 items-center justify-center rounded-full px-5 py-2 text-xs sm:text-[13px] font-bold text-white shadow-xs transition-all duration-300 hover:shadow-md hover:brightness-105 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                     style={{ backgroundColor: "var(--accent-btn-bg, var(--accent))" }}
                   >
                     Request this service
@@ -222,7 +222,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
 
                   <a
                     href="/services"
-                    className="inline-flex min-h-9 items-center justify-center rounded-full border border-slate-300 bg-white px-4.5 py-2 text-xs sm:text-[13px] font-semibold text-[#0c2b48] shadow-2xs transition-all duration-300 hover:border-slate-400 hover:bg-slate-50 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+                    className="inline-flex min-h-9 items-center justify-center rounded-full border border-slate-300 bg-white px-4.5 py-2 text-xs sm:text-[13px] font-semibold text-[#0c2b48] shadow-2xs transition-all duration-300 hover:border-slate-400 hover:bg-slate-50 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                   >
                     Back to services
                   </a>
@@ -234,7 +234,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
             {/* Right Column: Hero Image Card (~42%) */}
             <div className="lg:col-span-5 flex justify-center">
               <ScrollReveal delay={120}>
-                <div className="relative mx-auto w-full max-w-[360px] sm:max-w-[390px]">
+                <div className="relative mx-auto w-full max-w-90 sm:max-w-97.5">
                   {/* Subtle soft backdrop blur halo */}
                   <div 
                     aria-hidden="true" 
@@ -338,7 +338,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                         color: "var(--accent)",
                       }}
                     >
-                      <Check className="h-3.5 w-3.5 stroke-[2.5]" aria-hidden="true" />
+                      <Check className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden="true" />
                     </span>
                     <div className="flex-1">
                       <h3 className="font-['Poppins',sans-serif] text-xs sm:text-sm font-bold text-[#0c2b48] leading-snug">
@@ -398,7 +398,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                         color: "var(--accent)",
                       }}
                     >
-                      <IconComp className="h-4 w-4 stroke-[2]" aria-hidden="true" />
+                      <IconComp className="h-4 w-4 stroke-2" aria-hidden="true" />
                     </div>
                     <h3 className="font-['Poppins',sans-serif] text-xs sm:text-sm font-bold text-[#0c2b48] leading-snug">
                       {app.title}
@@ -453,7 +453,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                         color: "var(--accent)",
                       }}
                     >
-                      <FlaskConical className="h-4 w-4 stroke-[2]" aria-hidden="true" />
+                      <FlaskConical className="h-4 w-4 stroke-2" aria-hidden="true" />
                     </div>
                     <h3 className="font-['Poppins',sans-serif] text-xs sm:text-sm font-bold text-[#0c2b48]">
                       {service.requirementsLabel || "Sample Requirements"}
@@ -467,7 +467,8 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                       return (
                         <li key={index} className="flex items-start gap-2">
                           <Check 
-                            className="h-3.5 w-3.5 shrink-0 mt-0.5 stroke-[2.5]" 
+                            className="h-3.5 w-3.5 shrink-0 mt-0.5" 
+                            strokeWidth={2.5}
                             style={{ color: "var(--accent)" }}
                             aria-hidden="true" 
                           />
@@ -490,7 +491,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                         color: "var(--accent)",
                       }}
                     >
-                      <FileCheck className="h-4 w-4 stroke-[2]" aria-hidden="true" />
+                      <FileCheck className="h-4 w-4 stroke-2" aria-hidden="true" />
                     </div>
                     <h3 className="font-['Poppins',sans-serif] text-xs sm:text-sm font-bold text-[#0c2b48]">
                       Deliverables
@@ -501,7 +502,8 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                     {service.deliverables.map((deliv, index) => (
                       <li key={index} className="flex items-start gap-2">
                         <Check 
-                          className="h-3.5 w-3.5 shrink-0 mt-0.5 stroke-[2.5]" 
+                          className="h-3.5 w-3.5 shrink-0 mt-0.5" 
+                          strokeWidth={2.5}
                           style={{ color: "var(--accent)" }}
                           aria-hidden="true" 
                         />
@@ -623,7 +625,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                             color: "var(--accent)",
                           }}
                         >
-                          <StepIcon className="h-3.5 w-3.5 stroke-[2]" aria-hidden="true" />
+                          <StepIcon className="h-3.5 w-3.5 stroke-2" aria-hidden="true" />
                         </div>
                       </div>
 
@@ -689,7 +691,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                       aria-expanded={isOpen}
                       aria-controls={answerId}
                       onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                      className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left font-['Poppins',sans-serif] text-xs sm:text-[13.5px] font-semibold text-[#0c2b48] hover:bg-slate-50/70 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+                      className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left font-['Poppins',sans-serif] text-xs sm:text-[13.5px] font-semibold text-[#0c2b48] hover:bg-slate-50/70 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                     >
                       <span className="leading-snug">{cleanText(item.question)}</span>
                       <span 
@@ -697,7 +699,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                         style={{ color: "var(--accent)" }}
                         aria-hidden="true"
                       >
-                        {isOpen ? <Minus className="h-3.5 w-3.5 stroke-[2.5]" /> : <Plus className="h-3.5 w-3.5 stroke-[2.5]" />}
+                        {isOpen ? <Minus className="h-3.5 w-3.5" strokeWidth={2.5} /> : <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />}
                       </span>
                     </button>
 
@@ -757,9 +759,9 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                   <a
                     key={rel.slug}
                     href={`/services/${rel.slug}`}
-                    className="group flex flex-col h-full overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_24px_rgba(12,43,72,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+                    className="group flex flex-col h-full overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_24px_rgba(12,43,72,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                   >
-                    <div className="relative aspect-16/9 w-full overflow-hidden bg-slate-900">
+                    <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
                       <img
                         src={rel.image}
                         alt={rel.name}
@@ -773,7 +775,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                     <div className="flex flex-1 flex-col p-4 justify-between">
                       <div>
                         <h3 
-                          className="font-['Poppins',sans-serif] text-xs sm:text-[14px] font-bold text-[#0c2b48] transition-colors leading-snug group-hover:text-[var(--accent)]"
+                          className="font-['Poppins',sans-serif] text-xs sm:text-[14px] font-bold text-[#0c2b48] transition-colors leading-snug group-hover:text-(--accent)"
                         >
                           {rel.name}
                         </h3>

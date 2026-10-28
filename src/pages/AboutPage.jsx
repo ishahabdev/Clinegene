@@ -225,17 +225,17 @@ export default function AboutPage() {
             <ScrollReveal delay={300}>
               <div className="relative mx-auto max-w-120">
                 {/* Main Image */}
-                <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-[0_20px_60px_rgba(15,23,42,0.12)] min-h-[260px] sm:min-h-[280px]">
+                <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-[0_20px_60px_rgba(15,23,42,0.12)] min-h-65 sm:min-h-70">
                   <img
                     src={injectionImage}
                     alt="Genetic testing laboratory professional handling sample"
-                    className="w-full h-full min-h-[260px] sm:min-h-[280px] object-cover aspect-[4/3] sm:aspect-video"
+                    className="w-full h-full min-h-65 sm:min-h-70 object-cover aspect-4/3 sm:aspect-video"
                     loading="lazy"
                   />
                 </div>
 
                 {/* Floating Badge - Responsive corner positioning on mobile/tablet, right-overlap on desktop */}
-                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 lg:-right-12 xl:-right-16 bg-white rounded-[16px] sm:rounded-2xl shadow-[0_16px_40px_rgba(15,23,42,0.18)] p-3 sm:p-3.5 lg:p-4 w-fit max-w-[58%] sm:max-w-[50%] lg:max-w-none lg:w-48.75 xl:w-53.75 z-10 transition-all">
+                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 lg:bottom-auto lg:top-1/2 lg:-translate-y-1/2 lg:-right-12 xl:-right-16 bg-white rounded-2xl shadow-[0_16px_40px_rgba(15,23,42,0.18)] p-3 sm:p-3.5 lg:p-4 w-fit max-w-[58%] sm:max-w-[50%] lg:max-w-none lg:w-48.75 xl:w-53.75 z-10 transition-all">
                   <div className="flex flex-col items-center text-center gap-1.5 sm:gap-2 lg:gap-2.5">
                     <div
                       className="shrink-0 h-8.5 w-8.5 sm:h-9.5 sm:w-9.5 lg:h-11 lg:w-11 rounded-full flex items-center justify-center shadow-md transition-all"
@@ -293,7 +293,7 @@ export default function AboutPage() {
             >
               {/* Subtle radial highlight behind photo for mobile depth */}
               <div
-                className="pointer-events-none absolute inset-0 -z-0 opacity-80"
+                className="pointer-events-none absolute inset-0 z-0 opacity-80"
                 style={{
                   background: isRed
                     ? "radial-gradient(circle at 50% 18%, rgba(255, 60, 60, 0.18), transparent 60%)"
@@ -331,7 +331,7 @@ export default function AboutPage() {
                 {/* Label */}
                 <div className="inline-flex items-center gap-2 mb-3">
                   <span
-                    className="h-0.5 w-[26px] transition-colors"
+                    className="h-0.5 w-6.5 transition-colors"
                     style={{ backgroundColor: isRed ? "#ef4444" : "var(--accent)" }}
                   />
                   <span
@@ -344,7 +344,7 @@ export default function AboutPage() {
 
                 {/* Heading */}
                 <h3
-                  className="font-['Outfit',sans-serif] font-bold text-white mb-4 [text-wrap:balance]"
+                  className="font-['Outfit',sans-serif] font-bold text-white mb-4 text-balance"
                   style={{
                     fontSize: "clamp(1.5rem, 6.4vw, 1.85rem)",
                     lineHeight: 1.2,
@@ -363,7 +363,7 @@ export default function AboutPage() {
 
                 {/* Quote */}
                 <p
-                  className="text-white/85 max-w-[34ch] md:max-w-2xl leading-[1.7] [text-wrap:pretty] [hyphens:auto] mx-auto md:mx-0 mb-5 font-['Inter',sans-serif]"
+                  className="text-white/85 max-w-[34ch] md:max-w-2xl leading-[1.7] text-pretty [hyphens:auto] mx-auto md:mx-0 mb-5 font-['Inter',sans-serif]"
                   style={{
                     fontSize: "clamp(0.92rem, 3.8vw, 1.02rem)",
                   }}
@@ -380,7 +380,7 @@ export default function AboutPage() {
                     Dr. Amjad Ali Tanoli Ph.D
                   </div>
                   <div
-                    className="mt-1 font-semibold transition-colors px-2 text-center md:text-left break-words"
+                    className="mt-1 font-semibold transition-colors px-2 text-center md:text-left wrap-break-word"
                     style={{
                       color: isRed ? "#fca5a5" : isGreen ? "#86efac" : "var(--accent)",
                       fontSize: "clamp(0.8rem, 3.4vw, 0.9rem)",
@@ -445,7 +445,7 @@ export default function AboutPage() {
               `}</style>
 
               <div
-                className="dna-aim-banner relative flex flex-col lg:flex-row overflow-hidden mx-4 sm:mx-6 lg:mx-0 rounded-3xl lg:rounded-l-none lg:rounded-r-[210px] min-h-[420px] lg:min-h-97.5 shadow-xl transition-colors duration-500"
+                className="dna-aim-banner relative flex flex-col lg:flex-row overflow-hidden mx-4 sm:mx-6 lg:mx-0 rounded-3xl lg:rounded-l-none lg:rounded-r-[210px] min-h-105 lg:min-h-97.5 shadow-xl transition-colors duration-500"
                 style={{
                   backgroundColor: panelDark,
                   '--panel-dark': panelDark,
@@ -654,7 +654,7 @@ export default function AboutPage() {
                           className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white shadow-xs transition-colors duration-400"
                           style={{ backgroundColor: whyCheckmarkBg }}
                         >
-                          <Check className="h-3 w-3 stroke-[3]" />
+                          <Check className="h-3 w-3 stroke-3" />
                         </span>
                         <span
                           className="font-['Inter',sans-serif] text-[13.5px] sm:text-[14.5px] font-medium transition-colors duration-400"
@@ -679,9 +679,9 @@ export default function AboutPage() {
             {/* MIDDLE COLUMN: Character Portrait with Floating Badge */}
             <div className="min-[900px]:col-span-4 flex justify-center">
               <ScrollReveal delay={180} className="w-full">
-                <div className="relative mx-auto w-full max-w-[320px] sm:max-w-[360px] min-[900px]:max-w-none">
+                <div className="relative mx-auto w-full max-w-80 sm:max-w-90 min-[900px]:max-w-none">
                   {/* Portrait Card with theme-adaptive tint overlay and filter */}
-                  <div className="relative aspect-[4/5] min-[900px]:aspect-[3/4.2] min-[900px]:min-h-[490px] w-full overflow-hidden rounded-[28px] sm:rounded-3xl border border-slate-100/80 bg-slate-100 shadow-[0_16px_40px_rgba(12,43,72,0.1)]">
+                  <div className="relative aspect-4/5 min-[900px]:aspect-[3/4.2] min-[900px]:min-h-122.5 w-full overflow-hidden rounded-[28px] sm:rounded-3xl border border-slate-100/80 bg-slate-100 shadow-[0_16px_40px_rgba(12,43,72,0.1)]">
                     <img
                       src={characterImage}
                       alt="ClinGene Laboratory Professional"
@@ -706,7 +706,7 @@ export default function AboutPage() {
                       boxShadow: whyBadgeShadow,
                     }}
                   >
-                    <p className="font-['Poppins',sans-serif] text-[11px] sm:text-[12px] font-bold leading-[1.25]">
+                    <p className="font-['Poppins',sans-serif] text-[11px] sm:text-[12px] font-bold leading-tight">
                       Advancing<br />
                       Life Sciences<br />
                       in Pakistan
@@ -718,16 +718,16 @@ export default function AboutPage() {
 
             {/* RIGHT COLUMN: Quality & Compliance & Expert Guidance Card */}
             <div className="min-[900px]:col-span-3 w-full max-[899px]:mt-6 flex justify-center min-[900px]:h-full">
-              <ScrollReveal delay={250} className="w-full max-w-[340px] min-[900px]:max-w-none min-[900px]:h-full flex flex-col">
+              <ScrollReveal delay={250} className="w-full max-w-85 min-[900px]:max-w-none min-[900px]:h-full flex flex-col">
                 <div
-                  className="w-full min-[900px]:h-full min-[900px]:min-h-[490px] rounded-[24px] sm:rounded-3xl p-6 sm:p-7 xl:p-8 shadow-[0_12px_32px_rgba(0,0,0,0.15)] border border-white/10 transition-colors duration-400 flex flex-col justify-between"
+                  className="w-full min-[900px]:h-full min-[900px]:min-h-122.5 rounded-3xl sm:rounded-3xl p-6 sm:p-7 xl:p-8 shadow-[0_12px_32px_rgba(0,0,0,0.15)] border border-white/10 transition-colors duration-400 flex flex-col justify-between"
                   style={{ backgroundColor: whyDark }}
                 >
                   {/* Block 1: Registered & Compliant */}
                   <div className="group flex-1 flex flex-col justify-center">
                     <div className="flex items-center gap-3.5">
                       <div
-                        className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl border shadow-xs transition-all duration-300 group-hover:-translate-y-[2px]"
+                        className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl border shadow-xs transition-all duration-300 group-hover:-translate-y-0.5"
                         style={{ backgroundColor: whyTileBg, borderColor: whyTileBorder }}
                       >
                         <ShieldCheck className="h-5 w-5 sm:h-5.5 sm:w-5.5 transition-colors duration-400" stroke={whyIconAccent} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
@@ -751,7 +751,7 @@ export default function AboutPage() {
                   <div className="group flex-1 flex flex-col justify-center">
                     <div className="flex items-center gap-3.5">
                       <div
-                        className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl border shadow-xs transition-all duration-300 group-hover:-translate-y-[2px]"
+                        className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl border shadow-xs transition-all duration-300 group-hover:-translate-y-0.5"
                         style={{ backgroundColor: whyTileBg, borderColor: whyTileBorder }}
                       >
                         <Compass className="h-5 w-5 sm:h-5.5 sm:w-5.5 transition-colors duration-400" stroke={whyIconAccent} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
@@ -782,7 +782,7 @@ export default function AboutPage() {
             <div className="flex items-center justify-center gap-3 sm:gap-4">
               <span
                 aria-hidden="true"
-                className="h-[2px] w-6 sm:w-12 md:w-14 shrink-0 rounded-full transition-colors duration-400"
+                className="h-0.5 w-6 sm:w-12 md:w-14 shrink-0 rounded-full transition-colors duration-400"
                 style={{ backgroundColor: isRed ? "#b91c1c" : isGreen ? "#10b981" : "var(--accent)" }}
               />
               <h2
@@ -799,7 +799,7 @@ export default function AboutPage() {
               </h2>
               <span
                 aria-hidden="true"
-                className="h-[2px] w-6 sm:w-12 md:w-14 shrink-0 rounded-full transition-colors duration-400"
+                className="h-0.5 w-6 sm:w-12 md:w-14 shrink-0 rounded-full transition-colors duration-400"
                 style={{ backgroundColor: isRed ? "#b91c1c" : isGreen ? "#10b981" : "var(--accent)" }}
               />
             </div>

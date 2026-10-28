@@ -19,7 +19,7 @@ export default function TeamHero() {
   return (
     <section
       aria-labelledby="team-hero-title"
-      className="relative isolate min-h-[38vh] overflow-hidden text-white sm:min-h-[42vh] lg:min-h-[46vh] z-[1] transition-colors duration-500"
+      className="relative isolate min-h-[38vh] overflow-hidden text-white sm:min-h-[42vh] lg:min-h-[46vh] z-1 transition-colors duration-500"
       id="team-hero"
       style={{ backgroundColor: sectionBg }}
     >

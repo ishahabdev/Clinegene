@@ -359,7 +359,7 @@ function AppContent({ ssrUrl }) {
               rel="noopener noreferrer"
               aria-label="Chat with ClinGene on WhatsApp"
               title="Chat with us on WhatsApp"
-              className="group pointer-events-auto grid h-[46px] w-[46px] sm:h-12 sm:w-12 place-items-center rounded-full text-white transition-all duration-300 hover:scale-110 active:scale-95"
+              className="group pointer-events-auto grid h-11.5 w-11.5 sm:h-12 sm:w-12 place-items-center rounded-full text-white transition-all duration-300 hover:scale-110 active:scale-95"
               style={{
                 backgroundColor: "#25D366",
                 border: "2px solid #ffffff",
@@ -383,7 +383,7 @@ function AppContent({ ssrUrl }) {
                   });
                 } else window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="group pointer-events-auto grid h-[46px] w-[46px] sm:h-12 sm:w-12 place-items-center rounded-full text-white cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95"
+              className="group pointer-events-auto grid h-11.5 w-11.5 sm:h-12 sm:w-12 place-items-center rounded-full text-white cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95"
               style={{
                 pointerEvents:   showBackToTop ? "auto" : "none",
                 backgroundColor: "var(--accent-btn-bg, var(--accent))",

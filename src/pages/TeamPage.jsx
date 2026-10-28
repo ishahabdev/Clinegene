@@ -59,7 +59,7 @@ export default function TeamPage() {
 
       {/* --- Our Promise Section with Fixed Background --- */}
       <section
-        className="promise-section relative overflow-hidden min-h-[320px] lg:h-[380px] flex items-center"
+        className="promise-section relative overflow-hidden min-h-80 lg:h-95 flex items-center"
         id="trust-care"
         aria-labelledby="trust-care-title"
         style={{
@@ -91,7 +91,7 @@ export default function TeamPage() {
         
         {/* Dark gradient overlay */}
         <div 
-          className="absolute inset-0 z-[-1] transition-all duration-500"
+          className="absolute inset-0 -z-1 transition-all duration-500"
           style={{
             background: promiseOverlay
           }}
@@ -101,7 +101,7 @@ export default function TeamPage() {
         {/* Theme glow bottom-right */}
         <div
           aria-hidden="true"
-          className="absolute bottom-0 right-0 h-96 w-96 rounded-full blur-[120px] z-[-1] transition-colors"
+          className="absolute bottom-0 right-0 h-96 w-96 rounded-full blur-[120px] -z-1 transition-colors"
           style={{ backgroundColor: "var(--accent)", opacity: 0.15 }}
         />
 
@@ -114,7 +114,7 @@ export default function TeamPage() {
                 <ScrollReveal>
                   <div className="flex items-center gap-3 mb-4">
                     <div
-                      className="h-[2px] w-12 transition-colors"
+                      className="h-0.5 w-12 transition-colors"
                       style={{ backgroundColor: "var(--accent)" }}
                       aria-hidden="true"
                     />

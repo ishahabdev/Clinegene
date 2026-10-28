@@ -107,7 +107,7 @@ export default function OpenPositionsPage() {
                 />
               </Button>
               <Button
-                className="border-white/70 font-inter"
+                className="font-inter"
                 href="/team"
                 variant="transparent"
               >

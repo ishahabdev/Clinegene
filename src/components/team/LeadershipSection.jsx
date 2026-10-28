@@ -9,7 +9,7 @@ function LeadershipCard({ leader, index }) {
   return (
     <ScrollReveal delay={index * 100} className="w-full max-w-full min-w-0">
       <article 
-        className="group relative w-full max-w-full min-w-0 box-border overflow-hidden rounded-[20px] bg-white border border-slate-200 shadow-[0_20px_50px_-20px_rgba(10,35,66,0.18)] transition-all duration-300 min-h-auto lg:min-h-[452px]"
+        className="group relative w-full max-w-full min-w-0 box-border overflow-hidden rounded-[20px] bg-white border border-slate-200 shadow-[0_20px_50px_-20px_rgba(10,35,66,0.18)] transition-all duration-300 min-h-auto lg:min-h-113"
       >
         <div className={`relative grid grid-cols-1 w-full max-w-full min-w-0 box-border gap-0 h-full ${isImageLeft ? 'lg:grid-cols-[40%_1fr]' : 'lg:grid-cols-[1fr_40%]'}`}>
           
@@ -32,7 +32,7 @@ function LeadershipCard({ leader, index }) {
             </div>
 
             <h3
-              className="font-['Inter'] font-extrabold text-[#0c2b48] break-words [overflow-wrap:anywhere]"
+              className="font-['Inter'] font-extrabold text-[#0c2b48] wrap-break-word [overflow-wrap:anywhere]"
               style={{
                 fontSize: "clamp(1.4rem, 6vw, 2rem)",
                 lineHeight: 1.2,
@@ -42,7 +42,7 @@ function LeadershipCard({ leader, index }) {
             </h3>
 
             <p
-              className="mt-1.5 mb-2.5 font-semibold transition-colors break-words [overflow-wrap:anywhere]"
+              className="mt-1.5 mb-2.5 font-semibold transition-colors wrap-break-word [overflow-wrap:anywhere]"
               style={{
                 color: "var(--accent)",
                 fontSize: "clamp(0.9rem, 3.8vw, 1.1rem)",
@@ -53,7 +53,7 @@ function LeadershipCard({ leader, index }) {
             </p>
 
             <p
-              className="text-[#334155] max-w-full lg:max-w-[56ch] mb-4.5 break-words [overflow-wrap:anywhere]"
+              className="text-[#334155] max-w-full lg:max-w-[56ch] mb-4.5 wrap-break-word [overflow-wrap:anywhere]"
               style={{
                 fontSize: "clamp(0.9rem, 3.6vw, 1rem)",
                 lineHeight: 1.6,
@@ -65,7 +65,7 @@ function LeadershipCard({ leader, index }) {
             <div className="flex flex-wrap items-center gap-2.5 w-full">
               <a
                 href={`mailto:${leader.email}`}
-                className="inline-flex min-h-[44px] flex-1 sm:flex-initial min-w-[120px] items-center justify-center gap-2 rounded-full bg-black px-5 py-2.5 text-[14px] font-semibold text-white transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black touch-manipulation"
+                className="inline-flex min-h-11 flex-1 sm:flex-initial min-w-[120px] items-center justify-center gap-2 rounded-full bg-black px-5 py-2.5 text-[14px] font-semibold text-white transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black touch-manipulation"
                 aria-label={`Email ${leader.name}`}
               >
                 <Mail className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" />
@@ -75,7 +75,7 @@ function LeadershipCard({ leader, index }) {
                 href={leader.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-[44px] flex-1 sm:flex-initial min-w-[120px] items-center justify-center gap-2 rounded-full border-2 border-[#d4e5f2] bg-white px-5 py-2.5 text-[14px] font-semibold text-[#0c2b48] transition-all duration-300 hover:border-(--accent) hover:bg-(--accent) hover:text-white hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) touch-manipulation"
+                className="inline-flex min-h-11 flex-1 sm:flex-initial min-w-[120px] items-center justify-center gap-2 rounded-full border-2 border-[#d4e5f2] bg-white px-5 py-2.5 text-[14px] font-semibold text-[#0c2b48] transition-all duration-300 hover:border-(--accent) hover:bg-(--accent) hover:text-white hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) touch-manipulation"
                 aria-label={`View ${leader.name}'s LinkedIn profile`}
               >
                 <svg className="h-4 w-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -87,7 +87,7 @@ function LeadershipCard({ leader, index }) {
           </div>
 
           <div className={`relative w-full max-w-full min-w-0 ${isImageLeft ? 'lg:col-start-1 lg:order-1' : 'lg:col-start-2 lg:order-2'}`}>
-            <div className="relative h-full w-full min-h-[260px] sm:min-h-[340px] lg:min-h-[452px] aspect-[4/3] sm:aspect-[16/10] lg:aspect-auto leadership-photo-wrapper overflow-hidden" data-position={isImageLeft ? 'left' : 'right'}>
+            <div className="relative h-full w-full min-h-65 sm:min-h-85 lg:min-h-113 aspect-4/3 sm:aspect-[16/10] lg:aspect-auto leadership-photo-wrapper overflow-hidden" data-position={isImageLeft ? 'left' : 'right'}>
               <img
                 src={leader.image}
                 alt={leader.imageAlt}

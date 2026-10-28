@@ -224,7 +224,7 @@ export default function ServicesPage() {
                 <ScrollReveal
                   as="a"
                   href={serviceUrl}
-                  className="group flex min-h-[253px] flex-col overflow-hidden rounded-xl border border-[#c9e2ef] bg-[#f8fcff] hover:bg-(--accent-soft) shadow-[0_7px_18px_rgba(12,43,72,0.09)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_12px_28px_var(--accent-glow)] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
+                  className="group flex min-h-63.25 flex-col overflow-hidden rounded-xl border border-[#c9e2ef] bg-[#f8fcff] hover:bg-(--accent-soft) shadow-[0_7px_18px_rgba(12,43,72,0.09)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_12px_28px_var(--accent-glow)] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
                   delay={Math.min(index % 4, 3) * 55}
                   key={slug || name}
                 >

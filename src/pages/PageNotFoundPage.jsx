@@ -56,7 +56,7 @@ export default function PageNotFoundPage() {
 
           <div className="mt-7 flex flex-wrap items-center gap-3">
             <Button
-              className="min-h-11! gap-2! rounded-full! bg-[#079eae]! px-6! text-[11px]! text-white! shadow-[0_8px_18px_rgba(7,158,174,0.16)] hover:bg-[#087f91]!"
+              className="min-h-11! gap-2! bg-[#079eae]! px-6! text-[11px]! text-white! shadow-[0_8px_18px_rgba(7,158,174,0.16)] hover:bg-[#087f91]!"
               href="/"
             >
               <House aria-hidden="true" className="h-4 w-4" />

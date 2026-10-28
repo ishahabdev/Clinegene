@@ -93,7 +93,7 @@ export default function ServicesSection() {
         <Button
           variant="cyan"
           aria-label="Previous services"
-          className="service-carousel-control absolute! -left-14! top-1/2! z-10! hidden! h-11! min-h-11! w-11! -translate-y-1/2! rounded-full! border! border-slate-200! p-0! text-[#04152b]! shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-all! duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 2xl:flex!"
+          className="service-carousel-control absolute! -left-14! top-1/2! z-10! hidden! h-11! min-h-11! w-11! -translate-y-1/2! border! border-slate-200! p-0! text-[#04152b]! shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-all! duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 2xl:flex!"
           disabled={serviceIndex === 0}
           onClick={() => goToService(serviceIndex - 1)}
         >
@@ -102,7 +102,7 @@ export default function ServicesSection() {
         <Button
           variant="cyan"
           aria-label="Next services"
-          className="service-carousel-control absolute! -right-14! top-1/2! z-10! hidden! h-11! min-h-11! w-11! -translate-y-1/2! rounded-full! border! border-slate-200! p-0! text-[#04152b]! shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-all! duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 2xl:flex!"
+          className="service-carousel-control absolute! -right-14! top-1/2! z-10! hidden! h-11! min-h-11! w-11! -translate-y-1/2! border! border-slate-200! p-0! text-[#04152b]! shadow-[0_4px_14px_rgba(12,43,72,0.14)] transition-all! duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 2xl:flex!"
           disabled={serviceIndex === services.length - 1}
           onClick={() => goToService(serviceIndex + 1)}
         >
@@ -176,7 +176,7 @@ export default function ServicesSection() {
             type="button"
             aria-current={serviceIndex === index ? "true" : undefined}
             aria-label={`Show ${service.name}`}
-            className="flex min-h-[44px] min-w-[28px] sm:min-w-[34px] items-center justify-center p-1.5 cursor-pointer touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+            className="flex min-h-11 min-w-7 sm:min-w-[34px] items-center justify-center p-1.5 cursor-pointer touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
             onClick={() => goToService(index)}
           >
             <span

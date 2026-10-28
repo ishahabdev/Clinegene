@@ -34,7 +34,7 @@ function Hero() {
     >
       {/* Background image — responsive across mobile and desktop */}
       <div
-        className="absolute inset-y-0 right-0 w-full sm:w-[75%] md:w-[68%] bg-cover bg-[75%_center] md:bg-left opacity-35 sm:opacity-55 md:opacity-100 transition-all duration-500"
+        className="absolute inset-y-0 right-0 w-full sm:w-[75%] md:w-[68%] bg-cover bg-position-[75%_center] md:bg-left opacity-35 sm:opacity-55 md:opacity-100 transition-all duration-500"
         style={{
           backgroundImage: `url(${home1})`,
           filter: isRed
@@ -391,7 +391,7 @@ function QuoteCard() {
 
         {/* Theme line */}
         <div
-          className="mt-3 sm:mt-5 h-[2px] sm:h-[2.5px] w-8 sm:w-9 rounded-full transition-colors"
+          className="mt-3 sm:mt-5 h-0.5 sm:h-[2.5px] w-8 sm:w-9 rounded-full transition-colors"
           style={{ backgroundColor: "var(--accent)" }}
         />
       </div>
@@ -613,10 +613,10 @@ function Commitment() {
 
         {/* The three-word handwritten tagline in the middle */}
         <div 
-          className="pointer-events-none mt-4 sm:mt-6 md:mt-0 md:absolute md:left-[46%] md:top-[16%] lg:top-[17%] select-none z-10 w-[220px] sm:w-[250px] lg:w-[270px]"
+          className="pointer-events-none mt-4 sm:mt-6 md:mt-0 md:absolute md:left-[46%] md:top-[16%] lg:top-[17%] select-none z-10 w-55 sm:w-62.5 lg:w-67.5"
           aria-hidden="true"
         >
-          <div className="relative w-full aspect-[255/228]">
+          <div className="relative w-full aspect-255/228">
             <img
               src={taglineText}
               alt="Science Collaboration Impact"

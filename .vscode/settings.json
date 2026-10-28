@@ -1,0 +1,28 @@
+{
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/.git": true,
+    "**/dist": true,
+    "**/dist-ssr": true,
+    "**/build": true,
+    "**/.next": true,
+    "**/coverage": true
+  },
+  "tailwindCSS.files.exclude": [
+    "**/.git/**",
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/dist-ssr/**",
+    "**/build/**",
+    "**/.next/**",
+    "**/coverage/**"
+  ],
+  "tailwindCSS.lint.suggestCanonicalClasses": "off",
+  "tailwindCSS.lint.cssConflict": "off",
+  "html.validate.scripts": false,
+  "html.validate.styles": false,
+  "css.validate": true,
+  "eslint.ignore": true,
+  "eslint.workingDirectories": [{ "mode": "auto" }]
+}
