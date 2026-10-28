@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import Button from "./Button";
 
-const clingeneLogo = "/images/clingene-logo.webp";
-
 const links = [
   { label: "Home", href: "/" },
   { label: "CEO Message", href: "/ceo-message" },
@@ -78,13 +76,17 @@ export default function HeaderNav({ activePage }) {
         className="fixed top-0 left-0 right-0 z-1000 w-full border-b border-slate-100 bg-white shadow-[0_2px_12px_rgba(15,23,42,0.05)] transition-all"
       >
         <div className="site-container flex min-h-18 sm:min-h-19 lg:min-h-21 items-center justify-between gap-4">
-          <a aria-label="Clingene home" className="shrink-0 touch-manipulation" href="/">
+          <a
+            aria-label="ClinGene home"
+            className="flex items-center shrink-0 touch-manipulation group"
+            href="/"
+          >
             <img
-              alt="Clingene"
-              width="450"
-              height="189"
-              className="h-10 w-32 sm:h-11 sm:w-36 lg:h-12 lg:w-44 object-contain"
-              src={clingeneLogo}
+              alt="ClinGene"
+              width="733"
+              height="290"
+              className="h-10 sm:h-11 lg:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              src="/images/clingene-logo.webp"
             />
           </a>
 

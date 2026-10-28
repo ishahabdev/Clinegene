@@ -67,11 +67,15 @@ async function prerender() {
     );
 
     // 5. Inject Open Graph and Twitter tags
-    const ogTitle = seo.title || "ClinGene Pakistan";
+    const ogTitle = seo.title || "ClinGene";
     const ogDesc = seo.description || "";
     const ogType = seo.ogType || "website";
 
     pageHtml = pageHtml
+      .replace(
+        /<meta\s+property="og:site_name"\s+content=".*?"\s*\/?>/i,
+        `<meta property="og:site_name" content="ClinGene" />`
+      )
       .replace(
         /<meta\s+property="og:title"\s+content=".*?"\s*\/?>/i,
         `<meta property="og:title" content="${ogTitle.replace(/"/g, '&quot;')}" />`

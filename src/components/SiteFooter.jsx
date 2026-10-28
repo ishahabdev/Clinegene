@@ -64,8 +64,8 @@ export default function SiteFooter({ showJoinCta }) {
               >
                 <img
                   alt="ClinGene"
-                  width="450"
-                  height="189"
+                  width="733"
+                  height="290"
                   className="w-full object-contain"
                   src={clingeneLogo}
                 />

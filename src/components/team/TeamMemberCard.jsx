@@ -4,7 +4,7 @@ const departmentLabels = {
   leadership: "Leadership",
   genetics: "Human Genetics",
   laboratory: "Laboratory Sciences",
-  bioinformatics: "Bioinformatics",
+  bioinformatician: "Bioinformatician",
   computational: "Computational Biology",
   training: "Training & Outreach",
 };

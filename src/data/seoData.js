@@ -13,18 +13,13 @@ export const DEFAULT_OG_IMAGE = `${BASE_URL}/images/og-image.jpg`;
 
 export const ORGANIZATION_SCHEMA = {
   "@context": "https://schema.org",
-  "@type": ["MedicalOrganization", "ResearchOrganization"],
+  "@type": ["MedicalOrganization", "ResearchOrganization", "Organization"],
   "@id": `${BASE_URL}/#organization`,
   name: "ClinGene",
   legalName: "ClinGene (SMC-Private) Limited",
-  alternateName: ["ClinGene Pakistan", "ClinGene Genomics", "ClinGene Lab"],
-  url: BASE_URL,
-  logo: {
-    "@type": "ImageObject",
-    url: `${BASE_URL}/images/clingene-logo.webp`,
-    width: 450,
-    height: 189,
-  },
+  alternateName: ["Clingene", "ClinGene.co", "ClinGene Pakistan"],
+  url: `${BASE_URL}/`,
+  logo: `${BASE_URL}/images/clingene-logo.webp`,
   image: DEFAULT_OG_IMAGE,
   email: COMPANY_EMAIL,
   telephone: COMPANY_PHONE,
@@ -58,9 +53,9 @@ export const WEBSITE_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": `${BASE_URL}/#website`,
-  url: BASE_URL,
   name: "ClinGene",
-  alternateName: ["ClinGene Pakistan", "ClinGene (SMC-Private) Limited"],
+  alternateName: ["Clingene", "ClinGene.co"],
+  url: `${BASE_URL}/`,
   description: "Pioneer in life sciences, clinical genetic testing, DNA sequencing and genomics research in Pakistan.",
   publisher: {
     "@id": `${BASE_URL}/#organization`,
@@ -192,7 +187,7 @@ export const seoRoutes = {
   },
 
   "/team": {
-    title: "Our Scientific Team & Geneticists | ClinGene",
+    title: "Our Scientific Team & Geneticists - ClinGene",
     description:
       "Meet ClinGene's board of directors, clinical geneticists, molecular biologists, and bioinformaticians advancing genomic science in Islamabad, Pakistan.",
     canonical: `${BASE_URL}/team`,
@@ -210,7 +205,7 @@ export const seoRoutes = {
   },
 
   "/ceo-message": {
-    title: "CEO Message | ClinGene (SMC-Private) Limited",
+    title: "CEO Message - ClinGene",
     description:
       "Read the CEO message from Dr. Amjad Ali Tanoli on building Pakistan's genomic medicine ecosystem and training the next generation of researchers.",
     canonical: `${BASE_URL}/ceo-message`,
@@ -252,7 +247,7 @@ export const seoRoutes = {
   },
 
   "/careers": {
-    title: "Careers & Open Positions | ClinGene Pakistan",
+    title: "Careers & Open Positions - ClinGene",
     description:
       "Join ClinGene's research community. Explore job openings, research fellowships, and internship opportunities in molecular biology and bioinformatics.",
     canonical: `${BASE_URL}/careers`,
@@ -270,7 +265,7 @@ export const seoRoutes = {
   },
 
   "/open-positions": {
-    title: "Careers & Open Positions | ClinGene Pakistan",
+    title: "Careers & Open Positions - ClinGene",
     description:
       "Join ClinGene's research community. Explore job openings, research fellowships, and internship opportunities in molecular biology and bioinformatics.",
     canonical: `${BASE_URL}/careers`,

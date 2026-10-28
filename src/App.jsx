@@ -47,8 +47,8 @@ function LoadingScreen() {
     >
       <img
         alt="ClinGene"
-        width="450"
-        height="189"
+        width="733"
+        height="290"
         className="preloader-logo h-28 w-80 max-w-[85vw] object-contain sm:h-36 sm:w-md lg:h-44 lg:w-xl"
         src="/images/clingene-logo.webp"
       />
@@ -153,7 +153,7 @@ function AppContent({ ssrUrl }) {
         seo?.title ||
         (pageId === "home"
           ? "ClinGene | Pioneer in Life Sciences & Genetic Testing in Pakistan"
-          : `${pages[pageId]?.label || "ClinGene"} | ClinGene`);
+          : `${pages[pageId]?.label || "ClinGene"} - ClinGene`);
       if (title && pageId !== "service-detail") {
         document.title = title;
       }
@@ -163,6 +163,16 @@ function AppContent({ ssrUrl }) {
         const descMeta = document.querySelector('meta[name="description"]');
         if (descMeta) descMeta.setAttribute("content", seo.description);
       }
+
+      // Update og:site_name to ClinGene
+      const siteNameMeta = document.querySelector('meta[property="og:site_name"]');
+      if (siteNameMeta) siteNameMeta.setAttribute("content", "ClinGene");
+
+      // Update og:title & twitter:title
+      const ogTitleMeta = document.querySelector('meta[property="og:title"]');
+      if (ogTitleMeta && title) ogTitleMeta.setAttribute("content", title);
+      const twTitleMeta = document.querySelector('meta[name="twitter:title"]');
+      if (twTitleMeta && title) twTitleMeta.setAttribute("content", title);
 
       // Update canonical
       const canonicalLink = document.querySelector('link[rel="canonical"]');

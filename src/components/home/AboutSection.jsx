@@ -116,7 +116,7 @@ export default function AboutSection() {
               <span aria-hidden="true" className="h-2 w-2 rounded-full"
                 style={{ background: "var(--accent)", transition: "background 0.4s ease-in-out" }}
               />
-              CLINGENE
+              ClinGene
             </p>
             <p className="mt-2 font-inter text-[12.5px] font-medium leading-snug text-[#4a6e8b]">
               Biomedical Research for a Better Tomorrow

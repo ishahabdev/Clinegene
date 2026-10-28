@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 // Calculate stacked overlapping position for 5-card deck layout
@@ -124,7 +124,7 @@ function getCardTransform(offset, stageWidth) {
 }
 
 // Individual Card Component
-function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenModal }) {
+function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
   const transform = getCardTransform(offset, stageWidth);
   
   const getInitials = (name) => {
@@ -223,7 +223,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
 
           {/* Content Section - Theme color on active card content area */}
           <div
-            className={`px-3.5 py-3 sm:px-4 sm:pb-4 sm:pt-3.5 transition-colors duration-300 min-h-0 sm:min-h-43.75 flex flex-col justify-between ${
+            className={`px-3.5 py-3 sm:px-4 sm:pb-4 sm:pt-3.5 transition-colors duration-300 min-h-0 sm:min-h-43.75 flex flex-col justify-start ${
               isActive 
                 ? 'text-white' 
                 : 'bg-white'
@@ -266,40 +266,18 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive, onOpenMod
                 style={!isActive ? { backgroundColor: "var(--accent)" } : undefined}
               />
 
-              {/* 3. Description: 2 lines on mobile, 3 lines on desktop with ellipsis */}
+              {/* 3. Description: supports multi-line credentials cleanly */}
               <p
-                className={`text-center line-clamp-2 sm:line-clamp-3 mb-1.5 sm:mb-2 font-['Inter',sans-serif] ${
+                className={`text-center whitespace-pre-line line-clamp-4 sm:line-clamp-5 font-['Inter',sans-serif] ${
                   isActive ? 'text-white/85' : 'text-slate-500'
                 }`}
                 style={{
-                  fontSize: "clamp(0.78rem, 3.2vw, 0.85rem)",
-                  lineHeight: 1.5,
+                  fontSize: "clamp(0.76rem, 3.1vw, 0.83rem)",
+                  lineHeight: 1.45,
                 }}
               >
                 {member.description}
               </p>
-            </div>
-
-            {/* 4. Below description: "Read more" link with thin underline */}
-            <div className="text-center pt-0.5 sm:pt-1">
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onOpenModal?.(member);
-                }}
-                className={`inline-flex min-h-9 sm:min-h-11 items-center font-semibold pb-0.5 border-b cursor-pointer transition-all touch-manipulation ${
-                  isActive
-                    ? 'text-white border-white/70 hover:border-white'
-                    : 'border-(--accent) hover:opacity-80'
-                }`}
-                style={{
-                  fontSize: "clamp(0.8rem, 3.2vw, 0.85rem)",
-                  ...(!isActive ? { color: "var(--accent)" } : {}),
-                }}
-              >
-                Read more
-              </button>
             </div>
           </div>
         </div>
@@ -313,26 +291,9 @@ export default function TeamCarousel({ members = [] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [stageWidth, setStageWidth] = useState(1200);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [activeModalMember, setActiveModalMember] = useState(null);
   const stageRef = useRef(null);
   const touchStartRef = useRef({ x: 0, time: 0 });
   const isDraggingRef = useRef(false);
-
-  // Manage modal open body scroll lock and escape key
-  useEffect(() => {
-    if (!activeModalMember) return;
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        setActiveModalMember(null);
-      }
-    };
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [activeModalMember]);
 
   // Measure stage width
   useEffect(() => {
@@ -479,25 +440,6 @@ export default function TeamCarousel({ members = [] }) {
       <div className="relative site-container">
         {/* Section Header */}
         <div className="mb-6 sm:mb-10 lg:mb-12 text-center">
-          <div
-            className="mb-3 sm:mb-4 inline-flex items-center gap-2 sm:gap-2.5 rounded-full border px-4 sm:px-6 py-1.5 sm:py-2 shadow-xs transition-colors"
-            style={{
-              backgroundColor: "var(--accent-soft)",
-              borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
-            }}
-          >
-            <div
-              className="h-2 w-2 rounded-full animate-pulse shadow-lg transition-colors"
-              style={{ backgroundColor: "var(--accent)" }}
-            />
-            <span
-              className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] font-['Inter'] transition-colors"
-              style={{ color: "var(--accent)" }}
-            >
-              Expert Diagnostic Leadership
-            </span>
-          </div>
-
           <h2 className="font-['Poppins'] text-[26px] font-extrabold leading-[1.18] text-[#0f172a] sm:text-[36px] lg:text-[44px]">
             Meet Our{" "}
             <span
@@ -506,7 +448,7 @@ export default function TeamCarousel({ members = [] }) {
                 transition: "color 0.4s ease-in-out",
               }}
             >
-              Board-Certified Specialists
+             Team
             </span>
           </h2>
 
@@ -547,7 +489,6 @@ export default function TeamCarousel({ members = [] }) {
                 stageWidth={stageWidth}
                 isActive={index === activeIndex}
                 onClick={() => handleCardClick(index)}
-                onOpenModal={(m) => setActiveModalMember(m)}
               />
             );
           })}
@@ -616,67 +557,6 @@ export default function TeamCarousel({ members = [] }) {
             <ChevronRight className="h-6 w-6" strokeWidth={2.5} />
           </button>
         </div>
-
-        {/* Member Full Details Modal */}
-        {activeModalMember && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200"
-            onClick={() => setActiveModalMember(null)}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="member-modal-title"
-          >
-            <div
-              className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl border border-slate-200 p-6 sm:p-7 animate-in zoom-in-95 duration-200"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Close button */}
-              <button
-                type="button"
-                onClick={() => setActiveModalMember(null)}
-                className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition-colors cursor-pointer"
-                aria-label="Close details"
-              >
-                <X className="h-4 w-4" />
-              </button>
-
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
-                {/* Member Photo */}
-                {activeModalMember.image && (
-                  <div className="relative h-28 w-28 sm:h-32 sm:w-32 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-sm">
-                    <img
-                      src={activeModalMember.image}
-                      alt={activeModalMember.name}
-                      width={activeModalMember.width || 800}
-                      height={activeModalMember.height || 800}
-                      decoding="async"
-                      className="h-full w-full object-cover object-[center_20%]"
-                    />
-                  </div>
-                )}
-
-                <div className="flex-1 text-center sm:text-left">
-                  <h3 id="member-modal-title" className="font-['Poppins'] text-[20px] font-bold text-[#0c2b48] leading-tight">
-                    {activeModalMember.name}
-                  </h3>
-                  <p
-                    className="mt-1 text-[13px] font-semibold"
-                    style={{ color: "var(--accent)" }}
-                  >
-                    {activeModalMember.designation}
-                  </p>
-                  <div
-                    className="my-3 h-0.5 w-12 rounded-full sm:mx-0 mx-auto"
-                    style={{ backgroundColor: "var(--accent)" }}
-                  />
-                  <p className="text-[13px] leading-relaxed text-slate-600 font-['Inter']">
-                    {activeModalMember.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );

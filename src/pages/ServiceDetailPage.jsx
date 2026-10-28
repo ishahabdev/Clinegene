@@ -70,7 +70,15 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
   // Set document title and meta description
   useEffect(() => {
     if (typeof document !== "undefined") {
-      document.title = `${service.name} | ClinGene`;
+      const title = `${service.name} | ClinGene`;
+      document.title = title;
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute("content", title);
+      const twTitle = document.querySelector('meta[name="twitter:title"]');
+      if (twTitle) twTitle.setAttribute("content", title);
+      const siteName = document.querySelector('meta[property="og:site_name"]');
+      if (siteName) siteName.setAttribute("content", "ClinGene");
+
       let metaDesc = document.querySelector('meta[name="description"]');
       if (!metaDesc) {
         metaDesc = document.createElement("meta");

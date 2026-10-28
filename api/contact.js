@@ -312,7 +312,7 @@ export default async function handler(req, res) {
         <div style="max-width:620px;margin:auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
           <div style="background:#061a2b;padding:24px;color:#ffffff">
             <h1>ClinGene Web Inquiry</h1>
-            <p>Submitted via clingene.co contact desk</p>
+            <p>Submitted via ClinGene contact desk</p>
             <strong>${isCareer ? "Careers & Opportunities" : "Genomic Inquiry"}</strong>
           </div>
 

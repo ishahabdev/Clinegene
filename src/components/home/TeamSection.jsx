@@ -27,9 +27,9 @@ export default function TeamSection() {
       <div className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4" id="team-members">
         {[
           {
-            name: "Dr. Amjad Ali Tanoli, Ph.D",
-            designation: "CEO / Director",
-            details: ["Human Geneticist, Consultant Genetic Counselor"],
+            name: "Dr. Amjad Ali Tanoli Ph.D",
+            designation: "CEO/Director",
+            details: ["Human Geneticist", "Consultant Genetic Counselor"],
             image: amjadAli,
             width: 879,
             height: 1024,
@@ -37,7 +37,7 @@ export default function TeamSection() {
           {
             name: "Dr. Safdar Ali, Ph.D, Postdoc",
             designation: "Managing Director",
-            details: ["Princess Margaret Cancer Research Centre, Toronto, Canada; Medical Physicist"],
+            details: ["Princess Margaret Cancer Research Center, Toronto, Canada", "Medical Physicist"],
             image: safdarAli,
             width: 554,
             height: 526,
@@ -45,7 +45,7 @@ export default function TeamSection() {
           {
             name: "Dr. Kifayat Ullah, Ph.D",
             designation: "Molecular Biologist, Human Geneticist",
-            details: ["Quaid-i-Azam University, Islamabad; Yale School of Medicine, USA"],
+            details: ["Quaid-i-Azam University, Islamabad, Pakistan.", "Yale School of Medicine, Yale University, USA."],
             image: kifayatUllah,
             width: 341,
             height: 238,
