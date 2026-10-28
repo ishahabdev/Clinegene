@@ -452,7 +452,7 @@ export default function TeamCarousel({ members = [] }) {
             </span>
           </h2>
 
-          <p className="mx-auto mt-2.5 sm:mt-4 max-w-2xl text-[13px] leading-relaxed text-[#64748b] sm:text-[14px] lg:text-[15px] font-['Inter']">
+          <p className="mx-auto mt-2.5 sm:mt-4 max-w-2xl text-[13px] leading-relaxed text-[#64748b] sm:text-sm lg:text-[15px] font-['Inter']">
             Our leadership team combines decades of expertise in clinical diagnostics,<br className="hidden sm:block" />
             genomic medicine, and laboratory science to deliver world-class healthcare solutions.
           </p>

@@ -1,4 +1,13 @@
 {
+  "files.exclude": {
+    "**/.git": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/dist-ssr": true,
+    "**/build": true,
+    "**/.next": true,
+    "**/coverage": true
+  },
   "search.exclude": {
     "**/node_modules": true,
     "**/bower_components": true,
@@ -23,6 +32,7 @@
   "html.validate.scripts": false,
   "html.validate.styles": false,
   "css.validate": true,
+  "css.lint.unknownAtRules": "ignore",
   "eslint.ignore": true,
   "eslint.workingDirectories": [{ "mode": "auto" }]
 }

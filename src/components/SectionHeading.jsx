@@ -51,7 +51,7 @@ export default function SectionHeading({
 
         {description && (
           <p
-            className={`mt-4 max-w-[640px] font-inter text-base leading-[1.7] ${
+            className={`mt-4 max-w-160 font-inter text-base leading-[1.7] ${
               dark ? "text-slate-300" : descriptionClassName || "text-[#4a6e8b]"
             } ${center ? "text-center" : ""}`}
           >

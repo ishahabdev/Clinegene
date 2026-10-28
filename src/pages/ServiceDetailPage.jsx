@@ -39,6 +39,63 @@ function cleanText(text) {
     .replace(/\[.*?to be confirmed.*?\]/gi, "Contact us for details");
 }
 
+function SubServiceIcon({ id, className = "h-11 w-11", style }) {
+  if (id === "prenatal-diagnosis") {
+    return (
+      <svg className={className} style={style} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="24" cy="24" r="18" strokeDasharray="3 3.5" opacity="0.4" />
+        <circle cx="28" cy="18" r="4.5" />
+        <path d="M28 22.5c-4 0-7.5 3-7.5 7.5 0 4.5 3.5 7.5 8 7.5 3.5 0 6.5-2 6.5-5 0-3-2.5-5-5-5-3 0-5 2-5 2" />
+        <path d="M19 28a6 6 0 0 0 6 6" />
+      </svg>
+    );
+  }
+  if (id === "newborn-screening") {
+    return (
+      <svg className={className} style={style} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="24" cy="25" r="13" />
+        <circle cx="19" cy="23" r="1.8" fill="currentColor" />
+        <circle cx="29" cy="23" r="1.8" fill="currentColor" />
+        <path d="M20 29.5a5 5 0 0 0 8 0" />
+        <path d="M24 12c0-2.5 2-4 4.5-4 1.5 0 2.5 1 2.5 2" />
+        <path d="M11 25a3.5 3.5 0 1 1-3-3M37 25a3.5 3.5 0 1 0 3-3" />
+      </svg>
+    );
+  }
+  if (id === "genetic-diseases") {
+    return (
+      <svg className={className} style={style} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M15 10c0 7 18 11 18 17s-18 10-18 17" />
+        <path d="M33 10c0 7-18 11-18 17s18 10 18 17" />
+        <line x1="18" y1="14" x2="30" y2="14" />
+        <line x1="16" y1="19" x2="32" y2="19" />
+        <line x1="21" y1="27" x2="27" y2="27" />
+        <line x1="16" y1="35" x2="32" y2="35" />
+        <line x1="18" y1="40" x2="30" y2="40" />
+        <circle cx="15" cy="10" r="2" fill="currentColor" />
+        <circle cx="33" cy="10" r="2" fill="currentColor" />
+        <circle cx="15" cy="44" r="2" fill="currentColor" />
+        <circle cx="33" cy="44" r="2" fill="currentColor" />
+      </svg>
+    );
+  }
+  if (id === "chromosomal-abnormalities") {
+    return (
+      <svg className={className} style={style} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 9c2 0 3.5 1.5 3.5 4v5c0 2-1.5 3.5-3 4.5 1.5 1 3 2.5 3 4.5v7c0 2.5-1.5 4-3.5 4s-3.5-1.5-3.5-4v-7c0-2 1.5-3.5 3-4.5-1.5-1-3-2.5-3-4.5v-5c0-2.5 1.5-4 3.5-4Z" />
+        <path d="M31 9c2 0 3.5 1.5 3.5 4v5c0 2-1.5 3.5-3 4.5 1.5 1 3 2.5 3 4.5v7c0 2.5-1.5 4-3.5 4s-3.5-1.5-3.5-4v-7c0-2 1.5-3.5 3-4.5-1.5-1-3-2.5-3-4.5v-5c0-2.5 1.5-4 3.5-4Z" />
+      </svg>
+    );
+  }
+  return (
+    <svg className={className} style={style} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="24" cy="15" rx="6" ry="7" />
+      <path d="M20 20 12 37c-1 2 0 3.5 1.5 3.5h3L24 30l7.5 10.5h3c1.5 0 2.5-1.5 1.5-3.5L28 20" />
+      <circle cx="24" cy="15" r="2.2" fill="currentColor" />
+    </svg>
+  );
+}
+
 export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
   const { theme } = useTheme();
   const isRed = theme === "red";
@@ -96,8 +153,14 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
 
   // Find index for Prev / Next links
   const currentIndex = servicesData.findIndex((s) => s.slug === service.slug);
-  const prevService = servicesData[(currentIndex - 1 + servicesData.length) % servicesData.length];
-  const nextService = servicesData[(currentIndex + 1) % servicesData.length];
+  const prevService =
+    currentIndex >= 0
+      ? servicesData[(currentIndex - 1 + servicesData.length) % servicesData.length]
+      : servicesData[servicesData.length - 1];
+  const nextService =
+    currentIndex >= 0
+      ? servicesData[(currentIndex + 1) % servicesData.length]
+      : servicesData[0];
 
   // Related services
   const relatedServices = (service.relatedSlugs || [])
@@ -300,6 +363,69 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
           </ScrollReveal>
         </div>
       </section>
+
+      {/* ================= 2b. SUB-SERVICES (GENETIC COUNSELLING) ================= */}
+      {service.subServices && service.subServices.length > 0 && (
+        <section 
+          aria-labelledby="service-subservices-heading"
+          className="py-10 sm:py-12 border-t border-slate-200/60 bg-linear-to-b from-[#f4fbfe] to-white"
+        >
+          <div className="site-container max-w-5xl">
+            <ScrollReveal>
+              <div className="flex items-center gap-1.5 font-inter text-xs font-bold text-[#00bcd4] uppercase tracking-wider mb-2">
+                <svg className="h-3.5 w-3.5 text-[#00bcd4]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 16v-4M12 8h.01" strokeLinecap="round" />
+                </svg>
+                <span>Sub Services</span>
+              </div>
+              <h2 
+                id="service-subservices-heading"
+                className="font-outfit text-2xl sm:text-3xl font-extrabold text-[#0c2b48]"
+              >
+                Specialized Clinical Focus Areas
+              </h2>
+              <p className="mt-2 text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
+                Professional guidance and support to help you understand genetic risks and make informed decisions across specialized areas:
+              </p>
+
+              <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
+                {service.subServices.map((sub) => {
+                  const themeAccentColor = isRed ? "#c81e25" : isGreen ? "#059669" : "#00bcd4";
+                  const themeCardBorderHover = isRed ? "hover:border-[#c81e25]" : isGreen ? "hover:border-[#059669]" : "hover:border-[#00bcd4]";
+
+                  return (
+                    <a
+                      key={sub.id}
+                      href={`/contact?service=genetic-counselling-${sub.id}`}
+                      className={`group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-[0_2px_10px_rgba(12,43,72,0.04)] hover:shadow-lg ${themeCardBorderHover} hover:-translate-y-1 transition-all duration-300`}
+                    >
+                      <div className="flex h-14 w-14 items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                        <SubServiceIcon
+                          id={sub.id}
+                          className="h-11 w-11 transition-colors duration-300"
+                          style={{ color: themeAccentColor }}
+                        />
+                      </div>
+
+                      <h3 className="mt-3 mb-3.5 font-outfit text-xs sm:text-sm font-bold text-[#0c2b48] leading-tight min-h-8 flex items-center justify-center">
+                        {sub.label}
+                      </h3>
+
+                      <span
+                        className="mt-auto flex h-7 w-7 items-center justify-center rounded-full text-white shadow-xs transition-transform duration-300 group-hover:scale-115"
+                        style={{ backgroundColor: themeAccentColor }}
+                      >
+                        <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+                      </span>
+                    </a>
+                  );
+                })}
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+      )}
 
       {/* ================= 3. WHAT YOU GET ================= */}
       <section 

@@ -202,10 +202,10 @@ export default function TeamMemberCard({ member }) {
           <Avatar name={name} department={department} />
           
           <div className="mt-5 w-full">
-            <h3 className="font-outfit text-[20px] font-extrabold leading-tight text-[#0c2b48] sm:text-[22px]">
+            <h3 className="font-outfit text-xl font-extrabold leading-tight text-[#0c2b48] sm:text-[22px]">
               {name}
             </h3>
-            <p className={`mt-2 text-[14px] font-bold ${deptColors.text}`}>
+            <p className={`mt-2 text-sm font-bold ${deptColors.text}`}>
               {designation}
             </p>
             

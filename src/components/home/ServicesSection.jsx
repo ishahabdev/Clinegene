@@ -157,8 +157,18 @@ export default function ServicesSection() {
                     <span className="service-card-icon absolute -top-7.5 left-5 grid h-15 w-15 place-items-center rounded-[15px] border border-[#d4e5f2] motion-reduce:transform-none motion-reduce:transition-none">
                       <service.Icon aria-hidden="true" size={22} strokeWidth={1.8} />
                     </span>
-                    <h3 className="mt-4 text-[18px] font-bold leading-[1.35] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-(--accent-dark) group-focus-within:text-(--accent-dark) motion-reduce:transition-none">{service.name}</h3>
+                    <h3 className="mt-4 text-lg font-bold leading-[1.35] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-(--accent-dark) group-focus-within:text-(--accent-dark) motion-reduce:transition-none">{service.name}</h3>
                     <p className="mt-3 text-base leading-[1.6] text-[#58748d]">{service.description}</p>
+                    {service.subServices && service.subServices.length > 0 && (
+                      <ul className="mt-3 space-y-1 border-t border-[#d4e5f2]/70 pt-2.5 text-xs text-[#58748d]">
+                        {service.subServices.map((sub, sIdx) => (
+                          <li key={sub.id || sIdx} className="flex items-center gap-1.5">
+                            <span className="font-semibold text-(--accent)">{String.fromCharCode(97 + sIdx)})</span>
+                            <span>{sub.label}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                     <span className="service-card-explore mt-auto inline-flex items-center gap-2 whitespace-nowrap pt-5 text-base font-bold">
                       Explore
                       <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-focus-within:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
@@ -177,7 +187,7 @@ export default function ServicesSection() {
             type="button"
             aria-current={serviceIndex === index ? "true" : undefined}
             aria-label={`Show ${service.name}`}
-            className="flex min-h-11 min-w-7 sm:min-w-[34px] items-center justify-center p-1.5 cursor-pointer touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+            className="flex min-h-11 min-w-7 sm:min-w-8.5 items-center justify-center p-1.5 cursor-pointer touch-manipulation focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
             onClick={() => goToService(index)}
           >
             <span

@@ -59,7 +59,7 @@ export default function AboutSection() {
           </Button>
          
           <a
-            className="group inline-flex min-h-9 sm:min-h-12 items-center gap-2 px-2 font-outfit text-xs sm:text-sm font-bold transition-colors hover:text-[#0c2b48] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
+            className="group inline-flex min-h-9 sm:min-h-12 items-center gap-2 px-2 font-outfit text-xs sm:text-sm font-bold transition-colors hover:text-[#0c2b48] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]"
             href="/ceo-message"
             style={{ color: "var(--accent-muted)", transition: "color 0.4s ease-in-out" }}
           >

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { seoRoutes, BASE_URL } from "./src/data/seoData.js";
+import { seoRoutes, BASE_URL, serviceSlugs, legacyServiceSlugs } from "./src/data/seoData.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -22,7 +22,14 @@ async function prerender() {
 
   const { render } = await import(pathToFileURL(ssrBundlePath).href);
 
-  const routes = Object.keys(seoRoutes);
+  // Derive service routes directly from serviceSlugs and legacyServiceSlugs
+  const dynamicServiceRoutes = [
+    ...serviceSlugs.map((slug) => `/services/${slug}`),
+    ...legacyServiceSlugs.map((slug) => `/services/${slug}`),
+  ];
+
+  const routeSet = new Set([...Object.keys(seoRoutes), ...dynamicServiceRoutes]);
+  const routes = Array.from(routeSet);
   console.log(`📄 Prerendering ${routes.length} public routes...`);
 
   for (const route of routes) {

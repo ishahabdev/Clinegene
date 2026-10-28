@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, ArrowRight, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { ChevronDown, ArrowRight, Loader2, CheckCircle, AlertCircle, Check } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
@@ -66,6 +66,184 @@ function ContactIcon({ type }) {
   );
 }
 
+function ServiceDropdown({ value, onChange, id = "contact-service", name = "service" }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef(null);
+  const menuRef = useRef(null);
+
+  const gc = servicesData.find((s) => s.slug === "genetic-counselling");
+
+  const serviceGroups = [
+    {
+      label: "General",
+      options: [
+        { value: "general-inquiry", label: "General Inquiry / Consultation" },
+        { value: "research-collaboration", label: "Research Collaboration" },
+      ],
+    },
+    {
+      label: "Genetic Counselling",
+      options: [
+        { value: "genetic-counselling", label: "Genetic Counselling - General" },
+        ...(gc?.subServices || []).map((sub) => ({
+          value: `genetic-counselling-${sub.id}`,
+          label: `Genetic Counselling - ${sub.label}`,
+        })),
+      ],
+    },
+    {
+      label: "Services",
+      options: servicesData
+        .filter((s) => s.slug !== "genetic-counselling")
+        .map((s) => ({
+          value: s.slug,
+          label: s.name,
+        })),
+    },
+    {
+      label: "Careers",
+      options: [
+        { value: "job", label: "Job Application" },
+        { value: "internship", label: "Internship" },
+      ],
+    },
+  ];
+
+  const allOptions = serviceGroups.flatMap((g) => g.options);
+  const selectedOption = allOptions.find((o) => o.value === value);
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+      document.addEventListener("touchstart", handleOutsideClick);
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
+  // Isolate mouse wheel events so smooth scroll libraries (Lenis) don't hijack dropdown scrolling
+  useEffect(() => {
+    const el = menuRef.current;
+    if (!el || !isOpen) return;
+
+    const stopWheel = (e) => {
+      e.stopPropagation();
+    };
+
+    el.addEventListener("wheel", stopWheel, { passive: true });
+    return () => {
+      el.removeEventListener("wheel", stopWheel);
+    };
+  }, [isOpen]);
+
+  const handleSelect = (val) => {
+    onChange(val);
+    setIsOpen(false);
+  };
+
+  return (
+    <div ref={containerRef} className="relative w-full">
+      {/* Hidden input to ensure FormData captures the exact value on submit */}
+      <input type="hidden" name={name} value={value || ""} />
+
+      {/* Dropdown Trigger Button */}
+      <button
+        id={id}
+        type="button"
+        role="combobox"
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-controls={`${id}-menu`}
+        onClick={() => setIsOpen((prev) => !prev)}
+        className={`w-full min-h-11 px-3.5 py-2.5 rounded-lg border bg-white text-left text-sm font-['Inter',sans-serif] transition-all flex items-center justify-between gap-2 shadow-2xs cursor-pointer ${
+          isOpen
+            ? "border-[#1ecbe1] ring-2 ring-[#1ecbe1]/20 outline-none"
+            : "border-slate-200 hover:border-slate-300 focus:border-[#1ecbe1] focus:ring-2 focus:ring-[#1ecbe1]/20 focus:outline-none"
+        }`}
+      >
+        <span className={`block truncate ${selectedOption ? "font-medium text-[#0c2b48]" : "text-slate-400"}`}>
+          {selectedOption ? selectedOption.label : "Select an option..."}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
+            isOpen ? "rotate-180 text-[#1ecbe1]" : "text-slate-400"
+          }`}
+          aria-hidden="true"
+        />
+      </button>
+
+      {/* Dropdown Menu Panel */}
+      {isOpen && (
+        <div
+          ref={menuRef}
+          id={`${id}-menu`}
+          role="listbox"
+          tabIndex={-1}
+          data-lenis-prevent="true"
+          data-lenis-prevent-wheel="true"
+          data-lenis-prevent-touch="true"
+          onWheel={(e) => e.stopPropagation()}
+          style={{
+            overscrollBehavior: "contain",
+            WebkitOverflowScrolling: "touch",
+          }}
+          className="absolute left-0 right-0 top-full mt-1.5 z-50 max-h-72 sm:max-h-80 overflow-y-auto overscroll-contain rounded-xl border border-slate-200/90 bg-white py-1.5 shadow-[0_12px_28px_rgba(12,43,72,0.12)] scrollbar-thin"
+        >
+          {serviceGroups.map((group) => (
+            <div key={group.label} className="border-t first:border-t-0 border-slate-100">
+              {/* Category Heading in Bold Navy */}
+              <div className="px-3.5 pt-2.5 pb-1 text-[11px] sm:text-xs font-bold text-[#0c2b48] uppercase tracking-wider bg-slate-50/70 select-none">
+                {group.label}
+              </div>
+
+              {/* Options in this category */}
+              <div className="py-0.5">
+                {group.options.map((opt) => {
+                  const isSelected = opt.value === value;
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      role="option"
+                      aria-selected={isSelected}
+                      onClick={() => handleSelect(opt.value)}
+                      className={`w-full text-left px-3.5 py-2 text-xs sm:text-[13.5px] font-['Inter',sans-serif] leading-snug transition-colors flex items-center justify-between gap-3 cursor-pointer ${
+                        isSelected
+                          ? "bg-[#eaf9fc] text-[#0c2b48] font-semibold"
+                          : "text-slate-700 hover:bg-slate-50 hover:text-[#0c2b48]"
+                      }`}
+                    >
+                      <span className="flex-1 wrap-break-word">{opt.label}</span>
+                      {isSelected && (
+                        <Check className="h-4 w-4 text-[#1ecbe1] shrink-0" strokeWidth={2.5} aria-hidden="true" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ContactPage() {
   const { theme } = useTheme();
   const isRed = theme === "red";
@@ -81,7 +259,22 @@ export default function ContactPage() {
   const [selectedService, setSelectedService] = useState(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      return params.get("service") || "";
+      const sParam = params.get("service") || "";
+      if (sParam.startsWith("genetic-counselling-")) {
+        return sParam;
+      }
+      if (
+        [
+          "prenatal-diagnosis",
+          "newborn-screening",
+          "genetic-diseases",
+          "chromosomal-abnormalities",
+          "hereditary-cancer",
+        ].includes(sParam)
+      ) {
+        return `genetic-counselling-${sParam}`;
+      }
+      return sParam;
     }
     return "";
   });
@@ -181,18 +374,31 @@ export default function ContactPage() {
       return;
     }
 
-    const matchingService = servicesData.find((s) => s.slug === serviceSlug);
-    const serviceDisplayName = matchingService
-      ? matchingService.name
-      : serviceSlug === "job" || serviceSlug === "job-application"
-        ? "Job Application"
-        : serviceSlug === "internship"
-          ? "Internship Application"
-          : serviceSlug === "general-inquiry"
-            ? "General Inquiry / Consultation"
-            : serviceSlug === "research-collaboration"
-              ? "Research Collaboration"
-              : serviceSlug;
+    const gcService = servicesData.find((s) => s.slug === "genetic-counselling");
+    let serviceDisplayName = serviceSlug;
+    if (serviceSlug.startsWith("genetic-counselling-")) {
+      const subId = serviceSlug.replace("genetic-counselling-", "");
+      const matchedSub = gcService?.subServices?.find((sub) => sub.id === subId);
+      serviceDisplayName = matchedSub
+        ? `Genetic Counselling - ${matchedSub.label}`
+        : `Genetic Counselling - ${subId}`;
+    } else {
+      const matchingService = servicesData.find((s) => s.slug === serviceSlug);
+      if (matchingService) {
+        serviceDisplayName =
+          matchingService.slug === "genetic-counselling"
+            ? "Genetic Counselling - General"
+            : matchingService.name;
+      } else if (serviceSlug === "job" || serviceSlug === "job-application") {
+        serviceDisplayName = "Job Application";
+      } else if (serviceSlug === "internship") {
+        serviceDisplayName = "Internship Application";
+      } else if (serviceSlug === "general-inquiry") {
+        serviceDisplayName = "General Inquiry / Consultation";
+      } else if (serviceSlug === "research-collaboration") {
+        serviceDisplayName = "Research Collaboration";
+      }
+    }
 
     const payload = {
       fullName,
@@ -455,10 +661,10 @@ export default function ContactPage() {
 
           {/* Send us a message Form Card */}
           <div className="rounded-2xl sm:rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 lg:p-9 shadow-[0_12px_36px_rgba(5,11,28,0.06)]">
-            <h2 className="font-['Poppins',sans-serif] text-[24px] sm:text-[28px] font-bold leading-snug text-[#0c2b48]">
+            <h2 className="font-['Poppins',sans-serif] text-2xl sm:text-[28px] font-bold leading-snug text-[#0c2b48]">
               Send us a message
             </h2>
-            <p className="mt-1 text-xs sm:text-[14px] text-slate-500 font-['Inter',sans-serif]">
+            <p className="mt-1 text-xs sm:text-sm text-slate-500 font-['Inter',sans-serif]">
               Fill in the form and our team will get back to you shortly.
             </p>
 
@@ -555,44 +761,17 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Row 3: Area of Interest with optgroup */}
+              {/* Row 3: Area of Interest with custom dropdown */}
               <div>
                 <label htmlFor="contact-service" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
                   Primary Service of Interest <span className="text-red-500">*</span>
                 </label>
-                <div className="relative">
-                  <select
-                    id="contact-service"
-                    name="service"
-                    value={selectedService}
-                    onChange={(e) => setSelectedService(e.target.value)}
-                    required
-                    className="w-full h-11 appearance-none px-3.5 pr-10 rounded-lg border border-slate-200 bg-white text-sm font-['Inter',sans-serif] text-slate-800 transition-all focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none cursor-pointer"
-                  >
-                    <option value="">Select an option...</option>
-                    
-                    <optgroup label="General">
-                      <option value="general-inquiry">General Inquiry / Consultation</option>
-                      <option value="research-collaboration">Research Collaboration</option>
-                    </optgroup>
-
-                    <optgroup label="Services">
-                      {servicesData.map((s) => (
-                        <option key={s.slug} value={s.slug}>
-                          {s.name}
-                        </option>
-                      ))}
-                    </optgroup>
-
-                    <optgroup label="Careers">
-                      <option value="job">Job Application</option>
-                      <option value="internship">Internship</option>
-                    </optgroup>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-400">
-                    <ChevronDown className="h-4 w-4" aria-hidden="true" />
-                  </div>
-                </div>
+                <ServiceDropdown
+                  id="contact-service"
+                  name="service"
+                  value={selectedService}
+                  onChange={setSelectedService}
+                />
               </div>
 
               {/* Conditional Careers Fields: Position & CV upload */}

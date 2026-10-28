@@ -11,6 +11,32 @@ export const COMPANY_PHONE = "+923485607051";
 export const COMPANY_LOCATION = "Islamabad, Pakistan";
 export const DEFAULT_OG_IMAGE = `${BASE_URL}/images/og-image.jpg`;
 
+export const serviceSlugs = [
+  "genetic-counselling",
+  "whole-exome-genome-sequencing",
+  "panel-sequencing",
+  "sanger-sequencing",
+  "rna-seq",
+  "whole-genome-metagenome",
+  "phylogenetic-tree-construction",
+  "pangenome-analysis",
+  "protein-docking-molecular-dynamics",
+  "protein-modeling",
+  "immunogenicity-analysis",
+  "virtual-screening",
+  "library-generation",
+  "molecular-biology-services",
+  "project-design",
+];
+
+export const legacyServiceSlugs = [
+  "clinical-genetic-testing",
+  "single-cell-rna-seq-analysis",
+  "16s-rrna-metagenome-sequencing",
+  "whole-fungal-genome-sequencing",
+  "plant-genome-sequencing",
+];
+
 export const ORGANIZATION_SCHEMA = {
   "@context": "https://schema.org",
   "@type": ["MedicalOrganization", "ResearchOrganization", "Organization"],
@@ -512,7 +538,7 @@ export const seoRoutes = {
   },
 
   "/services/whole-genome-metagenome": {
-    title: "Whole Genome Metagenome | ClinGene",
+    title: "Metagenome Sequencing Services in Pakistan | ClinGene",
     description:
       "Shotgun metagenomic sequencing and functional gene profiling in Pakistan. Metagenome assembly, MAG binning, and metabolic pathway reconstruction.",
     canonical: `${BASE_URL}/services/whole-genome-metagenome`,
@@ -599,7 +625,7 @@ export const seoRoutes = {
   },
 
   "/services/phylogenetic-tree-construction": {
-    title: "Phylogenetic Tree Construction | ClinGene",
+    title: "Phylogenetic Tree Construction & Analysis | ClinGene",
     description:
       "Phylogenetic analysis and evolutionary tree construction in Pakistan using Maximum Likelihood, Bayesian, and Neighbor-Joining algorithms.",
     canonical: `${BASE_URL}/services/phylogenetic-tree-construction`,
@@ -657,7 +683,7 @@ export const seoRoutes = {
   },
 
   "/services/protein-docking-molecular-dynamics": {
-    title: "Protein Docking & Molecular Dynamics | ClinGene",
+    title: "MD Simulation & Molecular Dynamics in Pakistan | ClinGene",
     description:
       "Computational drug discovery and protein-ligand docking in Pakistan. GROMACS/AMBER molecular dynamics simulations with binding free energy analysis.",
     canonical: `${BASE_URL}/services/protein-docking-molecular-dynamics`,
@@ -680,6 +706,238 @@ export const seoRoutes = {
         url: `${BASE_URL}/services/protein-docking-molecular-dynamics`,
         serviceType: "Computational Biophysics",
         description: "Atomistic molecular dynamics simulations, binding affinity calculation, and structural modeling.",
+        areaServed: "Pakistan",
+      },
+    ],
+  },
+
+  "/services/genetic-counselling": {
+    title: "Genetic Counselling Services in Pakistan | ClinGene",
+    description:
+      "Expert genetic counselling in Pakistan for prenatal diagnosis, newborn screening, genetic diseases, chromosomal abnormalities, and hereditary cancer.",
+    canonical: `${BASE_URL}/services/genetic-counselling`,
+    ogType: "service",
+    schema: [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
+          { "@type": "ListItem", position: 3, name: "Genetic Counselling", item: `${BASE_URL}/services/genetic-counselling` },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Genetic Counselling",
+        provider: { "@id": `${BASE_URL}/#organization` },
+        url: `${BASE_URL}/services/genetic-counselling`,
+        serviceType: "Clinical Genetics",
+        description: "Comprehensive risk assessment, pedigree analysis, pre-test and post-test genetic counselling in Pakistan.",
+        areaServed: "Pakistan",
+      },
+    ],
+  },
+
+  "/services/panel-sequencing": {
+    title: "Targeted Panel Sequencing in Pakistan | ClinGene",
+    description:
+      "High-depth targeted next-generation sequencing gene panels in Pakistan for oncology, cardiology, neurology, and rare inherited genetic disorders.",
+    canonical: `${BASE_URL}/services/panel-sequencing`,
+    ogType: "service",
+    schema: [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
+          { "@type": "ListItem", position: 3, name: "Panel Sequencing", item: `${BASE_URL}/services/panel-sequencing` },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Panel sequencing",
+        provider: { "@id": `${BASE_URL}/#organization` },
+        url: `${BASE_URL}/services/panel-sequencing`,
+        serviceType: "Targeted NGS",
+        description: "Deep coverage targeted NGS panels for clinical diagnostic and research cohort screening.",
+        areaServed: "Pakistan",
+      },
+    ],
+  },
+
+  "/services/protein-modeling": {
+    title: "Protein Modeling & 3D Structure Prediction | ClinGene",
+    description:
+      "State-of-the-art homology modeling, AlphaFold 3D structure prediction, and stereochemical refinement for drug targets and mutational impact in Pakistan.",
+    canonical: `${BASE_URL}/services/protein-modeling`,
+    ogType: "service",
+    schema: [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
+          { "@type": "ListItem", position: 3, name: "Protein Modeling", item: `${BASE_URL}/services/protein-modeling` },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Protein modeling",
+        provider: { "@id": `${BASE_URL}/#organization` },
+        url: `${BASE_URL}/services/protein-modeling`,
+        serviceType: "Computational Structural Biology",
+        description: "In silico tertiary structure prediction, energy minimization, and active site druggability assessment.",
+        areaServed: "Pakistan",
+      },
+    ],
+  },
+
+  "/services/immunogenicity-analysis": {
+    title: "Immunogenicity Analysis & Epitope Prediction | ClinGene",
+    description:
+      "Computational immunogenicity assessment, MHC-I/II binding profiling, and B-cell epitope prediction for biotherapeutics and vaccine development in Pakistan.",
+    canonical: `${BASE_URL}/services/immunogenicity-analysis`,
+    ogType: "service",
+    schema: [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
+          { "@type": "ListItem", position: 3, name: "Immunogenicity Analysis", item: `${BASE_URL}/services/immunogenicity-analysis` },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Immunogenicity Analysis",
+        provider: { "@id": `${BASE_URL}/#organization` },
+        url: `${BASE_URL}/services/immunogenicity-analysis`,
+        serviceType: "Immunoinformatics",
+        description: "In silico immune reactivity profiling, epitope mapping, and population coverage calculation.",
+        areaServed: "Pakistan",
+      },
+    ],
+  },
+
+  "/services/virtual-screening": {
+    title: "Virtual Screening & In Silico Lead Discovery | ClinGene",
+    description:
+      "High-throughput structure- and ligand-based virtual screening, molecular docking, and ADMET profiling for accelerated drug discovery in Pakistan.",
+    canonical: `${BASE_URL}/services/virtual-screening`,
+    ogType: "service",
+    schema: [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
+          { "@type": "ListItem", position: 3, name: "Virtual Screening", item: `${BASE_URL}/services/virtual-screening` },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Virtual Screening",
+        provider: { "@id": `${BASE_URL}/#organization` },
+        url: `${BASE_URL}/services/virtual-screening`,
+        serviceType: "Computational Drug Discovery",
+        description: "Structure-based and ligand-based high-throughput screening of chemical libraries.",
+        areaServed: "Pakistan",
+      },
+    ],
+  },
+
+  "/services/library-generation": {
+    title: "NGS Library Preparation & Generation Services | ClinGene",
+    description:
+      "Quality-assured next-generation sequencing library preparation for DNA, RNA, amplicons, and low-input samples on Illumina and MGI platforms in Pakistan.",
+    canonical: `${BASE_URL}/services/library-generation`,
+    ogType: "service",
+    schema: [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
+          { "@type": "ListItem", position: 3, name: "Library Generation", item: `${BASE_URL}/services/library-generation` },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Library generation",
+        provider: { "@id": `${BASE_URL}/#organization` },
+        url: `${BASE_URL}/services/library-generation`,
+        serviceType: "Genomic Library Preparation",
+        description: "NGS library construction for short-read and long-read platforms with Bioanalyzer quality control.",
+        areaServed: "Pakistan",
+      },
+    ],
+  },
+
+  "/services/molecular-biology-services": {
+    title: "Molecular Biology Services & Laboratory Solutions | ClinGene",
+    description:
+      "Standardized wet-lab molecular biology services in Pakistan including DNA/RNA isolation, qualitative PCR, real-time qPCR, and recombinant cloning.",
+    canonical: `${BASE_URL}/services/molecular-biology-services`,
+    ogType: "service",
+    schema: [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
+          { "@type": "ListItem", position: 3, name: "Molecular Biology Services", item: `${BASE_URL}/services/molecular-biology-services` },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Molecular Biology Services",
+        provider: { "@id": `${BASE_URL}/#organization` },
+        url: `${BASE_URL}/services/molecular-biology-services`,
+        serviceType: "Wet-Lab Molecular Biology",
+        description: "Nucleic acid extraction, PCR amplification, real-time qPCR, and molecular assay support.",
+        areaServed: "Pakistan",
+      },
+    ],
+  },
+
+  "/services/project-design": {
+    title: "Genomics Project Design & Research Advisory | ClinGene",
+    description:
+      "Strategic experimental design, statistical power calculation, sequencing depth optimization, and multi-omics consultation for scientific research in Pakistan.",
+    canonical: `${BASE_URL}/services/project-design`,
+    ogType: "service",
+    schema: [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: `${BASE_URL}/` },
+          { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
+          { "@type": "ListItem", position: 3, name: "Project Design", item: `${BASE_URL}/services/project-design` },
+        ],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: "Project Design",
+        provider: { "@id": `${BASE_URL}/#organization` },
+        url: `${BASE_URL}/services/project-design`,
+        serviceType: "Scientific Consultation",
+        description: "Experimental design, statistical power sizing, platform selection, and grant methodology advisory.",
         areaServed: "Pakistan",
       },
     ],

@@ -1,4 +1,10 @@
-import servicesData, { servicesBySlug, getServiceBySlug } from "./servicesData.js";
+import servicesData, {
+  legacyServices,
+  servicesBySlug,
+  getServiceBySlug,
+  allServices,
+} from "./servicesData.js";
 
-export { servicesData, servicesBySlug, getServiceBySlug };
+export { servicesData, legacyServices, servicesBySlug, getServiceBySlug, allServices };
 export default servicesData;
+

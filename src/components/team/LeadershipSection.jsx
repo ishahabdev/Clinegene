@@ -65,7 +65,7 @@ function LeadershipCard({ leader, index }) {
             <div className="flex flex-wrap items-center gap-2.5 w-full">
               <a
                 href={`mailto:${leader.email}`}
-                className="inline-flex min-h-11 flex-1 sm:flex-initial min-w-[120px] items-center justify-center gap-2 rounded-full bg-black px-5 py-2.5 text-[14px] font-semibold text-white transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black touch-manipulation"
+                className="inline-flex min-h-11 flex-1 sm:flex-initial min-w-30 items-center justify-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black touch-manipulation"
                 aria-label={`Email ${leader.name}`}
               >
                 <Mail className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" />
@@ -75,7 +75,7 @@ function LeadershipCard({ leader, index }) {
                 href={leader.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 flex-1 sm:flex-initial min-w-[120px] items-center justify-center gap-2 rounded-full border-2 border-[#d4e5f2] bg-white px-5 py-2.5 text-[14px] font-semibold text-[#0c2b48] transition-all duration-300 hover:border-(--accent) hover:bg-(--accent) hover:text-white hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) touch-manipulation"
+                className="inline-flex min-h-11 flex-1 sm:flex-initial min-w-30 items-center justify-center gap-2 rounded-full border-2 border-[#d4e5f2] bg-white px-5 py-2.5 text-sm font-semibold text-[#0c2b48] transition-all duration-300 hover:border-(--accent) hover:bg-(--accent) hover:text-white hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) touch-manipulation"
                 aria-label={`View ${leader.name}'s LinkedIn profile`}
               >
                 <svg className="h-4 w-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -87,7 +87,7 @@ function LeadershipCard({ leader, index }) {
           </div>
 
           <div className={`relative w-full max-w-full min-w-0 ${isImageLeft ? 'lg:col-start-1 lg:order-1' : 'lg:col-start-2 lg:order-2'}`}>
-            <div className="relative h-full w-full min-h-65 sm:min-h-85 lg:min-h-113 aspect-4/3 sm:aspect-[16/10] lg:aspect-auto leadership-photo-wrapper overflow-hidden" data-position={isImageLeft ? 'left' : 'right'}>
+            <div className="relative h-full w-full min-h-65 sm:min-h-85 lg:min-h-113 aspect-4/3 sm:aspect-8/5 lg:aspect-auto leadership-photo-wrapper overflow-hidden" data-position={isImageLeft ? 'left' : 'right'}>
               <img
                 src={leader.image}
                 alt={leader.imageAlt}

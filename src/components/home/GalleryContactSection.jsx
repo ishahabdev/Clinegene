@@ -99,7 +99,7 @@ export default function GalleryContactSection() {
         </Button>
         <address className="mt-7 space-y-5 not-italic text-sm leading-6 text-slate-600">
           {/* Phone hidden until confirmed by client per SECP personal data guidelines */}
-          <a className="flex items-start gap-3 break-all transition-colors hover:text-[#0a7a94] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="mailto:info@clingene.co">
+          <a className="flex items-start gap-3 break-all transition-colors hover:text-[#0a7a94] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48]" href="mailto:info@clingene.co">
             <svg aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#0d9c9c]" fill="none" viewBox="0 0 24 24">
               <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.7" />
               <path d="m4 7 8 6 8-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" />

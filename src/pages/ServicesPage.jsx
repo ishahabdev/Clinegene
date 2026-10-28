@@ -6,6 +6,63 @@ import serviceHero from "../assets/service-hero.webp";
 import services from "../data/services";
 import { useTheme } from "../context/ThemeContext.jsx";
 
+function SubServiceIcon({ id, className = "h-11 w-11", style }) {
+  if (id === "prenatal-diagnosis") {
+    return (
+      <svg className={className} style={style} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="24" cy="24" r="18" strokeDasharray="3 3.5" opacity="0.4" />
+        <circle cx="28" cy="18" r="4.5" />
+        <path d="M28 22.5c-4 0-7.5 3-7.5 7.5 0 4.5 3.5 7.5 8 7.5 3.5 0 6.5-2 6.5-5 0-3-2.5-5-5-5-3 0-5 2-5 2" />
+        <path d="M19 28a6 6 0 0 0 6 6" />
+      </svg>
+    );
+  }
+  if (id === "newborn-screening") {
+    return (
+      <svg className={className} style={style} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="24" cy="25" r="13" />
+        <circle cx="19" cy="23" r="1.8" fill="currentColor" />
+        <circle cx="29" cy="23" r="1.8" fill="currentColor" />
+        <path d="M20 29.5a5 5 0 0 0 8 0" />
+        <path d="M24 12c0-2.5 2-4 4.5-4 1.5 0 2.5 1 2.5 2" />
+        <path d="M11 25a3.5 3.5 0 1 1-3-3M37 25a3.5 3.5 0 1 0 3-3" />
+      </svg>
+    );
+  }
+  if (id === "genetic-diseases") {
+    return (
+      <svg className={className} style={style} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M15 10c0 7 18 11 18 17s-18 10-18 17" />
+        <path d="M33 10c0 7-18 11-18 17s18 10 18 17" />
+        <line x1="18" y1="14" x2="30" y2="14" />
+        <line x1="16" y1="19" x2="32" y2="19" />
+        <line x1="21" y1="27" x2="27" y2="27" />
+        <line x1="16" y1="35" x2="32" y2="35" />
+        <line x1="18" y1="40" x2="30" y2="40" />
+        <circle cx="15" cy="10" r="2" fill="currentColor" />
+        <circle cx="33" cy="10" r="2" fill="currentColor" />
+        <circle cx="15" cy="44" r="2" fill="currentColor" />
+        <circle cx="33" cy="44" r="2" fill="currentColor" />
+      </svg>
+    );
+  }
+  if (id === "chromosomal-abnormalities") {
+    return (
+      <svg className={className} style={style} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 9c2 0 3.5 1.5 3.5 4v5c0 2-1.5 3.5-3 4.5 1.5 1 3 2.5 3 4.5v7c0 2.5-1.5 4-3.5 4s-3.5-1.5-3.5-4v-7c0-2 1.5-3.5 3-4.5-1.5-1-3-2.5-3-4.5v-5c0-2.5 1.5-4 3.5-4Z" />
+        <path d="M31 9c2 0 3.5 1.5 3.5 4v5c0 2-1.5 3.5-3 4.5 1.5 1 3 2.5 3 4.5v7c0 2.5-1.5 4-3.5 4s-3.5-1.5-3.5-4v-7c0-2 1.5-3.5 3-4.5-1.5-1-3-2.5-3-4.5v-5c0-2.5 1.5-4 3.5-4Z" />
+      </svg>
+    );
+  }
+  return (
+    <svg className={className} style={style} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="24" cy="15" rx="6" ry="7" />
+      <path d="M20 20 12 37c-1 2 0 3.5 1.5 3.5h3L24 30l7.5 10.5h3c1.5 0 2.5-1.5 1.5-3.5L28 20" />
+      <circle cx="24" cy="15" r="2.2" fill="currentColor" />
+    </svg>
+  );
+}
+
 export default function ServicesPage() {
   const { theme } = useTheme();
   const isRed = theme === "red";
@@ -216,8 +273,105 @@ export default function ServicesPage() {
               <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
             </Button>
           </ScrollReveal>
+          {/* ── Featured Top Card: Genetic Counselling & Sub-Services ── */}
+          {(() => {
+            const gc = services.find((s) => s.slug === "genetic-counselling") || services[0];
+            const themeAccentColor = isRed ? "#c81e25" : isGreen ? "#059669" : "#00bcd4";
+            const themeCardBorderHover = isRed ? "hover:border-[#c81e25]" : isGreen ? "hover:border-[#059669]" : "hover:border-[#00bcd4]";
+            const themeBannerBorder = isRed ? "border-[#fecdd3]" : isGreen ? "border-[#a7f3d0]" : "border-[#cbe8f6]";
+            const themeBannerBg = isRed
+              ? "bg-linear-to-r from-[#fff5f5] via-white to-[#fff1f2]"
+              : isGreen
+                ? "bg-linear-to-r from-[#f0fdf4] via-white to-[#ecfdf5]"
+                : "bg-linear-to-r from-[#eef9fd] via-[#f5fbfe] to-[#eaf5fc]";
+
+            return (
+              <ScrollReveal as="div" className={`relative mb-7 overflow-hidden rounded-2xl sm:rounded-3xl border ${themeBannerBorder} ${themeBannerBg} p-5 sm:p-7 lg:p-8 shadow-[0_4px_22px_rgba(12,43,72,0.06)] transition-colors duration-500`}>
+                
+                {/* Number 1 Badge on Card */}
+                <div className="flex items-center gap-2 mb-3">
+                  <span
+                    className="rounded-md px-2.5 py-0.5 font-inter text-xs font-bold tracking-wide text-white shadow-2xs transition-colors duration-300"
+                    style={{ backgroundColor: badgeBg }}
+                  >
+                    01
+                  </span>
+                  <span className="font-inter text-[11px] font-bold uppercase tracking-wider text-[#0c2b48]/70">
+                    Service 01
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr] gap-6 lg:gap-8 items-center">
+                  
+                  {/* Left Column: Main Service Info */}
+                  <div className="flex flex-col items-start pr-0 lg:pr-6 lg:border-r border-slate-200/80">
+                    <h2 className="font-outfit text-2xl sm:text-3xl font-extrabold text-[#0c2b48] leading-tight">
+                      <span className="mr-2 transition-colors duration-300" style={{ color: themeAccentColor }}>1.</span>{gc.name}
+                    </h2>
+                    <p className="mt-3 font-inter text-xs sm:text-[13.5px] leading-relaxed text-[#4a6e8b]">
+                      Professional guidance and support to help you understand genetic risks and make informed decisions.
+                    </p>
+                    <a
+                      href={`/services/${gc.slug}`}
+                      className="mt-6 inline-flex items-center gap-2 rounded-full text-white font-inter font-bold text-xs sm:text-sm px-6 py-2.5 shadow-sm transition-all hover:shadow-md hover:scale-[1.02] active:scale-95"
+                      style={{ backgroundColor: themeAccentColor }}
+                    >
+                      <span>Learn More</span>
+                      <span aria-hidden="true" className="text-sm font-bold">›</span>
+                    </a>
+                  </div>
+
+                  {/* Right Column: Sub Services Row */}
+                  <div className="min-w-0 w-full">
+                    <div
+                      className="flex items-center gap-1.5 font-inter text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-3 sm:mb-3.5 transition-colors duration-300"
+                      style={{ color: themeAccentColor }}
+                    >
+                      <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 16v-4M12 8h.01" strokeLinecap="round" />
+                      </svg>
+                      <span>Sub Services</span>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 sm:gap-3">
+                      {gc.subServices?.map((sub) => (
+                        <a
+                          key={sub.id}
+                          href={`/contact?service=genetic-counselling-${sub.id}`}
+                          className={`group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-[0_2px_8px_rgba(12,43,72,0.03)] hover:shadow-md ${themeCardBorderHover} hover:-translate-y-0.5 transition-all duration-300`}
+                        >
+                          <div className="flex h-12 w-12 items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                            <SubServiceIcon
+                              id={sub.id}
+                              className="h-10 w-10 transition-colors duration-300"
+                              style={{ color: themeAccentColor }}
+                            />
+                          </div>
+
+                          <h3 className="mt-2.5 mb-3 font-outfit text-xs sm:text-[12.5px] font-bold text-[#0c2b48] leading-tight min-h-7 flex items-center justify-center">
+                            {sub.label}
+                          </h3>
+
+                          <span
+                            className="mt-auto flex h-6.5 w-6.5 sm:h-7 sm:w-7 items-center justify-center rounded-full text-white shadow-2xs transition-transform duration-300 group-hover:scale-110"
+                            style={{ backgroundColor: themeAccentColor }}
+                          >
+                            <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={2.5} />
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+
+                </div>
+              </ScrollReveal>
+            );
+          })()}
+
+          {/* ── Remaining Services Grid (02 to 15) in other line ── */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {services.map(({ slug, name, description, Icon, image, width, height }, index) => {
+            {services.filter((s) => s.slug !== "genetic-counselling").map(({ slug, name, description, Icon, image, width, height }, index) => {
               const serviceUrl = `/services/${slug}`;
 
               return (
@@ -242,7 +396,7 @@ export default function ServicesPage() {
                       className="absolute left-2 top-2 rounded-md px-2 py-1 font-inter text-[10px] font-bold tracking-wide text-white"
                       style={{ backgroundColor: badgeBg }}
                     >
-                      {String(index + 1).padStart(2, "0")}
+                      {String(index + 2).padStart(2, "0")}
                     </span>
                   </div>
                   <div className="relative flex flex-1 flex-col px-3 pb-3 pt-7 transition-colors duration-300">

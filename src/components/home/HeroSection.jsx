@@ -183,7 +183,7 @@ export default function HeroSection() {
 
         {/* ── Genomics card (bottom-right) ─────────────────────────── */}
         <div
-          className="absolute bottom-[68px] right-10 hidden w-[200px] flex-col justify-center overflow-hidden rounded-[14px] backdrop-blur-sm lg:flex xl:right-16"
+          className="absolute bottom-17 right-10 hidden w-50 flex-col justify-center overflow-hidden rounded-[14px] backdrop-blur-sm lg:flex xl:right-16"
           style={{
             /* Per-theme dark background */
             background: isRed
