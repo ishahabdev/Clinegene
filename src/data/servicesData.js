@@ -21,21 +21,20 @@ import {
 import clinicalTestingImage from "../assets/services/cropped/clinical-genetic-testing.webp";
 import sangerImage from "../assets/services/cropped/sanger-sequencing.webp";
 import exomeSequencingImage from "../assets/services/cropped/whole-exome-genome-sequencing.webp";
-import rnaSeqImage from "../assets/services/cropped/rna-seq.webp";
 import singleCellImage from "../assets/services/cropped/single-cell-rna-seq-analysis.webp";
 import metagenomeImage from "../assets/services/cropped/16s-rrna-metagenome-sequencing.webp";
-import wholeGenomeMetagenomeImage from "../assets/services/cropped/whole-genome-metagenome.webp";
 import fungalGenomeImage from "../assets/services/cropped/whole-fungal-genome-sequencing.webp";
 import pangenomeImage from "../assets/services/cropped/pangenome-analysis.webp";
 import phylogeneticImage from "../assets/services/cropped/phylogenetic-tree-construction.webp";
 import plantGenomeImage from "../assets/services/cropped/plant genome.webp";
 import proteinDockingImage from "../assets/services/cropped/protein-docking-molecular-dynamics.webp";
 import statisticalDataAnalysisImage from "../assets/services/cropped/statistical-data-analysis.webp";
-
 // Optimized high-resolution WebP service assets
 import geneticCounselingImage from "../assets/services/genetic-counseling-consultation.webp";
-import panelSequencingImage from "../assets/services/panel-sequencing-targeted-gene-panel.webp";
+import panelSequencingImage from "../assets/services/panel-sequencing.webp";
 import rnaSequencingNewImage from "../assets/services/rna-sequencing-transcriptome.webp";
+import metagenomeNewImage from "../assets/services/metagenome-sequencing.webp";
+import pangenomeNewImage from "../assets/services/pangenome-analysis.webp";
 import mdSimulationImage from "../assets/services/md-simulation-molecular-dynamics.webp";
 import immunogenicityImage from "../assets/services/immunogenicity-analysis-antibody-antigen.webp";
 import virtualScreeningImage from "../assets/services/virtual-screening-ligand-docking.webp";
@@ -202,9 +201,9 @@ export const servicesData = [
     tagline: "High-depth targeted next-generation sequencing for focused disease gene panels.",
     Icon: TestTubes,
     image: panelSequencingImage,
-    imageAlt: "Scientist loading samples next to a sequencer for targeted gene panel sequencing at ClinGene",
+    imageAlt: "Targeted next-generation panel sequencing in the laboratory at ClinGene",
     width: 800,
-    height: 754,
+    height: 597,
     description: "Deep-coverage targeted gene panels for oncology, cardiology, neurology, and rare inherited conditions.",
     overview: [
       "Targeted panel sequencing enriches curated subsets of clinically relevant genes, providing extraordinary coverage depth and sensitivity for single-nucleotide variants, insertions/deletions, and copy number variations.",
@@ -406,10 +405,10 @@ export const servicesData = [
     type: "lab",
     tagline: "Whole-genome metagenomic sequencing and analysis.",
     Icon: Layers,
-    image: wholeGenomeMetagenomeImage,
-    imageAlt: "Scientist examining bacterial cultures for metagenome sequencing at ClinGene",
-    width: 305,
-    height: 301,
+    image: metagenomeNewImage,
+    imageAlt: "Microbial metagenome sequencing analysis and bacterial community profiling at ClinGene",
+    width: 800,
+    height: 597,
     description: "Whole-genome metagenomic sequencing and analysis.",
     overview: [
       "Shotgun sequencing reads all the DNA in a mixed sample, not just one marker gene.",
@@ -540,10 +539,10 @@ export const servicesData = [
     type: "computational",
     tagline: "Comparative analysis across multiple genomes.",
     Icon: Network,
-    image: pangenomeImage,
-    imageAlt: "Circular comparative genomic map displaying core and accessory pangenome loci at ClinGene",
-    width: 387,
-    height: 331,
+    image: pangenomeNewImage,
+    imageAlt: "Comparative pangenome analysis showing core and accessory genomic structure at ClinGene",
+    width: 800,
+    height: 597,
     description: "Comparative analysis across multiple genomes.",
     overview: [
       "Compares many genomes of the same species to separate genes shared by all (core) from genes found only in some (accessory).",

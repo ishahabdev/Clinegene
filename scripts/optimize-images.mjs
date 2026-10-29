@@ -19,8 +19,8 @@ const imageTasks = [
     serviceSlug: "genetic-counseling",
   },
   {
-    originalFilename: "Precision Genomic Analysis in the Laboratory.png",
-    outputFilename: "panel-sequencing-targeted-gene-panel.webp",
+    originalFilename: "Panel Sequencing.jpeg",
+    outputFilename: "panel-sequencing.webp",
     serviceName: "Panel sequencing",
     serviceNumber: "03",
     serviceSlug: "panel-sequencing",
@@ -31,6 +31,20 @@ const imageTasks = [
     serviceName: "RNA-Sequencing/Transcriptome Sequencing",
     serviceNumber: "05",
     serviceSlug: "rna-seq",
+  },
+  {
+    originalFilename: "metagenome.jpeg",
+    outputFilename: "metagenome-sequencing.webp",
+    serviceName: "Metagenome Sequencing",
+    serviceNumber: "06",
+    serviceSlug: "whole-genome-metagenome",
+  },
+  {
+    originalFilename: "Pangenome.jpeg",
+    outputFilename: "pangenome-analysis.webp",
+    serviceName: "Pangenome Analysis",
+    serviceNumber: "08",
+    serviceSlug: "pangenome-analysis",
   },
   {
     originalFilename: "Molecular Membrane Channel in Motion.png",
@@ -67,14 +81,7 @@ const imageTasks = [
     serviceNumber: "14",
     serviceSlug: "molecular-biology-services",
   },
-  {
-    originalFilename: "metagenome-sequencing-microbiome.png",
-    outputFilename: "metagenome-sequencing-microbiome.webp",
-    serviceName: "Metagenome Sequencing",
-    serviceNumber: "06",
-    serviceSlug: "whole-genome-metagenome",
-    optional: true,
-  },
+
 ];
 
 async function optimizeImages() {

@@ -299,15 +299,16 @@ export default function OpenPositionsPage() {
                     <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </Button>
                   <Button
-                    className="min-h-9 sm:min-h-13! px-4 sm:px-8! text-xs sm:text-sm! font-inter"
+                    className="min-h-9 sm:min-h-13! px-4 sm:px-8! text-xs sm:text-sm! font-inter text-(--accent) hover:text-white! focus-visible:text-white! transition-colors duration-300"
                     href="/contact?service=internship"
                     variant="transparent"
                     style={{
                       borderColor: accent.border,
-                      color: accent.primary,
                     }}
                   >
-                    Apply for Internship
+                    <span className="text-(--accent) transition-colors duration-300 group-hover:text-white group-focus-visible:text-white">
+                      Apply for Internship
+                    </span>
                   </Button>
                 </div>
               </ScrollReveal>
