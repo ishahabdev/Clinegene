@@ -11,9 +11,10 @@ const contactPhone = "+92 348 5607051";
 const contactPhoneRaw = "+923485607051";
 const contactEmail = "info@clingene.co";
 const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contactEmail)}&su=${encodeURIComponent("Inquiry - ClinGene")}`;
-const contactAddress = "Islamabad, Pakistan";
-const mapUrl = "https://maps.google.com/?q=Islamabad,+Pakistan";
-const mapEmbedUrl = "https://maps.google.com/maps?q=Islamabad,+Pakistan&output=embed";
+const contactAddress = "Street 13, Lane 10, Hostel City, Chatta Bakhtawar, Chak Shahzad, Park Road, Islamabad, Pakistan";
+const mapQuery = "Street 13, Lane 10, Hostel City, Chatta Bakhtawar, Chak Shahzad, Park Road, Islamabad, Pakistan";
+const mapUrl = `https://maps.google.com/?q=${encodeURIComponent(mapQuery)}`;
+const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;
 
 const contactCards = [
   {
@@ -35,7 +36,7 @@ const contactCards = [
   {
     icon: "location",
     title: "Visit us",
-    value: "Islamabad, Pakistan",
+    value: "Hostel City, Chak Shahzad, Islamabad",
     href: mapUrl,
     detail: contactAddress,
     isFeatured: false,

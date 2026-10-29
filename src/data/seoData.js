@@ -53,6 +53,7 @@ export const ORGANIZATION_SCHEMA = {
     "ClinGene is a pioneer in life sciences, clinical genetic testing, Sanger sequencing, next-generation sequencing (NGS), and bioinformatics services in Islamabad, Pakistan.",
   address: {
     "@type": "PostalAddress",
+    streetAddress: "Street 13, Lane 10, Hostel City, Chatta Bakhtawar, Chak Shahzad, Park Road",
     addressLocality: "Islamabad",
     addressRegion: "Islamabad Capital Territory",
     addressCountry: "PK",

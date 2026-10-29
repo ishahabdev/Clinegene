@@ -188,9 +188,9 @@ export const scientificTeam = teamMembers.filter(member => member.type === "team
 // CONTACT INFORMATION - Replace with real company details
 // -----------------------------------------------------------------------------
 export const contactInfo = {
-  email: "info@clingene.pk",
-  phone: "+92 (XX) XXXX-XXXX", // Replace with real phone
-  address: "Islamabad, Pakistan", // Replace with real address
+  email: "info@clingene.co",
+  phone: "+92 348 5607051",
+  address: "Street 13, Lane 10, Hostel City, Chatta Bakhtawar, Chak Shahzad, Park Road, Islamabad, Pakistan",
   social: {
     linkedin: "https://linkedin.com/company/clingene",
     facebook: "https://facebook.com/clingene", // Optional

@@ -137,8 +137,8 @@ export default function SiteFooter({ showJoinCta }) {
                     <p className="text-[12.5px] sm:text-[13.5px] font-semibold text-white group-hover:text-(--accent) transition-colors">
                       Visit our office
                     </p>
-                    <p className="mt-0.5 text-[10.5px] sm:text-[11px] text-slate-400">Find us on the map</p>
-                    <p className="mt-0.5 text-[10.5px] sm:text-[11px] text-slate-300 font-medium">Islamabad, Pakistan</p>
+                    <p className="mt-0.5 text-[10.5px] sm:text-[11px] text-slate-400">Street 13, Lane 10, Hostel City, Chak Shahzad</p>
+                    <p className="mt-0.5 text-[10.5px] sm:text-[11px] text-slate-300 font-medium">Park Road, Islamabad, Pakistan</p>
                   </div>
                 </a>
               </div>
