@@ -32,18 +32,28 @@ import plantGenomeImage from "../assets/services/cropped/plant genome.webp";
 import proteinDockingImage from "../assets/services/cropped/protein-docking-molecular-dynamics.webp";
 import statisticalDataAnalysisImage from "../assets/services/cropped/statistical-data-analysis.webp";
 
+// Optimized high-resolution WebP service assets
+import geneticCounselingImage from "../assets/services/genetic-counseling-consultation.webp";
+import panelSequencingImage from "../assets/services/panel-sequencing-targeted-gene-panel.webp";
+import rnaSequencingNewImage from "../assets/services/rna-sequencing-transcriptome.webp";
+import mdSimulationImage from "../assets/services/md-simulation-molecular-dynamics.webp";
+import immunogenicityImage from "../assets/services/immunogenicity-analysis-antibody-antigen.webp";
+import virtualScreeningImage from "../assets/services/virtual-screening-ligand-docking.webp";
+import libraryGenerationImage from "../assets/services/ngs-library-generation.webp";
+import molecularBiologyImage from "../assets/services/molecular-biology-pcr-gel.webp";
+
 export const servicesData = [
   {
     number: "01",
-    slug: "genetic-counselling",
-    name: "Genetic Counselling",
+    slug: "genetic-counseling",
+    name: "Genetic Counseling",
     type: "lab",
     tagline: "Professional genetic evaluation, hereditary risk assessment, and family counseling.",
     Icon: Stethoscope,
-    image: clinicalTestingImage,
-    width: 322,
-    height: 304,
-    description: "Expert clinical guidance on hereditary risks, carrier screening, and reproductive genetic options.",
+    image: geneticCounselingImage,
+    imageAlt: "Genetic counselor explaining a family pedigree chart to a couple at ClinGene",
+    width: 800,
+    height: 800,
     subServices: [
       { id: "prenatal-diagnosis", label: "Prenatal Diagnosis" },
       { id: "newborn-screening", label: "Newborn Screening" },
@@ -52,62 +62,62 @@ export const servicesData = [
       { id: "hereditary-cancer", label: "Hereditary Cancer" },
     ],
     overview: [
-      "Genetic counselling provides individuals, families, and referring healthcare providers with clinical insights into the medical, psychological, and familial implications of genetic conditions.",
-      "Our clinical genetics team evaluates three-generation family pedigrees, interprets complex molecular and cytogenetic test results, and formulates clear, actionable risk management pathways.",
-    ],
-    features: [
-      "Three-generation pedigree construction and familial inheritance risk assessment",
-      "Comprehensive pre-test and post-test genetic consultations",
-      "Specialized evaluation across prenatal, pediatric, oncology, and adult genetic indications",
-      "Detailed clinical consultation documentation delivered to referring physicians",
-    ],
-    applications: [
-      {
-        title: "Prenatal & Reproductive Guidance",
-        description: "Assisting prospective parents with carrier screening results, advanced maternal age considerations, and diagnostic options.",
-      },
-      {
-        title: "Hereditary Cancer Risk Assessment",
-        description: "Evaluating familial clusters of breast, ovarian, colorectal, and endocrine tumors to guide surveillance strategies.",
-      },
-      {
-        title: "Rare & Pediatric Genetic Conditions",
-        description: "Guiding diagnostic pathways for developmental delay, dysmorphic features, and suspected inborn errors of metabolism.",
-      },
-      {
-        title: "Cardiogenetics & Neurogenetics",
-        description: "Interpreting inherited risk profiles for familial cardiomyopathies, channelopathies, ataxias, and early-onset neurodegeneration.",
-      },
-    ],
-    requirementsLabel: "Consultation Prerequisites",
-    requirements: [
-      "Clinical summary notes or referral letter from attending physician",
-      "Detailed three-generation family health history and medical background",
-      "Prior genetic, cytogenetic, or biochemical test reports if available",
-      "Relevant clinical imaging, pathology, or laboratory investigation records",
-    ],
-    deliverables: [
-      "Comprehensive written genetic consultation summary report",
-      "Annotated three-generation familial pedigree chart",
-      "Evidence-based clinical surveillance and management recommendations",
-      "Patient educational literature and physician follow-up recommendations",
-    ],
-    faq: [
-      {
-        question: "What is genetic counselling and who benefits from it?",
-        answer: "Genetic counselling is a specialized clinical consultation that helps individuals understand how genetics impacts health, guiding informed decisions regarding genetic testing and preventive care.",
-      },
-      {
-        question: "Is genetic counselling required before having a genetic test?",
-        answer: "Pre-test counselling is strongly recommended to ensure patients understand the clinical scope, benefits, limitations, and potential familial implications of testing before proceeding.",
-      },
-      {
-        question: "Can consultations be conducted via telehealth?",
-        answer: "Yes, ClinGene offers secure remote telehealth consultations for patients and clinicians nationwide, as well as in-person appointments at our Islamabad laboratory facility.",
-      },
-    ],
-    relatedSlugs: ["whole-exome-genome-sequencing", "panel-sequencing", "sanger-sequencing"],
-  },
+    "Genetic counseling provides individuals, families, and referring healthcare providers with clinical insights into the medical, psychological, and familial implications of genetic conditions.",
+    "Our clinical genetics team evaluates family pedigrees, interprets complex molecular and cytogenetic test results, and formulates clear, actionable risk management pathways.",
+  ],
+  features: [
+    "Pedigree construction and familial inheritance risk assessment",
+    "Comprehensive pre-test and post-test genetic consultations",
+    "Specialized evaluation across prenatal, pediatric, oncology, and adult genetic indications",
+    "Detailed clinical consultation documentation delivered to referring physicians",
+  ],
+  applications: [
+    {
+      title: "Prenatal & Reproductive Guidance",
+      description: "Assisting prospective parents with carrier screening results, advanced maternal age considerations, and diagnostic options.",
+    },
+    {
+      title: "Hereditary Cancer Risk Assessment",
+      description: "Evaluating familial clusters of breast, ovarian, colorectal, and endocrine tumors to guide surveillance strategies.",
+    },
+    {
+      title: "Rare & Pediatric Genetic Conditions",
+      description: "Guiding diagnostic pathways for developmental delay, dysmorphic features, and suspected inborn errors of metabolism.",
+    },
+    {
+      title: "Cardiogenetics, Neurogenetics & Other Genetic Diseases",
+      description: "Interpreting inherited risk profiles for familial cardiomyopathies, channelopathies, ataxias, and early-onset neurodegeneration.",
+    },
+  ],
+  requirementsLabel: "Consultation Prerequisites",
+  requirements: [
+    "Clinical summary notes or referral letter from attending physician",
+    "Detailed family health history and medical background",
+    "Prior genetic, cytogenetic, or biochemical test reports if available",
+    "Relevant clinical imaging, pathology, or laboratory investigation records",
+  ],
+  deliverables: [
+    "Comprehensive written genetic consultation summary report",
+    "Annotated familial pedigree chart",
+    "Evidence-based clinical surveillance and management recommendations",
+    "Patient educational literature and physician follow-up recommendations",
+  ],
+  faq: [
+    {
+      question: "What is genetic counseling and who benefits from it?",
+      answer: "Genetic counseling is a specialized clinical consultation that helps individuals understand how genetics impacts health, guiding informed decisions regarding genetic testing and preventive care.",
+    },
+    {
+      question: "Is genetic counseling required before having a genetic test?",
+      answer: "Pre-test counseling is strongly recommended to ensure patients understand the clinical scope, benefits, limitations, and potential familial implications of testing before proceeding.",
+    },
+    {
+      question: "Can consultations be conducted via telehealth?",
+      answer: "Yes, ClinGene offers secure remote telehealth consultations for patients and clinicians nationwide, as well as in-person appointments at our Islamabad laboratory facility.",
+    },
+  ],
+  relatedSlugs: ["whole-exome-genome-sequencing", "panel-sequencing", "sanger-sequencing"],
+},
 {
     number: "02",
     slug: "whole-exome-genome-sequencing",
@@ -116,6 +126,7 @@ export const servicesData = [
     tagline: "Comprehensive sequencing for genomic research and diagnostics.",
     Icon: Dna,
     image: exomeSequencingImage,
+    imageAlt: "Next-generation sequencing sequencer and automated flow cell running whole exome and genome sequencing at ClinGene",
     width: 317,
     height: 301,
     description: "Comprehensive sequencing for genomic research and diagnostics.",
@@ -190,9 +201,10 @@ export const servicesData = [
     type: "lab",
     tagline: "High-depth targeted next-generation sequencing for focused disease gene panels.",
     Icon: TestTubes,
-    image: clinicalTestingImage,
-    width: 322,
-    height: 304,
+    image: panelSequencingImage,
+    imageAlt: "Scientist loading samples next to a sequencer for targeted gene panel sequencing at ClinGene",
+    width: 800,
+    height: 754,
     description: "Deep-coverage targeted gene panels for oncology, cardiology, neurology, and rare inherited conditions.",
     overview: [
       "Targeted panel sequencing enriches curated subsets of clinically relevant genes, providing extraordinary coverage depth and sensitivity for single-nucleotide variants, insertions/deletions, and copy number variations.",
@@ -249,7 +261,7 @@ export const servicesData = [
         answer: "Standard clinical and research panels are processed within 2 to 4 weeks from sample qualification.",
       },
     ],
-    relatedSlugs: ["whole-exome-genome-sequencing", "sanger-sequencing", "genetic-counselling"],
+    relatedSlugs: ["whole-exome-genome-sequencing", "sanger-sequencing", "genetic-counseling"],
   },
 {
     number: "04",
@@ -259,6 +271,7 @@ export const servicesData = [
     tagline: "Targeted DNA sequencing and sequence analysis.",
     Icon: TestTubes,
     image: sangerImage,
+    imageAlt: "Sanger DNA sequencing electropherogram with clean fluorescence chromatogram peaks at ClinGene",
     width: 320,
     height: 302,
     description: "Targeted DNA sequencing and sequence analysis.",
@@ -324,9 +337,10 @@ export const servicesData = [
     type: "lab",
     tagline: "RNA sequencing for gene expression research.",
     Icon: FlaskConical,
-    image: rnaSeqImage,
-    width: 320,
-    height: 304,
+    image: rnaSequencingNewImage,
+    imageAlt: "Gene expression heatmap and volcano plot for RNA sequencing analysis at ClinGene",
+    width: 800,
+    height: 754,
     description: "RNA sequencing services for gene expression research.",
     overview: [
       "Measures which genes are active and how strongly in a sample.",
@@ -393,6 +407,7 @@ export const servicesData = [
     tagline: "Whole-genome metagenomic sequencing and analysis.",
     Icon: Layers,
     image: wholeGenomeMetagenomeImage,
+    imageAlt: "Scientist examining bacterial cultures for metagenome sequencing at ClinGene",
     width: 305,
     height: 301,
     description: "Whole-genome metagenomic sequencing and analysis.",
@@ -459,6 +474,7 @@ export const servicesData = [
     tagline: "Phylogenetic analysis and tree construction.",
     Icon: GitBranch,
     image: phylogeneticImage,
+    imageAlt: "High-resolution phylogenetic tree diagram with evolutionary branch lengths at ClinGene",
     width: 405,
     height: 295,
     description: "Phylogenetic analysis and tree construction.",
@@ -525,6 +541,7 @@ export const servicesData = [
     tagline: "Comparative analysis across multiple genomes.",
     Icon: Network,
     image: pangenomeImage,
+    imageAlt: "Circular comparative genomic map displaying core and accessory pangenome loci at ClinGene",
     width: 387,
     height: 331,
     description: "Comparative analysis across multiple genomes.",
@@ -590,9 +607,10 @@ export const servicesData = [
     type: "computational",
     tagline: "Computational protein docking and molecular simulation.",
     Icon: Atom,
-    image: proteinDockingImage,
-    width: 431,
-    height: 291,
+    image: mdSimulationImage,
+    imageAlt: "Molecular dynamics simulation of a membrane protein surrounded by water molecules and ions",
+    width: 800,
+    height: 756,
     description: "Computational protein docking and molecular simulation.",
     overview: [
       "Uses computers to predict how a protein and a small molecule (or another protein) fit together.",
@@ -658,8 +676,9 @@ export const servicesData = [
     tagline: "Accurate 3D protein structure prediction, homology modeling, and structural refinement.",
     Icon: Boxes,
     image: proteinDockingImage,
-    width: 322,
-    height: 304,
+    imageAlt: "High-resolution 3D ribbon diagram and secondary structure model of a target protein at ClinGene",
+    width: 431,
+    height: 291,
     description: "In silico tertiary structure prediction using state-of-the-art homology and deep-learning protocols.",
     overview: [
       "Protein modeling generates accurate three-dimensional atomic structures for biological targets lacking experimental X-ray crystallography or cryo-EM coordinates, empowering drug discovery and mechanistic biology.",
@@ -725,9 +744,10 @@ export const servicesData = [
     type: "computational",
     tagline: "Epitope prediction, MHC binding affinity profiling, and immunogenicity risk assessment.",
     Icon: ShieldPlus,
-    image: singleCellImage,
-    width: 322,
-    height: 304,
+    image: immunogenicityImage,
+    imageAlt: "Antibodies binding to a virus-like particle for immunogenicity analysis",
+    width: 800,
+    height: 755,
     description: "In silico computational evaluation of immune reactivity, epitope binding, and antigenicity.",
     overview: [
       "Immunogenicity analysis evaluates the propensity of biotherapeutics, recombinant proteins, and peptide antigens to trigger adaptive immune responses in human populations.",
@@ -793,9 +813,10 @@ export const servicesData = [
     type: "computational",
     tagline: "High-throughput in silico screening of compound libraries against macromolecular targets.",
     Icon: Search,
-    image: proteinDockingImage,
-    width: 322,
-    height: 304,
+    image: virtualScreeningImage,
+    imageAlt: "Drug-like molecule docking into a protein binding pocket for virtual screening",
+    width: 800,
+    height: 754,
     description: "Structure- and ligand-based virtual screening to discover potent bioactive lead molecules.",
     overview: [
       "Virtual screening accelerates early drug discovery by rapidly evaluating thousands to millions of small molecules in silico against validated biological targets, dramatically reducing experimental timelines and reagent costs.",
@@ -861,9 +882,10 @@ export const servicesData = [
     type: "lab",
     tagline: "High-quality next-generation sequencing library preparation across diverse sample types.",
     Icon: Library,
-    image: exomeSequencingImage,
-    width: 322,
-    height: 304,
+    image: libraryGenerationImage,
+    imageAlt: "Multichannel pipette dispensing samples into a 96-well plate for NGS library preparation at ClinGene",
+    width: 800,
+    height: 754,
     description: "Quality-assured NGS library preparation for genomic, transcriptomic, and targeted applications.",
     overview: [
       "Library generation is the critical prerequisite for high-throughput sequencing. High-efficiency fragmentation, adapter ligation, and low-bias amplification ensure uniform coverage and maximal data fidelity.",
@@ -929,9 +951,10 @@ export const servicesData = [
     type: "lab",
     tagline: "Comprehensive routine and specialized wet-lab molecular biology services.",
     Icon: Microscope,
-    image: sangerImage,
-    width: 322,
-    height: 304,
+    image: molecularBiologyImage,
+    imageAlt: "Gloved hand holding a PCR tube strip in front of a gel electrophoresis tray at ClinGene",
+    width: 800,
+    height: 800,
     description: "Bench-level nucleic acid isolation, PCR assays, cloning, and molecular analysis.",
     overview: [
       "ClinGene's molecular biology services provide biomedical researchers, diagnostic facilities, and academic institutions with dependable bench-level wet-lab capabilities executed under strict quality standards.",
@@ -998,8 +1021,9 @@ export const servicesData = [
     tagline: "Strategic experimental design, statistical power calculation, and platform selection.",
     Icon: Lightbulb,
     image: statisticalDataAnalysisImage,
-    width: 322,
-    height: 304,
+    imageAlt: "Genomic experimental workflow chart, statistical power curves, and project milestones at ClinGene",
+    width: 547,
+    height: 309,
     description: "Expert scientific consultation to optimize sequencing design, cohort sizing, and analytical strategy.",
     overview: [
       "Rigorous experimental design is the cornerstone of statistically sound, biologically impactful, and cost-efficient genomic investigations.",
@@ -1069,6 +1093,7 @@ export const legacyServices = [
     tagline: "Genetic testing for clinical and research needs.",
     Icon: Stethoscope,
     image: clinicalTestingImage,
+    imageAlt: "Targeted medical genetic testing and diagnostic screening at ClinGene",
     width: 322,
     height: 304,
     description: "Genetic testing services for clinical and research needs.",
@@ -1111,7 +1136,7 @@ export const legacyServices = [
       "Interpreted report with variants classified by clinical significance.",
       "Comprehensive list of genes tested.",
     ],
-    deliverablesNote: "Genetic counselling is recommended before and after testing.",
+    deliverablesNote: "Genetic counseling is recommended before and after testing.",
     faq: [
       {
         question: "What quantity of blood or DNA is required?",
@@ -1136,6 +1161,7 @@ export const legacyServices = [
     tagline: "Analysis of single-cell RNA sequencing datasets.",
     Icon: Microscope,
     image: singleCellImage,
+    imageAlt: "Single-cell transcriptomics UMAP cluster plot at ClinGene",
     width: 319,
     height: 304,
     description: "Analysis of single-cell RNA sequencing datasets.",
@@ -1203,6 +1229,7 @@ export const legacyServices = [
     tagline: "Sequencing and analysis of 16S rRNA metagenomes.",
     Icon: Bug,
     image: metagenomeImage,
+    imageAlt: "16S rRNA amplicon sequencing and microbial community taxonomic chart at ClinGene",
     width: 406,
     height: 287,
     description: "Sequencing and analysis of 16S rRNA metagenomes.",
@@ -1269,6 +1296,7 @@ export const legacyServices = [
     tagline: "Genome sequencing services for fungal research.",
     Icon: Sprout,
     image: fungalGenomeImage,
+    imageAlt: "Whole fungal genome sequencing assembly and secondary metabolite analysis at ClinGene",
     width: 403,
     height: 297,
     description: "Genome sequencing services for fungal research.",
@@ -1336,6 +1364,7 @@ export const legacyServices = [
     tagline: "Genome sequencing services for plant research.",
     Icon: Leaf,
     image: plantGenomeImage,
+    imageAlt: "Plant genome de novo sequencing and polyploid agricultural genetics at ClinGene",
     width: 406,
     height: 297,
     description: "Genome sequencing services for plant research.",
@@ -1402,8 +1431,10 @@ export const allServices = [...servicesData, ...legacyServices];
 export const servicesBySlug = Object.fromEntries([
   ...servicesData.map((service) => [service.slug, service]),
   ...legacyServices.map((service) => [service.slug, service]),
-  // Backward compatibility alias for metagenome-sequencing
+  // Backward compatibility alias for metagenome-sequencing and genetic counselling
   ["metagenome-sequencing", servicesData.find((s) => s.slug === "whole-genome-metagenome")],
+  ["genetic-counselling", servicesData.find((s) => s.slug === "genetic-counseling" || s.slug === "genetic-counselling")],
+  ["genetic-counseling", servicesData.find((s) => s.slug === "genetic-counseling" || s.slug === "genetic-counselling")],
 ]);
 
 export function getServiceBySlug(slug) {

@@ -127,7 +127,7 @@ export default function ServicesSection() {
           style={{ touchAction: "pan-y" }}
         >
           <div
-            className="flex w-max"
+            className="flex w-max items-stretch"
             style={{
               gap: `${cardGap}px`,
               width: `${carouselServices.length * cardWidth + (carouselServices.length - 1) * cardGap}px`,
@@ -136,19 +136,19 @@ export default function ServicesSection() {
             {carouselServices.map((service, index) => {
               return (
                 <a
-                  className="service-card group relative flex min-h-117 shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] hover:border-(--accent) focus-within:border-(--accent) text-[#102744] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
+                  className="service-card group relative flex min-h-117 h-full shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] hover:border-(--accent) focus-within:border-(--accent) text-[#102744] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
                   href={`/services/${service.slug}`}
                   key={`${service.slug || service.name}-${index}`}
                   style={{ width: `${cardWidth}px` }}
                 >
                   <div className="relative aspect-3.5/2.5 w-full min-w-0 overflow-hidden rounded-t-[15px] bg-[#102943]">
                     <img
-                      alt={service.name}
+                      alt={service.imageAlt || service.name}
                       width={service.width || 400}
                       height={service.height || 300}
-                      className="h-full w-full object-cover object-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 group-focus-within:scale-105 motion-reduce:transform-none motion-reduce:transition-none"
+                      className={`h-full w-full object-cover ${service.slug === "library-generation" ? "object-[center_top]" : "object-center"} transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 group-focus-within:scale-105 motion-reduce:transform-none motion-reduce:transition-none`}
                       decoding="async"
-                      loading="lazy"
+                      loading={index === 0 ? "eager" : "lazy"}
                       src={service.image}
                     />
                   </div>
@@ -158,11 +158,13 @@ export default function ServicesSection() {
                       <service.Icon aria-hidden="true" size={22} strokeWidth={1.8} />
                     </span>
                     <h3 className="mt-4 text-lg font-bold leading-[1.35] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-(--accent-dark) group-focus-within:text-(--accent-dark) motion-reduce:transition-none">{service.name}</h3>
-                    <p className="mt-3 text-base leading-[1.6] text-[#58748d]">{service.description}</p>
+                    {service.description && (
+                      <p className="mt-3 text-base leading-[1.6] text-[#58748d]">{service.description}</p>
+                    )}
                     {service.subServices && service.subServices.length > 0 && (
-                      <ul className="mt-3 space-y-1 border-t border-[#d4e5f2]/70 pt-2.5 text-xs text-[#58748d]">
+                      <ul className="mt-2.5 space-y-1 border-t border-[#d4e5f2]/70 pt-2 text-[11px] sm:text-xs leading-tight text-[#58748d]">
                         {service.subServices.map((sub, sIdx) => (
-                          <li key={sub.id || sIdx} className="flex items-center gap-1.5">
+                          <li key={sub.id || sIdx} className="flex items-center gap-1.5 leading-tight">
                             <span className="font-semibold text-(--accent)">{String.fromCharCode(97 + sIdx)})</span>
                             <span>{sub.label}</span>
                           </li>

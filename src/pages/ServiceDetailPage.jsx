@@ -318,10 +318,10 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                     <div className="relative aspect-16/10 w-full overflow-hidden rounded-lg sm:rounded-xl bg-slate-100">
                       <img
                         src={service.image}
-                        alt={service.name}
+                        alt={service.imageAlt || service.name}
                         width={service.width}
                         height={service.height}
-                        className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                        className={`h-full w-full object-cover ${service.slug === "library-generation" ? "object-[center_top]" : "object-center"} transition-transform duration-700 hover:scale-105`}
                         loading="eager"
                         fetchPriority="high"
                       />
@@ -899,10 +899,10 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                     <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
                       <img
                         src={rel.image}
-                        alt={rel.name}
+                        alt={rel.imageAlt || rel.name}
                         width={rel.width || 400}
                         height={rel.height || 300}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className={`h-full w-full object-cover ${rel.slug === "library-generation" ? "object-[center_top]" : "object-center"} transition-transform duration-700 group-hover:scale-105`}
                         decoding="async"
                         loading="lazy"
                       />

@@ -80,7 +80,7 @@ export const WEBSITE_SCHEMA = {
   "@type": "WebSite",
   "@id": `${BASE_URL}/#website`,
   name: "ClinGene",
-  alternateName: ["Clingene", "ClinGene.co"],
+  alternateName: ["ClinGene Lab", "Clingene", "ClinGene.co"],
   url: `${BASE_URL}/`,
   description: "Pioneer in life sciences, clinical genetic testing, DNA sequencing and genomics research in Pakistan.",
   publisher: {
@@ -157,7 +157,7 @@ export const SITELINKS_NAV_SCHEMA = {
 
 export const seoRoutes = {
   "/": {
-    title: "ClinGene | Pioneer in Life Sciences & Genetic Testing in Pakistan",
+    title: "ClinGene | Clinical Genetic Testing Laboratory",
     description:
       "ClinGene provides genetic testing, Sanger sequencing, NGS, and bioinformatics services for researchers, clinicians and industry partners in Islamabad, Pakistan.",
     canonical: `${BASE_URL}/`,
@@ -170,7 +170,7 @@ export const seoRoutes = {
   },
 
   "/about": {
-    title: "About ClinGene | Life Sciences Research in Islamabad, Pakistan",
+    title: "About Us | ClinGene",
     description:
       "Learn about ClinGene's mission to advance life sciences in Pakistan through precision genetic testing, applied research, and registered laboratory services.",
     canonical: `${BASE_URL}/about`,
@@ -195,9 +195,9 @@ export const seoRoutes = {
   },
 
   "/services": {
-    title: "Comprehensive Genomic Solutions & Genetic Testing | ClinGene",
+    title: "Our Services | ClinGene",
     description:
-      "Explore 12 specialized genomic services in Pakistan: clinical genetic testing, Sanger sequencing, WES/WGS, RNA-seq, metagenomics, and molecular dynamics.",
+      "Explore ClinGene's comprehensive genomic services in Pakistan: genetic counselling, Sanger sequencing, WES/WGS, RNA-seq, metagenomics, protein modeling, and more.",
     canonical: `${BASE_URL}/services`,
     ogType: "website",
     schema: [
@@ -249,7 +249,7 @@ export const seoRoutes = {
   },
 
   "/contact": {
-    title: "Contact ClinGene | Specimen Receiving & Lab in Islamabad",
+    title: "Contact Us | ClinGene",
     description:
       "Contact ClinGene in Islamabad, Pakistan. Sample shipments, requisitions, pricing quotes, research inquiries, and genetic testing consultations.",
     canonical: `${BASE_URL}/contact`,

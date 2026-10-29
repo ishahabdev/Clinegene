@@ -526,7 +526,7 @@ export default function TeamCarousel({ members = [] }) {
                   key={idx}
                   onClick={() => goToIndex(idx)}
                   disabled={isTransitioning}
-                  className="flex min-h-11 min-w-[28px] sm:min-w-[32px] items-center justify-center p-1 cursor-pointer touch-manipulation disabled:cursor-not-allowed"
+                  className="flex min-h-11 min-w-7 sm:min-w-8 items-center justify-center p-1 cursor-pointer touch-manipulation disabled:cursor-not-allowed"
                   aria-label={`Go to ${members[idx].name}`}
                   aria-current={idx === activeIndex ? 'true' : 'false'}
                 >

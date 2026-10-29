@@ -275,7 +275,7 @@ export default function ServicesPage() {
           </ScrollReveal>
           {/* ── Featured Top Card: Genetic Counselling & Sub-Services ── */}
           {(() => {
-            const gc = services.find((s) => s.slug === "genetic-counselling") || services[0];
+            const gc = services.find((s) => s.slug === "genetic-counselling" || s.slug === "genetic-counseling") || services[0];
             const themeAccentColor = isRed ? "#c81e25" : isGreen ? "#059669" : "#00bcd4";
             const themeCardBorderHover = isRed ? "hover:border-[#c81e25]" : isGreen ? "hover:border-[#059669]" : "hover:border-[#00bcd4]";
             const themeBannerBorder = isRed ? "border-[#fecdd3]" : isGreen ? "border-[#a7f3d0]" : "border-[#cbe8f6]";
@@ -371,23 +371,23 @@ export default function ServicesPage() {
 
           {/* ── Remaining Services Grid (02 to 15) in other line ── */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {services.filter((s) => s.slug !== "genetic-counselling").map(({ slug, name, description, Icon, image, width, height }, index) => {
+            {services.filter((s) => s.slug !== "genetic-counselling" && s.slug !== "genetic-counseling").map(({ slug, name, description, Icon, image, imageAlt, width, height }, index) => {
               const serviceUrl = `/services/${slug}`;
 
               return (
                 <ScrollReveal
                   as="a"
                   href={serviceUrl}
-                  className="group flex min-h-63.25 flex-col overflow-hidden rounded-xl border border-[#c9e2ef] bg-[#f8fcff] hover:bg-(--accent-soft) shadow-[0_7px_18px_rgba(12,43,72,0.09)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_12px_28px_var(--accent-glow)] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
+                  className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#c9e2ef] bg-[#f8fcff] hover:bg-(--accent-soft) shadow-[0_7px_18px_rgba(12,43,72,0.09)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_12px_28px_var(--accent-glow)] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
                   delay={Math.min(index % 4, 3) * 55}
                   key={slug || name}
                 >
-                  <div className="relative aspect-2.5/1 overflow-hidden bg-[#102943]">
+                  <div className="relative aspect-4/3 overflow-hidden bg-[#102943]">
                     <img
-                      alt={name}
+                      alt={imageAlt || name}
                       width={width}
                       height={height}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:transition-none"
+                      className={`h-full w-full object-cover ${slug === "library-generation" ? "object-[center_top]" : "object-center"} transition-transform duration-500 group-hover:scale-110 motion-reduce:transition-none`}
                       decoding="async"
                       loading="lazy"
                       src={image}

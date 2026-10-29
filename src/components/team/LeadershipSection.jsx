@@ -32,7 +32,7 @@ function LeadershipCard({ leader, index }) {
             </div>
 
             <h3
-              className="font-['Inter'] font-extrabold text-[#0c2b48] wrap-break-word [overflow-wrap:anywhere]"
+              className="font-['Inter'] font-extrabold text-[#0c2b48] wrap-anywhere"
               style={{
                 fontSize: "clamp(1.4rem, 6vw, 2rem)",
                 lineHeight: 1.2,
@@ -42,7 +42,7 @@ function LeadershipCard({ leader, index }) {
             </h3>
 
             <p
-              className="mt-1.5 mb-2.5 font-semibold transition-colors wrap-break-word [overflow-wrap:anywhere]"
+              className="mt-1.5 mb-2.5 font-semibold transition-colors wrap-anywhere"
               style={{
                 color: "var(--accent)",
                 fontSize: "clamp(0.9rem, 3.8vw, 1.1rem)",
@@ -53,7 +53,7 @@ function LeadershipCard({ leader, index }) {
             </p>
 
             <p
-              className="text-[#334155] max-w-full lg:max-w-[56ch] mb-4.5 wrap-break-word [overflow-wrap:anywhere]"
+              className="text-[#334155] max-w-full lg:max-w-[56ch] mb-4.5 wrap-anywhere"
               style={{
                 fontSize: "clamp(0.9rem, 3.6vw, 1rem)",
                 lineHeight: 1.6,

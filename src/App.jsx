@@ -152,7 +152,7 @@ function AppContent({ ssrUrl }) {
       const title =
         seo?.title ||
         (pageId === "home"
-          ? "ClinGene | Pioneer in Life Sciences & Genetic Testing in Pakistan"
+          ? "ClinGene | Clinical Genetic Testing Laboratory"
           : `${pages[pageId]?.label || "ClinGene"} - ClinGene`);
       if (title && pageId !== "service-detail") {
         document.title = title;

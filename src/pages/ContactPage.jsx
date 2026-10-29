@@ -71,7 +71,7 @@ function ServiceDropdown({ value, onChange, id = "contact-service", name = "serv
   const containerRef = useRef(null);
   const menuRef = useRef(null);
 
-  const gc = servicesData.find((s) => s.slug === "genetic-counselling");
+  const gc = servicesData.find((s) => s.slug === "genetic-counselling" || s.slug === "genetic-counseling");
 
   const serviceGroups = [
     {
@@ -94,7 +94,7 @@ function ServiceDropdown({ value, onChange, id = "contact-service", name = "serv
     {
       label: "Services",
       options: servicesData
-        .filter((s) => s.slug !== "genetic-counselling")
+        .filter((s) => s.slug !== "genetic-counselling" && s.slug !== "genetic-counseling")
         .map((s) => ({
           value: s.slug,
           label: s.name,
@@ -374,7 +374,7 @@ export default function ContactPage() {
       return;
     }
 
-    const gcService = servicesData.find((s) => s.slug === "genetic-counselling");
+    const gcService = servicesData.find((s) => s.slug === "genetic-counselling" || s.slug === "genetic-counseling");
     let serviceDisplayName = serviceSlug;
     if (serviceSlug.startsWith("genetic-counselling-")) {
       const subId = serviceSlug.replace("genetic-counselling-", "");
@@ -386,7 +386,7 @@ export default function ContactPage() {
       const matchingService = servicesData.find((s) => s.slug === serviceSlug);
       if (matchingService) {
         serviceDisplayName =
-          matchingService.slug === "genetic-counselling"
+          matchingService.slug === "genetic-counselling" || matchingService.slug === "genetic-counseling"
             ? "Genetic Counselling - General"
             : matchingService.name;
       } else if (serviceSlug === "job" || serviceSlug === "job-application") {

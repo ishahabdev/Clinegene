@@ -10,6 +10,7 @@
     "build:prerender": "node prerender.js",
     "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node prerender.js",
     "lint": "node scripts/lint.js",
+    "optimize-images": "node scripts/optimize-images.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -22,5 +23,8 @@
     "resend": "^6.35.0",
     "tailwindcss": "^4.1.14",
     "vite": "^6.3.5"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
   }
 }
