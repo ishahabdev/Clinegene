@@ -164,7 +164,6 @@ ${sitemapUrls}
   // ── 9. Generate Robots.txt ──
   const robotsContent = `User-agent: *
 Allow: /
-Disallow: /admin
 
 Sitemap: ${BASE_URL}/sitemap.xml
 `;

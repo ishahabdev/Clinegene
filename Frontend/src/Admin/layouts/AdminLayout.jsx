@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { ADMIN_BASE } from "../adminConfig.js";
 import AdminSidebar from "./AdminSidebar.jsx";
 import AdminTopbar from "./AdminTopbar.jsx";
 import SessionTimeoutModal from "../components/SessionTimeoutModal.jsx";
 
 export default function AdminLayout({
-  currentPath = "/admin",
+  currentPath = ADMIN_BASE,
   onNavigate,
   children,
 }) {

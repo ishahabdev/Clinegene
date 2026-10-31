@@ -1,41 +1,82 @@
 import { useState, useRef } from "react";
-import { UploadCloud, Image as ImageIcon, X, RefreshCw, Link as LinkIcon, Upload } from "lucide-react";
+import { UploadCloud, X, RefreshCw, Link as LinkIcon, Upload, Loader2, CheckCircle2 } from "lucide-react";
+import { formatBytes } from "../../lib/imageOptimizer.js";
 
 export default function ImageUploader({
   value,
   onChange,
+  onUpload,
   label = "Upload Photo",
   aspectRatio = "aspect-square",
-  maxSizeMB = 5,
-  helperText = "PNG, JPG, or WebP up to 5MB",
+  maxSizeMB = 10,
+  helperText = "PNG, JPG, or WebP up to 10MB (automatically optimized to WebP <= 2MB)",
   required = false,
   error,
   allowUrlFallback = true,
 }) {
   const [dragActive, setDragActive] = useState(false);
   const [localError, setLocalError] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState("");
+  const [finalSizeInfo, setFinalSizeInfo] = useState("");
   const [showUrlInput, setShowUrlInput] = useState(false);
   const inputRef = useRef(null);
 
-  const handleFile = (file) => {
+  const handleFile = async (file) => {
     setLocalError("");
+    setFinalSizeInfo("");
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
+    // Requirement 2b: Reject files over 10 MB before processing
+    const maxInputBytes = 10 * 1024 * 1024;
+    if (file.size > maxInputBytes) {
+      setLocalError(
+        `File is too large (${formatBytes(file.size)}). Files over 10 MB are rejected before processing.`
+      );
+      return;
+    }
+
+    // Validate MIME type
+    const validMimes = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+    if (!validMimes.includes(file.type.toLowerCase())) {
       setLocalError("Please select a valid image file (PNG, JPG, WebP).");
       return;
     }
 
-    if (file.size > maxSizeMB * 1024 * 1024) {
-      setLocalError(`File size must be under ${maxSizeMB}MB.`);
-      return;
-    }
+    if (onUpload) {
+      try {
+        setUploading(true);
+        setUploadStatus("Resizing & converting to WebP...");
+        const result = await onUpload(file);
+        
+        let url = "";
+        let sizeText = "";
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      onChange(e.target.result);
-    };
-    reader.readAsDataURL(file);
+        if (typeof result === "string") {
+          url = result;
+        } else if (result && typeof result === "object") {
+          url = result.publicUrl;
+          sizeText = result.sizeFormatted;
+        }
+
+        onChange(url);
+        if (sizeText) {
+          setFinalSizeInfo(sizeText);
+        }
+      } catch (err) {
+        setLocalError(err.message || "Failed to process and upload image.");
+      } finally {
+        setUploading(false);
+        setUploadStatus("");
+      }
+    } else {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        onChange(e.target.result);
+        setFinalSizeInfo(formatBytes(file.size));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleDrag = (e) => {
@@ -60,6 +101,7 @@ export default function ImageUploader({
   const clearImage = (e) => {
     e.stopPropagation();
     onChange("");
+    setFinalSizeInfo("");
     if (inputRef.current) inputRef.current.value = "";
   };
 
@@ -89,14 +131,27 @@ export default function ImageUploader({
           <input
             type="text"
             value={value || ""}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => {
+              onChange(e.target.value);
+              setFinalSizeInfo("");
+            }}
             placeholder="Paste image URL..."
             className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-700 placeholder:text-slate-400 focus:border-[#009688] focus:outline-hidden"
           />
         </div>
       )}
 
-      {value ? (
+      {uploading ? (
+        <div className="flex flex-col items-center justify-center rounded-xl border border-teal-200 bg-teal-50/40 p-6 text-center">
+          <Loader2 className="h-7 w-7 text-[#009688] animate-spin mb-2" />
+          <p className="font-inter text-xs font-semibold text-teal-900">
+            {uploadStatus || "Processing Image..."}
+          </p>
+          <p className="mt-0.5 font-inter text-[11px] text-teal-600">
+            Resizing (max 1600px), converting to WebP & compressing
+          </p>
+        </div>
+      ) : value ? (
         <div className="relative flex items-center gap-3.5 rounded-xl border border-slate-200 bg-slate-50/70 p-3">
           <div
             className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-slate-200 ${aspectRatio} bg-white shadow-2xs`}
@@ -113,12 +168,26 @@ export default function ImageUploader({
           </div>
 
           <div className="min-w-0 flex-1">
-            <p className="font-outfit text-xs font-bold text-slate-800 truncate">
-              Image Selected
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="font-outfit text-xs font-bold text-slate-800 truncate">
+                Image Selected
+              </p>
+              {finalSizeInfo && (
+                <span className="inline-flex items-center gap-1 rounded bg-teal-100/70 px-2 py-0.5 font-mono text-[10px] font-bold text-teal-800">
+                  <CheckCircle2 className="h-3 w-3 text-teal-600" />
+                  WebP • {finalSizeInfo}
+                </span>
+              )}
+            </div>
+
             <p className="mt-0.5 font-inter text-[11px] text-slate-500 truncate">
-              Preview loaded successfully
+              {finalSizeInfo
+                ? `Final optimized size: ${finalSizeInfo} (under 2 MB limit)`
+                : value.startsWith("http")
+                ? value
+                : "Image ready"}
             </p>
+
             <div className="mt-2 flex items-center gap-3 text-xs">
               <button
                 type="button"

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import {
   Briefcase,
   Search,
@@ -9,12 +9,21 @@ import {
   Users,
   Plus,
   X,
+  AlertCircle,
+  RefreshCw,
+  CheckCircle2,
 } from "lucide-react";
 import AdminPageHeader from "../components/AdminPageHeader.jsx";
-import { MOCK_JOBS } from "../mocks/mockData.js";
+import {
+  getJobs,
+  createJob,
+  updateJob,
+  deleteJob,
+} from "../api/careers.js";
 
 const DEPARTMENTS = [
   "All Departments",
+  "Research",
   "Human Genetics",
   "Bioinformatics",
   "Laboratory Sciences",
@@ -25,8 +34,19 @@ const DEPARTMENTS = [
 
 const STATUSES = ["All Status", "Active", "Closed"];
 
+const DEFAULT_FORM_DATA = {
+  position: "",
+  subtitle: "",
+  department: "Human Genetics",
+  type: "Full Time",
+  status: "Active",
+  applicants: 0,
+};
+
 export default function CareerPage() {
-  const [jobs, setJobs] = useState(MOCK_JOBS);
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDept, setSelectedDept] = useState("All Departments");
   const [selectedStatus, setSelectedStatus] = useState("All Status");
@@ -34,83 +54,135 @@ export default function CareerPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [viewJob, setViewJob] = useState(null);
   const [editingJob, setEditingJob] = useState(null);
-  const [formData, setFormData] = useState({
-    position: "",
-    subtitle: "",
-    department: "Human Genetics",
-    type: "Full Time",
-    status: "Active",
-    applicants: 0,
-  });
+  const [formData, setFormData] = useState(DEFAULT_FORM_DATA);
+  const [saving, setSaving] = useState(false);
+  const [modalError, setModalError] = useState("");
+
   const [deleteId, setDeleteId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Success toast state
+  const [toastMessage, setToastMessage] = useState("");
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(""), 3500);
+  };
+
+  // Load jobs from Supabase
+  const loadJobsList = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getJobs();
+      setJobs(data || []);
+    } catch (err) {
+      console.error("[CareerPage] Failed to load jobs:", err);
+      setError(err.message || "Failed to load jobs from Supabase.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadJobsList();
+  }, [loadJobsList]);
 
   const filteredJobs = useMemo(() => {
     return jobs.filter((job) => {
-      const matchSearch =
-        job.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.subtitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.department.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchDept =
-        selectedDept === "All Departments" || job.department === selectedDept;
-      const matchStatus =
-        selectedStatus === "All Status" || job.status === selectedStatus;
+      const pos = (job.position || job.title || "").toLowerCase();
+      const sub = (job.subtitle || job.short_description || "").toLowerCase();
+      const dept = (job.department || "").toLowerCase();
+      const q = searchTerm.toLowerCase();
+
+      const matchSearch = !q || pos.includes(q) || sub.includes(q) || dept.includes(q);
+      const matchDept = selectedDept === "All Departments" || job.department === selectedDept;
+      const matchStatus = selectedStatus === "All Status" || job.status === selectedStatus;
+
       return matchSearch && matchDept && matchStatus;
     });
   }, [jobs, searchTerm, selectedDept, selectedStatus]);
 
   const handleOpenAdd = () => {
     setEditingJob(null);
-    setFormData({
-      position: "",
-      subtitle: "",
-      department: "Human Genetics",
-      type: "Full Time",
-      status: "Active",
-      applicants: 0,
-    });
+    setFormData({ ...DEFAULT_FORM_DATA });
+    setModalError("");
     setModalOpen(true);
   };
 
   const handleOpenEdit = (job) => {
     setEditingJob(job);
     setFormData({
-      position: job.position,
-      subtitle: job.subtitle,
-      department: job.department,
-      type: job.type,
-      status: job.status,
-      applicants: job.applicants,
+      position: job.position || job.title || "",
+      subtitle: job.subtitle || job.short_description || "",
+      department: job.department || "Human Genetics",
+      type: job.type || job.job_type || "Full Time",
+      status: job.status || job.job_status || "Active",
+      applicants: job.applicants ?? job.applicants_count ?? 0,
+      sort_order: job.sort_order ?? 1,
     });
+    setModalError("");
     setModalOpen(true);
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
-    if (!formData.position) return;
-
-    if (editingJob) {
-      setJobs((prev) =>
-        prev.map((j) => (j.id === editingJob.id ? { ...j, ...formData } : j))
-      );
-    } else {
-      const newJob = {
-        id: Date.now(),
-        ...formData,
-      };
-      setJobs((prev) => [...prev, newJob]);
+    if (!formData.position.trim()) {
+      setModalError("Job position title is required.");
+      return;
     }
-    setModalOpen(false);
+
+    setSaving(true);
+    setModalError("");
+
+    try {
+      if (editingJob) {
+        const updated = await updateJob(editingJob.id, formData);
+        setJobs((prev) =>
+          prev.map((j) => (j.id === editingJob.id ? updated : j))
+        );
+        showToast("Job opening updated successfully.");
+      } else {
+        const created = await createJob(formData);
+        setJobs((prev) => [...prev, created]);
+        showToast("New job opening posted successfully.");
+      }
+      setModalOpen(false);
+    } catch (err) {
+      console.error("[CareerPage] Save error:", err);
+      setModalError(err.message || "Failed to save job opening.");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleDelete = () => {
-    if (deleteId) {
+  const handleDelete = async () => {
+    if (!deleteId) return;
+
+    setIsDeleting(true);
+    try {
+      await deleteJob(deleteId);
       setJobs((prev) => prev.filter((j) => j.id !== deleteId));
+      showToast("Job opening deleted successfully.");
       setDeleteId(null);
+    } catch (err) {
+      console.error("[CareerPage] Delete error:", err);
+      showToast("Error deleting job: " + (err.message || "Unknown error"));
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   return (
     <div>
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-xs font-medium text-white shadow-xl animate-in slide-in-from-bottom-5">
+          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* Page Header */}
       <AdminPageHeader
         icon={Briefcase}
@@ -120,6 +192,24 @@ export default function CareerPage() {
         actionLabel="Post Job"
         onAction={handleOpenAdd}
       />
+
+      {/* Error banner if query fails */}
+      {error && (
+        <div className="mb-6 flex items-center justify-between rounded-xl border border-rose-200 bg-rose-50/80 p-4 text-xs text-rose-700">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="h-4 w-4 shrink-0 text-rose-600" />
+            <span>{error}</span>
+          </div>
+          <button
+            type="button"
+            onClick={loadJobsList}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-rose-600 px-3 py-1.5 font-semibold text-white hover:bg-rose-700"
+          >
+            <RefreshCw className="h-3 w-3" />
+            <span>Retry</span>
+          </button>
+        </div>
+      )}
 
       {/* Filter Bar with 2 Dropdowns */}
       <div className="mb-6 flex flex-col sm:flex-row items-center justify-between gap-3 rounded-lg border border-slate-200/90 bg-white p-2.5 shadow-xs">
@@ -168,7 +258,12 @@ export default function CareerPage() {
       </div>
 
       {/* Main Jobs Section */}
-      {jobs.length === 0 ? (
+      {loading && jobs.length === 0 ? (
+        <div className="rounded-xl border border-slate-200/80 bg-white p-12 text-center shadow-xs mb-8">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#009688] border-r-transparent mb-3" />
+          <p className="text-xs text-slate-500 font-medium">Loading job openings from Supabase...</p>
+        </div>
+      ) : jobs.length === 0 ? (
         /* Empty state matching frontend real career data (no open jobs currently) */
         <div className="flex flex-col items-center justify-center p-12 text-center bg-white rounded-xl border border-slate-200/80 shadow-xs mb-8">
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 text-[#009688]">
@@ -183,7 +278,7 @@ export default function CareerPage() {
           <button
             type="button"
             onClick={handleOpenAdd}
-            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#009688] px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-[#008779] transition-colors"
+            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#009688] px-4 py-2 text-xs font-semibold text-white shadow-xs hover:bg-[#008779] transition-colors cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             <span>Post New Job Opening</span>
@@ -205,7 +300,7 @@ export default function CareerPage() {
               setSelectedDept("All Departments");
               setSelectedStatus("All Status");
             }}
-            className="mt-4 text-xs font-semibold text-[#009688] hover:underline"
+            className="mt-4 text-xs font-semibold text-[#009688] hover:underline cursor-pointer"
           >
             Clear all filters
           </button>
@@ -237,17 +332,17 @@ export default function CareerPage() {
                     </td>
                     <td className="py-4 px-4">
                       <p className="font-outfit text-xs sm:text-sm font-bold text-slate-800">
-                        {job.position}
+                        {job.position || job.title}
                       </p>
                       <p className="text-[11px] text-slate-400 font-normal">
-                        {job.subtitle}
+                        {job.subtitle || job.short_description}
                       </p>
                     </td>
                     <td className="py-4 px-4 text-slate-600 font-medium">
                       {job.department}
                     </td>
                     <td className="py-4 px-4 text-slate-600 font-medium">
-                      {job.type}
+                      {job.type || job.job_type}
                     </td>
                     <td className="py-4 px-4">
                       <span
@@ -257,13 +352,13 @@ export default function CareerPage() {
                             : "bg-slate-100 text-slate-600"
                         }`}
                       >
-                        {job.status}
+                        {job.status || "Active"}
                       </span>
                     </td>
                     <td className="py-4 px-4">
                       <div className="inline-flex items-center gap-1.5 text-[#009688] font-semibold">
                         <Users className="h-3.5 w-3.5" />
-                        <span>{job.applicants}</span>
+                        <span>{job.applicants ?? job.applicants_count ?? 0}</span>
                       </div>
                     </td>
                     <td className="py-4 px-4">
@@ -271,7 +366,7 @@ export default function CareerPage() {
                         <button
                           type="button"
                           onClick={() => handleOpenEdit(job)}
-                          className="flex h-7 w-7 items-center justify-center rounded-md bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors"
+                          className="flex h-7 w-7 items-center justify-center rounded-md bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
                           title="Edit"
                         >
                           <Edit2 className="h-3.5 w-3.5" />
@@ -279,7 +374,7 @@ export default function CareerPage() {
                         <button
                           type="button"
                           onClick={() => setViewJob(job)}
-                          className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+                          className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
                           title="View"
                         >
                           <Eye className="h-3.5 w-3.5" />
@@ -287,7 +382,7 @@ export default function CareerPage() {
                         <button
                           type="button"
                           onClick={() => setDeleteId(job.id)}
-                          className="flex h-7 w-7 items-center justify-center rounded-md bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors"
+                          className="flex h-7 w-7 items-center justify-center rounded-md bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
                           title="Delete"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -300,33 +395,11 @@ export default function CareerPage() {
             </table>
           </div>
 
-          {/* Table Footer with Pagination */}
+          {/* Table Footer */}
           <div className="flex items-center justify-between border-t border-slate-100 px-4 py-3 text-xs text-slate-500">
             <span>
-              Showing 1 to {filteredJobs.length} of {jobs.length} entries
+              Showing {filteredJobs.length} of {jobs.length} job opening{jobs.length !== 1 ? "s" : ""}
             </span>
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                disabled
-                className="flex h-7 w-7 items-center justify-center rounded border border-slate-200 text-slate-300 cursor-not-allowed"
-              >
-                ‹
-              </button>
-              <button
-                type="button"
-                className="flex h-7 w-7 items-center justify-center rounded bg-[#009688] font-semibold text-white"
-              >
-                1
-              </button>
-              <button
-                type="button"
-                disabled
-                className="flex h-7 w-7 items-center justify-center rounded border border-slate-200 text-slate-300 cursor-not-allowed"
-              >
-                ›
-              </button>
-            </div>
           </div>
         </div>
       )}
@@ -337,21 +410,28 @@ export default function CareerPage() {
           <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="font-outfit text-lg font-bold text-slate-800">
-                {editingJob ? "Edit Job" : "Post New Job"}
+                {editingJob ? "Edit Job Opening" : "Post New Job Opening"}
               </h3>
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-slate-600 rounded-lg"
+                className="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
+            {modalError && (
+              <div className="mt-3 flex items-center gap-2 rounded-lg bg-rose-50 p-3 text-xs text-rose-700 border border-rose-200">
+                <AlertCircle className="h-4 w-4 shrink-0 text-rose-600" />
+                <span>{modalError}</span>
+              </div>
+            )}
+
             <form onSubmit={handleSave} className="mt-4 space-y-3.5">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Job Position
+                  Job Position *
                 </label>
                 <input
                   type="text"
@@ -360,7 +440,7 @@ export default function CareerPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, position: e.target.value })
                   }
-                  placeholder="e.g. Senior Genetic Counselor"
+                  placeholder="e.g. Genetic Counselor"
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
                 />
               </div>
@@ -369,14 +449,13 @@ export default function CareerPage() {
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Short Description
                 </label>
-                <input
-                  type="text"
-                  required
+                <textarea
+                  rows={2}
                   value={formData.subtitle}
                   onChange={(e) =>
                     setFormData({ ...formData, subtitle: e.target.value })
                   }
-                  placeholder="e.g. Guide patients through genetic testing and care plans."
+                  placeholder="Brief role description, duties, or requirements..."
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
                 />
               </div>
@@ -391,7 +470,7 @@ export default function CareerPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, department: e.target.value })
                     }
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none cursor-pointer"
                   >
                     {DEPARTMENTS.filter((d) => d !== "All Departments").map((dept) => (
                       <option key={dept} value={dept}>
@@ -410,7 +489,7 @@ export default function CareerPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, type: e.target.value })
                     }
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none cursor-pointer"
                   >
                     <option value="Full Time">Full Time</option>
                     <option value="Part Time">Part Time</option>
@@ -430,9 +509,9 @@ export default function CareerPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, status: e.target.value })
                     }
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none cursor-pointer"
                   >
-                    <option value="Active">Active</option>
+                    <option value="Active">Active (Published)</option>
                     <option value="Closed">Closed</option>
                   </select>
                 </div>
@@ -443,6 +522,7 @@ export default function CareerPage() {
                   </label>
                   <input
                     type="number"
+                    min="0"
                     value={formData.applicants}
                     onChange={(e) =>
                       setFormData({
@@ -459,15 +539,16 @@ export default function CareerPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                  className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="rounded-lg bg-[#009688] px-5 py-2 text-xs font-semibold text-white hover:bg-[#00897b]"
+                  disabled={saving}
+                  className="rounded-lg bg-[#009688] px-5 py-2 text-xs font-semibold text-white hover:bg-[#00897b] transition-colors disabled:opacity-50 cursor-pointer"
                 >
-                  {editingJob ? "Save Changes" : "Post Job"}
+                  {saving ? "Saving..." : editingJob ? "Save Changes" : "Post Job"}
                 </button>
               </div>
             </form>
@@ -486,7 +567,7 @@ export default function CareerPage() {
               <button
                 type="button"
                 onClick={() => setViewJob(null)}
-                className="p-1 text-slate-400 hover:text-slate-600 rounded-lg"
+                className="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -496,13 +577,13 @@ export default function CareerPage() {
               <div>
                 <span className="text-slate-400 font-medium">Position</span>
                 <p className="font-outfit text-base font-bold text-slate-800 mt-0.5">
-                  {viewJob.position}
+                  {viewJob.position || viewJob.title}
                 </p>
               </div>
               <div>
                 <span className="text-slate-400 font-medium">Description</span>
                 <p className="text-slate-600 mt-0.5 leading-relaxed">
-                  {viewJob.subtitle}
+                  {viewJob.subtitle || viewJob.short_description || "No description provided."}
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -515,7 +596,7 @@ export default function CareerPage() {
                 <div>
                   <span className="text-slate-400 font-medium">Job Type</span>
                   <p className="font-bold text-slate-800 mt-0.5">
-                    {viewJob.type}
+                    {viewJob.type || viewJob.job_type}
                   </p>
                 </div>
               </div>
@@ -530,14 +611,14 @@ export default function CareerPage() {
                           : "bg-slate-100 text-slate-600"
                       }`}
                     >
-                      {viewJob.status}
+                      {viewJob.status || "Active"}
                     </span>
                   </div>
                 </div>
                 <div>
                   <span className="text-slate-400 font-medium">Applicants</span>
                   <p className="font-bold text-[#009688] mt-0.5">
-                    {viewJob.applicants} candidates
+                    {viewJob.applicants ?? viewJob.applicants_count ?? 0} candidates
                   </p>
                 </div>
               </div>
@@ -546,7 +627,7 @@ export default function CareerPage() {
         </div>
       )}
 
-      {/* Delete Confirmation */}
+      {/* Delete Confirmation Modal */}
       {deleteId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-2xl animate-in zoom-in-95 duration-150">
@@ -554,22 +635,23 @@ export default function CareerPage() {
               Confirm Delete
             </h4>
             <p className="mt-2 text-xs text-slate-500">
-              Are you sure you want to remove this job opening?
+              Are you sure you want to remove this job opening? This action will remove it from the public careers portal as well.
             </p>
             <div className="mt-5 flex items-center justify-end gap-2">
               <button
                 type="button"
                 onClick={() => setDeleteId(null)}
-                className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50"
+                className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
+                disabled={isDeleting}
                 onClick={handleDelete}
-                className="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-rose-700"
+                className="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-rose-700 transition-colors disabled:opacity-50 cursor-pointer"
               >
-                Delete
+                {isDeleting ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>

@@ -20,8 +20,16 @@ import {
 } from "lucide-react";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import dnaStrand from "../assets/dna_strand.png";
-import { servicesData, getServiceBySlug } from "../data/servicesData.js";
+import PageNotFoundPage from "./PageNotFoundPage.jsx";
+import { fetchServiceBySlug, fetchPublishedServices } from "../lib/servicesClient.js";
 import { useTheme } from "../context/ThemeContext.jsx";
+
+export const revalidate = 60;
+export const dynamic = "force-dynamic";
+
+export function notFound() {
+  return <PageNotFoundPage />;
+}
 
 // Helper to sanitize placeholder brackets e.g. "[To be confirmed by the lab]"
 function cleanText(text) {
@@ -119,7 +127,66 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
     ? ssrUrl.replace(/^\/|\/$/g, "")
     : (typeof window !== "undefined" ? window.location.pathname.replace(/^\/|\/$/g, "") : "");
   const activeSlug = currentSlug || (path.startsWith("services/") ? path.slice("services/".length) : "");
-  const service = getServiceBySlug(activeSlug) || servicesData[0];
+
+  const [service, setService] = useState(null);
+  const [relatedServices, setRelatedServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isNotFound, setIsNotFound] = useState(false);
+
+  useEffect(() => {
+    if (!activeSlug) {
+      setIsNotFound(true);
+      setLoading(false);
+      return;
+    }
+
+    let isMounted = true;
+    setLoading(true);
+    setIsNotFound(false);
+
+    async function loadDetail() {
+      try {
+        const item = await fetchServiceBySlug(activeSlug);
+        if (!isMounted) return;
+
+        if (!item) {
+          setIsNotFound(true);
+          setService(null);
+          setLoading(false);
+          return;
+        }
+
+        setService(item);
+        setLoading(false);
+
+        // Fetch related services
+        try {
+          const allPublished = await fetchPublishedServices();
+          if (isMounted && allPublished) {
+            setRelatedServices(
+              allPublished.filter((s) => s.slug !== item.slug).slice(0, 3)
+            );
+          }
+        } catch {
+          // non-critical
+        }
+      } catch (err) {
+        if (import.meta.env.DEV) {
+          console.error("[ServiceDetailPage] Error fetching service:", err);
+        }
+        if (isMounted) {
+          setIsNotFound(true);
+          setService(null);
+          setLoading(false);
+        }
+      }
+    }
+
+    loadDetail();
+    return () => {
+      isMounted = false;
+    };
+  }, [activeSlug]);
 
   // Accordion state for FAQs: first item open by default
   const [openFaq, setOpenFaq] = useState(0);
@@ -141,6 +208,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
 
   // Set document title and meta description
   useEffect(() => {
+    if (!service) return;
     if (typeof document !== "undefined") {
       const title = `${service.name} | ClinGene`;
       document.title = title;
@@ -218,11 +286,35 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
     }
   };
 
-  // Related services
-  const relatedServices = (service.relatedSlugs || [])
-    .map((slug) => getServiceBySlug(slug))
-    .filter(Boolean)
-    .slice(0, 3);
+  if (isNotFound) {
+    return notFound();
+  }
+
+  if (loading && !service) {
+    return (
+      <div className="service-detail-page bg-white min-h-[70vh] flex items-center justify-center py-20">
+        <div className="site-container max-w-5xl w-full animate-pulse space-y-8">
+          <div className="h-4 w-48 bg-slate-200 rounded" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="h-6 w-36 bg-slate-200 rounded-full" />
+              <div className="h-10 w-4/5 bg-slate-200 rounded" />
+              <div className="h-4 w-full bg-slate-200 rounded" />
+              <div className="h-4 w-3/4 bg-slate-200 rounded" />
+              <div className="h-10 w-48 bg-slate-200 rounded-full mt-4" />
+            </div>
+            <div className="lg:col-span-5">
+              <div className="aspect-16/10 rounded-2xl bg-slate-200" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!service) {
+    return notFound();
+  }
 
   // Application icons cycle
   const appIcons = [Dna, FileCheck, Microscope, GitBranch, FlaskConical, Sparkles, Activity, ShieldCheck];

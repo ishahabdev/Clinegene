@@ -12,6 +12,7 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import AdminPageHeader from "../components/AdminPageHeader.jsx";
+import { adminPath } from "../adminConfig.js";
 
 export default function DashboardPage({ onNavigate }) {
   const stats = [
@@ -19,25 +20,25 @@ export default function DashboardPage({ onNavigate }) {
       count: "9",
       title: "Scientific Faculty & Team",
       icon: Users,
-      path: "/admin/team",
+      path: adminPath("/team"),
     },
     {
       count: "16",
       title: "Genomic Services",
       icon: Layers,
-      path: "/admin/services",
+      path: adminPath("/services"),
     },
     {
       count: "0",
       title: "Research Publications",
       icon: Microscope,
-      path: "/admin/research",
+      path: adminPath("/research"),
     },
     {
       count: "0",
       title: "Open Career Positions",
       icon: Briefcase,
-      path: "/admin/career",
+      path: adminPath("/career"),
     },
   ];
 
@@ -79,19 +80,19 @@ export default function DashboardPage({ onNavigate }) {
   const shortcuts = [
     {
       label: "Add New Doctor",
-      path: "/admin/team",
+      path: adminPath("/team"),
     },
     {
       label: "Configure Medical Services",
-      path: "/admin/services",
+      path: adminPath("/services"),
     },
     {
       label: "Upload Gallery Media",
-      path: "/admin/gallery",
+      path: adminPath("/gallery"),
     },
     {
       label: "Create Blog Article",
-      path: "/admin/news",
+      path: adminPath("/news"),
     },
   ];
 
@@ -162,7 +163,7 @@ export default function DashboardPage({ onNavigate }) {
 
             <button
               type="button"
-              onClick={() => onNavigate && onNavigate("/admin/team")}
+              onClick={() => onNavigate && onNavigate(adminPath("/team"))}
               className="inline-flex items-center gap-1 text-xs font-semibold text-[#009688] hover:text-[#00897b] transition-colors cursor-pointer"
             >
               <span>View All</span>

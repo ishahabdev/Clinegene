@@ -1,10 +1,14 @@
-import { ArrowRight, Dna, Play, ShieldPlus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowRight, Dna, Play, ShieldPlus, Layers } from "lucide-react";
 import Button from "../components/Button.jsx";
 import SectionHeading from "../components/SectionHeading";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import serviceHero from "../assets/service-hero.webp";
-import services from "../data/services";
+import { fetchPublishedServices } from "../lib/servicesClient.js";
 import { useTheme } from "../context/ThemeContext.jsx";
+
+export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 function SubServiceIcon({ id, className = "h-11 w-11", style }) {
   if (id === "prenatal-diagnosis") {
@@ -67,6 +71,36 @@ export default function ServicesPage() {
   const { theme } = useTheme();
   const isRed = theme === "red";
   const isGreen = theme === "green";
+
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadServices() {
+      try {
+        const data = await fetchPublishedServices();
+        if (isMounted) {
+          setServices(data || []);
+        }
+      } catch (err) {
+        if (import.meta.env.DEV) {
+          console.error("[ServicesPage] Failed to fetch published services:", err);
+        }
+        if (isMounted) {
+          setServices([]);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    }
+    loadServices();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const sectionBg = isRed ? "#2d0306" : isGreen ? "#021e12" : "#02132a";
 
@@ -274,152 +308,192 @@ export default function ServicesPage() {
               <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:text-white motion-reduce:transform-none motion-reduce:transition-none" />
             </Button>
           </ScrollReveal>
-          {/* ── Featured Top Card: Genetic Counselling & Sub-Services ── */}
-          {(() => {
-            const gc = services.find((s) => s.slug === "genetic-counselling" || s.slug === "genetic-counseling") || services[0];
-            const themeAccentColor = isRed ? "#c81e25" : isGreen ? "#059669" : "#00bcd4";
-            const themeCardBorderHover = isRed ? "hover:border-[#c81e25]" : isGreen ? "hover:border-[#059669]" : "hover:border-[#00bcd4]";
-            const themeBannerBorder = isRed ? "border-[#fecdd3]" : isGreen ? "border-[#a7f3d0]" : "border-[#cbe8f6]";
-            const themeBannerBg = isRed
-              ? "bg-linear-to-r from-[#fff5f5] via-white to-[#fff1f2]"
-              : isGreen
-                ? "bg-linear-to-r from-[#f0fdf4] via-white to-[#ecfdf5]"
-                : "bg-linear-to-r from-[#eef9fd] via-[#f5fbfe] to-[#eaf5fc]";
+          {/* ── Services Content (Live from Supabase) ── */}
+          {loading && services.length === 0 ? (
+            <div className="space-y-6 py-8">
+              <div className="h-48 w-full rounded-2xl bg-slate-200/60 animate-pulse" />
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="h-64 rounded-xl bg-slate-200/50 animate-pulse" />
+                ))}
+              </div>
+            </div>
+          ) : services.length === 0 ? (
+            <div className="rounded-2xl border border-slate-200/80 bg-white p-12 text-center shadow-xs my-6">
+              <Layers className="mx-auto h-10 w-10 text-slate-400 mb-3" />
+              <h3 className="text-base font-bold text-slate-700">No Services Available</h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Our published clinical and sequencing services will be available here soon.
+              </p>
+            </div>
+          ) : (
+            <>
+              {/* ── Featured Top Card: Genetic Counselling & Sub-Services ── */}
+              {(() => {
+                const defaultGc = {
+                  slug: "genetic-counseling",
+                  name: "Genetic Counseling",
+                  description: "Professional guidance and support to help you understand genetic risks and make informed decisions.",
+                  subServices: [
+                    { id: "prenatal-diagnosis", label: "Prenatal Diagnosis" },
+                    { id: "newborn-screening", label: "Newborn Screening" },
+                    { id: "genetic-diseases", label: "Genetic Diseases" },
+                    { id: "chromosomal-abnormalities", label: "Chromosomal Abnormalities" },
+                    { id: "hereditary-cancer", label: "Hereditary Cancer" },
+                  ],
+                };
+                const gc =
+                  services.find((s) => s.slug === "genetic-counselling" || s.slug === "genetic-counseling") ||
+                  services[0] ||
+                  defaultGc;
+                const themeAccentColor = isRed ? "#c81e25" : isGreen ? "#059669" : "#00bcd4";
+                const themeCardBorderHover = isRed ? "hover:border-[#c81e25]" : isGreen ? "hover:border-[#059669]" : "hover:border-[#00bcd4]";
+                const themeBannerBorder = isRed ? "border-[#fecdd3]" : isGreen ? "border-[#a7f3d0]" : "border-[#cbe8f6]";
+                const themeBannerBg = isRed
+                  ? "bg-linear-to-r from-[#fff5f5] via-white to-[#fff1f2]"
+                  : isGreen
+                    ? "bg-linear-to-r from-[#f0fdf4] via-white to-[#ecfdf5]"
+                    : "bg-linear-to-r from-[#eef9fd] via-[#f5fbfe] to-[#eaf5fc]";
 
-            return (
-              <ScrollReveal as="div" className={`relative mb-7 overflow-hidden rounded-2xl sm:rounded-3xl border ${themeBannerBorder} ${themeBannerBg} p-5 sm:p-7 lg:p-8 shadow-[0_4px_22px_rgba(12,43,72,0.06)] transition-colors duration-500`}>
-                
-                {/* Number 1 Badge on Card */}
-                <div className="flex items-center gap-2 mb-3">
-                  <span
-                    className="rounded-md px-2.5 py-0.5 font-inter text-xs font-bold tracking-wide text-white shadow-2xs transition-colors duration-300"
-                    style={{ backgroundColor: badgeBg }}
-                  >
-                    01
-                  </span>
-                  <span className="font-inter text-[11px] font-bold uppercase tracking-wider text-[#0c2b48]/70">
-                    Service 01
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr] gap-6 lg:gap-8 items-center">
-                  
-                  {/* Left Column: Main Service Info */}
-                  <div className="flex flex-col items-start pr-0 lg:pr-6 lg:border-r border-slate-200/80">
-                    <h2 className="font-outfit text-2xl sm:text-3xl font-extrabold text-[#0c2b48] leading-tight">
-                      <span className="mr-2 transition-colors duration-300" style={{ color: themeAccentColor }}>1.</span>{gc.name}
-                    </h2>
-                    <p className="mt-3 font-inter text-xs sm:text-[13.5px] leading-relaxed text-[#4a6e8b]">
-                      Professional guidance and support to help you understand genetic risks and make informed decisions.
-                    </p>
-                    <a
-                      href={`/services/${gc.slug}`}
-                      className="mt-6 inline-flex items-center gap-2 rounded-full text-white font-inter font-bold text-xs sm:text-sm px-6 py-2.5 shadow-sm transition-all hover:shadow-md hover:scale-[1.02] active:scale-95"
-                      style={{ backgroundColor: themeAccentColor }}
-                    >
-                      <span>Learn More</span>
-                      <span aria-hidden="true" className="text-sm font-bold">›</span>
-                    </a>
-                  </div>
-
-                  {/* Right Column: Sub Services Row */}
-                  <div className="min-w-0 w-full">
-                    <div
-                      className="flex items-center gap-1.5 font-inter text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-3 sm:mb-3.5 transition-colors duration-300"
-                      style={{ color: themeAccentColor }}
-                    >
-                      <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
-                        <circle cx="12" cy="12" r="9" />
-                        <path d="M12 16v-4M12 8h.01" strokeLinecap="round" />
-                      </svg>
-                      <span>Sub Services</span>
+                return (
+                  <ScrollReveal as="div" className={`relative mb-7 overflow-hidden rounded-2xl sm:rounded-3xl border ${themeBannerBorder} ${themeBannerBg} p-5 sm:p-7 lg:p-8 shadow-[0_4px_22px_rgba(12,43,72,0.06)] transition-colors duration-500`}>
+                    
+                    {/* Number 1 Badge on Card */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <span
+                        className="rounded-md px-2.5 py-0.5 font-inter text-xs font-bold tracking-wide text-white shadow-2xs transition-colors duration-300"
+                        style={{ backgroundColor: badgeBg }}
+                      >
+                        01
+                      </span>
+                      <span className="font-inter text-[11px] font-bold uppercase tracking-wider text-[#0c2b48]/70">
+                        Service 01
+                      </span>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 sm:gap-3">
-                      {gc.subServices?.map((sub) => (
+                    <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr] gap-6 lg:gap-8 items-center">
+                      
+                      {/* Left Column: Main Service Info */}
+                      <div className="flex flex-col items-start pr-0 lg:pr-6 lg:border-r border-slate-200/80">
+                        <h2 className="font-outfit text-2xl sm:text-3xl font-extrabold text-[#0c2b48] leading-tight">
+                          <span className="mr-2 transition-colors duration-300" style={{ color: themeAccentColor }}>1.</span>{gc.name}
+                        </h2>
+                        <p className="mt-3 font-inter text-xs sm:text-[13.5px] leading-relaxed text-[#4a6e8b]">
+                          {gc.description || "Professional guidance and support to help you understand genetic risks and make informed decisions."}
+                        </p>
                         <a
-                          key={sub.id}
-                          href={`/contact?service=genetic-counselling-${sub.id}`}
-                          className={`group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-[0_2px_8px_rgba(12,43,72,0.03)] hover:shadow-md ${themeCardBorderHover} hover:-translate-y-0.5 transition-all duration-300`}
+                          href={`/services/${gc.slug}`}
+                          className="mt-6 inline-flex items-center gap-2 rounded-full text-white font-inter font-bold text-xs sm:text-sm px-6 py-2.5 shadow-sm transition-all hover:shadow-md hover:scale-[1.02] active:scale-95"
+                          style={{ backgroundColor: themeAccentColor }}
                         >
-                          <div className="flex h-12 w-12 items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                            <SubServiceIcon
-                              id={sub.id}
-                              className="h-10 w-10 transition-colors duration-300"
-                              style={{ color: themeAccentColor }}
-                            />
-                          </div>
-
-                          <h3 className="mt-2.5 mb-3 font-outfit text-xs sm:text-[12.5px] font-bold text-[#0c2b48] leading-tight min-h-7 flex items-center justify-center">
-                            {sub.label}
-                          </h3>
-
-                          <span
-                            className="mt-auto flex h-6.5 w-6.5 sm:h-7 sm:w-7 items-center justify-center rounded-full text-white shadow-2xs transition-transform duration-300 group-hover:scale-110"
-                            style={{ backgroundColor: themeAccentColor }}
-                          >
-                            <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={2.5} />
-                          </span>
+                          <span>Learn More</span>
+                          <span aria-hidden="true" className="text-sm font-bold">›</span>
                         </a>
-                      ))}
+                      </div>
+
+                      {/* Right Column: Sub Services Row */}
+                      <div className="min-w-0 w-full">
+                        <div
+                          className="flex items-center gap-1.5 font-inter text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-3 sm:mb-3.5 transition-colors duration-300"
+                          style={{ color: themeAccentColor }}
+                        >
+                          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 16v-4M12 8h.01" strokeLinecap="round" />
+                          </svg>
+                          <span>Sub Services</span>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 sm:gap-3">
+                          {(gc.subServices || []).map((sub) => (
+                            <a
+                              key={sub.id}
+                              href={`/contact?service=genetic-counselling-${sub.id}`}
+                              className={`group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-[0_2px_8px_rgba(12,43,72,0.03)] hover:shadow-md ${themeCardBorderHover} hover:-translate-y-0.5 transition-all duration-300`}
+                            >
+                              <div className="flex h-12 w-12 items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                                <SubServiceIcon
+                                  id={sub.id}
+                                  className="h-10 w-10 transition-colors duration-300"
+                                  style={{ color: themeAccentColor }}
+                                />
+                              </div>
+
+                              <h3 className="mt-2.5 mb-3 font-outfit text-xs sm:text-[12.5px] font-bold text-[#0c2b48] leading-tight min-h-7 flex items-center justify-center">
+                                {sub.label}
+                              </h3>
+
+                              <span
+                                className="mt-auto flex h-6.5 w-6.5 sm:h-7 sm:w-7 items-center justify-center rounded-full text-white shadow-2xs transition-transform duration-300 group-hover:scale-110"
+                                style={{ backgroundColor: themeAccentColor }}
+                              >
+                                <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={2.5} />
+                              </span>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+
                     </div>
-                  </div>
+                  </ScrollReveal>
+                );
+              })()}
 
-                </div>
-              </ScrollReveal>
-            );
-          })()}
+              {/* ── Remaining Services Grid (02 to 15) in other line ── */}
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {services
+                  .filter((s) => s.slug !== "genetic-counselling" && s.slug !== "genetic-counseling")
+                  .map(({ slug, name, description, Icon, image, imageAlt, width, height }, index) => {
+                    const serviceUrl = `/services/${slug}`;
 
-          {/* ── Remaining Services Grid (02 to 15) in other line ── */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {services.filter((s) => s.slug !== "genetic-counselling" && s.slug !== "genetic-counseling").map(({ slug, name, description, Icon, image, imageAlt, width, height }, index) => {
-              const serviceUrl = `/services/${slug}`;
+                    return (
+                      <ScrollReveal
+                        as="a"
+                        href={serviceUrl}
+                        className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#c9e2ef] bg-[#f8fcff] hover:bg-(--accent-soft) shadow-[0_7px_18px_rgba(12,43,72,0.09)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_12px_28px_var(--accent-glow)] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
+                        delay={Math.min(index % 4, 3) * 55}
+                        key={slug || name}
+                      >
+                        <div className="relative aspect-4/3 overflow-hidden bg-[#102943]">
+                          <img
+                            alt={imageAlt || name}
+                            width={width || 800}
+                            height={height || 800}
+                            className={`h-full w-full object-cover ${slug === "library-generation" ? "object-[center_top]" : "object-center"} transition-transform duration-500 group-hover:scale-110 motion-reduce:transition-none`}
+                            decoding="async"
+                            loading="lazy"
+                            src={image}
+                          />
+                          <span
+                            className="absolute left-2 top-2 rounded-md px-2 py-1 font-inter text-[10px] font-bold tracking-wide text-white"
+                            style={{ backgroundColor: badgeBg }}
+                          >
+                            {String(index + 2).padStart(2, "0")}
+                          </span>
+                        </div>
+                        <div className="relative flex flex-1 flex-col px-3 pb-3 pt-7 transition-colors duration-300">
+                          <span
+                            className="absolute -top-5 left-3 grid h-10 w-10 place-items-center rounded-xl border border-[#c9e2ef] bg-white shadow-[0_3px_10px_rgba(12,43,72,0.13)] transition-colors group-hover:bg-(--accent-btn-bg,var(--accent)) group-hover:text-(--accent-btn-text,white)"
+                            style={{ color: "var(--accent-muted)" }}
+                          >
+                            <Icon aria-hidden="true" className="h-5 w-5" strokeWidth={1.8} />
+                          </span>
+                          <h3 className="font-outfit text-[15px] font-bold leading-snug text-[#0c2b48] group-hover:text-(--accent-dark) transition-colors">{name}</h3>
+                          <p className="mt-1.5 font-inter text-xs leading-normal text-[#4a6e8b]">{description}</p>
+                          <span
+                            className="mt-auto inline-flex items-center gap-1.5 pt-3 font-inter text-[11px] font-bold transition-colors text-[#0c2b48] group-hover:text-(--accent)"
+                          >
+                            Ask about this service
+                            <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
+                          </span>
+                        </div>
+                      </ScrollReveal>
+                    );
+                  })}
+              </div>
+            </>
+          )}
 
-              return (
-                <ScrollReveal
-                  as="a"
-                  href={serviceUrl}
-                  className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#c9e2ef] bg-[#f8fcff] hover:bg-(--accent-soft) shadow-[0_7px_18px_rgba(12,43,72,0.09)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_12px_28px_var(--accent-glow)] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
-                  delay={Math.min(index % 4, 3) * 55}
-                  key={slug || name}
-                >
-                  <div className="relative aspect-4/3 overflow-hidden bg-[#102943]">
-                    <img
-                      alt={imageAlt || name}
-                      width={width}
-                      height={height}
-                      className={`h-full w-full object-cover ${slug === "library-generation" ? "object-[center_top]" : "object-center"} transition-transform duration-500 group-hover:scale-110 motion-reduce:transition-none`}
-                      decoding="async"
-                      loading="lazy"
-                      src={image}
-                    />
-                    <span
-                      className="absolute left-2 top-2 rounded-md px-2 py-1 font-inter text-[10px] font-bold tracking-wide text-white"
-                      style={{ backgroundColor: badgeBg }}
-                    >
-                      {String(index + 2).padStart(2, "0")}
-                    </span>
-                  </div>
-                  <div className="relative flex flex-1 flex-col px-3 pb-3 pt-7 transition-colors duration-300">
-                    <span
-                      className="absolute -top-5 left-3 grid h-10 w-10 place-items-center rounded-xl border border-[#c9e2ef] bg-white shadow-[0_3px_10px_rgba(12,43,72,0.13)] transition-colors group-hover:bg-(--accent-btn-bg,var(--accent)) group-hover:text-(--accent-btn-text,white)"
-                      style={{ color: "var(--accent-muted)" }}
-                    >
-                      <Icon aria-hidden="true" className="h-5 w-5" strokeWidth={1.8} />
-                    </span>
-                    <h3 className="font-outfit text-[15px] font-bold leading-snug text-[#0c2b48] group-hover:text-(--accent-dark) transition-colors">{name}</h3>
-                    <p className="mt-1.5 font-inter text-xs leading-normal text-[#4a6e8b]">{description}</p>
-                    <span
-                      className="mt-auto inline-flex items-center gap-1.5 pt-3 font-inter text-[11px] font-bold transition-colors text-[#0c2b48] group-hover:text-(--accent)"
-                    >
-                      Ask about this service
-                      <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
-                    </span>
-                  </div>
-                </ScrollReveal>
-              );
-            })}
-          </div>
           <div
             className="mt-9 overflow-hidden rounded-2xl p-6 text-white shadow-[0_12px_28px_rgba(12,43,72,0.18)] sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-8 transition-colors duration-500"
             style={{

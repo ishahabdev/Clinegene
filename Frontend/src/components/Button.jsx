@@ -21,7 +21,6 @@ export default function Button({
     ? {
         backgroundColor: "var(--accent-btn-bg, var(--accent))",
         color:           "var(--accent-btn-text, #04152b)",
-        transition:      "background-color 0.4s ease-in-out, color 0.4s ease-in-out",
       }
     : {};
 
@@ -37,7 +36,7 @@ export default function Button({
     !hasMinH && "min-h-11",
     !hasPx && "px-4.5 sm:px-6",
     !hasTextSize && "text-[12px] sm:text-sm",
-    "font-bold transition-all duration-300 hover:text-white! focus-visible:text-white!",
+    "font-bold hover:text-white! focus-visible:text-white!",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)",
     "active:scale-95 active:opacity-85",
     variants[variant] ?? variants.cyan,
@@ -46,16 +45,16 @@ export default function Button({
     .filter(Boolean)
     .join(" ");
 
-  // Ripple overlay: full coverage from center, with solid black background
+  // Ripple overlay: bubble starts as a small circle in center and spreads slowly across whole button
   const rippleBg = "bg-black";
 
   const content = (
     <>
       <span
         aria-hidden="true"
-        className={`pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[320%] -translate-x-1/2 -translate-y-1/2 scale-0 rounded-full transition-transform duration-500 ease-out group-hover:scale-100 group-focus-visible:scale-100 group-active:scale-100 ${rippleBg}`}
+        className={`pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[320%] -translate-x-1/2 -translate-y-1/2 scale-0 rounded-full transition-transform duration-700 ease-out group-hover:scale-100 group-focus-visible:scale-100 group-active:scale-100 ${rippleBg}`}
       />
-      <span className="relative z-10 inline-flex items-center gap-2 transition-colors duration-300 group-hover:text-white! group-focus-visible:text-white!">
+      <span className="relative z-10 inline-flex items-center gap-2 transition-colors duration-500 ease-out group-hover:text-white! group-focus-visible:text-white!">
         {children}
       </span>
     </>

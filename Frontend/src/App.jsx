@@ -17,6 +17,10 @@ const ContactPage = lazy(() => import("./pages/ContactPage.jsx"));
 const GalleryPage = lazy(() => import("./pages/GalleryPage.jsx"));
 const NewsPage = lazy(() => import("./pages/NewsPage.jsx"));
 const OpenPositionsPage = lazy(() => import("./pages/OpenPositionsPage.jsx"));
+import { ADMIN_BASE } from "./Admin/adminConfig.js";
+
+const cleanAdminBase = ADMIN_BASE ? ADMIN_BASE.replace(/^\/|\/$/g, "").toLowerCase() : "";
+
 const ResearchPage = lazy(() => import("./pages/ResearchPage.jsx"));
 const ServicesPage = lazy(() => import("./pages/ServicesPage.jsx"));
 const ServiceDetailPage = lazy(() => import("./pages/ServiceDetailPage.jsx"));
@@ -36,7 +40,6 @@ const pages = {
   "open-positions": { label: "Careers", component: OpenPositionsPage },
   news: { label: "News", component: NewsPage },
   contact: { label: "Contact", component: ContactPage },
-  admin: { label: "Admin Portal", component: AdminApp },
   "not-found": { label: "Page Not Found", component: PageNotFoundPage },
 };
 
@@ -135,8 +138,8 @@ function getCurrentPage(ssrUrl) {
     return "careers";
   }
 
-  // If pathname matches /admin or /admin/*
-  if (pathname === "admin" || pathname.startsWith("admin/")) {
+  // If pathname matches secret admin base defined by VITE_ADMIN_BASE
+  if (cleanAdminBase && (pathname === cleanAdminBase || pathname.startsWith(`${cleanAdminBase}/`))) {
     return "admin";
   }
 
@@ -163,7 +166,7 @@ function AppContent({ ssrUrl }) {
   const lenisRef = useLenisRef();
   const lastHandledLocationRef = useRef(typeof window !== "undefined" ? window.location.href : (ssrUrl || "/"));
   const backToTopVisibleRef = useRef(false);
-  const CurrentPage = pages[pageId]?.component || PageNotFoundPage;
+  const CurrentPage = pageId === "admin" ? AdminApp : (pages[pageId]?.component || PageNotFoundPage);
 
   useEffect(() => {
     const lenis = lenisRef?.current;
@@ -291,7 +294,7 @@ function AppContent({ ssrUrl }) {
       const isHomeTarget = href === "/" || href === "#home" || normalized === "" || normalized === "home";
       
       // Admin routes handled directly by AdminApp
-      if (normalized === "admin" || normalized.startsWith("admin/")) {
+      if (cleanAdminBase && (normalized === cleanAdminBase || normalized.startsWith(`${cleanAdminBase}/`))) {
         event.preventDefault();
         window.history.pushState(null, "", href);
         setPageId("admin");

@@ -39,12 +39,12 @@ export default function TeamGrid({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {members.map((member, index) => {
-        const orderNum = member.displayOrder ?? index + 1;
+        const orderNum = member.sort_order ?? member.displayOrder ?? index + 1;
         const isFirst = index === 0;
         const isLast = index === members.length - 1;
         const isPublished =
-          member.status === "Published" ||
-          member.status === "Active" ||
+          member.status?.toLowerCase() === "published" ||
+          member.status?.toLowerCase() === "active" ||
           !member.status;
 
         return (
@@ -120,7 +120,7 @@ export default function TeamGrid({
             {/* Circular Avatar */}
             <div className="relative mt-4">
               <img
-                src={member.photo}
+                src={member.image_url || member.photo}
                 alt={member.name}
                 className="h-24 w-24 rounded-full object-cover shadow-xs border-2 border-slate-100"
                 onError={(e) => {
@@ -135,7 +135,7 @@ export default function TeamGrid({
               {member.name}
             </h3>
             <p className="text-xs text-slate-500 font-normal mb-5 text-center px-2 line-clamp-1">
-              {member.designation}
+              {member.role || member.designation}
             </p>
 
             {/* Contact Rows */}

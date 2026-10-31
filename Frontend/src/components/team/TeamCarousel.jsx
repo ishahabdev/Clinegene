@@ -127,8 +127,8 @@ function getCardTransform(offset, stageWidth) {
 function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
   const transform = getCardTransform(offset, stageWidth);
   
-  const getInitials = (name) => {
-    return name
+  const getInitials = (name = "") => {
+    return (name || "")
       .split(" ")
       .filter((n) => n.length && isNaN(Number(n.replace(/[^a-zA-Z.]/g, ""))))
       .slice(0, 2)
@@ -137,7 +137,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
       .toUpperCase();
   };
 
-  const initials = getInitials(member.name);
+  const initials = getInitials(member?.name || "");
 
   return (
     <div
@@ -173,10 +173,10 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
           {/* Header Section with Profile Photo */}
           <div className="relative h-[clamp(200px,54vw,240px)] sm:h-64 overflow-hidden bg-white">
             {/* Profile Image - Focused on Face */}
-            {member.image ? (
+            {(member.image || member.image_url) ? (
               <div className="absolute inset-0">
                 <img 
-                  src={member.image} 
+                  src={member.image || member.image_url} 
                   alt={member.imageAlt || member.name}
                   width={member.width || 800}
                   height={member.height || 800}
@@ -255,7 +255,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
                   ...(!isActive ? { color: "var(--accent)" } : {}),
                 }}
               >
-                {member.designation}
+                {member.role || member.designation}
               </p>
 
               {/* Decorative line: subtle ~6px margin on mobile */}
@@ -266,7 +266,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
                 style={!isActive ? { backgroundColor: "var(--accent)" } : undefined}
               />
 
-              {/* 3. Description: supports multi-line credentials cleanly */}
+              {/* 3. Description / Qualification / Bio: supports multi-line credentials cleanly */}
               <p
                 className={`text-center whitespace-pre-line line-clamp-4 sm:line-clamp-5 font-['Inter',sans-serif] ${
                   isActive ? 'text-white/85' : 'text-slate-500'
@@ -276,7 +276,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
                   lineHeight: 1.45,
                 }}
               >
-                {member.description}
+                {member.qualification || member.bio || member.description}
               </p>
             </div>
           </div>

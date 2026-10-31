@@ -17,6 +17,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import AdminPageHeader from "../components/AdminPageHeader.jsx";
+import ImageUploader from "../components/ImageUploader.jsx";
 import { MOCK_RESEARCH, RESEARCH_STATS } from "../mocks/mockData.js";
 
 const TYPES = ["All Types", "Research Project", "Publication"];
@@ -28,6 +29,21 @@ const STAT_ICONS = {
   check: CheckCircle2,
 };
 
+const DEFAULT_FORM_STATE = {
+  title: "",
+  subtitle: "",
+  type: "Research Project",
+  category: "Genomics",
+  status: "Ongoing",
+  date: "Oct 2026",
+  leadInvestigator: "Dr. Amjad Ali Tanoli Ph.D",
+  journal: "",
+  doi: "",
+  keywords: "",
+  summary: "",
+  image: "",
+};
+
 export default function ResearchPage() {
   const [researchList, setResearchList] = useState(MOCK_RESEARCH);
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,19 +52,7 @@ export default function ResearchPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [viewItem, setViewItem] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
-  const [formData, setFormData] = useState({
-    title: "",
-    subtitle: "",
-    type: "Research Project",
-    category: "Genomics",
-    status: "Ongoing",
-    date: "Oct 2026",
-    leadInvestigator: "Dr. Amjad Ali Tanoli Ph.D",
-    journal: "",
-    doi: "",
-    keywords: "",
-    summary: "",
-  });
+  const [formData, setFormData] = useState(DEFAULT_FORM_STATE);
   const [deleteId, setDeleteId] = useState(null);
 
   const filteredResearch = useMemo(() => {
@@ -86,19 +90,7 @@ export default function ResearchPage() {
 
   const handleOpenAdd = () => {
     setEditingItem(null);
-    setFormData({
-      title: "",
-      subtitle: "",
-      type: "Research Project",
-      category: "Genomics",
-      status: "Ongoing",
-      date: "Oct 2026",
-      leadInvestigator: "Dr. Amjad Ali Tanoli Ph.D",
-      journal: "",
-      doi: "",
-      keywords: "",
-      summary: "",
-    });
+    setFormData({ ...DEFAULT_FORM_STATE });
     setModalOpen(true);
   };
 
@@ -116,6 +108,7 @@ export default function ResearchPage() {
       doi: item.doi || "",
       keywords: Array.isArray(item.keywords) ? item.keywords.join(", ") : item.keywords || "",
       summary: item.summary || "",
+      image: item.image || "",
     });
     setModalOpen(true);
   };
@@ -196,7 +189,7 @@ export default function ResearchPage() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search by title, investigator, keywords, journal, or category..."
+            placeholder="Search research..."
             className="w-full rounded-md border-0 bg-transparent pl-9 pr-9 text-xs sm:text-sm text-slate-700 placeholder:text-slate-400 focus:outline-hidden"
           />
           {searchTerm && (
@@ -301,43 +294,54 @@ export default function ResearchPage() {
                       {index + 1}
                     </td>
                     <td className="py-4 px-4 max-w-md">
-                      <p className="font-outfit text-xs sm:text-sm font-bold text-slate-800 leading-snug">
-                        {item.title}
-                      </p>
-                      <p className="text-[11px] text-slate-500 font-normal mt-0.5 line-clamp-1">
-                        {item.subtitle}
-                      </p>
-                      <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[11px]">
-                        {item.leadInvestigator && (
-                          <span className="font-semibold text-slate-700 flex items-center gap-1">
-                            <User className="h-3 w-3 text-[#009688]" />
-                            {item.leadInvestigator}
-                          </span>
+                      <div className="flex items-start gap-3">
+                        {item.image && (
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="h-11 w-11 rounded-lg object-cover border border-slate-200/80 shrink-0 mt-0.5"
+                          />
                         )}
-                        {item.journal && (
-                          <span className="text-slate-400 flex items-center gap-1">
-                            • <BookOpen className="h-3 w-3 text-sky-600" />
-                            {item.journal}
-                          </span>
-                        )}
-                      </div>
-                      {Array.isArray(item.keywords) && item.keywords.length > 0 && (
-                        <div className="mt-1 flex flex-wrap gap-1">
-                          {item.keywords.slice(0, 3).map((kw) => (
-                            <span
-                              key={kw}
-                              className="text-[10px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded"
-                            >
-                              #{kw}
-                            </span>
-                          ))}
-                          {item.keywords.length > 3 && (
-                            <span className="text-[10px] text-slate-400">
-                              +{item.keywords.length - 3} more
-                            </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-outfit text-xs sm:text-sm font-bold text-slate-800 leading-snug">
+                            {item.title}
+                          </p>
+                          <p className="text-[11px] text-slate-500 font-normal mt-0.5 line-clamp-1">
+                            {item.subtitle}
+                          </p>
+                          <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[11px]">
+                            {item.leadInvestigator && (
+                              <span className="font-semibold text-slate-700 flex items-center gap-1">
+                                <User className="h-3 w-3 text-[#009688]" />
+                                {item.leadInvestigator}
+                              </span>
+                            )}
+                            {item.journal && (
+                              <span className="text-slate-400 flex items-center gap-1">
+                                • <BookOpen className="h-3 w-3 text-sky-600" />
+                                {item.journal}
+                              </span>
+                            )}
+                          </div>
+                          {Array.isArray(item.keywords) && item.keywords.length > 0 && (
+                            <div className="mt-1 flex flex-wrap gap-1">
+                              {item.keywords.slice(0, 3).map((kw) => (
+                                <span
+                                  key={kw}
+                                  className="text-[10px] font-medium bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded"
+                                >
+                                  #{kw}
+                                </span>
+                              ))}
+                              {item.keywords.length > 3 && (
+                                <span className="text-[10px] text-slate-400">
+                                  +{item.keywords.length - 3} more
+                                </span>
+                              )}
+                            </div>
                           )}
                         </div>
-                      )}
+                      </div>
                     </td>
                     <td className="py-4 px-4">
                       <p className="text-xs text-slate-700 font-semibold">
@@ -445,7 +449,7 @@ export default function ResearchPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  placeholder="e.g. Genetic Variants in Hereditary Disorders"
+                  placeholder="e.g. Genetic Variants"
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
                 />
               </div>
@@ -461,7 +465,7 @@ export default function ResearchPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, subtitle: e.target.value })
                   }
-                  placeholder="e.g. Mapping inherited variants across consanguineous families."
+                  placeholder="Brief study description..."
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
                 />
               </div>
@@ -478,7 +482,7 @@ export default function ResearchPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, leadInvestigator: e.target.value })
                     }
-                    placeholder="e.g. Dr. Amjad Ali Tanoli Ph.D"
+                    placeholder="e.g. Dr. Amjad"
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
                   />
                 </div>
@@ -493,7 +497,7 @@ export default function ResearchPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, category: e.target.value })
                     }
-                    placeholder="e.g. Genomics, Diagnostics, Oncology"
+                    placeholder="e.g. Genomics, Oncology"
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
                   />
                 </div>
@@ -560,7 +564,7 @@ export default function ResearchPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, journal: e.target.value })
                     }
-                    placeholder="e.g. European Journal of Human Genetics"
+                    placeholder="e.g. Medical Journal"
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
                   />
                 </div>
@@ -575,7 +579,7 @@ export default function ResearchPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, doi: e.target.value })
                     }
-                    placeholder="e.g. 10.1038/s41431-026-01582-x"
+                    placeholder="e.g. 10.1038/sample-doi"
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
                   />
                 </div>
@@ -591,7 +595,7 @@ export default function ResearchPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, keywords: e.target.value })
                   }
-                  placeholder="e.g. Whole Exome Sequencing, Consanguinity, WES"
+                  placeholder="e.g. WES, Genetics"
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
                 />
               </div>
@@ -606,10 +610,18 @@ export default function ResearchPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, summary: e.target.value })
                   }
-                  placeholder="Detailed study abstract and findings..."
+                  placeholder="Enter study abstract..."
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
                 />
               </div>
+
+              <ImageUploader
+                label="Research Picture / Cover Image"
+                value={formData.image}
+                onChange={(val) => setFormData({ ...formData, image: val })}
+                aspectRatio="aspect-16/9"
+                helperText="Upload a featured cover image, graphical abstract, or research figure"
+              />
 
               <div className="mt-5 flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
                 <button
@@ -649,6 +661,14 @@ export default function ResearchPage() {
             </div>
 
             <div className="mt-5 space-y-4 text-xs">
+              {viewItem.image && (
+                <img
+                  src={viewItem.image}
+                  alt={viewItem.title}
+                  className="w-full h-44 rounded-xl object-cover border border-slate-200/80 shadow-2xs"
+                />
+              )}
+
               <div>
                 <span className="text-slate-400 font-medium">Title</span>
                 <p className="font-outfit text-base font-bold text-slate-800 mt-0.5">

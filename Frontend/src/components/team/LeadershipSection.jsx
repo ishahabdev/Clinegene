@@ -1,6 +1,5 @@
 import { Mail } from "lucide-react";
 import ScrollReveal from "../ScrollReveal.jsx";
-import { executiveTeam } from "../../data/teamConfig.js";
 
 function LeadershipCard({ leader, index }) {
   // Alternate layout: even index = image right, odd index = image left
@@ -27,7 +26,7 @@ function LeadershipCard({ leader, index }) {
                 className="text-[10px] font-bold uppercase tracking-wider transition-colors"
                 style={{ color: "var(--accent-muted)" }}
               >
-                Leadership
+                {leader.department || "Leadership"}
               </span>
             </div>
 
@@ -59,20 +58,22 @@ function LeadershipCard({ leader, index }) {
                 lineHeight: 1.6,
               }}
             >
-              {leader.bio}
+              {leader.bio || leader.qualification}
             </p>
 
             <div className="flex flex-wrap items-center gap-2.5 w-full">
+              {leader.email && (
+                <a
+                  href={`mailto:${leader.email}`}
+                  className="inline-flex min-h-11 flex-1 sm:flex-initial min-w-30 items-center justify-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black touch-manipulation"
+                  aria-label={`Email ${leader.name}`}
+                >
+                  <Mail className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" />
+                  <span>Email</span>
+                </a>
+              )}
               <a
-                href={`mailto:${leader.email}`}
-                className="inline-flex min-h-11 flex-1 sm:flex-initial min-w-30 items-center justify-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#1a1a1a] hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black touch-manipulation"
-                aria-label={`Email ${leader.name}`}
-              >
-                <Mail className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" />
-                <span>Email</span>
-              </a>
-              <a
-                href={leader.linkedin}
+                href={leader.linkedin || "https://linkedin.com/company/clingene"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-11 flex-1 sm:flex-initial min-w-30 items-center justify-center gap-2 rounded-full border-2 border-[#d4e5f2] bg-white px-5 py-2.5 text-sm font-semibold text-[#0c2b48] transition-all duration-300 hover:border-(--accent) hover:bg-(--accent) hover:text-white hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) touch-manipulation"
@@ -89,8 +90,8 @@ function LeadershipCard({ leader, index }) {
           <div className={`relative w-full max-w-full min-w-0 ${isImageLeft ? 'lg:col-start-1 lg:order-1' : 'lg:col-start-2 lg:order-2'}`}>
             <div className="relative h-full w-full min-h-65 sm:min-h-85 lg:min-h-113 aspect-4/3 sm:aspect-8/5 lg:aspect-auto leadership-photo-wrapper overflow-hidden" data-position={isImageLeft ? 'left' : 'right'}>
               <img
-                src={leader.image}
-                alt={leader.imageAlt}
+                src={leader.image_url || leader.image}
+                alt={leader.imageAlt || leader.name}
                 width={leader.width || 879}
                 height={leader.height || 1024}
                 decoding="async"
@@ -108,7 +109,9 @@ function LeadershipCard({ leader, index }) {
   );
 }
 
-export default function LeadershipSection() {
+export default function LeadershipSection({ leaders = [] }) {
+  if (!leaders || leaders.length === 0) return null;
+
   return (
     <section 
       className="relative bg-white pt-14 pb-24 sm:pt-16 sm:pb-20 md:py-20 z-1"
@@ -122,8 +125,8 @@ export default function LeadershipSection() {
 
       <div className="relative site-container">
         <div className="space-y-8 lg:space-y-10">
-          {executiveTeam.map((leader, index) => (
-            <LeadershipCard key={leader.id} leader={leader} index={index} />
+          {leaders.map((leader, index) => (
+            <LeadershipCard key={leader.id || leader.email || leader.name || index} leader={leader} index={index} />
           ))}
         </div>
       </div>

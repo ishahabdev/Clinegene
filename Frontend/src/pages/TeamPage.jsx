@@ -1,45 +1,120 @@
-import { ArrowRight, Users, Award, TrendingUp, Target } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowRight, Users } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import TeamHero from "../components/team/TeamHero.jsx";
 import LeadershipSection from "../components/team/LeadershipSection.jsx";
 import TeamCarousel from "../components/team/TeamCarousel.jsx";
-import { carouselMembers } from "../data/team.js";
 import teamPhoto from "../assets/team.png";
 import { useTheme } from "../context/ThemeContext.jsx";
+import { supabase } from "../lib/supabase.js";
 
-const stats = [
-  {
-    icon: Users,
-    value: "9+",
-    label: "Team Members",
-    color: "from-[#10c8e0] to-[#0a7a94]"
-  },
-  {
-    icon: Award,
-    value: "5",
-    label: "Departments",
-    color: "from-[#0e8fae] to-[#08536a]"
-  },
-  {
-    icon: TrendingUp,
-    value: "5+",
-    label: "Years Experience",
-    color: "from-[#10c8e0] to-[#0e8fae]"
-  },
-  {
-    icon: Target,
-    value: "20+",
-    label: "Projects Completed",
-    color: "from-[#0a7a94] to-[#08536a]"
-  }
-];
+import amjadAli from "../assets/team/Amjad Ali.jpeg";
+import safdarAli from "../assets/team/Safdar Ali.jpeg";
+import abidAli from "../assets/team/Abid Ali.jpeg";
+import samrana from "../assets/team/samrana.jpeg";
+import kifayatUllah from "../assets/team/Kifayat ullah.jpeg";
+import tahirUllah from "../assets/team/Tahir Ali.jpeg";
+import mudassirAlvi from "../assets/team/Mudassir.jpeg";
+import saadKhan from "../assets/team/Saad.jpeg";
+import imadAli from "../assets/team/Imad Ali.jpeg";
+
+const localImageMap = {
+  "/assets/team/Amjad Ali.jpeg": amjadAli,
+  "/assets/team/Safdar Ali.jpeg": safdarAli,
+  "/assets/team/Abid Ali.jpeg": abidAli,
+  "/assets/team/samrana.jpeg": samrana,
+  "/assets/team/Kifayat ullah.jpeg": kifayatUllah,
+  "/assets/team/Tahir Ali.jpeg": tahirUllah,
+  "/assets/team/Mudassir.jpeg": mudassirAlvi,
+  "/assets/team/Saad.jpeg": saadKhan,
+  "/assets/team/Imad Ali.jpeg": imadAli,
+};
 
 export default function TeamPage() {
   const { theme } = useTheme();
   const isRed = theme === "red";
   const isGreen = theme === "green";
   const promisePhoto = teamPhoto;
+
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
+    let isMounted = true;
+
+    async function fetchSupabaseTeam() {
+      try {
+        const { data, error } = await supabase
+          .from("team")
+          .select("name, role, department, qualification, email, bio, image_url")
+          .eq("status", "published")
+          .order("sort_order", { ascending: true });
+
+        if (error) {
+          if (import.meta.env.DEV) {
+            console.error("[TeamPage] Error fetching team members:", error);
+          }
+          if (isMounted) {
+            setMembers([]);
+            setLoading(false);
+          }
+          return;
+        }
+
+        if (isMounted) {
+          if (data && data.length > 0) {
+            const formatted = data.map((item) => {
+              const img = localImageMap[item.image_url] || item.image_url || "";
+              return {
+                name: item.name || "",
+                role: item.role || "",
+                designation: item.role || "",
+                department: item.department || "",
+                qualification: item.qualification || "",
+                description: item.qualification || item.bio || "",
+                email: item.email || "",
+                bio: item.bio || item.qualification || "",
+                image: img,
+                image_url: img,
+              };
+            });
+            setMembers(formatted);
+          } else {
+            setMembers([]);
+          }
+          setLoading(false);
+        }
+      } catch (err) {
+        if (import.meta.env.DEV) {
+          console.error("[TeamPage] Failed to fetch team from Supabase:", err);
+        }
+        if (isMounted) {
+          setMembers([]);
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchSupabaseTeam();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const leaders = members.filter(
+    (m) =>
+      m.department?.toLowerCase() === "leadership" ||
+      m.department?.toLowerCase() === "executive leadership" ||
+      m.role?.toLowerCase().includes("ceo") ||
+      m.role?.toLowerCase().includes("director")
+  );
 
   const promiseOverlay = isRed
     ? "linear-gradient(90deg, rgba(45, 3, 6, 0.97) 0%, rgba(60, 6, 10, 0.88) 45%, rgba(90, 10, 16, 0.45) 100%)"
@@ -51,11 +126,51 @@ export default function TeamPage() {
     <>
       <TeamHero />
 
-      {/* --- Leadership Section --- */}
-      <LeadershipSection />
+      {loading ? (
+        <section className="py-20 bg-white" aria-label="Loading team members">
+          <div className="site-container flex flex-col items-center justify-center min-h-[320px]">
+            <div
+              className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200"
+              style={{ borderTopColor: "var(--accent)" }}
+              role="status"
+              aria-label="Loading"
+            />
+            <p className="mt-4 text-sm text-slate-500 font-medium font-['Inter']">Loading team directory...</p>
+          </div>
+        </section>
+      ) : members.length === 0 ? (
+        <section className="py-20 bg-white" aria-label="No team members">
+          <div className="site-container">
+            <div className="mx-auto max-w-lg text-center rounded-2xl border border-slate-200 bg-slate-50/60 p-10 sm:p-12 shadow-xs">
+              <div 
+                className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
+                style={{ backgroundColor: "var(--accent-soft)", color: "var(--accent)" }}
+              >
+                <Users className="h-7 w-7" aria-hidden="true" />
+              </div>
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0c2b48]">
+                No Team Members Found
+              </h3>
+              <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed font-['Inter']">
+                Our team directory is currently being updated. Please check back soon or get in touch with us directly.
+              </p>
+              <div className="mt-6">
+                <Button href="/contact" className="px-6 py-2.5 text-sm">
+                  Contact Us
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <>
+          {/* --- Leadership Section --- */}
+          {leaders.length > 0 && <LeadershipSection leaders={leaders} />}
 
-      {/* --- Team Carousel --- */}
-      <TeamCarousel members={carouselMembers} />
+          {/* --- Team Carousel --- */}
+          <TeamCarousel members={members} />
+        </>
+      )}
 
       {/* --- Our Promise Section with Fixed Background --- */}
       <section

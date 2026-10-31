@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef } from "react";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
+import { ADMIN_BASE } from "../Admin/adminConfig.js";
 
 const LenisContext = createContext(null);
 
@@ -39,7 +40,7 @@ export default function LenisProvider({ children }) {
     // Stop Lenis on admin paths to allow native mouse wheel scrolling in nested admin panels
     const handleRouteChange = () => {
       if (typeof window !== "undefined") {
-        if (window.location.pathname.startsWith("/admin")) {
+        if (ADMIN_BASE && (window.location.pathname === ADMIN_BASE || window.location.pathname.startsWith(`${ADMIN_BASE}/`))) {
           lenis.stop();
           document.documentElement.classList.remove("lenis", "lenis-smooth");
         } else {

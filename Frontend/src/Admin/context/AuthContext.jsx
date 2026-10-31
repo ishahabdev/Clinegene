@@ -1,46 +1,17 @@
 import { createContext, useContext, useEffect, useRef, useState, useCallback } from "react";
+import { supabase } from "../../lib/supabase.js";
+import { adminPath } from "../adminConfig.js";
 
 const AuthContext = createContext(null);
 
-const SESSION_STORAGE_USER_KEY = "clingene_admin_session_active";
-const LOCKOUT_ATTEMPTS_LIMIT = 5;
-const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes lockout
 const WARNING_INACTIVITY_MS = 28 * 60 * 1000; // 28 minutes
 const LOGOUT_INACTIVITY_MS = 30 * 60 * 1000;  // 30 minutes
 
 export function AuthProvider({ children }) {
-  // Mock in-memory session (retains during tab refresh via sessionStorage session flag; TODO: replace with httpOnly cookie auth)
-  const [user, setUser] = useState(() => {
-    if (typeof window === "undefined") return null;
-    try {
-      const active = sessionStorage.getItem(SESSION_STORAGE_USER_KEY);
-      if (active) {
-        return {
-          email: "admin@clingene.co",
-          name: "Dr. Admin",
-          role: "Super Admin",
-          avatar: "/assets/team/Safdar Ali.jpeg",
-        };
-      }
-    } catch {
-      // ignore
-    }
-    return null;
-  });
-
-  const [failedAttempts, setFailedAttempts] = useState(() => {
-    if (typeof window === "undefined") return 0;
-    const count = parseInt(sessionStorage.getItem("clingene_admin_failed_attempts") || "0", 10);
-    return isNaN(count) ? 0 : count;
-  });
-
-  const [lockoutUntil, setLockoutUntil] = useState(() => {
-    if (typeof window === "undefined") return null;
-    const stored = sessionStorage.getItem("clingene_admin_lockout_until");
-    if (!stored) return null;
-    const time = parseInt(stored, 10);
-    return time > Date.now() ? time : null;
-  });
+  const [user, setUser] = useState(null);
+  const [session, setSession] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [showInactivityWarning, setShowInactivityWarning] = useState(false);
   const [secondsRemaining, setSecondsRemaining] = useState(120);
@@ -50,28 +21,52 @@ export function AuthProvider({ children }) {
   const logoutTimerRef = useRef(null);
   const countdownIntervalRef = useRef(null);
 
-  const logout = useCallback((reason = "manual") => {
-    setUser(null);
-    setShowInactivityWarning(false);
+  // Requirement 1 & 2: Check if user is listed in the `admins` table
+  const checkAdminStatus = async (userId) => {
+    if (!supabase || !userId) return false;
     try {
-      sessionStorage.removeItem(SESSION_STORAGE_USER_KEY);
+      const { data, error } = await supabase
+        .from("admins")
+        .select("user_id")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (error || !data) {
+        return false;
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const logout = useCallback(async (reason = "manual") => {
+    try {
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
     } catch {
       // ignore
-    }
+    } finally {
+      setUser(null);
+      setSession(null);
+      setIsAdmin(false);
+      setShowInactivityWarning(false);
 
-    if (warningTimerRef.current) clearTimeout(warningTimerRef.current);
-    if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
-    if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
+      if (warningTimerRef.current) clearTimeout(warningTimerRef.current);
+      if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
+      if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
 
-    if (typeof window !== "undefined") {
-      const query = reason === "timeout" ? "?reason=timeout" : "";
-      window.history.pushState(null, "", `/admin/login${query}`);
-      window.dispatchEvent(new PopStateEvent("popstate"));
+      if (typeof window !== "undefined") {
+        const query = reason === "timeout" ? "?reason=timeout" : "";
+        window.history.pushState(null, "", `${adminPath("/login")}${query}`);
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      }
     }
   }, []);
 
   const resetInactivityTimers = useCallback(() => {
-    if (!user) return;
+    if (!user || !isAdmin) return;
     lastActivityRef.current = Date.now();
     setShowInactivityWarning(false);
     setSecondsRemaining(120);
@@ -100,16 +95,112 @@ export function AuthProvider({ children }) {
     logoutTimerRef.current = setTimeout(() => {
       logout("timeout");
     }, LOGOUT_INACTIVITY_MS);
-  }, [user, logout]);
+  }, [user, isAdmin, logout]);
 
-  // Activity listeners when user is logged in
+  // Requirement 5 & 6: Keep session across refresh (getSession + onAuthStateChange)
   useEffect(() => {
-    if (!user) return;
+    let isMounted = true;
+
+    // If supabase client is null (missing env vars), show login form and never grant access
+    if (!supabase) {
+      setUser(null);
+      setSession(null);
+      setIsAdmin(false);
+      setLoading(false);
+      return;
+    }
+
+    const initAuth = async () => {
+      try {
+        const {
+          data: { session: activeSession },
+        } = await supabase.auth.getSession();
+
+        if (activeSession?.user) {
+          const authorized = await checkAdminStatus(activeSession.user.id);
+          if (isMounted) {
+            if (authorized) {
+              setUser(activeSession.user);
+              setSession(activeSession);
+              setIsAdmin(true);
+            } else {
+              // Valid Supabase user but not listed in `admins` table -> sign out
+              await supabase.auth.signOut();
+              setUser(null);
+              setSession(null);
+              setIsAdmin(false);
+            }
+          }
+        } else {
+          if (isMounted) {
+            setUser(null);
+            setSession(null);
+            setIsAdmin(false);
+          }
+        }
+      } catch {
+        if (isMounted) {
+          setUser(null);
+          setSession(null);
+          setIsAdmin(false);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    initAuth();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+      if (event === "SIGNED_OUT" || !currentSession?.user) {
+        if (isMounted) {
+          setUser(null);
+          setSession(null);
+          setIsAdmin(false);
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (
+        event === "SIGNED_IN" ||
+        event === "TOKEN_REFRESHED" ||
+        event === "USER_UPDATED"
+      ) {
+        const authorized = await checkAdminStatus(currentSession.user.id);
+        if (isMounted) {
+          if (authorized) {
+            setUser(currentSession.user);
+            setSession(currentSession);
+            setIsAdmin(true);
+          } else {
+            await supabase.auth.signOut();
+            setUser(null);
+            setSession(null);
+            setIsAdmin(false);
+          }
+          setLoading(false);
+        }
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      subscription?.unsubscribe();
+    };
+  }, []);
+
+  // Inactivity listeners when user is authenticated
+  useEffect(() => {
+    if (!user || !isAdmin) return;
 
     resetInactivityTimers();
 
     const handleUserActivity = () => {
-      // Only reset if warning modal is not currently open
       if (!showInactivityWarning) {
         lastActivityRef.current = Date.now();
         if (warningTimerRef.current) clearTimeout(warningTimerRef.current);
@@ -127,74 +218,68 @@ export function AuthProvider({ children }) {
     };
 
     const events = ["mousedown", "mousemove", "keydown", "scroll", "touchstart"];
-    events.forEach((evt) => window.addEventListener(evt, handleUserActivity, { passive: true }));
+    events.forEach((evt) =>
+      window.addEventListener(evt, handleUserActivity, { passive: true })
+    );
 
     return () => {
-      events.forEach((evt) => window.removeEventListener(evt, handleUserActivity));
+      events.forEach((evt) =>
+        window.removeEventListener(evt, handleUserActivity)
+      );
       if (warningTimerRef.current) clearTimeout(warningTimerRef.current);
       if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
       if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
     };
-  }, [user, showInactivityWarning, logout, resetInactivityTimers]);
+  }, [user, isAdmin, showInactivityWarning, logout, resetInactivityTimers]);
 
+  // Requirement 2 & 3: Email + Password via supabase.auth.signInWithPassword.
+  // Then check `admins` table. One generic error "Invalid email or password" for any failure.
   const login = async ({ email, password }) => {
-    // Check if locked out
-    if (lockoutUntil && Date.now() < lockoutUntil) {
-      const remainingMins = Math.ceil((lockoutUntil - Date.now()) / (60 * 1000));
-      throw new Error(`Account temporarily locked due to 5 consecutive failed attempts. Please try again in ${remainingMins} minute(s).`);
+    const genericError = "Invalid email or password";
+
+    if (!supabase) {
+      throw new Error(genericError);
     }
 
-    const cleanEmail = email.trim().toLowerCase();
-
-    // Mock validation: accept admin@clingene.co with any password
-    if (cleanEmail === "admin@clingene.co") {
-      const adminUser = {
-        email: "admin@clingene.co",
-        name: "Dr. Admin",
-        role: "Super Admin",
-        avatar: "/assets/team/Safdar Ali.jpeg",
-      };
-      setUser(adminUser);
-      setFailedAttempts(0);
-      setLockoutUntil(null);
-      try {
-        sessionStorage.setItem(SESSION_STORAGE_USER_KEY, "1");
-        sessionStorage.removeItem("clingene_admin_failed_attempts");
-        sessionStorage.removeItem("clingene_admin_lockout_until");
-      } catch {
-        // ignore
-      }
-      return adminUser;
-    } else {
-      // Failed attempt
-      const nextCount = failedAttempts + 1;
-      setFailedAttempts(nextCount);
-      sessionStorage.setItem("clingene_admin_failed_attempts", String(nextCount));
-
-      if (nextCount >= LOCKOUT_ATTEMPTS_LIMIT) {
-        const lockoutTime = Date.now() + LOCKOUT_DURATION_MS;
-        setLockoutUntil(lockoutTime);
-        sessionStorage.setItem("clingene_admin_lockout_until", String(lockoutTime));
-        throw new Error("Too many failed attempts. Login has been locked for 15 minutes.");
-      }
-
-      const remaining = LOCKOUT_ATTEMPTS_LIMIT - nextCount;
-      throw new Error(`Invalid credentials. ${remaining} attempt${remaining === 1 ? "" : "s"} remaining before temporary lockout.`);
+    const cleanEmail = email?.trim();
+    if (!cleanEmail || !password) {
+      throw new Error(genericError);
     }
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: cleanEmail,
+      password,
+    });
+
+    if (error || !data?.user) {
+      throw new Error(genericError);
+    }
+
+    const authorized = await checkAdminStatus(data.user.id);
+    if (!authorized) {
+      await supabase.auth.signOut();
+      setUser(null);
+      setSession(null);
+      setIsAdmin(false);
+      throw new Error(genericError);
+    }
+
+    setUser(data.user);
+    setSession(data.session);
+    setIsAdmin(true);
+    return data.user;
   };
-
-  const isLockedOut = Boolean(lockoutUntil && Date.now() < lockoutUntil);
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated: Boolean(user),
+        session,
+        isAdmin,
+        loading,
+        isAuthenticated: Boolean(user && isAdmin),
         login,
         logout,
-        failedAttempts,
-        isLockedOut,
-        lockoutUntil,
         showInactivityWarning,
         secondsRemaining,
         stayLoggedIn: resetInactivityTimers,
@@ -210,4 +295,3 @@ export function useAuth() {
   if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
   return ctx;
 }
-

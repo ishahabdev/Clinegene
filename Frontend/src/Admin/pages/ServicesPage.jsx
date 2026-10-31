@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import {
   Layers,
   Stethoscope,
@@ -16,8 +16,9 @@ import {
   X,
   Edit2,
   Trash2,
+  RefreshCw,
+  Home,
 } from "lucide-react";
-import AdminPageHeader from "../components/AdminPageHeader.jsx";
 import FileUploader from "../components/FileUploader.jsx";
 import ImageUploader from "../components/ImageUploader.jsx";
 import ConfirmDialog from "../components/ConfirmDialog.jsx";
@@ -26,12 +27,12 @@ import ServicesToolbar from "./services/ServicesToolbar.jsx";
 import ServicesList from "./services/ServicesList.jsx";
 import ServicesGrid from "./services/ServicesGrid.jsx";
 import { useViewMode } from "../hooks/useViewMode.js";
-import { MOCK_SERVICES } from "../mocks/mockData.js";
 import {
   getServices,
   createService,
   updateService,
   deleteService,
+  uploadServiceImage,
 } from "../api/services.js";
 
 const CATEGORIES = [
@@ -41,22 +42,6 @@ const CATEGORIES = [
   "Computational Biology",
   "Laboratory Services",
 ];
-
-const SERVICES_STORAGE_KEY = "clingene_admin_services_mock_data";
-
-function loadInitialServices() {
-  if (typeof window === "undefined") return MOCK_SERVICES;
-  try {
-    const raw = localStorage.getItem(SERVICES_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-  } catch (e) {
-    console.warn("Could not read stored services", e);
-  }
-  return MOCK_SERVICES;
-}
 
 const DEFAULT_FORM_STATE = {
   name: "",
@@ -80,8 +65,9 @@ const DEFAULT_FORM_STATE = {
 };
 
 export default function ServicesPage() {
-  const [services, setServices] = useState(loadInitialServices);
-  const [loading, setLoading] = useState(false);
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [currentPage, setCurrentPage] = useState(1);
@@ -99,6 +85,8 @@ export default function ServicesPage() {
   const [editingService, setEditingService] = useState(null);
   const [formData, setFormData] = useState(DEFAULT_FORM_STATE);
   const [initialData, setInitialData] = useState(DEFAULT_FORM_STATE);
+  const [saving, setSaving] = useState(false);
+  const [modalError, setModalError] = useState("");
 
   // Unsaved changes confirm dialog
   const [confirmDiscardOpen, setConfirmDiscardOpen] = useState(false);
@@ -118,21 +106,24 @@ export default function ServicesPage() {
     setTimeout(() => setToastMessage(""), 3500);
   };
 
-  // Load services from API layer
-  const loadServicesList = async () => {
+  // Load services from Supabase services table
+  const loadServicesList = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
       const data = await getServices();
-      if (Array.isArray(data) && data.length > 0) {
-        setServices(data);
-      }
+      setServices(data || []);
     } catch (err) {
-      console.error("Failed to load services", err);
+      console.error("Failed to load services from Supabase:", err);
+      setError(err.message || "Failed to load services from Supabase.");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadServicesList();
-  }, []);
+  }, [loadServicesList]);
 
   // Compute category counts for pills
   const categoryCounts = useMemo(() => {
@@ -159,32 +150,28 @@ export default function ServicesPage() {
 
     return [
       {
-        count: total || "16",
+        count: total,
         title: "Total Services",
-        subtitle: "All active services",
         icon: Stethoscope,
-        color: "text-teal-600 bg-teal-50",
+        color: "text-[#00bcd4] bg-[#e0f7fa]",
       },
       {
-        count: categoriesCount || "4",
+        count: categoriesCount || 1,
         title: "Categories",
-        subtitle: "Service categories",
         icon: LayoutGrid,
-        color: "text-cyan-600 bg-cyan-50",
+        color: "text-[#00bcd4] bg-[#e0f7fa]",
       },
       {
-        count: active || "14",
+        count: active,
         title: "Active Services",
-        subtitle: "Currently available",
-        icon: Heart,
-        color: "text-emerald-600 bg-emerald-50",
+        icon: CheckCircle2,
+        color: "text-[#2e7d32] bg-[#e8f5e9]",
       },
       {
-        count: inactive || "2",
+        count: inactive,
         title: "Inactive Services",
-        subtitle: "Temporarily unavailable",
         icon: PauseCircle,
-        color: "text-blue-600 bg-blue-50",
+        color: "text-[#0284c7] bg-[#e0f2fe]",
       },
     ];
   }, [services, categoryCounts]);
@@ -217,6 +204,7 @@ export default function ServicesPage() {
     setFormData(initial);
     setInitialData(initial);
     setErrors({});
+    setModalError("");
     setActiveTab("quickFacts");
     setModalOpen(true);
   };
@@ -247,10 +235,12 @@ export default function ServicesPage() {
       featuresText: Array.isArray(service.features)
         ? service.features.join("\n")
         : service.features || "",
+      sort_order: service.sort_order ?? 1,
     };
     setFormData(initial);
     setInitialData(initial);
     setErrors({});
+    setModalError("");
     setActiveTab("quickFacts");
     setModalOpen(true);
   };
@@ -336,6 +326,9 @@ export default function ServicesPage() {
       return;
     }
 
+    setSaving(true);
+    setModalError("");
+
     const payload = {
       ...formData,
       overview: formData.overviewText
@@ -349,19 +342,18 @@ export default function ServicesPage() {
     try {
       if (editingService) {
         const updated = await updateService(editingService.id, payload);
-        setServices((prev) =>
-          prev.map((s) => (s.id === editingService.id ? updated : s))
-        );
         showToast(`Service "${updated.name}" updated successfully!`);
       } else {
         const created = await createService(payload);
-        setServices((prev) => [created, ...prev]);
         showToast(`Service "${created.name}" created successfully!`);
       }
       setModalOpen(false);
+      await loadServicesList();
     } catch (err) {
-      console.error("Failed to save service", err);
-      showToast("Error saving service. Please try again.");
+      console.error("Failed to save service:", err);
+      setModalError(err.message || "Failed to save service in Supabase.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -371,12 +363,12 @@ export default function ServicesPage() {
     try {
       setIsDeleting(true);
       await deleteService(deleteId);
-      setServices((prev) => prev.filter((s) => s.id !== deleteId));
       showToast("Service removed successfully.");
       setDeleteId(null);
+      await loadServicesList();
     } catch (err) {
-      console.error("Failed to delete service", err);
-      showToast("Error deleting service.");
+      console.error("Failed to delete service:", err);
+      alert(`Failed to delete service: ${err.message}`);
     } finally {
       setIsDeleting(false);
     }
@@ -418,15 +410,54 @@ export default function ServicesPage() {
         </div>
       )}
 
-      {/* Page Header (with + Add Service button matching screenshot) */}
-      <AdminPageHeader
-        icon={Layers}
-        title="Services"
-        subtitle="Our Medical &amp; Computational Services"
-        breadcrumb="Services"
-        actionLabel="Add Service"
-        onAction={handleOpenAdd}
-      />
+      {/* Page Header (Matches screenshot) */}
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#00bcd4] text-white shadow-xs">
+            <Layers className="h-6 w-6 stroke-[2]" />
+          </div>
+          <div>
+            <h1 className="font-outfit text-2xl font-bold text-[#0c2b48]">Services</h1>
+            <p className="font-inter text-xs sm:text-sm text-slate-500 mt-0.5">
+              Manage medical and research services
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-start sm:items-end gap-2">
+          {/* Top right breadcrumb */}
+          <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
+            <Home className="h-3.5 w-3.5 text-slate-400" />
+            <span className="text-slate-400">Home</span>
+            <span>›</span>
+            <span className="text-slate-600 font-medium">Services</span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleOpenAdd}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00bcd4] px-5 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-xs hover:bg-[#00acc1] active:scale-95 transition-all cursor-pointer"
+          >
+            <span>+ Add Service</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Top Error Alert if Supabase fetch failed */}
+      {error && (
+        <div className="mb-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-red-800">
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
+          <div className="flex-1 text-sm font-medium">{error}</div>
+          <button
+            type="button"
+            onClick={loadServicesList}
+            className="inline-flex items-center gap-1 rounded-lg bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-200 transition-colors cursor-pointer"
+          >
+            <RefreshCw className="h-3.5 w-3.5" />
+            Retry
+          </button>
+        </div>
+      )}
 
       {/* 4 Stat Cards in a Row (Exact match to screenshot) */}
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -435,22 +466,19 @@ export default function ServicesPage() {
           return (
             <div
               key={stat.title}
-              className="flex items-center gap-4 rounded-xl border border-slate-200/80 bg-white p-4.5 shadow-xs"
+              className="flex items-center gap-4 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs"
             >
               <div
-                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${stat.color}`}
+                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${stat.color}`}
               >
-                <StatIcon className="h-5 w-5" />
+                <StatIcon className="h-6 w-6 stroke-[1.9]" />
               </div>
               <div className="min-w-0">
-                <h4 className="font-outfit text-2xl font-bold text-slate-800 tracking-tight leading-none">
+                <h4 className="font-outfit text-2xl sm:text-3xl font-extrabold text-[#0c2b48] leading-none">
                   {stat.count}
                 </h4>
-                <p className="font-outfit text-xs font-bold text-slate-800 mt-1">
+                <p className="font-inter text-xs font-semibold text-slate-400 mt-1.5">
                   {stat.title}
-                </p>
-                <p className="text-[11px] text-slate-400 mt-0.5 truncate">
-                  {stat.subtitle}
                 </p>
               </div>
             </div>
@@ -458,15 +486,13 @@ export default function ServicesPage() {
         })}
       </div>
 
-      {/* Toolbar: Search input, Category Dropdown, Filter button, ViewToggle, Category Pills */}
+      {/* Toolbar: Search input, Category Dropdown, Filter button, ViewToggle */}
       <ServicesToolbar
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
         categories={CATEGORIES}
-        categoryCounts={categoryCounts}
-        totalCount={services.length}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
       />
@@ -623,6 +649,13 @@ export default function ServicesPage() {
 
             {/* Modal Body (Scrollable) */}
             <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-6 space-y-5">
+              {/* Modal Error Alert if Supabase save failed */}
+              {modalError && (
+                <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+                  <AlertCircle className="h-4 w-4 shrink-0 text-red-500" />
+                  <span>{modalError}</span>
+                </div>
+              )}
               
               {/* TAB 1: QUICK FACTS */}
               {activeTab === "quickFacts" && (
@@ -643,7 +676,7 @@ export default function ServicesPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, sampleType: e.target.value })
                       }
-                      placeholder='e.g. Peripheral blood (EDTA), purified DNA, or FFPE tissue'
+                      placeholder="e.g. Blood, DNA"
                       className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-none"
                     />
                     <p className="mt-1 text-[11px] text-slate-500">
@@ -670,7 +703,7 @@ export default function ServicesPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, turnaroundTime: e.target.value })
                       }
-                      placeholder='e.g. 10–14 business days'
+                      placeholder="e.g. 10–14 days"
                       className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-none"
                     />
                     <p className="mt-1 text-[11px] text-slate-500">
@@ -697,7 +730,7 @@ export default function ServicesPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, reportFormat: e.target.value })
                       }
-                      placeholder='e.g. Comprehensive clinical report (PDF) with ACMG variant classification'
+                      placeholder="e.g. Clinical report"
                       className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-none"
                     />
                     <p className="mt-1 text-[11px] text-slate-500">
@@ -792,7 +825,7 @@ export default function ServicesPage() {
                         required
                         value={formData.name}
                         onChange={(e) => handleNameChange(e.target.value)}
-                        placeholder="e.g. Panel Sequencing (Targeted NGS)"
+                        placeholder="e.g. Panel Sequencing"
                         className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
                       />
                       {errors.name && (
@@ -830,7 +863,7 @@ export default function ServicesPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, subtitle: e.target.value })
                       }
-                      placeholder="e.g. Focused disease gene panels"
+                      placeholder="e.g. Disease panels"
                       className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
                     />
                   </div>
@@ -881,7 +914,7 @@ export default function ServicesPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, pricing: e.target.value })
                         }
-                        placeholder="e.g. Rs. 45,000 / $180 or On request"
+                        placeholder="e.g. Rs. 45,000"
                         className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
                       />
                     </div>
@@ -897,7 +930,7 @@ export default function ServicesPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, description: e.target.value })
                       }
-                      placeholder="High-depth targeted sequencing for focused disease gene panels."
+                      placeholder="Short service description..."
                       className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
                     />
                   </div>
@@ -960,6 +993,7 @@ export default function ServicesPage() {
                     label="Service Cover Image"
                     value={formData.image}
                     onChange={(val) => setFormData({ ...formData, image: val })}
+                    onUpload={uploadServiceImage}
                     aspectRatio="aspect-16/9"
                     helperText="Click or drop a PNG, JPG, or WebP cover image for this medical service"
                   />
@@ -977,7 +1011,7 @@ export default function ServicesPage() {
                           setErrors((prev) => ({ ...prev, imageAlt: undefined }));
                         }
                       }}
-                      placeholder="e.g. Targeted next-generation panel sequencing in the laboratory at ClinGene"
+                      placeholder="e.g. Laboratory service"
                       className={`w-full rounded-lg border px-3 py-2 text-xs text-slate-800 focus:outline-none ${
                         errors.imageAlt
                           ? "border-rose-400 focus:border-rose-500 bg-rose-50/30"
@@ -1010,7 +1044,7 @@ export default function ServicesPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, overviewText: e.target.value })
                       }
-                      placeholder="Enter overview paragraphs separated by a blank line..."
+                      placeholder="Enter overview content..."
                       className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
                     />
                     <p className="mt-1 text-[11px] text-slate-500">
@@ -1028,7 +1062,7 @@ export default function ServicesPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, featuresText: e.target.value })
                       }
-                      placeholder="Enter one feature per line..."
+                      placeholder="One per line..."
                       className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
                     />
                   </div>
@@ -1069,9 +1103,10 @@ export default function ServicesPage() {
 
                   <button
                     type="submit"
-                    className="rounded-lg bg-[#009688] px-5 py-2 text-xs font-semibold text-white hover:bg-[#00897b] transition-colors shadow-xs"
+                    disabled={saving}
+                    className="rounded-lg bg-[#009688] px-5 py-2 text-xs font-semibold text-white hover:bg-[#00897b] transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
                   >
-                    {editingService ? "Save Changes" : "Add Service"}
+                    {saving ? "Saving..." : editingService ? "Save Changes" : "Add Service"}
                   </button>
                 </div>
               </div>

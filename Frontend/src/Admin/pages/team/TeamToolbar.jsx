@@ -19,7 +19,7 @@ export default function TeamToolbar({
           type="text"
           value={searchTerm}
           onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
-          placeholder="Search team members by name, role, email..."
+          placeholder="Search team members..."
           className="w-full rounded-lg border-0 bg-transparent pl-9 pr-4 text-xs sm:text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
         />
       </div>

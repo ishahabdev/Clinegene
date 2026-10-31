@@ -50,6 +50,10 @@ body.menu-open {
   overflow: hidden;
 }
 
+/* =================================================================
+   THEME TRANSITIONS
+   ================================================================= */
+
 /* Smooth accent transitions on accent-colored elements */
 .hero-bg-img {
   transition: opacity 0.45s ease-in-out;
@@ -1611,7 +1615,7 @@ header[data-theme="ceo"] nav[aria-label="Mobile navigation"] a[aria-current="pag
   font-weight: 750;
   text-align: center;
   text-decoration: none;
-  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+  transition: background-color 600ms cubic-bezier(0.25, 1, 0.5, 1), color 600ms cubic-bezier(0.25, 1, 0.5, 1), border-color 600ms cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .ceo-button-primary {

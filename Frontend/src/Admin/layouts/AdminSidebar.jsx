@@ -13,20 +13,21 @@ import {
 } from "lucide-react";
 import { ADMIN_USER } from "../mocks/mockData.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { ADMIN_BASE, adminPath } from "../adminConfig.js";
 
 export const ADMIN_NAV_ITEMS = [
-  { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
-  { label: "Team", path: "/admin/team", icon: Users },
-  { label: "Services", path: "/admin/services", icon: Layers },
-  { label: "Research", path: "/admin/research", icon: Microscope },
-  { label: "Gallery", path: "/admin/gallery", icon: ImageIcon },
-  { label: "Career", path: "/admin/career", icon: Briefcase },
-  { label: "Blog & News", path: "/admin/news", icon: Newspaper },
-  { label: "Profile Settings", path: "/admin/profile", icon: Settings },
+  { label: "Dashboard", path: adminPath(""), icon: LayoutDashboard },
+  { label: "Team", path: adminPath("/team"), icon: Users },
+  { label: "Services", path: adminPath("/services"), icon: Layers },
+  { label: "Research", path: adminPath("/research"), icon: Microscope },
+  { label: "Gallery", path: adminPath("/gallery"), icon: ImageIcon },
+  { label: "Career", path: adminPath("/career"), icon: Briefcase },
+  { label: "Blog & News", path: adminPath("/news"), icon: Newspaper },
+  { label: "Profile Settings", path: adminPath("/profile"), icon: Settings },
 ];
 
 export default function AdminSidebar({
-  currentPath = "/admin",
+  currentPath = ADMIN_BASE,
   collapsed,
   mobileOpen,
   setMobileOpen,
@@ -43,7 +44,7 @@ export default function AdminSidebar({
   const handleLogout = () => {
     if (setMobileOpen) setMobileOpen(false);
     logout();
-    if (onNavigate) onNavigate("/admin/login");
+    if (onNavigate) onNavigate(adminPath("/login"));
   };
 
   const navContent = (
@@ -90,14 +91,14 @@ export default function AdminSidebar({
           {ADMIN_NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive =
-              item.path === "/admin"
-                ? currentPath === "/admin" || currentPath === "/admin/"
+              item.path === ADMIN_BASE
+                ? currentPath === ADMIN_BASE || currentPath === `${ADMIN_BASE}/`
                 : currentPath.startsWith(item.path) ||
-                  (item.path === "/admin/news" && currentPath.startsWith("/admin/blog")) ||
-                  (item.path === "/admin/team" && currentPath.startsWith("/admin/doctor")) ||
-                  (item.path === "/admin/profile" &&
-                    (currentPath.startsWith("/admin/settings") ||
-                      currentPath.startsWith("/admin/profile")));
+                  (item.path === adminPath("/news") && currentPath.startsWith(adminPath("/blog"))) ||
+                  (item.path === adminPath("/team") && currentPath.startsWith(adminPath("/doctor"))) ||
+                  (item.path === adminPath("/profile") &&
+                    (currentPath.startsWith(adminPath("/settings")) ||
+                      currentPath.startsWith(adminPath("/profile"))));
 
             return (
               <a

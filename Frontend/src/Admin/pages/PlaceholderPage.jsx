@@ -1,5 +1,6 @@
 import { ArrowLeft, Clock, ShieldAlert } from "lucide-react";
 import AdminPageHeader from "../components/AdminPageHeader.jsx";
+import { ADMIN_BASE } from "../adminConfig.js";
 
 export default function PlaceholderPage({
   title = "Module",
@@ -35,7 +36,7 @@ export default function PlaceholderPage({
         <div className="mt-6 flex items-center gap-3">
           <button
             type="button"
-            onClick={() => onNavigate && onNavigate("/admin")}
+            onClick={() => onNavigate && onNavigate(ADMIN_BASE)}
             className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" />

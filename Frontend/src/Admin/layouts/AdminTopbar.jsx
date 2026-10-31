@@ -8,9 +8,10 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { ADMIN_USER } from "../mocks/mockData.js";
+import { ADMIN_BASE, adminPath } from "../adminConfig.js";
 
 export default function AdminTopbar({ onOpenMobileSidebar, onNavigate }) {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
 
@@ -29,10 +30,10 @@ export default function AdminTopbar({ onOpenMobileSidebar, onNavigate }) {
       {/* Left: Brand + Hamburger */}
       <div className="flex items-center gap-4">
         <a
-          href="/admin"
+          href={ADMIN_BASE || "#"}
           onClick={(e) => {
             e.preventDefault();
-            if (onNavigate) onNavigate("/admin");
+            if (onNavigate) onNavigate(ADMIN_BASE);
           }}
           className="font-outfit text-base sm:text-lg font-bold tracking-wider text-white hover:text-teal-300 transition-colors flex items-center gap-2 select-none"
         >
@@ -55,7 +56,7 @@ export default function AdminTopbar({ onOpenMobileSidebar, onNavigate }) {
         <button
           type="button"
           onClick={() => {
-            if (onNavigate) onNavigate("/admin/news");
+            if (onNavigate) onNavigate(adminPath("/news"));
           }}
           aria-label="Mail"
           className="relative p-2 text-slate-400 hover:text-white hover:bg-slate-800/80 rounded-lg transition-colors focus:outline-none"
@@ -89,8 +90,10 @@ export default function AdminTopbar({ onOpenMobileSidebar, onNavigate }) {
           {userMenuOpen && (
             <div className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-700 bg-[#16222f] p-2 shadow-2xl text-slate-200 z-50 animate-in fade-in duration-100">
               <div className="px-3 py-2 border-b border-slate-700/80">
-                <p className="text-xs font-bold text-white">{ADMIN_USER.fullName}</p>
-                <p className="text-[11px] text-teal-400">{ADMIN_USER.email}</p>
+                <p className="text-xs font-bold text-white">
+                  {user?.user_metadata?.fullName || user?.user_metadata?.name || ADMIN_USER.fullName}
+                </p>
+                <p className="text-[11px] text-teal-400">{user?.email || ADMIN_USER.email}</p>
               </div>
 
               <div className="py-1">
@@ -98,7 +101,7 @@ export default function AdminTopbar({ onOpenMobileSidebar, onNavigate }) {
                   type="button"
                   onClick={() => {
                     setUserMenuOpen(false);
-                    if (onNavigate) onNavigate("/admin/profile");
+                    if (onNavigate) onNavigate(adminPath("/profile"));
                   }}
                   className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 hover:text-teal-300 rounded-lg transition-colors text-left"
                 >
@@ -109,7 +112,7 @@ export default function AdminTopbar({ onOpenMobileSidebar, onNavigate }) {
                   type="button"
                   onClick={() => {
                     setUserMenuOpen(false);
-                    if (onNavigate) onNavigate("/admin/profile");
+                    if (onNavigate) onNavigate(adminPath("/profile"));
                   }}
                   className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 hover:text-teal-300 rounded-lg transition-colors text-left"
                 >
