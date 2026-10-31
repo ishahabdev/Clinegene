@@ -213,7 +213,7 @@ export default function AboutPage() {
 
               <ScrollReveal delay={250}>
                 <Button
-                  className="mt-8 min-h-9 sm:min-h-11 px-4 sm:px-7 font-['Inter'] text-xs sm:text-[14px] shadow-md hover:shadow-lg"
+                  className="mt-8 min-h-9 sm:min-h-11 px-4 sm:px-7 font-['Inter'] text-xs sm:text-[14px] shadow-md"
                   href="/services"
                   variant="cyan"
                 >
@@ -505,12 +505,13 @@ export default function AboutPage() {
                     Our aim is to advance genetic science and make it accessible to everyone. We strive to provide accurate testing, innovative research, and personalized solutions that lead to better diagnosis, treatment, and prevention of genetic and complex diseases.
                   </p>
 
-                  <button
-                    className="inline-flex items-center gap-2 bg-white font-semibold text-[13px] sm:text-[13.5px] px-6 py-2.5 rounded-full hover:bg-white/95 transition-all shadow-md w-fit"
+                  <Button
+                    variant="white"
+                    className="font-semibold text-[13px] sm:text-[13.5px] px-6! py-2.5! shadow-md w-fit"
                     style={{ color: isRed ? "#b91c1c" : isGreen ? "#064e3b" : "var(--accent-dark)" }}
                   >
                     Our Mission
-                  </button>
+                  </Button>
                 </div>
               </div>
             </ScrollReveal>

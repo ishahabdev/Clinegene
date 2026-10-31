@@ -56,21 +56,22 @@ export default function PageNotFoundPage() {
 
           <div className="mt-7 flex flex-wrap items-center gap-3">
             <Button
-              className="min-h-11! gap-2! bg-[#079eae]! px-6! text-[11px]! text-white! shadow-[0_8px_18px_rgba(7,158,174,0.16)] hover:bg-[#087f91]!"
+              className="min-h-11! gap-2! px-6! text-[11px]! shadow-[0_8px_18px_rgba(7,158,174,0.16)]"
               href="/"
             >
               <House aria-hidden="true" className="h-4 w-4" />
               Back to Home
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Button>
-            <button
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#9aafce] bg-white/70 px-6 text-[11px] font-bold text-[#19375f] transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#079eae]"
+            <Button
+              variant="white"
+              className="min-h-11! gap-2! border border-[#9aafce] px-6! text-[11px] font-bold text-[#19375f]"
               onClick={() => window.history.back()}
               type="button"
             >
               <ArrowLeft aria-hidden="true" className="h-4 w-4" />
               Return to Previous
-            </button>
+            </Button>
           </div>
 
           <ul className="mt-9 flex max-w-125 items-center divide-x divide-[#dce6ef]">

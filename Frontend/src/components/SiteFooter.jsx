@@ -251,17 +251,13 @@ export default function SiteFooter({ showJoinCta }) {
                 </p>
               </div>
 
-              <a
+              <Button
                 href="/contact"
-                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full py-2.5 px-5 text-xs sm:text-[13px] font-bold transition-all shadow-md hover:brightness-110 hover:shadow-lg active:scale-[0.98]"
-                style={{
-                  backgroundColor: "var(--accent)",
-                  color: theme === "red" || theme === "green" ? "#ffffff" : "#031d33",
-                }}
+                className="mt-5 w-full py-2.5 px-5 text-xs sm:text-[13px] font-bold shadow-md"
               >
                 <span>Contact Our Team</span>
                 <span aria-hidden="true">→</span>
-              </a>
+              </Button>
             </div>
           </div>
 

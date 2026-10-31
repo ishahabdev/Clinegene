@@ -1,6 +1,45 @@
 -- Run only once: Seeds public.research table with authentic ClinGene static data
 -- Total records: 8
 
+CREATE TABLE IF NOT EXISTS public.research (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title TEXT NOT NULL,
+    subtitle TEXT,
+    lead_investigator TEXT,
+    category TEXT,
+    research_type TEXT,
+    research_status TEXT,
+    research_date TEXT,
+    journal TEXT,
+    doi TEXT,
+    keywords TEXT[],
+    abstract TEXT,
+    image_url TEXT,
+    status TEXT NOT NULL DEFAULT 'published',
+    sort_order INTEGER NOT NULL DEFAULT 1,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+ALTER TABLE public.research ENABLE ROW LEVEL SECURITY;
+
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'research' AND policyname = 'Allow public read access to published research') THEN
+        CREATE POLICY "Allow public read access to published research" ON public.research FOR SELECT USING (status IS NULL OR LOWER(status) = 'published');
+    END IF;
+END $$;
+
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'research' AND policyname = 'Allow authenticated users full access to research') THEN
+        CREATE POLICY "Allow authenticated users full access to research" ON public.research FOR ALL TO authenticated USING (true) WITH CHECK (true);
+    END IF;
+END $$;
+
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'research' AND policyname = 'Allow anon all operations on research') THEN
+        CREATE POLICY "Allow anon all operations on research" ON public.research FOR ALL TO anon USING (true) WITH CHECK (true);
+    END IF;
+END $$;
+
 INSERT INTO public.research (
     title,
     subtitle,

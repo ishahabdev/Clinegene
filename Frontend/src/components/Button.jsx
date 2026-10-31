@@ -1,9 +1,60 @@
-const variants = {
-  // "cyan" variant = the branded primary accent button (bg & text driven by CSS vars)
-  cyan: "",
-  transparent: "border border-white bg-transparent text-white hover:text-white focus-visible:text-white",
-  white: "border border-black bg-white text-black hover:text-white focus-visible:text-white",
+import React from "react";
+
+const variantClassMap = {
+  cyan: "btn-bubble--cyan",
+  primary: "btn-bubble--primary",
+  blue: "btn-bubble--blue",
+  red: "btn-bubble--red",
+  danger: "btn-bubble--red",
+  dark: "btn-bubble--dark",
+  secondary: "btn-bubble--dark",
+  black: "btn-bubble--dark",
+  outline: "btn-bubble--outline",
+  transparent: "btn-bubble--outline",
+  "outline-dark": "btn-bubble--outline-dark",
+  white: "btn-bubble--white",
 };
+
+function isArrowChild(child) {
+  if (!React.isValidElement(child)) {
+    if (typeof child === "string") {
+      const trimmed = child.trim();
+      return trimmed === "→" || trimmed === "->" || trimmed === "←" || trimmed === "<-";
+    }
+    return false;
+  }
+
+  const cls = String(child.props?.className || "");
+  if (cls.split(/\s+/).includes("arrow")) return false;
+
+  const name =
+    child.type?.displayName ||
+    child.type?.name ||
+    child.type?.render?.displayName ||
+    child.type?.render?.name ||
+    "";
+  if (typeof name === "string" && (name.includes("Arrow") || name.includes("Chevron"))) {
+    return true;
+  }
+
+  if (typeof child.props?.children === "string") {
+    const t = child.props.children.trim();
+    if (t === "→" || t === "->" || t === "←" || t === "<-") {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function wrapChildren(children) {
+  return React.Children.map(children, (child) => {
+    if (isArrowChild(child)) {
+      return <span className="arrow">{child}</span>;
+    }
+    return child;
+  });
+}
 
 export default function Button({
   variant = "cyan",
@@ -11,70 +62,58 @@ export default function Button({
   children,
   className = "",
   type = "button",
-  style: propStyle,   // extract style separately so we can MERGE it with accentStyle
+  style,
   ...props
 }) {
-  const isCyan = variant === "cyan";
-
-  // Base accent style — always applied for primary (cyan) buttons
-  const accentStyle = isCyan
-    ? {
-        backgroundColor: "var(--accent-btn-bg, var(--accent))",
-        color:           "var(--accent-btn-text, #04152b)",
-      }
-    : {};
-
-  // Merge: accentStyle first, then caller overrides (propStyle wins for same keys)
-  const mergedStyle = { ...accentStyle, ...propStyle };
+  const bubbleVariantClass = variantClassMap[variant] || variantClassMap.cyan;
 
   const hasMinH = className.includes("min-h-");
   const hasPx = className.includes("px-");
   const hasTextSize = className.includes("text-");
 
+  // Neutralize and strip any conflicting transitions, durations, or hover utilities from callers
+  const cleanClassName = className
+    .split(/\s+/)
+    .filter(
+      (c) =>
+        !c.startsWith("transition") &&
+        !c.startsWith("duration-") &&
+        !c.startsWith("ease-") &&
+        !c.startsWith("hover:bg-") &&
+        !c.startsWith("hover:text-") &&
+        !c.startsWith("hover:shadow") &&
+        !c.startsWith("hover:border") &&
+        !c.startsWith("hover:brightness") &&
+        !c.startsWith("focus-visible:text-") &&
+        !c.startsWith("group-hover:text-") &&
+        !c.startsWith("group-hover:translate")
+    )
+    .join(" ");
+
   const classes = [
-    "group relative inline-flex items-center justify-center overflow-hidden rounded-full touch-manipulation",
+    "btn-bubble",
+    bubbleVariantClass,
     !hasMinH && "min-h-11",
     !hasPx && "px-4.5 sm:px-6",
     !hasTextSize && "text-[12px] sm:text-sm",
-    "font-bold hover:text-white! focus-visible:text-white!",
-    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)",
-    "active:scale-95 active:opacity-85",
-    variants[variant] ?? variants.cyan,
-    className,
+    "font-bold select-none",
+    cleanClassName,
   ]
     .filter(Boolean)
     .join(" ");
 
-  // Ripple overlay: bubble starts as a small circle in center and spreads slowly across whole button
-  const rippleBg = "bg-black";
-
   const content = (
-    <>
-      <span
-        aria-hidden="true"
-        className={`pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[220%] -translate-x-1/2 -translate-y-1/2 scale-0 rounded-full group-hover:scale-100 group-focus-visible:scale-100 group-active:scale-100 ${rippleBg}`}
-        style={{
-          transition: "transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1)",
-          willChange: "transform",
-        }}
-      />
-      <span
-        className="relative z-10 inline-flex items-center gap-2 group-hover:text-white! group-focus-visible:text-white!"
-        style={{
-          transition: "color 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)",
-        }}
-      >
-        {children}
-      </span>
-    </>
+    <span className="btn-label">
+      {wrapChildren(children)}
+    </span>
   );
 
   return href ? (
-    <a className={classes} href={href} style={mergedStyle} {...props}>
+    <a className={classes} href={href} style={style} {...props}>
       {content}
     </a>
   ) : (
-    <button className={classes} type={type} style={mergedStyle} {...props}>
+    <button className={classes} type={type} style={style} {...props}>
       {content}
     </button>
   );

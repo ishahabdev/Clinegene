@@ -295,17 +295,16 @@ export default function ServicesPage() {
               </p>
             </div>
             <Button
-              className="min-h-0! px-4! py-2.5! font-inter text-(--accent-muted) hover:text-white! focus-visible:text-white! transition-colors duration-300"
+              className="min-h-0! px-4! py-2.5! font-inter"
               style={{
                 borderColor: "color-mix(in srgb, var(--accent) 50%, transparent)",
+                color: "var(--accent-muted)",
               }}
               href="#contact"
-              variant="transparent"
+              variant="outline"
             >
-              <span className="text-(--accent-muted) transition-colors duration-300 group-hover:text-white group-focus-visible:text-white">
-                Contact ClinGene
-              </span>
-              <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:text-white motion-reduce:transform-none motion-reduce:transition-none" />
+              <span>Contact ClinGene</span>
+              <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Button>
           </ScrollReveal>
           {/* ── Services Content (Live from Supabase) ── */}

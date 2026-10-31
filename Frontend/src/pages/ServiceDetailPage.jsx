@@ -19,6 +19,7 @@ import {
   TestTubes,
 } from "lucide-react";
 import ScrollReveal from "../components/ScrollReveal.jsx";
+import Button from "../components/Button.jsx";
 import dnaStrand from "../assets/dna_strand.png";
 import PageNotFoundPage from "./PageNotFoundPage.jsx";
 import { fetchServiceBySlug, fetchPublishedServices } from "../lib/servicesClient.js";
@@ -414,14 +415,13 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
 
                 {/* Primary CTA Button */}
                 <div className="mt-5 flex flex-wrap items-center gap-3">
-                  <a
+                  <Button
                     href={`/contact?service=${service.slug}`}
-                    className="inline-flex min-h-9 items-center justify-center rounded-full px-5 py-2 text-xs sm:text-[13px] font-bold text-white shadow-xs transition-all duration-300 hover:shadow-md hover:brightness-105 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
-                    style={{ backgroundColor: "var(--accent-btn-bg, var(--accent))" }}
+                    className="min-h-9 px-5 py-2 text-xs sm:text-[13px] font-bold shadow-xs"
                   >
                     Request this service
                     <ArrowRight className="ml-1.5 h-3.5 w-3.5" aria-hidden="true" />
-                  </a>
+                  </Button>
                 </div>
 
               </ScrollReveal>
@@ -1019,25 +1019,23 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                 {service.type === "lab" ? "Clinical Lab Service" : "Computational Service"}
               </span>
             </div>
-            <a
+            <Button
               href={`/contact?service=${service.slug}`}
-              className="shrink-0 inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-bold text-white shadow-xs transition-transform active:scale-95"
-              style={{ backgroundColor: "var(--accent-btn-bg, var(--accent))" }}
+              className="shrink-0 px-4 py-2 text-xs font-bold shadow-xs"
             >
               Request service
               <ArrowRight className="ml-1 h-3 w-3" aria-hidden="true" />
-            </a>
+            </Button>
           </div>
 
           {/* Desktop Floating Pill Button (Bottom Right) */}
-          <a
+          <Button
             href={`/contact?service=${service.slug}`}
-            className="hidden sm:inline-flex fixed bottom-6 right-6 z-40 items-center gap-2 rounded-full px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) animate-in fade-in slide-in-from-bottom-4 duration-300"
-            style={{ backgroundColor: "var(--accent-btn-bg, var(--accent))" }}
+            className="hidden sm:inline-flex fixed bottom-6 right-6 z-40 px-5 py-2.5 text-xs sm:text-sm font-bold shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-300"
           >
             <span>Request this service</span>
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </a>
+          </Button>
         </>
       )}
 

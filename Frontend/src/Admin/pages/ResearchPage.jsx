@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Microscope,
   Search,
@@ -22,9 +22,17 @@ import {
   AlignLeft,
   UploadCloud,
   Save,
+  Loader2,
+  RefreshCw,
 } from "lucide-react";
 import AdminPageHeader from "../components/AdminPageHeader.jsx";
-import { MOCK_RESEARCH, RESEARCH_STATS } from "../mocks/mockData.js";
+import {
+  getResearchList,
+  createResearch,
+  updateResearch,
+  deleteResearch,
+  uploadResearchImage,
+} from "../api/research.js";
 
 const TYPES = ["All Types", "Research Project", "Publication"];
 
@@ -92,7 +100,10 @@ const DEFAULT_FORM_STATE = {
 };
 
 export default function ResearchPage() {
-  const [researchList, setResearchList] = useState(MOCK_RESEARCH);
+  const [researchList, setResearchList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("All Types");
 
@@ -101,6 +112,25 @@ export default function ResearchPage() {
   const [editingItem, setEditingItem] = useState(null);
   const [formData, setFormData] = useState(DEFAULT_FORM_STATE);
   const [deleteId, setDeleteId] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadData() {
+      try {
+        setLoading(true);
+        const data = await getResearchList();
+        if (isMounted) setResearchList(data);
+      } catch (err) {
+        console.error("Failed to load research:", err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+    loadData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const filteredResearch = useMemo(() => {
     const q = searchTerm.trim().toLowerCase();
@@ -154,59 +184,106 @@ export default function ResearchPage() {
       journal: item.journal || "",
       doi: item.doi || "",
       keywords: Array.isArray(item.keywords) ? item.keywords.join(", ") : item.keywords || "",
-      summary: item.summary || "",
-      image: item.image || "",
+      summary: item.summary || item.abstract || "",
+      image: item.image || item.image_url || "",
     });
     setModalOpen(true);
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
       alert("File is too large. Max 5MB allowed.");
       return;
     }
-    const reader = new FileReader();
-    reader.onload = (uploadEvent) => {
-      setFormData((prev) => ({ ...prev, image: uploadEvent.target.result }));
-    };
-    reader.readAsDataURL(file);
+    setUploadingImage(true);
+    try {
+      const url = await uploadResearchImage(file);
+      setFormData((prev) => ({ ...prev, image: url }));
+    } catch (err) {
+      console.error("Image upload error:", err);
+      alert("Failed to process image: " + (err.message || "Unknown error"));
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     if (!formData.title) return;
 
-    const keywordsArray = typeof formData.keywords === "string"
-      ? formData.keywords.split(",").map((k) => k.trim()).filter(Boolean)
-      : formData.keywords;
+    setIsSaving(true);
+    try {
+      const keywordsArray = typeof formData.keywords === "string"
+        ? formData.keywords.split(",").map((k) => k.trim()).filter(Boolean)
+        : formData.keywords;
 
-    const processedData = {
-      ...formData,
-      keywords: keywordsArray,
-    };
-
-    if (editingItem) {
-      setResearchList((prev) =>
-        prev.map((r) => (r.id === editingItem.id ? { ...r, ...processedData } : r))
-      );
-    } else {
-      const newItem = {
-        id: Date.now(),
-        ...processedData,
+      const processedData = {
+        ...formData,
+        keywords: keywordsArray,
       };
-      setResearchList((prev) => [newItem, ...prev]);
+
+      if (editingItem) {
+        const updated = await updateResearch(editingItem.id, processedData);
+        setResearchList((prev) =>
+          prev.map((r) => (r.id === editingItem.id ? { ...r, ...updated } : r))
+        );
+      } else {
+        const created = await createResearch(processedData);
+        setResearchList((prev) => [created, ...prev]);
+      }
+      setModalOpen(false);
+    } catch (err) {
+      console.error("Save research error:", err);
+      alert("Failed to save research: " + (err.message || "Unknown error"));
+    } finally {
+      setIsSaving(false);
     }
-    setModalOpen(false);
   };
 
-  const handleDelete = () => {
-    if (deleteId) {
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    try {
+      await deleteResearch(deleteId);
       setResearchList((prev) => prev.filter((r) => r.id !== deleteId));
       setDeleteId(null);
+    } catch (err) {
+      console.error("Delete research error:", err);
+      alert("Failed to delete research: " + (err.message || "Unknown error"));
     }
   };
+
+  const dynamicStats = useMemo(() => [
+    {
+      label: "Total Research",
+      count: researchList.length,
+      icon: "flask",
+      bgColor: "bg-teal-50",
+      textColor: "text-teal-600",
+    },
+    {
+      label: "Ongoing Projects",
+      count: researchList.filter((r) => (r.status || "").toLowerCase() === "ongoing").length,
+      icon: "file",
+      bgColor: "bg-amber-50",
+      textColor: "text-amber-600",
+    },
+    {
+      label: "Completed Studies",
+      count: researchList.filter((r) => (r.status || "").toLowerCase() === "completed").length,
+      icon: "check",
+      bgColor: "bg-emerald-50",
+      textColor: "text-emerald-600",
+    },
+    {
+      label: "Publications",
+      count: researchList.filter((r) => (r.type || "").toLowerCase().includes("publication") || (r.status || "").toLowerCase() === "published").length,
+      icon: "edit",
+      bgColor: "bg-blue-50",
+      textColor: "text-blue-600",
+    },
+  ], [researchList]);
 
   const getStatusBadge = (status) => {
     if (status === "Ongoing") {
@@ -282,7 +359,7 @@ export default function ResearchPage() {
 
       {/* 4 Stat Cards */}
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {RESEARCH_STATS.map((st) => {
+        {dynamicStats.map((st) => {
           const Icon = STAT_ICONS[st.icon] || FlaskConical;
           return (
             <div
@@ -322,7 +399,16 @@ export default function ResearchPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredResearch.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="py-12 px-4 text-center">
+                    <Loader2 className="h-8 w-8 text-[#009688] animate-spin mx-auto mb-2.5" />
+                    <p className="font-outfit text-sm font-semibold text-slate-600">
+                      Loading research from Supabase...
+                    </p>
+                  </td>
+                </tr>
+              ) : filteredResearch.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-12 px-4 text-center">
                     <FlaskConical className="h-10 w-10 text-slate-300 mx-auto mb-2.5" />
@@ -334,7 +420,7 @@ export default function ResearchPage() {
                     <p className="font-inter text-xs text-slate-400 mt-1 max-w-md mx-auto">
                       {searchTerm
                         ? "Try adjusting search terms or resetting the filter."
-                        : "The research section on the public website is currently under construction. You can create research entries using the button below."}
+                        : "No research records have been added to the database yet. Click below to add a research project or publication."}
                     </p>
                     <button
                       type="button"
@@ -740,15 +826,27 @@ export default function ResearchPage() {
                   </div>
                 ) : (
                   <label className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 hover:border-teal-400 bg-teal-50/15 py-6 px-4 text-center cursor-pointer transition-colors group">
-                    <UploadCloud className="h-8 w-8 text-[#009688] mb-1.5 transition-transform group-hover:scale-110" />
-                    <p className="text-xs sm:text-sm text-slate-700">
-                      <span className="font-bold text-slate-800">Click to upload</span> or drag and drop
-                    </p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">Supports JPG, PNG (Max 5MB)</p>
+                    {uploadingImage ? (
+                      <>
+                        <Loader2 className="h-8 w-8 text-[#009688] animate-spin mb-1.5" />
+                        <p className="text-xs sm:text-sm font-semibold text-slate-700">
+                          Optimizing image...
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <UploadCloud className="h-8 w-8 text-[#009688] mb-1.5 transition-transform group-hover:scale-110" />
+                        <p className="text-xs sm:text-sm text-slate-700">
+                          <span className="font-bold text-slate-800">Click to upload</span> or drag and drop
+                        </p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">Supports JPG, PNG (Max 5MB)</p>
+                      </>
+                    )}
                     <input
                       type="file"
                       accept="image/png,image/jpeg,image/webp"
                       className="hidden"
+                      disabled={uploadingImage}
                       onChange={handleImageUpload}
                     />
                   </label>
@@ -760,17 +858,23 @@ export default function ResearchPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-5 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors"
+                  disabled={isSaving}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-5 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors disabled:opacity-50"
                 >
                   <X className="h-4 w-4" />
                   <span>Cancel</span>
                 </button>
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#00897b] hover:bg-[#00796b] px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xs cursor-pointer transition-colors"
+                  disabled={isSaving}
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#00897b] hover:bg-[#00796b] px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xs cursor-pointer transition-colors disabled:opacity-50"
                 >
-                  <Save className="h-4 w-4" />
-                  <span>Save Entry</span>
+                  {isSaving ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Save className="h-4 w-4" />
+                  )}
+                  <span>{isSaving ? "Saving..." : "Save Entry"}</span>
                 </button>
               </div>
             </form>

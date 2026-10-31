@@ -15,13 +15,6 @@ export default function GalleryContactSection() {
         ? "rgba(2, 30, 18, 0.65)"
         : "rgba(2, 19, 42, 0.65)";
 
-  const buttonColor =
-    theme === "red"
-      ? "!bg-red-600 hover:!bg-red-700"
-      : theme === "green"
-        ? "!bg-green-600 hover:!bg-green-700"
-        : "!bg-[#2385d1] hover:!bg-[#1a6fb8]";
-
   return (
     <section
       aria-labelledby="home-gallery-title"
@@ -94,7 +87,7 @@ export default function GalleryContactSection() {
         <p className="mt-4 text-sm leading-6 text-slate-600">
           Have a question or need assistance? We’re here to help.
         </p>
-        <Button className={`mt-6 !text-white hover:!text-white ${buttonColor}`} href="/contact">
+        <Button className="mt-6" variant={theme === "red" ? "red" : "blue"} href="/contact">
           Contact Us <ArrowRight aria-hidden="true" className="h-4 w-4" />
         </Button>
         <address className="mt-7 space-y-5 not-italic text-sm leading-6 text-slate-600">

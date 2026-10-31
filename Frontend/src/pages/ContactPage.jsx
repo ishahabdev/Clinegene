@@ -847,10 +847,11 @@ export default function ContactPage() {
 
               {/* Submit Button */}
               <div className="pt-2">
-                <button
+                <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-[#0f2137] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#091524] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f2137] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  variant="dark"
+                  className="rounded-lg! px-6! py-3! text-sm! font-semibold shadow-sm cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>
@@ -860,12 +861,12 @@ export default function ContactPage() {
                   ) : (
                     <>
                       <span>{isCareerOption ? "Submit Application" : "Send Message"}</span>
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/20 bg-white/10">
+                      <span className="arrow flex h-5 w-5 items-center justify-center rounded-full border border-white/20 bg-white/10">
                         <ArrowRight className="h-3 w-3" aria-hidden="true" />
                       </span>
                     </>
                   )}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

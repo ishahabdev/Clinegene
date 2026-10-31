@@ -89,6 +89,187 @@ body.menu-open {
 }
 
 /* =================================================================
+   BUTTON BUBBLE HOVER EFFECT (.btn-bubble)
+   Pure CSS, SSR safe, 60fps transform-only animation.
+   A bubble expands from bottom-center on hover/focus-visible.
+   Single speed variable --btn-speed: 1400ms.
+   ================================================================= */
+
+:root {
+  --btn-speed: 1400ms;
+}
+
+.btn-bubble {
+  --btn-speed: 1400ms;
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 9999px;
+  cursor: pointer;
+  text-decoration: none;
+  touch-manipulation: manipulation;
+  background-color: var(--btn-bg) !important;
+  color: var(--btn-text) !important;
+  /* Smooth color, border & shadow transitions */
+  transition:
+    color 900ms ease,
+    border-color 900ms ease,
+    box-shadow 900ms ease !important;
+  will-change: color;
+}
+
+/* Ensure label and all contents sit above the bubble pseudo-element at z-index: 1 */
+.btn-bubble .btn-label {
+  position: relative !important;
+  z-index: 1 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  color: inherit;
+  transition: color 900ms ease !important;
+  pointer-events: none;
+}
+
+/* The expanding bubble pseudo-element originating from bottom-center at z-index: 0 */
+.btn-bubble::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 0 !important;
+  width: 300% !important;
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 50% !important;
+  background-color: var(--btn-fill, #0b1f3a) !important;
+  transform: translate(-50%, 50%) scale(0) !important;
+  transform-origin: center center !important;
+  transition: transform var(--btn-speed, 1400ms) cubic-bezier(0.22, 1, 0.36, 1) !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  will-change: transform;
+}
+
+/* Expand bubble on hover and focus-visible */
+.btn-bubble:hover::before,
+.btn-bubble:focus-visible::before {
+  transform: translate(-50%, 50%) scale(1) !important;
+}
+
+/* Text and label color on hover - guaranteed high contrast with --btn-fill */
+.btn-bubble:hover,
+.btn-bubble:focus-visible {
+  color: var(--btn-text-hover) !important;
+  background-color: var(--btn-bg) !important;
+}
+
+.btn-bubble:hover .btn-label,
+.btn-bubble:focus-visible .btn-label {
+  color: var(--btn-text-hover) !important;
+}
+
+/* Arrow slide animation (4px to the right) with same slow transition */
+.btn-bubble .arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+  will-change: transform;
+}
+
+.btn-bubble:hover .arrow,
+.btn-bubble:focus-visible .arrow {
+  transform: translateX(4px) !important;
+}
+
+/* Keyboard accessibility */
+.btn-bubble:focus-visible {
+  outline: 2px solid var(--accent, #10c8e0);
+  outline-offset: 2px;
+}
+
+/* ── Variants with Guaranteed Contrast & Original Base Colors ── */
+
+/* 1. Cyan / Primary Accent (Original ClinGene primary button) */
+.btn-bubble--cyan {
+  --btn-bg: var(--accent-btn-bg, var(--accent, #10c8e0));
+  --btn-fill: #0b1f3a;
+  --btn-text: var(--accent-btn-text, #04152b);
+  --btn-text-hover: #ffffff;
+  border: 1px solid transparent;
+}
+
+/* 2. Primary Variant (Teal base, navy bubble, white text) */
+.btn-bubble--primary {
+  --btn-bg: #44bfa3;
+  --btn-fill: #0b1f3a;
+  --btn-text: #ffffff;
+  --btn-text-hover: #ffffff;
+  border: 1px solid transparent;
+}
+
+/* 3. Blue Variant */
+.btn-bubble--blue {
+  --btn-bg: #1d4ed8;
+  --btn-fill: #0b1f3a;
+  --btn-text: #ffffff;
+  --btn-text-hover: #ffffff;
+  border: 1px solid transparent;
+}
+
+/* 4. Red / Danger Variant */
+.btn-bubble--red {
+  --btn-bg: var(--brand-red, #dc2626);
+  --btn-fill: #7f1d1d;
+  --btn-text: #ffffff;
+  --btn-text-hover: #ffffff;
+  border: 1px solid transparent;
+}
+
+/* 5. Dark / Navy / Black Variant */
+.btn-bubble--dark {
+  --btn-bg: #0c2b48;
+  --btn-fill: var(--accent, #10c8e0);
+  --btn-text: #ffffff;
+  --btn-text-hover: #04152b;
+  border: 1px solid transparent;
+}
+
+/* 6. Outline / Transparent Variant (White border on dark hero) */
+.btn-bubble--outline {
+  --btn-bg: transparent;
+  --btn-fill: #0b1f3a;
+  --btn-text: #ffffff;
+  --btn-text-hover: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.65) !important;
+}
+.btn-bubble--outline:hover,
+.btn-bubble--outline:focus-visible {
+  border-color: #0b1f3a !important;
+}
+
+/* 7. Outline Dark Variant (Dark border on light backgrounds) */
+.btn-bubble--outline-dark {
+  --btn-bg: transparent;
+  --btn-fill: #0b1f3a;
+  --btn-text: #0b1f3a;
+  --btn-text-hover: #ffffff;
+  border: 1.5px solid #0b1f3a !important;
+}
+
+/* 8. White Variant */
+.btn-bubble--white {
+  --btn-bg: #ffffff;
+  --btn-fill: #0b1f3a;
+  --btn-text: #000000;
+  --btn-text-hover: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+/* =================================================================
    SMOOTH SCROLL, OVERFLOW & ACCESSIBILITY
    ================================================================= */
 html {
@@ -136,17 +317,21 @@ html.lenis body {
   perspective: 1000px;
 }
 
-/* Respect prefers-reduced-motion across the entire UI */
+/* Respect prefers-reduced-motion across the entire UI (preserving deliberate button animations) */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto !important;
   }
   
-  * {
+  *:not(.btn-bubble, .btn-bubble *) {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .btn-bubble::before {
+    transition-duration: var(--btn-speed, 1400ms) !important;
   }
 }
 
@@ -1827,28 +2012,9 @@ header[data-theme="ceo"] button:focus-visible {
 }
 
 .construction-home-link {
-  display: inline-flex;
   min-height: 46px;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
   padding: 0 20px;
-  border-radius: 999px;
-  background: #10c8e0;
-  color: #050b1c;
   font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: background-color 160ms ease;
-}
-
-.construction-home-link:hover {
-  background: #079bb0;
-}
-
-.construction-home-link:focus-visible {
-  outline: 3px solid #050b1c;
-  outline-offset: 4px;
 }
 
 .contact-page {
