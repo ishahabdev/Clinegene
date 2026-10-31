@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   Images,
   Loader2,
+  Users,
 } from "lucide-react";
 import AdminPageHeader from "../components/AdminPageHeader.jsx";
 import ImageUploader from "../components/ImageUploader.jsx";
@@ -27,10 +28,68 @@ import {
 } from "../api/gallery.js";
 
 const DEFAULT_CATEGORIES = [
+  "ClinGene Team",
   "ClinGene Genomics Lab",
   "Scientific Symposiums",
   "Research Bench & Compute",
   "Diagnostic Facilities",
+];
+
+export const TEAM_GALLERY_ITEMS = [
+  {
+    title: "Dr. Abid Ali, Ph.D, Postdoc",
+    image_url: "/assets/team/Abid Ali.jpeg",
+    image_alt: "Dr. Abid Ali",
+    caption: "Laboratory Sciences & Horticulture at ClinGene.",
+    category: "ClinGene Team",
+    event_date: "2026-01-01",
+    status: "published",
+  },
+  {
+    title: "Dr. Amjad Ali Tanoli Ph.D",
+    image_url: "/assets/team/Amjad Ali.jpeg",
+    image_alt: "Dr. Amjad Ali Tanoli",
+    caption: "Chief Executive Officer & Director at ClinGene.",
+    category: "ClinGene Team",
+    event_date: "2026-01-01",
+    status: "published",
+  },
+  {
+    title: "Saad Ullah",
+    image_url: "/assets/team/Saad.jpeg",
+    image_alt: "Saad Ullah",
+    caption: "Operations & Laboratory Management at ClinGene.",
+    category: "ClinGene Team",
+    event_date: "2026-01-01",
+    status: "published",
+  },
+  {
+    title: "Dr. Safdar Ali, Ph.D, Postdoc",
+    image_url: "/assets/team/Safdar Ali.jpeg",
+    image_alt: "Dr. Safdar Ali",
+    caption: "Managing Director at ClinGene.",
+    category: "ClinGene Team",
+    event_date: "2026-01-01",
+    status: "published",
+  },
+  {
+    title: "Tahir Ali",
+    image_url: "/assets/team/Tahir Ali.jpeg",
+    image_alt: "Tahir Ali",
+    caption: "Research Associate & Computational Biology.",
+    category: "ClinGene Team",
+    event_date: "2026-01-01",
+    status: "published",
+  },
+  {
+    title: "ClinGene Research & Diagnostic Team",
+    image_url: "/assets/team/team.png",
+    image_alt: "ClinGene Team",
+    caption: "ClinGene multidisciplinary genomics and diagnostic research team.",
+    category: "ClinGene Team",
+    event_date: "2026-01-01",
+    status: "published",
+  },
 ];
 
 const DEFAULT_FORM_STATE = {
@@ -73,10 +132,32 @@ export default function GalleryPage() {
   // Delete modal state
   const [deleteId, setDeleteId] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [seedingTeam, setSeedingTeam] = useState(false);
 
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(""), 3500);
+  };
+
+  const handleSeedTeamPhotos = async () => {
+    setSeedingTeam(true);
+    try {
+      const alreadyHasTeam = images.some((img) => img.category === "ClinGene Team");
+      if (alreadyHasTeam) {
+        setSelectedAlbum("ClinGene Team");
+        showToast("ClinGene Team folder is already in gallery!");
+        return;
+      }
+      await createMultipleGalleryItems(TEAM_GALLERY_ITEMS);
+      showToast("ClinGene Team photos (6 images) added successfully!");
+      await loadGallery();
+      setSelectedAlbum("ClinGene Team");
+    } catch (err) {
+      console.error("Failed to add team photos:", err);
+      alert(err.message || "Failed to add team photos.");
+    } finally {
+      setSeedingTeam(false);
+    }
   };
 
   // Load gallery items from Supabase
@@ -460,6 +541,16 @@ export default function GalleryPage() {
 
             <button
               type="button"
+              disabled={seedingTeam}
+              onClick={handleSeedTeamPhotos}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-teal-200 bg-teal-50 px-3.5 py-1.5 text-xs font-semibold text-[#009688] hover:bg-teal-100 transition-colors cursor-pointer"
+            >
+              <Users className="h-3.5 w-3.5" />
+              <span>{seedingTeam ? "Adding..." : "+ Add Team Photos (6)"}</span>
+            </button>
+
+            <button
+              type="button"
               onClick={handleOpenAdd}
               className="inline-flex items-center gap-1.5 rounded-lg bg-[#009688] px-4 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-[#008779] transition-colors cursor-pointer"
             >
@@ -580,7 +671,7 @@ export default function GalleryPage() {
       {/* Add / Edit Image Modal with Multi-File Upload Support */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs overflow-y-auto">
-          <div className="relative w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-150 my-8">
+          <div className="relative w-full max-w-3xl rounded-2xl bg-white p-6 sm:p-7 shadow-2xl animate-in zoom-in-95 duration-150 my-8">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="font-outfit text-lg font-bold text-slate-800 flex items-center gap-2">
                 <Images className="h-5 w-5 text-[#009688]" />

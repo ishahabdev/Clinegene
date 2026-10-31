@@ -157,4 +157,64 @@ INSERT INTO public.gallery (
     '2025-01-01',
     'published',
     12
+),
+(
+    'Dr. Abid Ali, Ph.D, Postdoc',
+    '/assets/team/Abid Ali.jpeg',
+    'Dr. Abid Ali',
+    'Dr. Abid Ali - Laboratory Sciences & Horticulture at ClinGene.',
+    'ClinGene Team',
+    '2026-01-01',
+    'published',
+    13
+),
+(
+    'Dr. Amjad Ali Tanoli Ph.D',
+    '/assets/team/Amjad Ali.jpeg',
+    'Dr. Amjad Ali Tanoli',
+    'Dr. Amjad Ali Tanoli - CEO & Director at ClinGene.',
+    'ClinGene Team',
+    '2026-01-01',
+    'published',
+    14
+),
+(
+    'Saad Ullah',
+    '/assets/team/Saad.jpeg',
+    'Saad Ullah',
+    'Saad Ullah - Administrative & Operations Team at ClinGene.',
+    'ClinGene Team',
+    '2026-01-01',
+    'published',
+    15
+),
+(
+    'Dr. Safdar Ali, Ph.D, Postdoc',
+    '/assets/team/Safdar Ali.jpeg',
+    'Dr. Safdar Ali',
+    'Dr. Safdar Ali - Managing Director at ClinGene.',
+    'ClinGene Team',
+    '2026-01-01',
+    'published',
+    16
+),
+(
+    'Tahir Ali',
+    '/assets/team/Tahir Ali.jpeg',
+    'Tahir Ali',
+    'Tahir Ali - Research Associate at ClinGene.',
+    'ClinGene Team',
+    '2026-01-01',
+    'published',
+    17
+),
+(
+    'ClinGene Laboratory & Research Team',
+    '/assets/team/team.png',
+    'ClinGene Team',
+    'ClinGene multidisciplinary genomic research, diagnostic, and bioinformatics team.',
+    'ClinGene Team',
+    '2026-01-01',
+    'published',
+    18
 );

@@ -15,9 +15,15 @@ import {
   Tag,
   User,
   BookOpen,
+  LayoutGrid,
+  Layers,
+  Calendar,
+  Link2,
+  AlignLeft,
+  UploadCloud,
+  Save,
 } from "lucide-react";
 import AdminPageHeader from "../components/AdminPageHeader.jsx";
-import ImageUploader from "../components/ImageUploader.jsx";
 import { MOCK_RESEARCH, RESEARCH_STATS } from "../mocks/mockData.js";
 
 const TYPES = ["All Types", "Research Project", "Publication"];
@@ -28,6 +34,47 @@ const STAT_ICONS = {
   edit: FileEdit,
   check: CheckCircle2,
 };
+
+const LEAD_INVESTIGATORS = [
+  "Dr. Amjad Ali Tanoli Ph.D",
+  "Dr. Safdar Ali, Ph.D, Postdoc",
+  "Dr. Abid Ali, Ph.D, Postdoc",
+  "Dr. Samrana Ph.D",
+  "Dr. Kifayat Ullah, Ph.D",
+  "Dr. Saad Ullah",
+];
+
+const CATEGORIES = [
+  "Clinical Diagnostics",
+  "Genomics & Sequencing",
+  "Bioinformatics",
+  "Molecular Biology",
+  "Crop Genetics",
+  "Genomics",
+];
+
+const RESEARCH_TYPES = [
+  "Research Project",
+  "Publication",
+  "Clinical Trial",
+];
+
+const STATUS_OPTIONS = [
+  "Ongoing",
+  "Completed",
+  "Published",
+  "In Review",
+];
+
+const DATE_OPTIONS = [
+  "Oct 2026",
+  "Nov 2026",
+  "Dec 2026",
+  "Jan 2027",
+  "2026",
+  "2025",
+  "2024",
+];
 
 const DEFAULT_FORM_STATE = {
   title: "",
@@ -111,6 +158,20 @@ export default function ResearchPage() {
       image: item.image || "",
     });
     setModalOpen(true);
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File is too large. Max 5MB allowed.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      setFormData((prev) => ({ ...prev, image: uploadEvent.target.result }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSave = (e) => {
@@ -420,222 +481,296 @@ export default function ResearchPage() {
         </div>
       </div>
 
-      {/* Add / Edit Modal with Complete Real Fields */}
+      {/* Add / Edit Modal - Exact Match to User Design Reference */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-          <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="font-outfit text-lg font-bold text-slate-800">
-                {editingItem ? "Edit Research" : "Add Research Entry"}
-              </h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/50 backdrop-blur-xs overflow-y-auto">
+          <div className="relative w-full max-w-3xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-150 my-8">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-3.5">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#00bcd4] text-white shadow-xs">
+                  <FlaskConical className="h-6 w-6 stroke-[2]" />
+                </div>
+                <div>
+                  <h3 className="font-outfit text-xl font-bold text-slate-900">
+                    {editingItem ? "Edit Research Entry" : "Add Research Entry"}
+                  </h3>
+                  <p className="font-inter text-xs sm:text-sm text-slate-400 mt-0.5">
+                    Enter the details of your research project
+                  </p>
+                </div>
+              </div>
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="mt-4 space-y-3.5">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Research Title
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  placeholder="e.g. Genetic Variants"
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Subtitle / Brief Description
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.subtitle}
-                  onChange={(e) =>
-                    setFormData({ ...formData, subtitle: e.target.value })
-                  }
-                  placeholder="Brief study description..."
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <form onSubmit={handleSave} className="mt-6 space-y-4 sm:space-y-5">
+              {/* Row 1: Research Title + Subtitle / Brief Description */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Lead Investigator
+                  <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
+                    Research Title <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
                     required
-                    value={formData.leadInvestigator}
-                    onChange={(e) =>
-                      setFormData({ ...formData, leadInvestigator: e.target.value })
-                    }
-                    placeholder="e.g. Dr. Amjad"
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    placeholder="e.g. Genetic Variants"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-hidden transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
+                    Subtitle / Brief Description
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.subtitle}
+                    onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+                    placeholder="Short description..."
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-hidden transition-colors"
+                  />
+                </div>
+              </div>
+
+              {/* Row 2: Lead Investigator + Category */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                <div>
+                  <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
+                    Lead Investigator
+                  </label>
+                  <div className="relative">
+                    <User className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <select
+                      value={formData.leadInvestigator}
+                      onChange={(e) => setFormData({ ...formData, leadInvestigator: e.target.value })}
+                      className="w-full appearance-none rounded-xl border border-slate-200 bg-white pl-10 pr-9 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-800 focus:border-[#009688] focus:outline-hidden cursor-pointer transition-colors"
+                    >
+                      <option value="">Select Investigator</option>
+                      {LEAD_INVESTIGATORS.map((inv) => (
+                        <option key={inv} value={inv}>{inv}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
                     Category
                   </label>
-                  <input
-                    type="text"
-                    value={formData.category}
-                    onChange={(e) =>
-                      setFormData({ ...formData, category: e.target.value })
-                    }
-                    placeholder="e.g. Genomics, Oncology"
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
-                  />
+                  <div className="relative">
+                    <LayoutGrid className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#009688]" />
+                    <select
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      className="w-full appearance-none rounded-xl border border-slate-200 bg-white pl-10 pr-9 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-800 focus:border-[#009688] focus:outline-hidden cursor-pointer transition-colors"
+                    >
+                      <option value="">Select Category</option>
+                      {CATEGORIES.map((cat) => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Row 3: Type (left) + Status & Date (right) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
                     Type
                   </label>
-                  <select
-                    value={formData.type}
-                    onChange={(e) =>
-                      setFormData({ ...formData, type: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden cursor-pointer"
-                  >
-                    <option value="Research Project">Research Project</option>
-                    <option value="Publication">Publication</option>
-                  </select>
+                  <div className="relative">
+                    <Layers className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#009688]" />
+                    <select
+                      value={formData.type}
+                      onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                      className="w-full appearance-none rounded-xl border border-slate-200 bg-white pl-10 pr-9 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-800 focus:border-[#009688] focus:outline-hidden cursor-pointer transition-colors"
+                    >
+                      <option value="">Select Type</option>
+                      {RESEARCH_TYPES.map((t) => (
+                        <option key={t} value={t}>{t}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Status
-                  </label>
-                  <select
-                    value={formData.status}
-                    onChange={(e) =>
-                      setFormData({ ...formData, status: e.target.value })
-                    }
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden cursor-pointer"
-                  >
-                    <option value="Ongoing">Ongoing</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Published">Published</option>
-                  </select>
-                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
+                      Status
+                    </label>
+                    <div className="relative">
+                      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-emerald-500" />
+                      <select
+                        value={formData.status}
+                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                        className="w-full appearance-none rounded-xl border border-slate-200 bg-white pl-7 pr-7 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-800 focus:border-[#009688] focus:outline-hidden cursor-pointer transition-colors"
+                      >
+                        {STATUS_OPTIONS.map((st) => (
+                          <option key={st} value={st}>{st}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    </div>
+                  </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Date
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.date}
-                    onChange={(e) =>
-                      setFormData({ ...formData, date: e.target.value })
-                    }
-                    placeholder="e.g. Oct 2026"
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
-                  />
+                  <div>
+                    <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
+                      Date
+                    </label>
+                    <div className="relative">
+                      <Calendar className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                      <select
+                        value={formData.date}
+                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                        className="w-full appearance-none rounded-xl border border-slate-200 bg-white pl-8 pr-7 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-800 focus:border-[#009688] focus:outline-hidden cursor-pointer transition-colors"
+                      >
+                        {DATE_OPTIONS.map((d) => (
+                          <option key={d} value={d}>{d}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Row 4: Journal / Publication Venue + DOI Identifier */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
                     Journal / Publication Venue
                   </label>
-                  <input
-                    type="text"
-                    value={formData.journal}
-                    onChange={(e) =>
-                      setFormData({ ...formData, journal: e.target.value })
-                    }
-                    placeholder="e.g. Medical Journal"
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
-                  />
+                  <div className="relative">
+                    <BookOpen className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#009688]" />
+                    <input
+                      type="text"
+                      value={formData.journal}
+                      onChange={(e) => setFormData({ ...formData, journal: e.target.value })}
+                      placeholder="e.g. Medical Journal"
+                      className="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3.5 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-hidden transition-colors"
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
                     DOI Identifier
                   </label>
+                  <div className="relative">
+                    <Link2 className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <input
+                      type="text"
+                      value={formData.doi}
+                      onChange={(e) => setFormData({ ...formData, doi: e.target.value })}
+                      placeholder="e.g. 10.1038/sample-doi"
+                      className="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3.5 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-hidden transition-colors"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 5: Keywords (comma-separated) */}
+              <div>
+                <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
+                  Keywords (comma-separated)
+                </label>
+                <div className="relative">
+                  <Tag className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#009688]" />
                   <input
                     type="text"
-                    value={formData.doi}
-                    onChange={(e) =>
-                      setFormData({ ...formData, doi: e.target.value })
-                    }
-                    placeholder="e.g. 10.1038/sample-doi"
-                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
+                    value={formData.keywords}
+                    onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
+                    placeholder="e.g. WES, Genetics"
+                    className="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3.5 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-hidden transition-colors"
                   />
                 </div>
               </div>
 
+              {/* Row 6: Full Abstract / Summary */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Keywords (comma-separated)
-                </label>
-                <input
-                  type="text"
-                  value={formData.keywords}
-                  onChange={(e) =>
-                    setFormData({ ...formData, keywords: e.target.value })
-                  }
-                  placeholder="e.g. WES, Genetics"
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
                   Full Abstract / Summary
                 </label>
-                <textarea
-                  rows={3}
-                  value={formData.summary}
-                  onChange={(e) =>
-                    setFormData({ ...formData, summary: e.target.value })
-                  }
-                  placeholder="Enter study abstract..."
-                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden"
-                />
+                <div className="relative">
+                  <AlignLeft className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+                  <textarea
+                    rows={3}
+                    value={formData.summary}
+                    onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
+                    placeholder="Enter detailed abstract..."
+                    className="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-3.5 py-2.5 sm:py-3 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-hidden transition-colors leading-relaxed"
+                  />
+                </div>
               </div>
 
-              <ImageUploader
-                label="Research Picture / Cover Image"
-                value={formData.image}
-                onChange={(val) => setFormData({ ...formData, image: val })}
-                aspectRatio="aspect-16/9"
-                helperText="Upload a featured cover image, graphical abstract, or research figure"
-              />
+              {/* Row 7: Upload Research Picture (Optional) */}
+              <div>
+                <label className="block text-xs sm:text-[13px] font-bold text-slate-800 mb-1.5">
+                  Upload Research Picture (Optional)
+                </label>
+                {formData.image ? (
+                  <div className="relative rounded-2xl border border-slate-200 bg-slate-50 p-3 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <img
+                        src={formData.image}
+                        alt="Preview"
+                        className="h-14 w-20 object-cover rounded-xl border border-slate-200"
+                      />
+                      <span className="text-xs text-slate-600 truncate font-medium">Research image uploaded</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, image: "" })}
+                      className="rounded-lg bg-rose-50 text-rose-600 px-3 py-1.5 text-xs font-semibold hover:bg-rose-100 cursor-pointer transition-colors"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 hover:border-teal-400 bg-teal-50/15 py-6 px-4 text-center cursor-pointer transition-colors group">
+                    <UploadCloud className="h-8 w-8 text-[#009688] mb-1.5 transition-transform group-hover:scale-110" />
+                    <p className="text-xs sm:text-sm text-slate-700">
+                      <span className="font-bold text-slate-800">Click to upload</span> or drag and drop
+                    </p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Supports JPG, PNG (Max 5MB)</p>
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
+                  </label>
+                )}
+              </div>
 
-              <div className="mt-5 flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+              {/* Footer Actions */}
+              <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-5 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors"
                 >
-                  Cancel
+                  <X className="h-4 w-4" />
+                  <span>Cancel</span>
                 </button>
                 <button
                   type="submit"
-                  className="rounded-lg bg-[#009688] px-5 py-2 text-xs font-semibold text-white hover:bg-[#00897b] cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#00897b] hover:bg-[#00796b] px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-xs cursor-pointer transition-colors"
                 >
-                  {editingItem ? "Save Changes" : "Add Research"}
+                  <Save className="h-4 w-4" />
+                  <span>Save Entry</span>
                 </button>
               </div>
             </form>
@@ -646,7 +781,7 @@ export default function ResearchPage() {
       {/* View Drawer with Complete Study Details */}
       {viewItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-end bg-slate-900/40 backdrop-blur-xs">
-          <div className="h-full w-full max-w-md bg-white p-6 shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-200">
+          <div className="h-full w-full max-w-lg bg-white p-6 shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-200">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <h3 className="font-outfit text-lg font-bold text-slate-800">
                 Research Details

@@ -52,9 +52,18 @@ export default function Button({
     <>
       <span
         aria-hidden="true"
-        className={`pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[320%] -translate-x-1/2 -translate-y-1/2 scale-0 rounded-full transition-transform duration-700 ease-out group-hover:scale-100 group-focus-visible:scale-100 group-active:scale-100 ${rippleBg}`}
+        className={`pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[220%] -translate-x-1/2 -translate-y-1/2 scale-0 rounded-full group-hover:scale-100 group-focus-visible:scale-100 group-active:scale-100 ${rippleBg}`}
+        style={{
+          transition: "transform 1.2s cubic-bezier(0.25, 0.1, 0.25, 1)",
+          willChange: "transform",
+        }}
       />
-      <span className="relative z-10 inline-flex items-center gap-2 transition-colors duration-500 ease-out group-hover:text-white! group-focus-visible:text-white!">
+      <span
+        className="relative z-10 inline-flex items-center gap-2 group-hover:text-white! group-focus-visible:text-white!"
+        style={{
+          transition: "color 0.8s cubic-bezier(0.25, 0.1, 0.25, 1)",
+        }}
+      >
         {children}
       </span>
     </>

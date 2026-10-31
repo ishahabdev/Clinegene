@@ -31,7 +31,11 @@ coverage
 .env
 .env.local
 .env.*.local
+Frontend/.env
+Frontend/.env.local
+Frontend/.env.*.local
 !.env.example
+!Frontend/.env.example
 
 # Vercel
 .vercel
@@ -39,3 +43,4 @@ coverage
 # Original backup assets
 assets-original/
 
+Frontend/.env

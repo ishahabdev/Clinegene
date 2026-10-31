@@ -357,7 +357,7 @@ export default function TeamPage() {
       {/* ================= ADD / EDIT MODAL ================= */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-          <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+          <div className="relative w-full max-w-3xl rounded-2xl bg-white p-6 sm:p-7 shadow-2xl animate-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="font-outfit text-lg font-bold text-slate-800">
                 {editingMember ? "Edit Team Member" : "Add Team Member"}
