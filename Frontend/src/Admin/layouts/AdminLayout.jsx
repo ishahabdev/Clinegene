@@ -62,10 +62,10 @@ export default function AdminLayout({
         {/* Content Area - Scrollable with native mouse wheel */}
         <main
           data-lenis-prevent="true"
-          className="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6 lg:p-7 select-text"
+          className="flex-1 overflow-y-auto overscroll-contain px-6 sm:px-8 md:px-10 lg:px-12 xl:px-14 py-6 sm:py-8 select-text"
           style={{ WebkitOverflowScrolling: "touch" }}
         >
-          <div className="mx-auto max-w-[1400px]">
+          <div className="mx-auto w-full max-w-[1380px]">
             {children}
           </div>
         </main>
