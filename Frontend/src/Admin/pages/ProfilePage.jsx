@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { ADMIN_USER } from "../mocks/mockData.js";
 import { useToast } from "../context/ToastContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
+import { supabase } from "../../lib/supabase.js";
 
 const PROFILE_STORAGE_KEY = "clingene_admin_profile_data";
 
@@ -32,6 +34,7 @@ function loadInitialProfile() {
 
 export default function ProfilePage() {
   const { addToast } = useToast() || { addToast: () => {} };
+  const { user } = useAuth();
   const [profile, setProfile] = useState(loadInitialProfile);
 
   // Change Password state
@@ -40,6 +43,7 @@ export default function ProfilePage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [passwordSuccess, setPasswordSuccess] = useState("");
+  const [passwordLoading, setPasswordLoading] = useState(false);
 
   // Change Email state
   const [newEmail, setNewEmail] = useState("");
@@ -90,7 +94,7 @@ export default function ProfilePage() {
   };
 
   // Handle Update Password
-  const handlePasswordSubmit = (e) => {
+  const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     setPasswordError("");
     setPasswordSuccess("");
@@ -103,8 +107,8 @@ export default function ProfilePage() {
       setPasswordError("Please enter a new password.");
       return;
     }
-    if (newPassword.length < 6) {
-      setPasswordError("New password must be at least 6 characters.");
+    if (newPassword.length < 8) {
+      setPasswordError("New password must be at least 8 characters long.");
       return;
     }
     if (newPassword !== confirmPassword) {
@@ -112,21 +116,87 @@ export default function ProfilePage() {
       return;
     }
 
-    // Success
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setPasswordSuccess("Password updated successfully!");
-
-    if (addToast) {
-      addToast({
-        type: "success",
-        title: "Password Changed",
-        message: "Your account password has been updated securely.",
-      });
+    if (!supabase) {
+      setPasswordError("Database client is not configured.");
+      return;
     }
 
-    setTimeout(() => setPasswordSuccess(""), 4000);
+    const email = user?.email || profile.email;
+    if (!email) {
+      setPasswordError("No authenticated admin email found. Please sign in again.");
+      return;
+    }
+
+    setPasswordLoading(true);
+
+    try {
+      // 1. Verify that an active session exists
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        console.error("[ProfilePage] Session verification failed:", sessionError);
+        setPasswordError("Your session has expired. Please sign in again.");
+        return;
+      }
+
+      // 2. Re-authenticate with entered current password to verify identity
+      const { data: signInData, error: signInError } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password: currentPassword,
+        });
+
+      if (signInError) {
+        console.error("[ProfilePage] Current password verification failed:", signInError);
+        setPasswordError("Current password is incorrect.");
+        return;
+      }
+
+      // 3. Update password in Supabase Auth
+      const { data: updateData, error: updateError } =
+        await supabase.auth.updateUser({
+          password: newPassword,
+        });
+
+      console.log("[ProfilePage] updateUser response:", {
+        data: updateData,
+        error: updateError,
+      });
+
+      if (updateError) {
+        console.error("[ProfilePage] updateUser error:", updateError);
+        setPasswordError(
+          updateError.message || "Failed to update password. Please try again."
+        );
+        return;
+      }
+
+      // 4. Success: only set success state and clear inputs when update truly succeeded
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setPasswordSuccess("Password updated successfully!");
+
+      if (addToast) {
+        addToast({
+          type: "success",
+          title: "Password Changed",
+          message: "Your account password has been updated securely.",
+        });
+      }
+
+      setTimeout(() => setPasswordSuccess(""), 4000);
+    } catch (err) {
+      console.error("[ProfilePage] Unexpected error during password update:", err);
+      setPasswordError(
+        err.message || "An unexpected error occurred while updating password."
+      );
+    } finally {
+      setPasswordLoading(false);
+    }
   };
 
   // Handle Update Email
@@ -307,13 +377,14 @@ export default function ProfilePage() {
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                 <input
                   type="password"
+                  disabled={passwordLoading}
                   value={currentPassword}
                   onChange={(e) => {
                     setCurrentPassword(e.target.value);
                     setPasswordError("");
                   }}
                   placeholder="Current Password"
-                  className="w-full rounded-xl border border-slate-200/90 bg-white pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all"
+                  className="w-full rounded-xl border border-slate-200/90 bg-white pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all disabled:opacity-60"
                 />
               </div>
 
@@ -322,13 +393,14 @@ export default function ProfilePage() {
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                 <input
                   type="password"
+                  disabled={passwordLoading}
                   value={newPassword}
                   onChange={(e) => {
                     setNewPassword(e.target.value);
                     setPasswordError("");
                   }}
                   placeholder="New Password"
-                  className="w-full rounded-xl border border-slate-200/90 bg-white pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all"
+                  className="w-full rounded-xl border border-slate-200/90 bg-white pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all disabled:opacity-60"
                 />
               </div>
 
@@ -337,13 +409,14 @@ export default function ProfilePage() {
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                 <input
                   type="password"
+                  disabled={passwordLoading}
                   value={confirmPassword}
                   onChange={(e) => {
                     setConfirmPassword(e.target.value);
                     setPasswordError("");
                   }}
                   placeholder="Confirm New Password"
-                  className="w-full rounded-xl border border-slate-200/90 bg-white pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all"
+                  className="w-full rounded-xl border border-slate-200/90 bg-white pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all disabled:opacity-60"
                 />
               </div>
 
@@ -364,10 +437,11 @@ export default function ProfilePage() {
               {/* Update Password Button */}
               <button
                 type="submit"
-                className="w-full mt-4 rounded-xl bg-[#009688] hover:bg-[#008577] text-white py-3 px-4 font-semibold text-sm flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer"
+                disabled={passwordLoading}
+                className="w-full mt-4 rounded-xl bg-[#009688] hover:bg-[#008577] text-white py-3 px-4 font-semibold text-sm flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <Lock className="h-4 w-4" />
-                <span>Update Password</span>
+                <span>{passwordLoading ? "Updating Password..." : "Update Password"}</span>
               </button>
             </form>
           </div>

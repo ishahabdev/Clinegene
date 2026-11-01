@@ -5,13 +5,14 @@ import { LoginSchema } from "../types/index.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { ADMIN_BASE, adminPath } from "../adminConfig.js";
 import { supabase } from "../../lib/supabase.js";
-import { Lock, Mail, ShieldCheck, ArrowRight, Stethoscope } from "lucide-react";
+import { Lock, Mail, ShieldCheck, ArrowRight, Stethoscope, Eye, EyeOff } from "lucide-react";
 import Input from "../components/Input.jsx";
 
 export default function LoginPage({ onNavigate }) {
   const { login } = useAuth();
   const [authError, setAuthError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Forgot Password Flow State
   const [showForgot, setShowForgot] = useState(false);
@@ -176,11 +177,25 @@ export default function LoginPage({ onNavigate }) {
 
               <Input
                 label="Password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 icon={Lock}
                 required
                 placeholder="••••••••••••"
                 error={errors.password?.message}
+                rightElement={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="p-1 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors cursor-pointer"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                }
                 {...register("password")}
               />
 

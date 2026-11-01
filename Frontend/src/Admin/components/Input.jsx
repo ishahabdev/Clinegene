@@ -6,6 +6,7 @@ const Input = forwardRef(function Input(
     error,
     hint,
     icon: Icon,
+    rightElement,
     id,
     type = "text",
     className = "",
@@ -43,12 +44,19 @@ const Input = forwardRef(function Input(
           className={`w-full rounded-xl border bg-white px-3.5 py-2 font-inter text-sm text-slate-900 placeholder:text-slate-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#b91c1c] dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 ${
             Icon ? "pl-10" : ""
           } ${
+            rightElement ? "pr-10" : ""
+          } ${
             error
               ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/20"
               : "border-slate-300 hover:border-slate-400 dark:border-slate-700 dark:hover:border-slate-600 focus:border-[#b91c1c]"
           } ${className}`}
           {...props}
         />
+        {rightElement && (
+          <div className="absolute right-3 flex items-center">
+            {rightElement}
+          </div>
+        )}
       </div>
 
       {error ? (

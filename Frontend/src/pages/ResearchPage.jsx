@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
-import UnderConstructionPage from "../components/UnderConstructionPage.jsx";
 import { fetchPublishedResearch } from "../lib/researchClient.js";
 import { useTheme } from "../context/ThemeContext.jsx";
 
@@ -105,12 +104,6 @@ export default function ResearchPage() {
     }
   };
 
-  // If loading finished and there are literally NO research entries in the database,
-  // show the UnderConstructionPage fallback as requested.
-  if (!loading && researchList.length === 0) {
-    return <UnderConstructionPage pageTitle="Research" />;
-  }
-
   const getStatusBadge = (status) => {
     const s = (status || "").toLowerCase();
     if (s.includes("ongoing")) {
@@ -169,79 +162,81 @@ export default function ResearchPage() {
       </section>
 
       {/* ── Search & Filter Controls ── */}
-      <section className="site-container max-w-6xl mx-auto px-4 sm:px-6 -mt-7 relative z-10">
-        <div className="rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-lg">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            {/* Search Input */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search research by title, investigator, keywords, DOI..."
-                className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-800 placeholder-slate-400 transition-colors focus:border-(--accent) focus:bg-white focus:outline-none"
-              />
-              {searchTerm && (
-                <button
-                  type="button"
-                  onClick={() => setSearchTerm("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
+      {researchList.length > 0 && (
+        <section className="site-container max-w-6xl mx-auto px-4 sm:px-6 -mt-7 relative z-10">
+          <div className="rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-lg">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              {/* Search Input */}
+              <div className="relative flex-1">
+                <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search research by title, investigator, keywords, DOI..."
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-800 placeholder-slate-400 transition-colors focus:border-(--accent) focus:bg-white focus:outline-none"
+                />
+                {searchTerm && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchTerm("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+
+              {/* Type Filter Pills */}
+              <div className="flex flex-wrap items-center gap-1.5">
+                {TYPES.map((type) => {
+                  const isActive = activeType === type;
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => setActiveType(type)}
+                      className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all ${
+                        isActive
+                          ? "bg-[#0c2b48] text-white shadow-sm"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            {/* Type Filter Pills */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              {TYPES.map((type) => {
-                const isActive = activeType === type;
-                return (
-                  <button
-                    key={type}
-                    type="button"
-                    onClick={() => setActiveType(type)}
-                    className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all ${
-                      isActive
-                        ? "bg-[#0c2b48] text-white shadow-sm"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
-                  >
-                    {type}
-                  </button>
-                );
-              })}
-            </div>
+            {/* Category Filter Pills (if multiple exist) */}
+            {categories.length > 2 && (
+              <div className="mt-3.5 flex flex-wrap items-center gap-1.5 border-t border-slate-100 pt-3">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">
+                  Category:
+                </span>
+                {categories.map((cat) => {
+                  const isActive = activeCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setActiveCategory(cat)}
+                      className={`rounded-lg px-2.5 py-1 text-[11px] font-medium transition-all ${
+                        isActive
+                          ? "bg-(--accent-soft) text-(--accent-dark) font-bold"
+                          : "text-slate-500 hover:text-slate-900"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
-
-          {/* Category Filter Pills (if multiple exist) */}
-          {categories.length > 2 && (
-            <div className="mt-3.5 flex flex-wrap items-center gap-1.5 border-t border-slate-100 pt-3">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">
-                Category:
-              </span>
-              {categories.map((cat) => {
-                const isActive = activeCategory === cat;
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setActiveCategory(cat)}
-                    className={`rounded-lg px-2.5 py-1 text-[11px] font-medium transition-all ${
-                      isActive
-                        ? "bg-(--accent-soft) text-(--accent-dark) font-bold"
-                        : "text-slate-500 hover:text-slate-900"
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── Research Cards Listing ── */}
       <section className="site-container max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
@@ -252,7 +247,7 @@ export default function ResearchPage() {
                 key={n}
                 className="rounded-3xl bg-white border border-slate-200/80 p-4 sm:p-5 animate-pulse space-y-3"
               >
-                <div className="aspect-16/10 w-full rounded-2xl bg-slate-200" />
+                <div className="aspect-4/3 w-full rounded-2xl bg-slate-200" />
                 <div className="h-5 w-3/4 bg-slate-200 rounded-md" />
                 <div className="h-3.5 w-1/2 bg-slate-200 rounded" />
                 <div className="pt-3 border-t border-slate-100 flex justify-between">
@@ -262,13 +257,25 @@ export default function ResearchPage() {
             ))}
           </div>
         ) : filteredList.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
-            <FlaskConical className="mx-auto h-12 w-12 text-slate-300 mb-3" />
-            <h3 className="text-base font-bold text-slate-800">No matching research found</h3>
-            <p className="mt-1 text-xs text-slate-500">
-              Try adjusting your search terms or filter selection.
-            </p>
-            {(searchTerm || activeType !== "All" || activeCategory !== "All") && (
+          researchList.length === 0 ? (
+            /* Clean Empty State when no research exists in Supabase (matching GalleryPage style) */
+            <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs max-w-md mx-auto my-6">
+              <FlaskConical className="h-12 w-12 text-slate-300 mx-auto mb-3" />
+              <h3 className="font-outfit text-base font-bold text-slate-800">
+                No Research Data Available
+              </h3>
+              <p className="font-inter text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Research projects, clinical trials, and genomic publications will appear here once published from the admin portal.
+              </p>
+            </div>
+          ) : (
+            /* Filter empty state when search keywords produce 0 matches */
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center max-w-md mx-auto my-6">
+              <FlaskConical className="mx-auto h-12 w-12 text-slate-300 mb-3" />
+              <h3 className="text-base font-bold text-slate-800">No matching research found</h3>
+              <p className="mt-1 text-xs text-slate-500">
+                Try adjusting your search terms or filter selection.
+              </p>
               <button
                 type="button"
                 onClick={() => {
@@ -276,12 +283,12 @@ export default function ResearchPage() {
                   setActiveType("All");
                   setActiveCategory("All");
                 }}
-                className="mt-4 text-xs font-semibold text-(--accent-dark) underline"
+                className="mt-4 text-xs font-semibold text-(--accent-dark) underline cursor-pointer"
               >
                 Clear all filters
               </button>
-            )}
-          </div>
+            </div>
+          )
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
             {filteredList.map((item, idx) => {
@@ -299,13 +306,13 @@ export default function ResearchPage() {
                   className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/85 bg-white p-4 sm:p-5 shadow-xs hover:shadow-xl hover:border-slate-300 transition-all duration-300 cursor-pointer"
                 >
                   <div>
-                    {/* Top Photo with modern aspect-16/10 ratio & overlay badges */}
-                    <div className="relative aspect-16/10 w-full overflow-hidden rounded-2xl bg-slate-100 shadow-2xs">
+                    {/* Top Photo with aspect-4/3 ratio & top-aligned framing so faces are fully visible */}
+                    <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-slate-100 shadow-2xs">
                       <img
                         src={item.image || "/images/clingene-logo.webp"}
                         alt={item.title}
-                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                        loading="lazy"
+                        className="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                        decoding="async"
                       />
                       {/* Floating Badges overlay on image */}
                       <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 z-10">
@@ -453,11 +460,11 @@ export default function ResearchPage() {
 
             {/* Image in modal if exists */}
             {selectedItem.image && (
-              <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
+              <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
                 <img
                   src={selectedItem.image}
                   alt={selectedItem.title}
-                  className="w-full h-56 object-cover"
+                  className="w-full max-h-80 object-cover object-top"
                 />
               </div>
             )}
