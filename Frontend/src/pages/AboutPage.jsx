@@ -1,4 +1,4 @@
-import { ArrowRight, Users, Award, TrendingUp, Dna, Lightbulb, Check, ShieldCheck, FileText, Compass } from "lucide-react";
+import { ArrowRight, Users, Dna, Lightbulb, Check, ShieldCheck, FileText, Compass } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import promiseImage from "../assets/about us/promise.png";

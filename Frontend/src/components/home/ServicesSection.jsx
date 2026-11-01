@@ -2,9 +2,28 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Button from "../Button";
 import SectionHeading from "../SectionHeading";
-import services from "../../data/services";
+import { fetchPublishedServices } from "../../lib/servicesClient.js";
+
 export default function ServicesSection() {
+  const [services, setServices] = useState([]);
   const [serviceIndex, setServiceIndex] = useState(0);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchPublishedServices()
+      .then((data) => {
+        if (isMounted && data) setServices(data);
+      })
+      .catch((err) => {
+        if (import.meta.env.DEV) {
+          console.error("[ServicesSection] Error loading services:", err);
+        }
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const [servicesViewportWidth, setServicesViewportWidth] = useState(() => {
     if (typeof window === "undefined") return 0;
     return Math.max(
@@ -17,7 +36,9 @@ export default function ServicesSection() {
   const cardsPerView = servicesViewportWidth >= 1024 ? 4 : servicesViewportWidth >= 640 ? 2 : 1;
   const cardGap = 18;
   const cardWidth = servicesViewportWidth ? (servicesViewportWidth - cardGap * (cardsPerView - 1)) / cardsPerView : 0;
-  const carouselServices = [...services, ...services.slice(0, cardsPerView - 1)];
+  const carouselServices = services.length > 0
+    ? [...services, ...services.slice(0, Math.max(0, cardsPerView - 1))]
+    : [];
   const touchStartX = useRef(null);
   useEffect(() => {
     const viewport = servicesViewportRef.current;
@@ -28,7 +49,10 @@ export default function ServicesSection() {
     resizeObserver.observe(viewport);
     return () => resizeObserver.disconnect();
   }, []);
-  const goToService = (index) => { setServiceIndex((index + services.length) % services.length); };
+  const goToService = (index) => {
+    if (services.length === 0) return;
+    setServiceIndex((index + services.length) % services.length);
+  };
   useEffect(() => {
     const viewport = servicesViewportRef.current;
     if (!viewport || !cardWidth) return;
@@ -158,19 +182,18 @@ export default function ServicesSection() {
                       <service.Icon aria-hidden="true" size={22} strokeWidth={1.8} />
                     </span>
                     <h3 className="mt-4 text-lg font-bold leading-[1.35] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-(--accent-dark) group-focus-within:text-(--accent-dark) motion-reduce:transition-none">{service.name}</h3>
-                    {service.description && (
-                      <p className="mt-3 text-base leading-[1.6] text-[#58748d]">{service.description}</p>
-                    )}
-                    {service.subServices && service.subServices.length > 0 && (
-                      <ul className="mt-2.5 space-y-1 border-t border-[#d4e5f2]/70 pt-2 text-[11px] sm:text-xs leading-tight text-[#58748d]">
+                    {service.subServices && service.subServices.length > 0 ? (
+                      <ul className="mt-3 space-y-1.5 text-xs sm:text-[13px] leading-normal text-[#58748d]">
                         {service.subServices.map((sub, sIdx) => (
-                          <li key={sub.id || sIdx} className="flex items-center gap-1.5 leading-tight">
+                          <li key={sub.id || sIdx} className="flex items-center gap-1.5 leading-normal">
                             <span className="font-semibold text-(--accent)">{String.fromCharCode(97 + sIdx)})</span>
                             <span>{sub.label}</span>
                           </li>
                         ))}
                       </ul>
-                    )}
+                    ) : service.description ? (
+                      <p className="mt-3 text-base leading-[1.6] text-[#58748d]">{service.description}</p>
+                    ) : null}
                     <span className="service-card-explore mt-auto inline-flex items-center gap-2 whitespace-nowrap pt-5 text-base font-bold">
                       Explore
                       <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-focus-within:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />

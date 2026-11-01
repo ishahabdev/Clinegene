@@ -24,6 +24,7 @@ import dnaStrand from "../assets/dna_strand.png";
 import PageNotFoundPage from "./PageNotFoundPage.jsx";
 import { fetchServiceBySlug, fetchPublishedServices } from "../lib/servicesClient.js";
 import { useTheme } from "../context/ThemeContext.jsx";
+import { buildServiceSeo } from "../data/seoData.js";
 
 export const revalidate = 60;
 export const dynamic = "force-dynamic";
@@ -134,6 +135,13 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
   const [loading, setLoading] = useState(true);
   const [isNotFound, setIsNotFound] = useState(false);
 
+  // Client redirect from legacy spelling /services/genetic-counselling to canonical DB slug
+  useEffect(() => {
+    if (activeSlug === "genetic-counselling" && typeof window !== "undefined") {
+      window.history.replaceState(null, "", "/services/genetic-counseling");
+    }
+  }, [activeSlug]);
+
   useEffect(() => {
     if (!activeSlug) {
       setIsNotFound(true);
@@ -207,11 +215,13 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
     { id: "faq", label: "FAQ" },
   ];
 
-  // Set document title and meta description
+  // Set document title and meta description using buildServiceSeo
   useEffect(() => {
     if (!service) return;
     if (typeof document !== "undefined") {
-      const title = `${service.name} | ClinGene`;
+      const seo = buildServiceSeo(service);
+      if (!seo) return;
+      const title = seo.title;
       document.title = title;
       const ogTitle = document.querySelector('meta[property="og:title"]');
       if (ogTitle) ogTitle.setAttribute("content", title);
@@ -226,11 +236,11 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
         metaDesc.setAttribute("name", "description");
         document.head.appendChild(metaDesc);
       }
-      metaDesc.setAttribute("content", service.tagline || service.description);
+      metaDesc.setAttribute("content", seo.description);
 
       let canonicalLink = document.querySelector('link[rel="canonical"]');
       if (canonicalLink) {
-        canonicalLink.setAttribute("href", `https://www.clingene.co/services/${service.slug}`);
+        canonicalLink.setAttribute("href", seo.canonical);
       }
     }
   }, [service]);
@@ -594,7 +604,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                     return (
                       <a
                         key={sub.id}
-                        href={`/contact?service=genetic-counselling-${sub.id}`}
+                        href={`/contact?service=genetic-counseling-${sub.id}`}
                         className={`group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-[0_2px_10px_rgba(12,43,72,0.04)] hover:shadow-lg ${themeCardBorderHover} hover:-translate-y-1 transition-all duration-300`}
                       >
                         <div className="flex h-14 w-14 items-center justify-center transition-transform duration-300 group-hover:scale-110">

@@ -11,6 +11,7 @@ import {
   Activity,
   FileText,
   FlaskConical,
+  Eye,
   Edit2,
   Trash2,
   ChevronLeft,
@@ -39,6 +40,7 @@ export default function ServicesList({
   services = [],
   onEdit,
   onDelete,
+  onView,
   loading = false,
   currentPage = 1,
   onPageChange,
@@ -81,7 +83,7 @@ export default function ServicesList({
               <th className="py-4 px-4 min-w-[150px]">Category</th>
               <th className="py-4 px-4 min-w-[240px]">Description</th>
               <th className="py-4 px-4 min-w-[110px]">Status</th>
-              <th className="py-4 pl-4 pr-6 text-right w-28">Actions</th>
+              <th className="py-4 px-4 text-center min-w-[130px] whitespace-nowrap">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -143,13 +145,23 @@ export default function ServicesList({
                     </span>
                   </td>
 
-                  {/* Actions (Light Blue Edit & Light Red Delete) */}
-                  <td className="py-3.5 pl-4 pr-6 text-right">
-                    <div className="flex items-center justify-end gap-2">
+                  {/* Actions (View, Edit, Delete) */}
+                  <td className="py-3.5 px-4 text-center whitespace-nowrap min-w-[130px]">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => onView && onView(service)}
+                        className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+                        title="View service"
+                        aria-label={`View ${service.name}`}
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                      </button>
+
                       <button
                         type="button"
                         onClick={() => onEdit && onEdit(service)}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
+                        className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
                         title="Edit service"
                         aria-label={`Edit ${service.name}`}
                       >
@@ -159,7 +171,7 @@ export default function ServicesList({
                       <button
                         type="button"
                         onClick={() => onDelete && onDelete(service.id)}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
+                        className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
                         title="Delete service"
                         aria-label={`Delete ${service.name}`}
                       >

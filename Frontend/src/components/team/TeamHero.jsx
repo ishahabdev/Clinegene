@@ -3,7 +3,7 @@ import teamPhoto from "../../assets/team.png";
 import { companyStats } from "../../data/teamConfig.js";
 import { useTheme } from "../../context/ThemeContext.jsx";
 
-export default function TeamHero() {
+export default function TeamHero({ memberCount }) {
   const { theme } = useTheme();
   const isRed = theme === "red";
   const isGreen = theme === "green";
@@ -130,7 +130,9 @@ export default function TeamHero() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-[28px] font-bold leading-none text-white sm:text-[32px]">{companyStats.teamMembers}</div>
+                    <div className="text-[28px] font-bold leading-none text-white sm:text-[32px]">
+                      {memberCount ? `${memberCount}+` : companyStats.teamMembers}
+                    </div>
                     <div className="mt-1 text-[14px] text-slate-400">Team Members</div>
                   </div>
                 </div>

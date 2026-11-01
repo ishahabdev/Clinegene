@@ -318,7 +318,7 @@ export default function CareerPage() {
                   <th className="py-3.5 px-4">Type</th>
                   <th className="py-3.5 px-4">Status</th>
                   <th className="py-3.5 px-4">Applicants</th>
-                  <th className="py-3.5 px-4 text-center">Actions</th>
+                  <th className="py-3.5 px-4 text-center min-w-[130px] whitespace-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -361,28 +361,28 @@ export default function CareerPage() {
                         <span>{job.applicants ?? job.applicants_count ?? 0}</span>
                       </div>
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-4 px-4 text-center whitespace-nowrap min-w-[130px]">
                       <div className="flex items-center justify-center gap-1.5">
                         <button
                           type="button"
-                          onClick={() => handleOpenEdit(job)}
-                          className="flex h-7 w-7 items-center justify-center rounded-md bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
-                          title="Edit"
-                        >
-                          <Edit2 className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          type="button"
                           onClick={() => setViewJob(job)}
-                          className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+                          className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
                           title="View"
                         >
                           <Eye className="h-3.5 w-3.5" />
                         </button>
                         <button
                           type="button"
+                          onClick={() => handleOpenEdit(job)}
+                          className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
+                          title="Edit"
+                        >
+                          <Edit2 className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
                           onClick={() => setDeleteId(job.id)}
-                          className="flex h-7 w-7 items-center justify-center rounded-md bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
+                          className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
                           title="Delete"
                         >
                           <Trash2 className="h-3.5 w-3.5" />

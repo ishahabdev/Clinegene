@@ -1,9 +1,23 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { seoRoutes, BASE_URL, serviceSlugs, legacyServiceSlugs } from "./src/data/seoData.js";
+import { seoRoutes, BASE_URL, buildServiceSeo } from "./src/data/seoData.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Load .env into process.env if available
+try {
+  const envPath = path.resolve(__dirname, ".env");
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, "utf-8");
+    for (const line of envContent.split("\n")) {
+      const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+      if (match && !process.env[match[1]]) {
+        process.env[match[1]] = (match[2] || "").trim();
+      }
+    }
+  }
+} catch (_) {}
 
 async function prerender() {
   console.log("🚀 Starting ClinGene Build-Time Prerendering (SSG)...");
@@ -22,18 +36,54 @@ async function prerender() {
 
   const { render } = await import(pathToFileURL(ssrBundlePath).href);
 
-  // Derive service routes directly from serviceSlugs and legacyServiceSlugs
-  const dynamicServiceRoutes = [
-    ...serviceSlugs.map((slug) => `/services/${slug}`),
-    ...legacyServiceSlugs.map((slug) => `/services/${slug}`),
-  ];
+  // Derive service routes and dynamic SEO metadata directly from Supabase
+  const { supabase } = await import("./src/lib/supabase.js");
+  if (!supabase) {
+    throw new Error(
+      "❌ Prerender Failed: Supabase client is not initialized. Ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are present in the environment or Frontend/.env."
+    );
+  }
 
-  const routeSet = new Set([...Object.keys(seoRoutes), ...dynamicServiceRoutes]);
-  const routes = Array.from(routeSet);
+  const { data: dbServices, error: dbError } = await supabase
+    .from("services")
+    .select("*")
+    .eq("status", "published")
+    .order("sort_order", { ascending: true });
+
+  if (dbError) {
+    throw new Error(
+      `❌ Prerender Failed: Error querying published services from Supabase: ${dbError.message || dbError}`
+    );
+  }
+
+  if (!Array.isArray(dbServices) || dbServices.length === 0) {
+    throw new Error(
+      "❌ Prerender Failed: No published services found in Supabase services table. Cannot generate empty service pages."
+    );
+  }
+
+  console.log(`📡 Loaded ${dbServices.length} published services from Supabase.`);
+
+  const serviceSeoMap = {};
+  for (const s of dbServices) {
+    if (!s.slug) continue;
+    const route = `/services/${s.slug}`;
+    serviceSeoMap[route] = buildServiceSeo(s);
+  }
+
+  const allSeoRoutes = {
+    ...seoRoutes,
+    ...serviceSeoMap,
+  };
+
+  const routes = [
+    ...Object.keys(seoRoutes),
+    ...Object.keys(serviceSeoMap),
+  ];
   console.log(`📄 Prerendering ${routes.length} public routes...`);
 
   for (const route of routes) {
-    const seo = seoRoutes[route] || seoRoutes["/"];
+    const seo = allSeoRoutes[route] || allSeoRoutes["/"];
     const { html: appHtml } = render(route);
 
     // 1. Inject rendered HTML inside #root
@@ -139,7 +189,7 @@ async function prerender() {
   const sitemapUrls = routes
     .filter((r) => r !== "404")
     .map((r) => {
-      const loc = r === "/" ? `${BASE_URL}/` : `${BASE_URL}${r}`;
+      const loc = allSeoRoutes[r]?.canonical || (r === "/" ? `${BASE_URL}/` : `${BASE_URL}${r}`);
       const priority = r === "/" ? "1.0" : r.startsWith("/services/") ? "0.8" : "0.7";
       const changefreq = r === "/" ? "daily" : "weekly";
       return `  <url>

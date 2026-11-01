@@ -31,6 +31,7 @@ import {
   deleteArticle,
   slugify,
   isStaticArticle,
+  uploadArticleImage,
 } from "../api/articles.js";
 
 const STORAGE_KEY = "clingene_admin_articles_data";
@@ -65,7 +66,7 @@ const DEFAULT_FORM_STATE = {
     day: "numeric",
     year: "numeric",
   }),
-  status: "Draft",
+  status: "Published",
   // Blog specific
   author: "Dr. Amjad Ali Tanoli Ph.D",
   tags: "",
@@ -97,6 +98,7 @@ export default function BlogPage() {
 
   // Delete State
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Load articles from Supabase
   useEffect(() => {
@@ -104,6 +106,18 @@ export default function BlogPage() {
     async function loadData() {
       try {
         setLoading(true);
+        // Clean any old static demo items from localStorage
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+              const cleaned = parsed.filter((item) => !isStaticArticle(item));
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned));
+            }
+          }
+        } catch (_) {}
+
         const data = await getArticles();
         if (isMounted) setArticles(data);
       } catch (err) {
@@ -122,7 +136,23 @@ export default function BlogPage() {
   useEffect(() => {
     try {
       const cleanArticles = articles.filter((item) => !isStaticArticle(item));
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanArticles));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanArticles));
+      } catch {
+        // Fallback to storing lightweight metadata without multi-megabyte base64
+        const light = cleanArticles.map((a) => {
+          if (
+            typeof a.image === "string" &&
+            a.image.startsWith("data:") &&
+            a.image.length > 50000
+          ) {
+            const { image, image_url, ...rest } = a;
+            return { ...rest, image: "", image_url: "" };
+          }
+          return a;
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(light));
+      }
     } catch (e) {
       console.warn("Could not save articles to localStorage", e);
     }
@@ -206,7 +236,7 @@ export default function BlogPage() {
       image: item.image || "",
       imageAlt: item.imageAlt || "",
       date: item.date || item.publish_date || "",
-      status: item.status || "Draft",
+      status: item.status || "Published",
       author: item.author || "Dr. Amjad Ali Tanoli Ph.D",
       tags: Array.isArray(item.tags) ? item.tags.join(", ") : item.tags || "",
       source: item.source || "ClinGene Press Office",
@@ -325,12 +355,15 @@ export default function BlogPage() {
   const handleDeleteConfirm = async () => {
     if (!deleteTarget) return;
     try {
+      setIsDeleting(true);
       await deleteArticle(deleteTarget.id, deleteTarget.type);
       setArticles((prev) => prev.filter((a) => a.id !== deleteTarget.id));
       setDeleteTarget(null);
     } catch (err) {
       console.error("Delete article error:", err);
       alert("Failed to delete article: " + (err.message || "Unknown error"));
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -422,7 +455,7 @@ export default function BlogPage() {
                 <th className="py-3.5 px-4 min-w-[150px]">Author / Source</th>
                 <th className="py-3.5 px-4 text-center">Status</th>
                 <th className="py-3.5 px-4 min-w-[100px]">Date</th>
-                <th className="py-3.5 px-4 text-center w-28">Actions</th>
+                <th className="py-3.5 px-4 text-center min-w-[130px] whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -551,12 +584,12 @@ export default function BlogPage() {
                       <td className="py-4 px-4 text-slate-500 font-normal whitespace-nowrap">
                         {art.date}
                       </td>
-                      <td className="py-4 px-4">
+                      <td className="py-4 px-4 text-center whitespace-nowrap min-w-[130px]">
                         <div className="flex items-center justify-center gap-1.5">
                           <button
                             type="button"
                             onClick={() => setViewItem(art)}
-                            className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+                            className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
                             title="View article"
                           >
                             <Eye className="h-3.5 w-3.5" />
@@ -564,7 +597,7 @@ export default function BlogPage() {
                           <button
                             type="button"
                             onClick={() => handleOpenEdit(art)}
-                            className="flex h-7 w-7 items-center justify-center rounded-md bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
+                            className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
                             title="Edit article"
                           >
                             <Edit2 className="h-3.5 w-3.5" />
@@ -575,9 +608,10 @@ export default function BlogPage() {
                               setDeleteTarget({
                                 id: art.id,
                                 title: art.title,
+                                type: art.type,
                               })
                             }
-                            className="flex h-7 w-7 items-center justify-center rounded-md bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
+                            className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
                             title="Delete article"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -784,8 +818,8 @@ export default function BlogPage() {
                     }
                     className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-hidden cursor-pointer"
                   >
-                    <option value="Draft">Draft</option>
                     <option value="Published">Published</option>
+                    <option value="Draft">Draft</option>
                   </select>
                 </div>
 
@@ -926,8 +960,9 @@ export default function BlogPage() {
                 label="Cover Image"
                 value={formData.image}
                 onChange={(val) => setFormData({ ...formData, image: val })}
+                onUpload={uploadArticleImage}
                 aspectRatio="aspect-16/9"
-                helperText="Upload PNG, JPG, or WebP (~1200 px wide, under 150 KB recommended) or click 'Enter URL instead'"
+                helperText="Upload PNG, JPG, or WebP (~1200 px wide, automatically optimized to WebP) or click 'Enter URL instead'"
               />
 
               {/* Image Alt Text (Required if image exists) */}
@@ -1110,13 +1145,14 @@ export default function BlogPage() {
 
       {/* ================= DELETE CONFIRMATION ================= */}
       <ConfirmDialog
-        open={Boolean(deleteTarget)}
+        isOpen={Boolean(deleteTarget)}
         title="Delete Article"
-        description={`Are you sure you want to delete "${deleteTarget?.title}"? This action cannot be undone.`}
+        message={`Are you sure you want to delete "${deleteTarget?.title}"? This action cannot be undone.`}
         confirmText="Delete"
         variant="danger"
+        loading={isDeleting}
         onConfirm={handleDeleteConfirm}
-        onCancel={() => setDeleteTarget(null)}
+        onClose={() => setDeleteTarget(null)}
       />
     </div>
   );

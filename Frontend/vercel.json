@@ -70,6 +70,11 @@
   ],
   "redirects": [
     {
+      "source": "/services/genetic-counselling",
+      "destination": "/services/genetic-counseling",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
@@ -83,6 +88,11 @@
     {
       "source": "/open-positions",
       "destination": "/careers",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/blogs",
       "permanent": true
     }
   ],

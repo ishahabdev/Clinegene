@@ -342,7 +342,7 @@ export default function ServicesPage() {
                   ],
                 };
                 const gc =
-                  services.find((s) => s.slug === "genetic-counselling" || s.slug === "genetic-counseling") ||
+                  services.find((s) => s.slug === "genetic-counseling" || s.slug === "genetic-counselling") ||
                   services[0] ||
                   defaultGc;
                 const themeAccentColor = isRed ? "#c81e25" : isGreen ? "#059669" : "#00bcd4";
@@ -407,7 +407,7 @@ export default function ServicesPage() {
                           {(gc.subServices || []).map((sub) => (
                             <a
                               key={sub.id}
-                              href={`/contact?service=genetic-counselling-${sub.id}`}
+                              href={`/contact?service=genetic-counseling-${sub.id}`}
                               className={`group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-[0_2px_8px_rgba(12,43,72,0.03)] hover:shadow-md ${themeCardBorderHover} hover:-translate-y-0.5 transition-all duration-300`}
                             >
                               <div className="flex h-12 w-12 items-center justify-center transition-transform duration-300 group-hover:scale-110">
@@ -441,7 +441,7 @@ export default function ServicesPage() {
               {/* ── Remaining Services Grid (02 to 15) in other line ── */}
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {services
-                  .filter((s) => s.slug !== "genetic-counselling" && s.slug !== "genetic-counseling")
+                  .filter((s) => s.slug !== "genetic-counseling" && s.slug !== "genetic-counselling")
                   .map(({ slug, name, description, Icon, image, imageAlt, width, height }, index) => {
                     const serviceUrl = `/services/${slug}`;
 

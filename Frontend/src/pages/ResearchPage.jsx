@@ -4,7 +4,6 @@ import {
   Search,
   Calendar,
   User,
-  Tag,
   BookOpen,
   ExternalLink,
   Layers,
@@ -247,16 +246,18 @@ export default function ResearchPage() {
       {/* ── Research Cards Listing ── */}
       <section className="site-container max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
         {loading ? (
-          <div className="grid gap-6 md:grid-cols-2">
-            {[1, 2, 3, 4].map((n) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+            {[1, 2, 3].map((n) => (
               <div
                 key={n}
-                className="h-64 rounded-2xl bg-white border border-slate-200 p-6 animate-pulse"
+                className="rounded-3xl bg-white border border-slate-200/80 p-4 sm:p-5 animate-pulse space-y-3"
               >
-                <div className="h-5 w-24 bg-slate-200 rounded-full mb-4" />
-                <div className="h-6 w-3/4 bg-slate-200 rounded-md mb-2" />
-                <div className="h-4 w-1/2 bg-slate-200 rounded-md mb-4" />
-                <div className="h-16 w-full bg-slate-100 rounded-md" />
+                <div className="aspect-16/10 w-full rounded-2xl bg-slate-200" />
+                <div className="h-5 w-3/4 bg-slate-200 rounded-md" />
+                <div className="h-3.5 w-1/2 bg-slate-200 rounded" />
+                <div className="pt-3 border-t border-slate-100 flex justify-between">
+                  <div className="h-4 w-24 bg-slate-200 rounded" />
+                </div>
               </div>
             ))}
           </div>
@@ -282,128 +283,75 @@ export default function ResearchPage() {
             )}
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
             {filteredList.map((item, idx) => {
               const statusBadge = getStatusBadge(item.status);
-              const abstractText = item.abstract || item.summary || "";
+              const oneLineParagraph =
+                item.subtitle ||
+                item.abstract ||
+                item.summary ||
+                "Clinical genetic investigation and precision medical breakthrough.";
 
               return (
                 <article
                   key={item.id || idx}
-                  className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 sm:p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-slate-300"
+                  onClick={() => setSelectedItem(item)}
+                  className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/85 bg-white p-4 sm:p-5 shadow-xs hover:shadow-xl hover:border-slate-300 transition-all duration-300 cursor-pointer"
                 >
                   <div>
-                    {/* Top Meta Row */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${statusBadge.bg}`}
-                        >
-                          <span
-                            className={`h-1.5 w-1.5 rounded-full ${statusBadge.dot}`}
-                            aria-hidden="true"
-                          />
+                    {/* Top Photo with modern aspect-16/10 ratio & overlay badges */}
+                    <div className="relative aspect-16/10 w-full overflow-hidden rounded-2xl bg-slate-100 shadow-2xs">
+                      <img
+                        src={item.image || "/images/clingene-logo.webp"}
+                        alt={item.title}
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      {/* Floating Badges overlay on image */}
+                      <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 z-10">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-bold text-slate-800 shadow-xs backdrop-blur-xs">
+                          <span className={`h-1.5 w-1.5 rounded-full ${statusBadge.dot}`} />
                           {item.status || "Ongoing"}
                         </span>
-                        <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-600">
-                          {item.type || "Research"}
+                        <span className="rounded-full bg-black/75 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs backdrop-blur-xs">
+                          {item.type || "Research Project"}
                         </span>
                       </div>
 
                       {item.date && (
-                        <span className="flex items-center gap-1 text-[11px] font-medium text-slate-400">
-                          <Calendar className="h-3.5 w-3.5" />
-                          {item.date}
-                        </span>
+                        <div className="absolute bottom-2.5 right-2.5 z-10">
+                          <span className="rounded-xs bg-black/70 px-2 py-0.5 text-[10px] font-medium text-white/90 backdrop-blur-xs">
+                            {item.date}
+                          </span>
+                        </div>
                       )}
                     </div>
 
-                    {/* Image if available */}
-                    {item.image && (
-                      <div className="relative mb-4 h-40 w-full overflow-hidden rounded-xl bg-slate-100">
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-
                     {/* Title */}
-                    <h2 className="font-outfit text-lg sm:text-xl font-bold leading-snug text-[#0c2b48] group-hover:text-(--accent-dark) transition-colors">
+                    <h3 className="mt-3.5 font-outfit text-base sm:text-lg font-bold leading-snug text-slate-900 group-hover:text-(--accent-dark) transition-colors line-clamp-2">
                       {item.title}
-                    </h2>
+                    </h3>
 
-                    {/* Subtitle */}
-                    {item.subtitle && (
-                      <p className="mt-1.5 text-xs sm:text-[13px] text-slate-500 font-medium leading-relaxed">
-                        {item.subtitle}
-                      </p>
-                    )}
-
-                    {/* Lead Investigator */}
-                    {item.leadInvestigator && (
-                      <div className="mt-3 flex items-center gap-2 text-xs text-slate-700">
-                        <span className="grid h-6 w-6 place-items-center rounded-full bg-slate-100 text-slate-500">
-                          <User className="h-3.5 w-3.5" />
-                        </span>
-                        <span className="font-semibold">{item.leadInvestigator}</span>
-                        {item.category && (
-                          <span className="text-slate-400">• {item.category}</span>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Abstract / Summary excerpt */}
-                    {abstractText && (
-                      <p className="mt-3 text-xs sm:text-[13px] text-slate-600 line-clamp-3 leading-relaxed">
-                        {abstractText}
-                      </p>
-                    )}
-
-                    {/* Keywords */}
-                    {Array.isArray(item.keywords) && item.keywords.length > 0 && (
-                      <div className="mt-3.5 flex flex-wrap gap-1.5">
-                        {item.keywords.slice(0, 4).map((kw, kIdx) => (
-                          <span
-                            key={kIdx}
-                            className="inline-flex items-center gap-1 rounded-md bg-slate-50 px-2 py-0.5 text-[10.5px] font-medium text-slate-500 border border-slate-200/60"
-                          >
-                            <Tag className="h-2.5 w-2.5 text-slate-400" />
-                            {kw}
-                          </span>
-                        ))}
-                        {item.keywords.length > 4 && (
-                          <span className="text-[10.5px] text-slate-400 self-center">
-                            +{item.keywords.length - 4} more
-                          </span>
-                        )}
-                      </div>
-                    )}
+                    {/* Exactly 1 line of <p> as requested */}
+                    <p className="mt-1.5 text-xs sm:text-[13px] text-slate-500 line-clamp-1 leading-relaxed">
+                      {oneLineParagraph}
+                    </p>
                   </div>
 
-                  {/* Card Footer: Action Button / Links */}
-                  <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between gap-3">
-                    {abstractText ? (
-                      <button
-                        type="button"
-                        onClick={() => setSelectedItem(item)}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-(--accent-dark) hover:underline cursor-pointer"
-                      >
-                        <span>View Full Abstract</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </button>
-                    ) : (
-                      <span className="text-xs text-slate-400">Clinical Study</span>
-                    )}
+                  {/* Card Footer: Read Abstract link */}
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0c2b48] group-hover:text-(--accent-dark) transition-colors">
+                      <span>Read Abstract</span>
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </span>
 
                     {item.doi && (
                       <a
                         href={item.doi.startsWith("http") ? item.doi : `https://doi.org/${item.doi}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500 hover:text-slate-800"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-400 hover:text-slate-700"
                         title={item.doi}
                       >
                         <BookOpen className="h-3 w-3" />

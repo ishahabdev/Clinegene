@@ -11,20 +11,21 @@ import ScrollEnhancements from "./components/ScrollEnhancements.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { seoRoutes } from "./data/seoData.js";
 
-const AboutPage = lazy(() => import("./pages/AboutPage.jsx"));
-const CEOMessagePage = lazy(() => import("./pages/CEOMessagePage.jsx"));
-const ContactPage = lazy(() => import("./pages/ContactPage.jsx"));
-const GalleryPage = lazy(() => import("./pages/GalleryPage.jsx"));
-const NewsPage = lazy(() => import("./pages/NewsPage.jsx"));
-const OpenPositionsPage = lazy(() => import("./pages/OpenPositionsPage.jsx"));
+import AboutPage from "./pages/AboutPage.jsx";
+import CEOMessagePage from "./pages/CEOMessagePage.jsx";
+import ContactPage from "./pages/ContactPage.jsx";
+import GalleryPage from "./pages/GalleryPage.jsx";
+import NewsPage from "./pages/NewsPage.jsx";
+import OpenPositionsPage from "./pages/OpenPositionsPage.jsx";
+import ResearchPage from "./pages/ResearchPage.jsx";
+import ServicesPage from "./pages/ServicesPage.jsx";
+import ServiceDetailPage from "./pages/ServiceDetailPage.jsx";
+import TeamPage from "./pages/TeamPage.jsx";
+import BlogPage from "./pages/BlogPage.jsx";
 import { ADMIN_BASE } from "./Admin/adminConfig.js";
 
 const cleanAdminBase = ADMIN_BASE ? ADMIN_BASE.replace(/^\/|\/$/g, "").toLowerCase() : "";
 
-const ResearchPage = lazy(() => import("./pages/ResearchPage.jsx"));
-const ServicesPage = lazy(() => import("./pages/ServicesPage.jsx"));
-const ServiceDetailPage = lazy(() => import("./pages/ServiceDetailPage.jsx"));
-const TeamPage = lazy(() => import("./pages/TeamPage.jsx"));
 const AdminApp = lazy(() => import("./Admin/AdminApp.jsx"));
 
 const pages = {
@@ -39,6 +40,9 @@ const pages = {
   careers: { label: "Careers", component: OpenPositionsPage },
   "open-positions": { label: "Careers", component: OpenPositionsPage },
   news: { label: "News", component: NewsPage },
+  blogs: { label: "Blog", component: BlogPage },
+  blog: { label: "Blog", component: BlogPage },
+  resources: { label: "Blog", component: BlogPage },
   contact: { label: "Contact", component: ContactPage },
   "not-found": { label: "Page Not Found", component: PageNotFoundPage },
 };
@@ -82,6 +86,7 @@ function getCurrentPage(ssrUrl) {
     if (clean === "" || clean === "index.html") return "home";
     if (clean.startsWith("services/")) return "service-detail";
     if (clean === "careers" || clean === "open-positions") return "careers";
+    if (clean === "blogs" || clean === "blog" || clean === "resources") return "blogs";
     if (pages[clean]) return clean;
     return "not-found";
   }
@@ -99,7 +104,8 @@ function getCurrentPage(ssrUrl) {
 
   // If hash has services/<slug>
   if (hash.startsWith("services/")) {
-    const slug = hash.slice("services/".length);
+    let slug = hash.slice("services/".length);
+    if (slug === "genetic-counselling") slug = "genetic-counseling";
     const cleanUrl = `/services/${slug}`;
     if (window.location.hash || window.location.pathname !== cleanUrl) {
       window.history.replaceState(null, "", cleanUrl);
@@ -131,11 +137,18 @@ function getCurrentPage(ssrUrl) {
 
   // If pathname matches /services/<slug>
   if (pathname.startsWith("services/")) {
+    if (pathname === "services/genetic-counselling") {
+      window.history.replaceState(null, "", "/services/genetic-counseling");
+    }
     return "service-detail";
   }
 
   if (pathname === "careers" || pathname === "open-positions") {
     return "careers";
+  }
+
+  if (pathname === "blogs" || pathname === "blog" || pathname === "resources") {
+    return "blogs";
   }
 
   // If pathname matches secret admin base defined by VITE_ADMIN_BASE

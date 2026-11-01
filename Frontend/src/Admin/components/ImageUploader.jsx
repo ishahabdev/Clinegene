@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { UploadCloud, X, RefreshCw, Link as LinkIcon, Upload, Loader2, CheckCircle2 } from "lucide-react";
-import { formatBytes } from "../../lib/imageOptimizer.js";
+import { formatBytes, processAndOptimizeImage } from "../../lib/imageOptimizer.js";
 
 export default function ImageUploader({
   value,
@@ -70,12 +70,28 @@ export default function ImageUploader({
         setUploadStatus("");
       }
     } else {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        onChange(e.target.result);
-        setFinalSizeInfo(formatBytes(file.size));
-      };
-      reader.readAsDataURL(file);
+      try {
+        setUploading(true);
+        setUploadStatus("Optimizing photo...");
+        const optimized = await processAndOptimizeImage(file);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          onChange(e.target.result);
+          setFinalSizeInfo(optimized.sizeFormatted);
+          setUploading(false);
+          setUploadStatus("");
+        };
+        reader.readAsDataURL(optimized.blob || optimized.file);
+      } catch (_) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          onChange(e.target.result);
+          setFinalSizeInfo(formatBytes(file.size));
+          setUploading(false);
+          setUploadStatus("");
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 

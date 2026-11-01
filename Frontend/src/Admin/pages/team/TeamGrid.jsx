@@ -1,6 +1,7 @@
 import {
   Mail,
   MapPin,
+  Eye,
   Edit2,
   Trash2,
   ChevronUp,
@@ -11,6 +12,7 @@ export default function TeamGrid({
   members = [],
   onEdit,
   onDelete,
+  onView,
   onReorder,
   loading = false,
 }) {
@@ -95,12 +97,21 @@ export default function TeamGrid({
                 {isPublished ? "Published" : "Draft"}
               </span>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => onView && onView(member)}
+                  aria-label={`View ${member.name}`}
+                  className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+                  title="View member"
+                >
+                  <Eye className="h-3.5 w-3.5" />
+                </button>
                 <button
                   type="button"
                   onClick={() => onEdit && onEdit(member)}
                   aria-label={`Edit ${member.name}`}
-                  className="flex h-7 w-7 items-center justify-center rounded-md bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
+                  className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
                   title="Edit member"
                 >
                   <Edit2 className="h-3.5 w-3.5" />
@@ -109,7 +120,7 @@ export default function TeamGrid({
                   type="button"
                   onClick={() => onDelete && onDelete(member.id)}
                   aria-label={`Delete ${member.name}`}
-                  className="flex h-7 w-7 items-center justify-center rounded-md bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
+                  className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
                   title="Delete member"
                 >
                   <Trash2 className="h-3.5 w-3.5" />

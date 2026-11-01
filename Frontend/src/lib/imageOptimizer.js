@@ -57,8 +57,8 @@ export async function processAndOptimizeImage(file) {
     throw new Error("Invalid image dimensions.");
   }
 
-  // 4. Resize: max 1600px on the longest side
-  const maxDimension = 1600;
+  // 4. Resize: max 960px on the longest side (optimized for web card displays)
+  const maxDimension = 960;
   if (width > maxDimension || height > maxDimension) {
     if (width >= height) {
       height = Math.round((height * maxDimension) / width);
@@ -84,9 +84,9 @@ export async function processAndOptimizeImage(file) {
   ctx.imageSmoothingQuality = "high";
   ctx.drawImage(img, 0, 0, width, height);
 
-  // 6. Convert to WebP, starting at quality ~0.8 and iteratively lowering if > 2 MB
-  const maxOutputBytes = 2 * 1024 * 1024; // 2 MB
-  const qualitySteps = [0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2];
+  // 6. Convert to WebP, starting at quality ~0.75 and iteratively lowering to stay under 120 KB
+  const maxOutputBytes = 120 * 1024; // 120 KB (ultra fast loading)
+  const qualitySteps = [0.75, 0.65, 0.55, 0.45, 0.35];
 
   let bestBlob = null;
   let bestQuality = 0.8;
@@ -105,11 +105,11 @@ export async function processAndOptimizeImage(file) {
     }
   }
 
-  // 7. Verify result size fits under 2 MB
+  // 7. Verify result size fits under maxOutputBytes
   if (!bestBlob || bestBlob.size > maxOutputBytes) {
     const resultingSize = bestBlob ? formatBytes(bestBlob.size) : "unknown";
     throw new Error(
-      `Image size is ${resultingSize}, which exceeds the 2 MB limit even after maximum compression. Please choose a smaller image.`
+      `Image size is ${resultingSize}, which exceeds the 120 KB limit even after maximum compression. Please choose a smaller image.`
     );
   }
 

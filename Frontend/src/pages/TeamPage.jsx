@@ -124,7 +124,7 @@ export default function TeamPage() {
 
   return (
     <>
-      <TeamHero />
+      <TeamHero memberCount={members.length > 0 ? members.length : 11} />
 
       {loading ? (
         <section className="py-20 bg-white" aria-label="Loading team members">

@@ -203,6 +203,7 @@ export default function SiteFooter({ showJoinCta }) {
                 ["Gallery",        "/gallery"],
                 ["Careers",        "/careers"],
                 ["News",           "/news"],
+                ["Blog",           "/blogs"],
               ].map(([label, href]) => (
                 <li key={label}>
                   <a

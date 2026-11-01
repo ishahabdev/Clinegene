@@ -5,6 +5,7 @@ import CEOMessagePage from "./pages/CEOMessagePage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
 import GalleryPage from "./pages/GalleryPage.jsx";
 import NewsPage from "./pages/NewsPage.jsx";
+import BlogPage from "./pages/BlogPage.jsx";
 import OpenPositionsPage from "./pages/OpenPositionsPage.jsx";
 import ResearchPage from "./pages/ResearchPage.jsx";
 import ServicesPage from "./pages/ServicesPage.jsx";
@@ -28,6 +29,9 @@ const serverPages = {
   careers: { label: "Careers", component: OpenPositionsPage },
   "open-positions": { label: "Careers", component: OpenPositionsPage },
   news: { label: "News", component: NewsPage },
+  blogs: { label: "Blog", component: BlogPage },
+  blog: { label: "Blog", component: BlogPage },
+  resources: { label: "Blog", component: BlogPage },
   contact: { label: "Contact", component: ContactPage },
   "not-found": { label: "Page Not Found", component: PageNotFoundPage },
 };

@@ -3,7 +3,7 @@ import { ChevronDown, ArrowRight, Loader2, CheckCircle, AlertCircle, Check } fro
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
-import { servicesData } from "../data/servicesData.js";
+import { fetchPublishedServices } from "../lib/servicesClient.js";
 
 const homeBackground = "/images/home1.webp";
 
@@ -67,12 +67,12 @@ function ContactIcon({ type }) {
   );
 }
 
-function ServiceDropdown({ value, onChange, id = "contact-service", name = "service" }) {
+function ServiceDropdown({ value, onChange, id = "contact-service", name = "service", servicesList = [] }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
   const menuRef = useRef(null);
 
-  const gc = servicesData.find((s) => s.slug === "genetic-counselling" || s.slug === "genetic-counseling");
+  const gc = servicesList.find((s) => s.slug === "genetic-counseling" || s.slug === "genetic-counselling");
 
   const serviceGroups = [
     {
@@ -83,19 +83,19 @@ function ServiceDropdown({ value, onChange, id = "contact-service", name = "serv
       ],
     },
     {
-      label: "Genetic Counselling",
+      label: "Genetic Counseling",
       options: [
-        { value: "genetic-counselling", label: "Genetic Counselling - General" },
+        { value: "genetic-counseling", label: "Genetic Counseling - General" },
         ...(gc?.subServices || []).map((sub) => ({
-          value: `genetic-counselling-${sub.id}`,
-          label: `Genetic Counselling - ${sub.label}`,
+          value: `genetic-counseling-${sub.id}`,
+          label: `Genetic Counseling - ${sub.label}`,
         })),
       ],
     },
     {
       label: "Services",
-      options: servicesData
-        .filter((s) => s.slug !== "genetic-counselling" && s.slug !== "genetic-counseling")
+      options: servicesList
+        .filter((s) => s.slug !== "genetic-counseling" && s.slug !== "genetic-counselling")
         .map((s) => ({
           value: s.slug,
           label: s.name,
@@ -253,6 +253,23 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [servicesList, setServicesList] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchPublishedServices()
+      .then((data) => {
+        if (isMounted && data) setServicesList(data);
+      })
+      .catch((err) => {
+        if (import.meta.env.DEV) {
+          console.error("[ContactPage] Error fetching services:", err);
+        }
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const formRef = useRef(null);
   const turnstileContainerRef = useRef(null);
@@ -261,8 +278,12 @@ export default function ContactPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const sParam = params.get("service") || "";
-      if (sParam.startsWith("genetic-counselling-")) {
-        return sParam;
+      if (sParam.startsWith("genetic-counseling-") || sParam.startsWith("genetic-counselling-")) {
+        const subId = sParam.replace(/^(genetic-counseling-|genetic-counselling-)/, "");
+        return `genetic-counseling-${subId}`;
+      }
+      if (sParam === "genetic-counselling" || sParam === "genetic-counseling") {
+        return "genetic-counseling";
       }
       if (
         [
@@ -273,7 +294,7 @@ export default function ContactPage() {
           "hereditary-cancer",
         ].includes(sParam)
       ) {
-        return `genetic-counselling-${sParam}`;
+        return `genetic-counseling-${sParam}`;
       }
       return sParam;
     }
@@ -375,20 +396,20 @@ export default function ContactPage() {
       return;
     }
 
-    const gcService = servicesData.find((s) => s.slug === "genetic-counselling" || s.slug === "genetic-counseling");
+    const gcService = servicesList.find((s) => s.slug === "genetic-counseling" || s.slug === "genetic-counselling");
     let serviceDisplayName = serviceSlug;
-    if (serviceSlug.startsWith("genetic-counselling-")) {
-      const subId = serviceSlug.replace("genetic-counselling-", "");
+    if (serviceSlug.startsWith("genetic-counseling-") || serviceSlug.startsWith("genetic-counselling-")) {
+      const subId = serviceSlug.replace(/^(genetic-counseling-|genetic-counselling-)/, "");
       const matchedSub = gcService?.subServices?.find((sub) => sub.id === subId);
       serviceDisplayName = matchedSub
-        ? `Genetic Counselling - ${matchedSub.label}`
-        : `Genetic Counselling - ${subId}`;
+        ? `Genetic Counseling - ${matchedSub.label}`
+        : `Genetic Counseling - ${subId}`;
     } else {
-      const matchingService = servicesData.find((s) => s.slug === serviceSlug);
+      const matchingService = servicesList.find((s) => s.slug === serviceSlug);
       if (matchingService) {
         serviceDisplayName =
-          matchingService.slug === "genetic-counselling" || matchingService.slug === "genetic-counseling"
-            ? "Genetic Counselling - General"
+          matchingService.slug === "genetic-counseling" || matchingService.slug === "genetic-counselling"
+            ? "Genetic Counseling - General"
             : matchingService.name;
       } else if (serviceSlug === "job" || serviceSlug === "job-application") {
         serviceDisplayName = "Job Application";
@@ -772,6 +793,7 @@ export default function ContactPage() {
                   name="service"
                   value={selectedService}
                   onChange={setSelectedService}
+                  servicesList={servicesList}
                 />
               </div>
 

@@ -8,7 +8,6 @@ import {
   Stethoscope,
   Network,
   FlaskConical,
-  Bell,
   Sparkles,
   Layers,
 } from "lucide-react";

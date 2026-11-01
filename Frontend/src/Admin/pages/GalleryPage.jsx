@@ -5,6 +5,7 @@ import {
   ChevronDown,
   CheckSquare,
   Upload,
+  Eye,
   Edit2,
   Trash2,
   X,
@@ -66,6 +67,9 @@ export default function GalleryPage() {
   // Delete modal state
   const [deleteId, setDeleteId] = useState(null);
   const [deleting, setDeleting] = useState(false);
+
+  // View modal state
+  const [viewingImage, setViewingImage] = useState(null);
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -537,11 +541,19 @@ export default function GalleryPage() {
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-1 shrink-0">
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => setViewingImage(img)}
+                          className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+                          title="View Image"
+                        >
+                          <Eye className="h-3.5 w-3.5" />
+                        </button>
                         <button
                           type="button"
                           onClick={() => handleOpenEdit(img)}
-                          className="flex h-7 w-7 items-center justify-center rounded-md bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
+                          className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
                           title="Edit Image"
                         >
                           <Edit2 className="h-3.5 w-3.5" />
@@ -549,7 +561,7 @@ export default function GalleryPage() {
                         <button
                           type="button"
                           onClick={() => setDeleteId(img.id)}
-                          className="flex h-7 w-7 items-center justify-center rounded-md bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
+                          className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
                           title="Delete Image"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -887,6 +899,72 @@ export default function GalleryPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* View Image Modal */}
+      {viewingImage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="relative w-full max-w-xl rounded-2xl bg-white p-5 sm:p-6 shadow-2xl animate-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 className="font-outfit text-base font-bold text-slate-800">
+                Image Preview
+              </h3>
+              <button
+                type="button"
+                onClick={() => setViewingImage(null)}
+                className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="mt-4 overflow-hidden rounded-xl bg-slate-100 border border-slate-200">
+              <img
+                src={viewingImage.image_url || viewingImage.image}
+                alt={viewingImage.title}
+                className="w-full max-h-[380px] object-contain mx-auto"
+              />
+            </div>
+
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <h4 className="font-outfit text-base font-bold text-slate-900">
+                  {viewingImage.title}
+                </h4>
+                <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-semibold text-slate-600">
+                  {viewingImage.category}
+                </span>
+              </div>
+              {viewingImage.caption && (
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {viewingImage.caption}
+                </p>
+              )}
+            </div>
+
+            <div className="mt-5 flex items-center justify-end gap-2 border-t border-slate-100 pt-3">
+              <button
+                type="button"
+                onClick={() => {
+                  const img = viewingImage;
+                  setViewingImage(null);
+                  handleOpenEdit(img);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[#e0f2fe] px-3.5 py-2 text-xs font-semibold text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
+              >
+                <Edit2 className="h-3.5 w-3.5" />
+                <span>Edit Image</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewingImage(null)}
+                className="rounded-lg bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

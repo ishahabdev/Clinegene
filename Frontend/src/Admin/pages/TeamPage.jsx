@@ -6,6 +6,9 @@ import {
   X,
   AlertCircle,
   RefreshCw,
+  Mail,
+  Award,
+  Edit2,
 } from "lucide-react";
 import ConfirmDialog from "../components/ConfirmDialog.jsx";
 import EmptyState from "../components/EmptyState.jsx";
@@ -65,6 +68,9 @@ export default function TeamPage() {
   // Delete Confirm State
   const [deleteId, setDeleteId] = useState(null);
   const [deleting, setDeleting] = useState(false);
+
+  // View Member State
+  const [viewingMember, setViewingMember] = useState(null);
 
   // Requirement 1: Load team members from Supabase `team` table
   const fetchTeam = useCallback(async () => {
@@ -346,6 +352,7 @@ export default function TeamPage() {
           <TeamList
             members={sortedTeam}
             onEdit={handleOpenEdit}
+            onView={(m) => setViewingMember(m)}
             onDelete={(id) => setDeleteId(id)}
             sortField={sortField}
             sortDirection={sortDirection}
@@ -534,6 +541,95 @@ export default function TeamPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ================= VIEW MEMBER MODAL ================= */}
+      {viewingMember && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
+          <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl animate-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 className="font-outfit text-base font-bold text-slate-800">
+                Team Member Profile
+              </h3>
+              <button
+                type="button"
+                onClick={() => setViewingMember(null)}
+                className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="mt-4 flex flex-col items-center text-center">
+              <img
+                src={viewingMember.image_url || viewingMember.photo || "/assets/team/Amjad Ali.jpeg"}
+                alt={viewingMember.name}
+                className="h-24 w-24 rounded-full object-cover border-4 border-slate-100 shadow-md"
+                onError={(e) => {
+                  e.currentTarget.src = "/assets/team/Amjad Ali.jpeg";
+                }}
+              />
+              <h4 className="mt-3 font-outfit text-lg font-bold text-slate-900">
+                {viewingMember.name}
+              </h4>
+              <p className="text-xs font-semibold text-[#009688]">
+                {viewingMember.role}
+              </p>
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-1.5">
+                <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-600">
+                  {viewingMember.department}
+                </span>
+                <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700">
+                  {viewingMember.status || "Published"}
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-5 space-y-3 border-t border-slate-100 pt-4 text-xs">
+              {viewingMember.qualification && (
+                <div className="flex items-center gap-2 text-slate-600">
+                  <Award className="h-4 w-4 text-slate-400 shrink-0" />
+                  <span className="font-medium text-slate-700">{viewingMember.qualification}</span>
+                </div>
+              )}
+              {viewingMember.email && (
+                <div className="flex items-center gap-2 text-slate-600">
+                  <Mail className="h-4 w-4 text-slate-400 shrink-0" />
+                  <a href={`mailto:${viewingMember.email}`} className="text-[#0284c7] hover:underline">
+                    {viewingMember.email}
+                  </a>
+                </div>
+              )}
+              {viewingMember.bio && (
+                <div className="rounded-xl bg-slate-50 p-3 text-slate-600 leading-relaxed max-h-36 overflow-y-auto">
+                  {viewingMember.bio}
+                </div>
+              )}
+            </div>
+
+            <div className="mt-5 flex items-center justify-end gap-2 border-t border-slate-100 pt-3">
+              <button
+                type="button"
+                onClick={() => {
+                  const m = viewingMember;
+                  setViewingMember(null);
+                  handleOpenEdit(m);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[#e0f2fe] px-3.5 py-2 text-xs font-semibold text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
+              >
+                <Edit2 className="h-3.5 w-3.5" />
+                <span>Edit Member</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewingMember(null)}
+                className="rounded-lg bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

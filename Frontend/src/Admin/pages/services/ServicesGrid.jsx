@@ -188,7 +188,7 @@ export default function ServicesGrid({
                 <button
                   type="button"
                   onClick={() => onView && onView(service)}
-                  className="flex h-7 w-7 items-center justify-center rounded-md bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
+                  className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
                   title="View details &amp; preview"
                   aria-label={`View ${service.name}`}
                 >
@@ -198,7 +198,7 @@ export default function ServicesGrid({
                 <button
                   type="button"
                   onClick={() => onEdit && onEdit(service)}
-                  className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+                  className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
                   title="Edit service"
                   aria-label={`Edit ${service.name}`}
                 >
@@ -208,7 +208,7 @@ export default function ServicesGrid({
                 <button
                   type="button"
                   onClick={() => onDelete && onDelete(service.id)}
-                  className="flex h-7 w-7 items-center justify-center rounded-md bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
+                  className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
                   title="Delete service"
                   aria-label={`Delete ${service.name}`}
                 >
