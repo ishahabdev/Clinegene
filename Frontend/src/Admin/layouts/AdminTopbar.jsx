@@ -9,11 +9,35 @@ import {
 import { useAuth } from "../context/AuthContext.jsx";
 import { ADMIN_USER } from "../mocks/mockData.js";
 import { ADMIN_BASE, adminPath } from "../adminConfig.js";
+import { getUnreadCount } from "../api/messages.js";
 
 export default function AdminTopbar({ onOpenMobileSidebar, onNavigate }) {
   const { user, logout } = useAuth();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const userMenuRef = useRef(null);
+
+  useEffect(() => {
+    let mounted = true;
+    const loadCount = async () => {
+      const { count } = await getUnreadCount();
+      if (mounted && typeof count === "number") {
+        setUnreadCount(count);
+      }
+    };
+
+    loadCount();
+
+    const handleMessagesUpdated = () => {
+      loadCount();
+    };
+
+    window.addEventListener("messages:updated", handleMessagesUpdated);
+    return () => {
+      mounted = false;
+      window.removeEventListener("messages:updated", handleMessagesUpdated);
+    };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -52,20 +76,22 @@ export default function AdminTopbar({ onOpenMobileSidebar, onNavigate }) {
 
       {/* Right: Email Icon & User Avatar */}
       <div className="flex items-center gap-2">
-        {/* Email Envelope Badge (5) */}
+        {/* Email Envelope Badge */}
         <button
           type="button"
           onClick={() => {
-            if (onNavigate) onNavigate(adminPath("/news"));
+            if (onNavigate) onNavigate(adminPath("/messages"));
           }}
-          aria-label="Mail"
+          aria-label="Messages"
           className="relative p-2 text-slate-400 hover:text-white hover:bg-slate-800/80 rounded-lg transition-colors focus:outline-none"
-          title="Unread Emails (5)"
+          title={unreadCount > 0 ? `Unread Messages (${unreadCount})` : "Messages"}
         >
           <Mail className="h-4.5 w-4.5" />
-          <span className="absolute top-1 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-xs">
-            5
-          </span>
+          {unreadCount > 0 && (
+            <span className="absolute top-1 -right-0.5 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-xs">
+              {unreadCount > 99 ? "99+" : unreadCount}
+            </span>
+          )}
         </button>
 
         {/* User Avatar Menu */}

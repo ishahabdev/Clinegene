@@ -13,6 +13,7 @@ import {
   ArrowUpRight,
   Image as ImageIcon,
   FileText,
+  Mail,
 } from "lucide-react";
 import AdminPageHeader from "../components/AdminPageHeader.jsx";
 import { adminPath } from "../adminConfig.js";
@@ -69,6 +70,7 @@ export default function DashboardPage({ onNavigate }) {
           researchRes,
           blogsRes,
           newsRes,
+          contactMessagesRes,
         ] = await Promise.all([
           supabase.from("team").select("id", { count: "exact", head: true }),
           supabase.from("services").select("id", { count: "exact", head: true }),
@@ -107,6 +109,11 @@ export default function DashboardPage({ onNavigate }) {
           supabase
             .from("news_posts")
             .select("id, title, created_at")
+            .order("created_at", { ascending: false })
+            .limit(4),
+          supabase
+            .from("contact_messages")
+            .select("id, name, subject, created_at")
             .order("created_at", { ascending: false })
             .limit(4),
         ]);
@@ -212,6 +219,19 @@ export default function DashboardPage({ onNavigate }) {
             icon: FileText,
             path: adminPath("/news"),
             timestamp: new Date(n.created_at).getTime() || 0,
+          });
+        });
+
+        (contactMessagesRes?.data || []).forEach((m) => {
+          activities.push({
+            id: `msg-${m.id}`,
+            title: "New Client Message",
+            description: `${m.name}: ${m.subject || "Website Inquiry"}`,
+            time: formatTimeAgo(m.created_at),
+            author: "Contact Desk",
+            icon: Mail,
+            path: adminPath("/messages"),
+            timestamp: new Date(m.created_at).getTime() || 0,
           });
         });
 

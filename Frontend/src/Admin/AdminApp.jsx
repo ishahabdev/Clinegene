@@ -15,6 +15,7 @@ import BlogPage from "./pages/BlogPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import ResearchPage from "./pages/ResearchPage.jsx";
 import CareerPage from "./pages/CareerPage.jsx";
+import MessagesPage from "./pages/MessagesPage.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -137,9 +138,13 @@ function AdminRoutes() {
   } else if (normalized === adminPath("/gallery") || normalized === adminPath("/notice")) {
     pageContent = <GalleryPage />;
   } else if (
-    normalized === adminPath("/news") ||
-    normalized === adminPath("/blog") ||
+    normalized === adminPath("/messages") ||
     normalized === adminPath("/mail")
+  ) {
+    pageContent = <MessagesPage />;
+  } else if (
+    normalized === adminPath("/news") ||
+    normalized === adminPath("/blog")
   ) {
     pageContent = <BlogPage />;
   } else if (normalized === adminPath("/profile") || normalized === adminPath("/settings")) {

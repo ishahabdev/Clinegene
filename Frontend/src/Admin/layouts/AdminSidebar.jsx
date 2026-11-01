@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   LayoutDashboard,
   Users,
@@ -10,13 +11,16 @@ import {
   LogOut,
   ChevronRight,
   X,
+  Mail,
 } from "lucide-react";
 import { ADMIN_USER } from "../mocks/mockData.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { ADMIN_BASE, adminPath } from "../adminConfig.js";
+import { getUnreadCount } from "../api/messages.js";
 
 export const ADMIN_NAV_ITEMS = [
   { label: "Dashboard", path: adminPath(""), icon: LayoutDashboard },
+  { label: "Messages", path: adminPath("/messages"), icon: Mail },
   { label: "Team", path: adminPath("/team"), icon: Users },
   { label: "Services", path: adminPath("/services"), icon: Layers },
   { label: "Research", path: adminPath("/research"), icon: Microscope },
@@ -34,6 +38,24 @@ export default function AdminSidebar({
   onNavigate,
 }) {
   const { logout } = useAuth();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    let mounted = true;
+    const loadCount = async () => {
+      const { count } = await getUnreadCount();
+      if (mounted && typeof count === "number") {
+        setUnreadCount(count);
+      }
+    };
+    loadCount();
+    const handleUpdate = () => loadCount();
+    window.addEventListener("messages:updated", handleUpdate);
+    return () => {
+      mounted = false;
+      window.removeEventListener("messages:updated", handleUpdate);
+    };
+  }, []);
 
   const handleNavClick = (path, e) => {
     e.preventDefault();
@@ -119,13 +141,17 @@ export default function AdminSidebar({
                   />
                   <span className="truncate">{item.label}</span>
                 </div>
-                {item.label !== "Dashboard" && (
+                {item.label === "Messages" && unreadCount > 0 ? (
+                  <span className="flex h-5 min-w-5 px-1.5 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-xs">
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </span>
+                ) : item.label !== "Dashboard" ? (
                   <ChevronRight
                     className={`h-3.5 w-3.5 shrink-0 transition-transform ${
                       isActive ? "text-teal-400" : "text-slate-500 opacity-60 group-hover:opacity-100"
                     }`}
                   />
-                )}
+                ) : null}
               </a>
             );
           })}

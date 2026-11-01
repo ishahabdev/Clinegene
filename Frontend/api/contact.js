@@ -1,5 +1,6 @@
 
 import { Resend } from "resend";
+import { createClient } from "@supabase/supabase-js";
 
 // Simple in-memory rate limiter
 const rateLimitMap = new Map();
@@ -179,9 +180,9 @@ export default async function handler(req, res) {
       });
     }
 
-    if (cleanName.length > 100) {
+    if (cleanName.length > 120) {
       return res.status(400).json({
-        error: "Full name exceeds maximum length of 100 characters.",
+        error: "Full name exceeds maximum length of 120 characters.",
       });
     }
 
@@ -193,9 +194,21 @@ export default async function handler(req, res) {
       });
     }
 
-    if (cleanEmail.length > 120) {
+    if (cleanEmail.length > 200) {
       return res.status(400).json({
-        error: "Email address exceeds maximum length of 120 characters.",
+        error: "Email address exceeds maximum length of 200 characters.",
+      });
+    }
+
+    if (cleanPhone && cleanPhone.length > 40) {
+      return res.status(400).json({
+        error: "Phone number exceeds maximum length of 40 characters.",
+      });
+    }
+
+    if (cleanCustomSubject && cleanCustomSubject.length > 200) {
+      return res.status(400).json({
+        error: "Subject exceeds maximum length of 200 characters.",
       });
     }
 
@@ -263,16 +276,48 @@ export default async function handler(req, res) {
       }
     }
 
-    // IMPORTANT: All enquiries go to the client's email.
-    // Configure CLIENT_EMAIL in Vercel Environment Variables.
-    const clientEmail = (process.env.CLIENT_EMAIL || "").trim();
+    // 1. Prepare Supabase Database Record
+    const dbSubject = (
+      cleanPosition
+        ? `[Career] ${cleanPosition} - ${cleanService}`
+        : (cleanCustomSubject ? `${cleanService}: ${cleanCustomSubject}` : cleanService)
+    ).slice(0, 200);
 
-    if (!clientEmail) {
-      return res.status(500).json({
-        error: "CLIENT_EMAIL is not configured in Vercel.",
-      });
+    const dbMessage = (
+      isCareer
+        ? `Position: ${cleanPosition || "General"}\nOrganization/Institution: ${cleanOrg || "Not provided"}\n\nCover Note:\n${coverNote || message || "No cover note provided."}${attachments.length ? `\n\nAttachment: ${attachments[0].filename}` : ""}`
+        : `Organization: ${cleanOrg || "Not provided"}\n\nMessage:\n${message || "No message provided."}`
+    ).slice(0, 5000);
+
+    const dbRecord = {
+      name: cleanName.slice(0, 120),
+      email: cleanEmail.slice(0, 200),
+      phone: cleanPhone ? cleanPhone.slice(0, 40) : null,
+      subject: dbSubject,
+      message: dbMessage,
+      is_read: false,
+    };
+
+    // 2. Setup Supabase Client (Server-side only with service role key)
+    const supabaseUrl = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "").trim();
+    const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
+
+    let dbPromise = Promise.resolve({ skipped: true });
+    if (supabaseUrl && supabaseServiceKey) {
+      try {
+        const supabaseServer = createClient(supabaseUrl, supabaseServiceKey, {
+          auth: { persistSession: false, autoRefreshToken: false },
+        });
+        dbPromise = supabaseServer.from("contact_messages").insert(dbRecord);
+      } catch (dbInitErr) {
+        console.error("[Contact API] Supabase client init error:", dbInitErr?.message || dbInitErr);
+      }
+    } else {
+      console.warn("[Contact API] Supabase URL or SUPABASE_SERVICE_ROLE_KEY not configured; skipping database insert.");
     }
 
+    // 3. Setup Email via Resend
+    const clientEmail = (process.env.CLIENT_EMAIL || "").trim();
     const fromEmail = (
       process.env.RESEND_FROM_EMAIL ||
       process.env.FROM_EMAIL ||
@@ -283,16 +328,6 @@ export default async function handler(req, res) {
       `[ClinGene Website] ${cleanService} - ${cleanName}`;
 
     const resendApiKey = (process.env.RESEND_API_KEY || "").trim();
-
-    if (
-      !resendApiKey ||
-      resendApiKey === "re_your_api_key_here" ||
-      !resendApiKey.startsWith("re_")
-    ) {
-      return res.status(500).json({
-        error: "RESEND_API_KEY is not configured correctly.",
-      });
-    }
 
     const submittedAtKarachi = new Intl.DateTimeFormat("en-US", {
       timeZone: "Asia/Karachi",
@@ -359,40 +394,72 @@ export default async function handler(req, res) {
       </html>
     `.trim();
 
-    // Send email to the client; replies go to the visitor.
-    const resend = new Resend(resendApiKey);
+    let emailPromise = Promise.resolve({ skipped: true });
+    if (resendApiKey && clientEmail && resendApiKey.startsWith("re_") && resendApiKey !== "re_your_api_key_here") {
+      const resend = new Resend(resendApiKey);
+      const sendPayload = {
+        from: fromEmail,
+        to: [clientEmail],
+        replyTo: cleanEmail,
+        subject: emailSubject,
+        html: htmlBody,
+      };
 
-    const sendPayload = {
-      from: fromEmail,
-      to: [clientEmail],
-      replyTo: cleanEmail,
-      subject: emailSubject,
-      html: htmlBody,
-    };
+      if (attachments.length > 0) {
+        sendPayload.attachments = attachments;
+      }
 
-    if (attachments.length > 0) {
-      sendPayload.attachments = attachments;
+      emailPromise = resend.emails.send(sendPayload);
+    } else {
+      console.warn("[Contact API] RESEND_API_KEY or CLIENT_EMAIL not configured correctly; skipping email dispatch.");
     }
 
-    const { data, error } = await resend.emails.send(sendPayload);
+    // 4. Concurrently execute both via Promise.allSettled
+    const [dbResult, emailResult] = await Promise.allSettled([dbPromise, emailPromise]);
 
-    if (error) {
-      console.error("[Resend Delivery Error]", error);
+    let dbSuccess = false;
+    let emailSuccess = false;
+    let dbErrorMsg = null;
+    let emailErrorMsg = null;
 
+    if (dbResult.status === "fulfilled") {
+      if (dbResult.value?.error) {
+        dbErrorMsg = dbResult.value.error.message || "Database insert error";
+        console.error("[Contact API] Supabase insert failed:", dbResult.value.error);
+      } else if (!dbResult.value?.skipped) {
+        dbSuccess = true;
+      }
+    } else {
+      dbErrorMsg = dbResult.reason?.message || "Database insert exception";
+      console.error("[Contact API] Supabase insert exception:", dbResult.reason);
+    }
+
+    if (emailResult.status === "fulfilled") {
+      if (emailResult.value?.error) {
+        emailErrorMsg = emailResult.value.error.message || "Resend email delivery error";
+        console.error("[Contact API] Resend email delivery failed:", emailResult.value.error);
+      } else if (!emailResult.value?.skipped) {
+        emailSuccess = true;
+      }
+    } else {
+      emailErrorMsg = emailResult.reason?.message || "Resend email exception";
+      console.error("[Contact API] Resend email exception:", emailResult.reason);
+    }
+
+    // 5. Fail only if BOTH fail
+    if (!dbSuccess && !emailSuccess) {
+      console.error("[Contact API] Both DB insert and Email delivery failed.", { dbErrorMsg, emailErrorMsg });
       return res.status(500).json({
-        error: error.message || "Failed to send message via email provider.",
+        error: "Failed to process message through email and database. Please try again or email us directly at info@clingene.co.",
       });
     }
-
-    console.log(
-      `[Email Sent Successfully] ID: ${data?.id}, To: ${clientEmail}`
-    );
 
     return res.status(200).json({
       success: true,
       message:
         "Thank you! Your message has been sent. Our team will get back to you shortly.",
-      id: data?.id,
+      dbSaved: dbSuccess,
+      emailSent: emailSuccess,
     });
   } catch (err) {
     console.error("[Serverless Function Error]", err);
