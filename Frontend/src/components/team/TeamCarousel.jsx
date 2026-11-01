@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { DEFAULT_AVATAR } from "../../lib/imageOptimization.js";
 
 // Calculate stacked overlapping position for 5-card deck layout
 function getCardTransform(offset, stageWidth) {
@@ -182,6 +183,14 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
                   height={member.height || 800}
                   decoding="async"
                   loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    if (member.fallbackImage && e.currentTarget.src !== member.fallbackImage) {
+                      e.currentTarget.src = member.fallbackImage;
+                    } else {
+                      e.currentTarget.src = DEFAULT_AVATAR;
+                    }
+                  }}
                   className="h-full w-full object-cover object-[top_center] sm:object-[center_20%]"
                 />
               </div>
@@ -252,7 +261,7 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
                 style={{
                   fontSize: "clamp(0.8rem, 3.4vw, 0.9rem)",
                   lineHeight: 1.3,
-                  ...(!isActive ? { color: "var(--accent)" } : {}),
+                  ...(!isActive ? { color: "var(--accent-dark, #0284c7)" } : {}),
                 }}
               >
                 {member.role || member.designation}
@@ -263,13 +272,13 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
                 className={`mx-auto h-0.5 w-10 sm:w-12 rounded-full my-1.5 sm:my-2.5 ${
                   isActive ? 'bg-white/40' : ''
                 }`}
-                style={!isActive ? { backgroundColor: "var(--accent)" } : undefined}
+                style={!isActive ? { backgroundColor: "var(--accent-dark, #0284c7)" } : undefined}
               />
 
               {/* 3. Description / Qualification / Bio: supports multi-line credentials cleanly */}
               <p
                 className={`text-center whitespace-pre-line line-clamp-4 sm:line-clamp-5 font-['Inter',sans-serif] ${
-                  isActive ? 'text-white/85' : 'text-slate-500'
+                  isActive ? 'text-white/85' : 'text-slate-600'
                 }`}
                 style={{
                   fontSize: "clamp(0.76rem, 3.1vw, 0.83rem)",
@@ -295,16 +304,14 @@ export default function TeamCarousel({ members = [] }) {
   const touchStartRef = useRef({ x: 0, time: 0 });
   const isDraggingRef = useRef(false);
 
-  // Measure stage width
+  // Measure stage width purely through ResizeObserver (zero forced reflows)
   useEffect(() => {
-    const updateStageWidth = () => {
-      if (stageRef.current) {
-        setStageWidth(stageRef.current.offsetWidth);
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (entries[0]?.contentRect?.width) {
+        setStageWidth(entries[0].contentRect.width);
       }
-    };
+    });
 
-    updateStageWidth();
-    const resizeObserver = new ResizeObserver(updateStageWidth);
     if (stageRef.current) {
       resizeObserver.observe(stageRef.current);
     }
@@ -478,9 +485,10 @@ export default function TeamCarousel({ members = [] }) {
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Render ALL cards in stacked deck */}
+          {/* Render only visible cards in stacked deck (|offset| <= 2) to eliminate off-screen DOM weight */}
           {members.map((member, index) => {
             const offset = getCardOffset(index);
+            if (Math.abs(offset) > 2) return null;
             return (
               <CarouselCard
                 key={member.name || index}
@@ -516,7 +524,7 @@ export default function TeamCarousel({ members = [] }) {
             <div className="text-base font-extrabold text-[#0f172a] tabular-nums font-['Inter']">
               <span style={{ color: "var(--accent)" }}>{String(activeIndex + 1).padStart(2, '0')}</span>
               {" / "}
-              <span className="text-[#94a3b8]">{String(members.length).padStart(2, '0')}</span>
+              <span className="text-[#64748b]">{String(members.length).padStart(2, '0')}</span>
             </div>
 
             {/* Dot indicators — 44px touch targets */}

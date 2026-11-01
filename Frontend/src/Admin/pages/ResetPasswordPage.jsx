@@ -57,14 +57,22 @@ export default function ResetPasswordPage({ onNavigate }) {
     };
   }, []);
 
-  // While inspecting session tokens, show clean minimal loader
+  // While inspecting session tokens, show clean minimal loader with ClinGene logo like other pages
   if (checking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#16222f] p-4 font-inter text-slate-300">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-3 border-slate-700 border-t-[#009688]" />
-          <span className="text-xs text-slate-400">Verifying session...</span>
-        </div>
+      <div
+        aria-label="Loading ClinGene"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-white"
+        role="status"
+      >
+        <img
+          alt="ClinGene"
+          width="733"
+          height="290"
+          className="preloader-logo h-28 w-80 max-w-[85vw] object-contain sm:h-36 sm:w-md lg:h-44 lg:w-xl"
+          src="/images/clingene-logo.webp"
+        />
+        <span className="sr-only">Verifying session...</span>
       </div>
     );
   }
@@ -123,9 +131,9 @@ export default function ResetPasswordPage({ onNavigate }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#16222f] p-4 font-inter text-slate-800">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#070c14] p-4 font-inter text-slate-800 dark:text-slate-100 transition-colors">
       <div className="w-full max-w-md">
-        <div className="rounded-2xl border border-slate-700/80 bg-white p-7 sm:p-9 shadow-2xl transition-all">
+        <div className="rounded-2xl border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-7 sm:p-9 shadow-2xl transition-all">
           {/* Header */}
           <div className="flex flex-col items-center text-center mb-6">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-[#00897b] to-[#00a884] text-white shadow-lg shadow-teal-950/20 mb-3">

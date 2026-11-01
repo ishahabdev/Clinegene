@@ -4,6 +4,7 @@ import Button from "../components/Button.jsx";
 import SectionHeading from "../components/SectionHeading";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import serviceHero from "../assets/service-hero.webp";
+import { getOptimizedImageUrl } from "../lib/imageOptimization.js";
 import { fetchPublishedServices } from "../lib/servicesClient.js";
 import { useTheme } from "../context/ThemeContext.jsx";
 
@@ -457,11 +458,11 @@ export default function ServicesPage() {
                           <img
                             alt={imageAlt || name}
                             width={width || 800}
-                            height={height || 800}
+                            height={height || 600}
                             className={`h-full w-full object-cover ${slug === "library-generation" ? "object-[center_top]" : "object-center"} transition-transform duration-500 group-hover:scale-110 motion-reduce:transition-none`}
                             decoding="async"
                             loading="lazy"
-                            src={image}
+                            src={typeof image === "string" ? getOptimizedImageUrl(image, { width: 800, quality: 78, format: "webp" }) : image}
                           />
                           <span
                             className="absolute left-2 top-2 rounded-md px-2 py-1 font-inter text-[10px] font-bold tracking-wide text-white"

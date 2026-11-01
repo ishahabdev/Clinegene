@@ -51,6 +51,14 @@ export default function HeroSection() {
       className="relative isolate flex min-h-145 sm:min-h-155 lg:min-h-[calc(100svh-84px)] items-center overflow-hidden text-white"
       id="home"
     >
+      <link
+        rel="preload"
+        as="image"
+        href="/images/homepic-640.webp"
+        imageSrcSet={`/images/homepic-640.webp 640w, ${heroImgMobile} 1200w, ${heroImg} 2014w`}
+        imageSizes="(max-width: 640px) 640px, (max-width: 1200px) 1200px, 100vw"
+        fetchPriority="high"
+      />
       {/* Hero background image — responsive focal position across screen sizes */}
       <img
         alt=""
@@ -58,8 +66,8 @@ export default function HeroSection() {
         key={heroImg}
         width="2014"
         height="781"
-        srcSet={`${heroImgMobile} 1200w, ${heroImg} 2014w`}
-        sizes="100vw"
+        srcSet={`/images/homepic-640.webp 640w, ${heroImgMobile} 1200w, ${heroImg} 2014w`}
+        sizes="(max-width: 640px) 640px, (max-width: 1200px) 1200px, 100vw"
         className="hero-bg-img absolute inset-0 -z-20 h-full w-full object-cover object-[72%_center] sm:object-[68%_center] lg:object-center transition-all duration-500"
         fetchPriority="high"
         src={heroImg}

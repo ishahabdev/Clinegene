@@ -19,10 +19,10 @@ import {
   RefreshCw,
   Home,
 } from "lucide-react";
-import FileUploader from "../components/FileUploader.jsx";
 import ImageUploader from "../components/ImageUploader.jsx";
 import ConfirmDialog from "../components/ConfirmDialog.jsx";
 import EmptyState from "../components/EmptyState.jsx";
+import AdminPageHeader from "../components/AdminPageHeader.jsx";
 import ServicesToolbar from "./services/ServicesToolbar.jsx";
 import ServicesList from "./services/ServicesList.jsx";
 import ServicesGrid from "./services/ServicesGrid.jsx";
@@ -153,25 +153,29 @@ export default function ServicesPage() {
         count: total,
         title: "Total Services",
         icon: Stethoscope,
-        color: "text-[#00bcd4] bg-[#e0f7fa]",
+        color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
+        waveFill: "rgba(6,182,212,0.18)",
       },
       {
         count: categoriesCount || 1,
         title: "Categories",
         icon: LayoutGrid,
-        color: "text-[#00bcd4] bg-[#e0f7fa]",
+        color: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+        waveFill: "rgba(245,158,11,0.18)",
       },
       {
         count: active,
         title: "Active Services",
         icon: CheckCircle2,
-        color: "text-[#2e7d32] bg-[#e8f5e9]",
+        color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+        waveFill: "rgba(16,185,129,0.18)",
       },
       {
         count: inactive,
         title: "Inactive Services",
         icon: PauseCircle,
-        color: "text-[#0284c7] bg-[#e0f2fe]",
+        color: "text-purple-400 bg-purple-500/10 border-purple-500/20",
+        waveFill: "rgba(168,85,247,0.18)",
       },
     ];
   }, [services, categoryCounts]);
@@ -410,48 +414,25 @@ export default function ServicesPage() {
         </div>
       )}
 
-      {/* Page Header (Matches screenshot) */}
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-3.5">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#00bcd4] text-white shadow-xs">
-            <Layers className="h-6 w-6 stroke-[2]" />
-          </div>
-          <div>
-            <h1 className="font-outfit text-2xl font-bold text-[#0c2b48]">Services</h1>
-            <p className="font-inter text-xs sm:text-sm text-slate-500 mt-0.5">
-              Manage medical and research services
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-start sm:items-end gap-2">
-          {/* Top right breadcrumb */}
-          <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400">
-            <Home className="h-3.5 w-3.5 text-slate-400" />
-            <span className="text-slate-400">Home</span>
-            <span>›</span>
-            <span className="text-slate-600 font-medium">Services</span>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleOpenAdd}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00bcd4] px-5 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-xs hover:bg-[#00acc1] active:scale-95 transition-all cursor-pointer"
-          >
-            <span>+ Add Service</span>
-          </button>
-        </div>
-      </div>
+      {/* Page Header */}
+      <AdminPageHeader
+        icon={Layers}
+        title="Services"
+        subtitle="Manage medical and research services"
+        breadcrumbs={[{ label: "Services" }]}
+        actionLabel="+ Add Service"
+        onAction={handleOpenAdd}
+      />
 
       {/* Top Error Alert if Supabase fetch failed */}
       {error && (
-        <div className="mb-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-red-800">
+        <div className="mb-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 dark:bg-rose-500/10 dark:border-rose-500/20 p-4 text-red-800 dark:text-rose-400">
           <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
           <div className="flex-1 text-sm font-medium">{error}</div>
           <button
             type="button"
             onClick={loadServicesList}
-            className="inline-flex items-center gap-1 rounded-lg bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-200 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1 rounded-lg bg-red-100 dark:bg-rose-500/20 px-3 py-1 text-xs font-semibold text-red-700 dark:text-rose-300 hover:bg-red-200 transition-colors cursor-pointer"
           >
             <RefreshCw className="h-3.5 w-3.5" />
             Retry
@@ -459,27 +440,49 @@ export default function ServicesPage() {
         </div>
       )}
 
-      {/* 4 Stat Cards in a Row (Exact match to screenshot) */}
+      {/* 4 Stat Cards in a Row */}
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {statsCards.map((stat) => {
           const StatIcon = stat.icon;
           return (
             <div
               key={stat.title}
-              className="flex items-center gap-4 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs"
+              className="relative overflow-hidden flex items-center justify-between rounded-2xl border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-5 shadow-xs transition-all hover:border-slate-300 dark:hover:border-slate-700"
             >
-              <div
-                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${stat.color}`}
-              >
-                <StatIcon className="h-6 w-6 stroke-[1.9]" />
+              <div className="flex items-center gap-3.5 z-10">
+                <div
+                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${stat.color}`}
+                >
+                  <StatIcon className="h-5 w-5 stroke-[2]" />
+                </div>
+                <div>
+                  <p className="font-inter text-xs text-slate-500 dark:text-slate-400 font-medium">
+                    {stat.title}
+                  </p>
+                  <h4 className="font-outfit text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5">
+                    {stat.count}
+                  </h4>
+                </div>
               </div>
-              <div className="min-w-0">
-                <h4 className="font-outfit text-2xl sm:text-3xl font-extrabold text-[#0c2b48] leading-none">
-                  {stat.count}
-                </h4>
-                <p className="font-inter text-xs font-semibold text-slate-400 mt-1.5">
-                  {stat.title}
-                </p>
+
+              {/* Glowing Wave SVG on the right */}
+              <div className="absolute right-0 bottom-0 top-0 w-28 pointer-events-none opacity-80">
+                <svg
+                  viewBox="0 0 100 60"
+                  preserveAspectRatio="none"
+                  className="w-full h-full"
+                >
+                  <path
+                    d="M0,45 C30,20 60,55 100,25 L100,60 L0,60 Z"
+                    fill={stat.waveFill || "rgba(13,165,170,0.15)"}
+                  />
+                  <path
+                    d="M0,45 C30,20 60,55 100,25"
+                    fill="none"
+                    stroke={stat.waveFill || "rgba(13,165,170,0.4)"}
+                    strokeWidth="1.5"
+                  />
+                </svg>
               </div>
             </div>
           );
@@ -545,20 +548,20 @@ export default function ServicesPage() {
 
       {/* ================= ADD / EDIT SERVICE MODAL ================= */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/50 backdrop-blur-xs">
-          <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-2xl bg-white shadow-2xl animate-in zoom-in-95 duration-150 overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-2xl bg-white dark:bg-[#0e1624] border border-slate-200 dark:border-[#1b283d] shadow-2xl animate-in zoom-in-95 duration-150 overflow-hidden">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white shrink-0">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] shrink-0">
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 text-[#009688]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 dark:bg-cyan-500/15 text-[#009688] dark:text-[#0da5aa]">
                   <Layers className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-outfit text-base sm:text-lg font-bold text-slate-800">
+                  <h3 className="font-outfit text-base sm:text-lg font-bold text-slate-800 dark:text-white">
                     {editingService ? "Edit Service" : "Add Service"}
                   </h3>
-                  <p className="text-[11px] text-slate-400">
+                  <p className="text-[11px] text-slate-400 dark:text-slate-400">
                     {editingService ? `Editing "${editingService.name}"` : "Create a new clinical or computational service"}
                   </p>
                 </div>
@@ -570,7 +573,7 @@ export default function ServicesPage() {
                     href={`/services/${formData.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hidden sm:inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:text-teal-700 hover:border-teal-300 transition-colors"
+                    className="hidden sm:inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-2.5 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-teal-700 dark:hover:text-cyan-400 hover:border-teal-300 transition-colors"
                     title="Preview Public Service Page"
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
@@ -580,7 +583,7 @@ export default function ServicesPage() {
                 <button
                   type="button"
                   onClick={handleRequestCloseModal}
-                  className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors"
+                  className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -588,14 +591,14 @@ export default function ServicesPage() {
             </div>
 
             {/* Modal Tabs Navigation */}
-            <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-50/70 px-6 py-2 shrink-0 overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-2 border-b border-slate-200 dark:border-[#1b283d] bg-slate-50/70 dark:bg-[#080d17] px-6 py-2 shrink-0 overflow-x-auto no-scrollbar">
               <button
                 type="button"
                 onClick={() => setActiveTab("quickFacts")}
-                className={`relative px-3.5 py-2 text-xs font-bold rounded-lg transition-all ${
+                className={`relative px-3.5 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeTab === "quickFacts"
-                    ? "bg-white text-teal-700 shadow-xs border border-slate-200/80"
-                    : "text-slate-500 hover:text-slate-700 hover:bg-white/60"
+                    ? "bg-white dark:bg-[#0e1624] text-teal-700 dark:text-cyan-400 shadow-xs border border-slate-200/80 dark:border-[#1b283d]"
+                    : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <span>Quick facts</span>
@@ -607,10 +610,10 @@ export default function ServicesPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab("basic")}
-                className={`relative px-3.5 py-2 text-xs font-bold rounded-lg transition-all ${
+                className={`relative px-3.5 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeTab === "basic"
-                    ? "bg-white text-teal-700 shadow-xs border border-slate-200/80"
-                    : "text-slate-500 hover:text-slate-700 hover:bg-white/60"
+                    ? "bg-white dark:bg-[#0e1624] text-teal-700 dark:text-cyan-400 shadow-xs border border-slate-200/80 dark:border-[#1b283d]"
+                    : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <span>Basic Info</span>
@@ -622,10 +625,10 @@ export default function ServicesPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab("image")}
-                className={`relative px-3.5 py-2 text-xs font-bold rounded-lg transition-all ${
+                className={`relative px-3.5 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeTab === "image"
-                    ? "bg-white text-teal-700 shadow-xs border border-slate-200/80"
-                    : "text-slate-500 hover:text-slate-700 hover:bg-white/60"
+                    ? "bg-white dark:bg-[#0e1624] text-teal-700 dark:text-cyan-400 shadow-xs border border-slate-200/80 dark:border-[#1b283d]"
+                    : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <span>Image &amp; Alt</span>
@@ -637,10 +640,10 @@ export default function ServicesPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab("content")}
-                className={`relative px-3.5 py-2 text-xs font-bold rounded-lg transition-all ${
+                className={`relative px-3.5 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeTab === "content"
-                    ? "bg-white text-teal-700 shadow-xs border border-slate-200/80"
-                    : "text-slate-500 hover:text-slate-700 hover:bg-white/60"
+                    ? "bg-white dark:bg-[#0e1624] text-teal-700 dark:text-cyan-400 shadow-xs border border-slate-200/80 dark:border-[#1b283d]"
+                    : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-800/60"
                 }`}
               >
                 <span>Overview &amp; Scope</span>
@@ -662,10 +665,10 @@ export default function ServicesPage() {
                 <div className="space-y-5 animate-in fade-in duration-150">
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="text-xs font-semibold text-slate-700">
+                      <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                         Sample Type
                       </label>
-                      <span className="text-[11px] text-slate-400 font-medium">
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
                         {formData.sampleType?.length || 0}/120
                       </span>
                     </div>
@@ -677,9 +680,9 @@ export default function ServicesPage() {
                         setFormData({ ...formData, sampleType: e.target.value })
                       }
                       placeholder="e.g. Blood, DNA"
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-none"
+                      className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0da5aa] focus:outline-none"
                     />
-                    <p className="mt-1 text-[11px] text-slate-500">
+                    <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
                       Shown in the quick facts bar under the hero. Leave empty to hide.
                     </p>
                     {errors.sampleType && (
@@ -689,10 +692,10 @@ export default function ServicesPage() {
 
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="text-xs font-semibold text-slate-700">
+                      <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                         Turnaround Time
                       </label>
-                      <span className="text-[11px] text-slate-400 font-medium">
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
                         {formData.turnaroundTime?.length || 0}/60
                       </span>
                     </div>
@@ -704,9 +707,9 @@ export default function ServicesPage() {
                         setFormData({ ...formData, turnaroundTime: e.target.value })
                       }
                       placeholder="e.g. 10–14 days"
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-none"
+                      className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0da5aa] focus:outline-none"
                     />
-                    <p className="mt-1 text-[11px] text-slate-500">
+                    <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
                       Shown in the quick facts bar under the hero. Leave empty to hide.
                     </p>
                     {errors.turnaroundTime && (
@@ -716,10 +719,10 @@ export default function ServicesPage() {
 
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="text-xs font-semibold text-slate-700">
+                      <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                         Report Format
                       </label>
-                      <span className="text-[11px] text-slate-400 font-medium">
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
                         {formData.reportFormat?.length || 0}/120
                       </span>
                     </div>
@@ -731,9 +734,9 @@ export default function ServicesPage() {
                         setFormData({ ...formData, reportFormat: e.target.value })
                       }
                       placeholder="e.g. Clinical report"
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:border-[#009688] focus:outline-none"
+                      className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0da5aa] focus:outline-none"
                     />
-                    <p className="mt-1 text-[11px] text-slate-500">
+                    <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
                       Shown in the quick facts bar under the hero. Leave empty to hide.
                     </p>
                     {errors.reportFormat && (
@@ -741,37 +744,24 @@ export default function ServicesPage() {
                     )}
                   </div>
 
-                  <div className="pt-2 border-t border-slate-100">
-                    <FileUploader
-                      label="Requisition form"
-                      value={formData.requisitionPdf}
-                      onChange={(fileData) =>
-                        setFormData({ ...formData, requisitionPdf: fileData })
-                      }
-                      accept=".pdf,application/pdf"
-                      maxSizeMB={5}
-                      helperText="Shows a Download requisition form button on the service page."
-                    />
-                  </div>
-
                   {/* Live Mini Preview of Quick Facts Bar */}
-                  <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50/90 p-4">
+                  <div className="mt-6 rounded-xl border border-slate-200 dark:border-[#1b283d] bg-slate-50/90 dark:bg-[#080d17] p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-bold uppercase tracking-wider text-teal-800 flex items-center gap-1.5">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-teal-600" />
+                      <span className="text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-cyan-400 flex items-center gap-1.5">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-teal-600 dark:text-cyan-400" />
                         Live Quick Facts Bar Preview
                       </span>
-                      <span className="text-[10.5px] font-medium text-slate-400">
+                      <span className="text-[10.5px] font-medium text-slate-400 dark:text-slate-500">
                         Matches public service page
                       </span>
                     </div>
 
                     {previewFacts.length === 0 && !hasRequisitionPdf ? (
-                      <div className="rounded-lg border border-dashed border-slate-300 bg-white p-5 text-center text-xs text-slate-400">
-                        No quick facts entered. Enter sample type, turnaround time, report format, or upload a requisition form above to see the live preview.
+                      <div className="rounded-lg border border-dashed border-slate-300 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-5 text-center text-xs text-slate-400 dark:text-slate-500">
+                        No quick facts entered. Enter sample type, turnaround time, or report format above to see the live preview.
                       </div>
                     ) : (
-                      <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs">
+                      <div className="rounded-xl border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-3.5 shadow-2xs">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                           {previewFacts.length > 0 && (
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 flex-1">
@@ -780,16 +770,16 @@ export default function ServicesPage() {
                                 return (
                                   <div
                                     key={idx}
-                                    className="flex items-start gap-2.5 rounded-lg border border-slate-100 bg-slate-50/60 p-2.5"
+                                    className="flex items-start gap-2.5 rounded-lg border border-slate-100 dark:border-[#1b283d] bg-slate-50/60 dark:bg-[#080d17] p-2.5"
                                   >
-                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-teal-50 text-teal-600 mt-0.5">
+                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-teal-50 dark:bg-cyan-500/15 text-teal-600 dark:text-cyan-400 mt-0.5">
                                       <FactIcon className="h-3.5 w-3.5 stroke-2" />
                                     </div>
                                     <div className="min-w-0 flex-1">
-                                      <span className="block text-[9.5px] font-bold uppercase tracking-wider text-slate-400">
+                                      <span className="block text-[9.5px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                                         {fact.label}
                                       </span>
-                                      <span className="block text-[11px] font-semibold text-slate-800 leading-snug line-clamp-2">
+                                      <span className="block text-[11px] font-semibold text-slate-800 dark:text-white leading-snug line-clamp-2">
                                         {fact.value}
                                       </span>
                                     </div>
@@ -800,8 +790,8 @@ export default function ServicesPage() {
                           )}
 
                           {hasRequisitionPdf && (
-                            <div className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-3 py-2 text-xs font-bold text-slate-700 shrink-0 self-start md:self-center">
-                              <FileDown className="h-3.5 w-3.5 text-teal-600" />
+                            <div className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-slate-300 dark:border-[#1b283d] bg-slate-50 dark:bg-[#080d17] px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-200 shrink-0 self-start md:self-center">
+                              <FileDown className="h-3.5 w-3.5 text-teal-600 dark:text-cyan-400" />
                               <span>Download requisition form</span>
                             </div>
                           )}
@@ -817,7 +807,7 @@ export default function ServicesPage() {
                 <div className="space-y-4 animate-in fade-in duration-150">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                         Service Name <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -826,7 +816,7 @@ export default function ServicesPage() {
                         value={formData.name}
                         onChange={(e) => handleNameChange(e.target.value)}
                         placeholder="e.g. Panel Sequencing"
-                        className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
+                        className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none"
                       />
                       {errors.name && (
                         <p className="mt-1 text-[11px] text-rose-500">{errors.name}</p>
@@ -834,7 +824,7 @@ export default function ServicesPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                         URL Slug <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -845,7 +835,7 @@ export default function ServicesPage() {
                           setFormData({ ...formData, slug: slugify(e.target.value) })
                         }
                         placeholder="e.g. panel-sequencing"
-                        className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none font-mono"
+                        className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none font-mono"
                       />
                       {errors.slug && (
                         <p className="mt-1 text-[11px] text-rose-500">{errors.slug}</p>
@@ -854,7 +844,7 @@ export default function ServicesPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Subtitle / Focus
                     </label>
                     <input
@@ -864,13 +854,13 @@ export default function ServicesPage() {
                         setFormData({ ...formData, subtitle: e.target.value })
                       }
                       placeholder="e.g. Disease panels"
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
+                      className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                         Category
                       </label>
                       <select
@@ -878,7 +868,7 @@ export default function ServicesPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, category: e.target.value })
                         }
-                        className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none cursor-pointer"
+                        className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none cursor-pointer"
                       >
                         {CATEGORIES.map((c) => (
                           <option key={c} value={c}>
@@ -889,7 +879,7 @@ export default function ServicesPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                         Service Type
                       </label>
                       <select
@@ -897,7 +887,7 @@ export default function ServicesPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, type: e.target.value })
                         }
-                        className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none cursor-pointer"
+                        className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none cursor-pointer"
                       >
                         <option value="lab">Genetic Analysis (Lab)</option>
                         <option value="computational">Computational (In Silico)</option>
@@ -905,7 +895,7 @@ export default function ServicesPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                         Pricing Display
                       </label>
                       <input
@@ -915,13 +905,13 @@ export default function ServicesPage() {
                           setFormData({ ...formData, pricing: e.target.value })
                         }
                         placeholder="e.g. Rs. 45,000"
-                        className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
+                        className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Short Description
                     </label>
                     <textarea
@@ -931,13 +921,13 @@ export default function ServicesPage() {
                         setFormData({ ...formData, description: e.target.value })
                       }
                       placeholder="Short service description..."
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
+                      className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                         Status
                       </label>
                       <select
@@ -945,7 +935,7 @@ export default function ServicesPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, status: e.target.value })
                         }
-                        className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none cursor-pointer"
+                        className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none cursor-pointer"
                       >
                         <option value="Active">Active (Published)</option>
                         <option value="Inactive">Inactive (Unavailable)</option>
@@ -953,7 +943,7 @@ export default function ServicesPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                         Icon
                       </label>
                       <select
@@ -961,7 +951,7 @@ export default function ServicesPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, icon: e.target.value })
                         }
-                        className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none cursor-pointer"
+                        className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none cursor-pointer"
                       >
                         <option value="dna">DNA Helix</option>
                         <option value="activity">Pulse Activity</option>
@@ -979,11 +969,11 @@ export default function ServicesPage() {
               {/* TAB 3: IMAGE & ALT TEXT */}
               {activeTab === "image" && (
                 <div className="space-y-4 animate-in fade-in duration-150">
-                  <div className="flex items-start gap-2.5 rounded-xl border border-teal-200 bg-teal-50/70 p-3 text-xs text-teal-800">
-                    <Info className="h-4 w-4 shrink-0 text-teal-600 mt-0.5" />
+                  <div className="flex items-start gap-2.5 rounded-xl border border-teal-200 dark:border-cyan-500/20 bg-teal-50/70 dark:bg-cyan-500/10 p-3 text-xs text-teal-800 dark:text-cyan-200">
+                    <Info className="h-4 w-4 shrink-0 text-teal-600 dark:text-cyan-400 mt-0.5" />
                     <div>
-                      <p className="font-semibold">Recommended Image Format &amp; Size</p>
-                      <p className="mt-0.5 text-[11px] text-teal-700 leading-relaxed">
+                      <p className="font-semibold text-teal-900 dark:text-cyan-200">Recommended Image Format &amp; Size</p>
+                      <p className="mt-0.5 text-[11px] text-teal-700 dark:text-cyan-300 leading-relaxed">
                         For optimal load performance, upload an image about <strong>800 px wide</strong>, in <strong>WebP</strong> format, with file size <strong>under 100 KB</strong>.
                       </p>
                     </div>
@@ -999,7 +989,7 @@ export default function ServicesPage() {
                   />
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Alt Text {formData.image && <span className="text-rose-500">*</span>}
                     </label>
                     <input
@@ -1012,13 +1002,13 @@ export default function ServicesPage() {
                         }
                       }}
                       placeholder="e.g. Laboratory service"
-                      className={`w-full rounded-lg border px-3 py-2 text-xs text-slate-800 focus:outline-none ${
+                      className={`w-full rounded-lg border px-3 py-2 text-xs text-slate-800 dark:text-white focus:outline-none ${
                         errors.imageAlt
-                          ? "border-rose-400 focus:border-rose-500 bg-rose-50/30"
-                          : "border-slate-200 focus:border-[#009688]"
+                          ? "border-rose-400 focus:border-rose-500 bg-rose-50/30 dark:bg-rose-950/20"
+                          : "border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] focus:border-[#0da5aa]"
                       }`}
                     />
-                    <p className="mt-1 text-[11px] text-slate-500">
+                    <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
                       Required for accessibility and SEO when an image is uploaded. Describes the image for screen readers.
                     </p>
                     {errors.imageAlt && (
@@ -1035,7 +1025,7 @@ export default function ServicesPage() {
               {activeTab === "content" && (
                 <div className="space-y-4 animate-in fade-in duration-150">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Overview Paragraphs
                     </label>
                     <textarea
@@ -1045,15 +1035,15 @@ export default function ServicesPage() {
                         setFormData({ ...formData, overviewText: e.target.value })
                       }
                       placeholder="Enter overview content..."
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
+                      className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none"
                     />
-                    <p className="mt-1 text-[11px] text-slate-500">
+                    <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
                       Separate each paragraph with an empty line. Shown in the About section.
                     </p>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Key Features &amp; Benefits (Tick points)
                     </label>
                     <textarea
@@ -1063,18 +1053,18 @@ export default function ServicesPage() {
                         setFormData({ ...formData, featuresText: e.target.value })
                       }
                       placeholder="One per line..."
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-800 focus:border-[#009688] focus:outline-none"
+                      className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none"
                     />
                   </div>
                 </div>
               )}
 
               {/* Modal Footer Actions */}
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div className="pt-4 border-t border-slate-100 dark:border-[#1b283d] flex items-center justify-between">
                 <div>
                   {isDirty && (
-                    <span className="text-[11px] text-amber-600 font-medium flex items-center gap-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+                    <span className="text-[11px] text-amber-500 font-medium flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
                       Unsaved changes
                     </span>
                   )}
@@ -1084,7 +1074,7 @@ export default function ServicesPage() {
                   <button
                     type="button"
                     onClick={handleRequestCloseModal}
-                    className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+                    className="rounded-lg border border-slate-200 dark:border-[#1b283d] px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -1094,7 +1084,7 @@ export default function ServicesPage() {
                       href={`/services/${formData.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex sm:hidden items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600"
+                      className="inline-flex sm:hidden items-center gap-1 rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300"
                     >
                       <ExternalLink className="h-3 w-3" />
                       <span>Preview</span>
@@ -1104,7 +1094,7 @@ export default function ServicesPage() {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="rounded-lg bg-[#009688] px-5 py-2 text-xs font-semibold text-white hover:bg-[#00897b] transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
+                    className="rounded-lg bg-[#0da5aa] px-5 py-2 text-xs font-semibold text-white hover:bg-[#088395] transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
                   >
                     {saving ? "Saving..." : editingService ? "Save Changes" : "Add Service"}
                   </button>
@@ -1118,22 +1108,22 @@ export default function ServicesPage() {
 
       {/* ================= VIEW DRAWER ================= */}
       {viewDrawerService && (
-        <div className="fixed inset-0 z-50 flex items-center justify-end bg-slate-900/40 backdrop-blur-xs">
-          <div className="h-full w-full max-w-xl bg-white p-6 shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-200 flex flex-col justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-end bg-slate-900/60 backdrop-blur-xs">
+          <div className="h-full w-full max-w-xl bg-white dark:bg-[#0e1624] border-l border-slate-200 dark:border-[#1b283d] p-6 shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-200 flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-[#1b283d]">
                 <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 text-[#009688]">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 dark:bg-cyan-500/15 text-[#009688] dark:text-[#0da5aa]">
                     <Layers className="h-4.5 w-4.5" />
                   </div>
-                  <h3 className="font-outfit text-base font-bold text-slate-800">
+                  <h3 className="font-outfit text-base font-bold text-slate-800 dark:text-white">
                     Service Overview
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => setViewDrawerService(null)}
-                  className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors"
+                  className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -1141,7 +1131,7 @@ export default function ServicesPage() {
 
               <div className="mt-5 space-y-4 text-xs">
                 {viewDrawerService.image && (
-                  <div className="relative aspect-16/9 w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-900">
+                  <div className="relative aspect-16/9 w-full overflow-hidden rounded-xl border border-slate-200 dark:border-[#1b283d] bg-slate-900">
                     <img
                       src={viewDrawerService.image}
                       alt={viewDrawerService.imageAlt || viewDrawerService.name}
@@ -1155,30 +1145,30 @@ export default function ServicesPage() {
                 )}
 
                 <div>
-                  <span className="text-slate-400 font-medium">Service Name</span>
-                  <p className="font-outfit text-base font-bold text-slate-800 mt-0.5">
+                  <span className="text-slate-400 dark:text-slate-500 font-medium">Service Name</span>
+                  <p className="font-outfit text-base font-bold text-slate-800 dark:text-white mt-0.5">
                     {viewDrawerService.name}
                   </p>
-                  <p className="text-[11px] font-mono text-slate-400 mt-0.5">
+                  <p className="text-[11px] font-mono text-slate-400 dark:text-slate-500 mt-0.5">
                     /services/{viewDrawerService.slug}
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-[#1b283d]">
                   <div>
-                    <span className="text-slate-400 font-medium">Category</span>
-                    <p className="font-semibold text-teal-700 mt-0.5">
+                    <span className="text-slate-400 dark:text-slate-500 font-medium">Category</span>
+                    <p className="font-semibold text-teal-700 dark:text-cyan-400 mt-0.5">
                       {viewDrawerService.category}
                     </p>
                   </div>
                   <div>
-                    <span className="text-slate-400 font-medium">Status</span>
+                    <span className="text-slate-400 dark:text-slate-500 font-medium">Status</span>
                     <div className="mt-0.5">
                       <span
                         className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
                           viewDrawerService.status === "Active" || !viewDrawerService.status
-                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200/60"
-                            : "bg-slate-100 text-slate-500 border border-slate-200"
+                            ? "bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-500/30"
+                            : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-[#1b283d]"
                         }`}
                       >
                         <span
@@ -1195,19 +1185,19 @@ export default function ServicesPage() {
                 </div>
 
                 {/* Quick Facts Section in Drawer */}
-                <div className="pt-2 border-t border-slate-100">
-                  <span className="text-slate-400 font-medium block mb-2">
+                <div className="pt-2 border-t border-slate-100 dark:border-[#1b283d]">
+                  <span className="text-slate-400 dark:text-slate-500 font-medium block mb-2">
                     Quick Facts (Public Bar)
                   </span>
                   <div className="space-y-2">
                     {viewDrawerService.sampleType && (
-                      <div className="flex items-start gap-2 rounded-lg bg-slate-50 p-2.5 border border-slate-200/70">
-                        <TestTubes className="h-3.5 w-3.5 text-teal-600 mt-0.5 shrink-0" />
+                      <div className="flex items-start gap-2 rounded-lg bg-slate-50 dark:bg-[#080d17] p-2.5 border border-slate-200/70 dark:border-[#1b283d]">
+                        <TestTubes className="h-3.5 w-3.5 text-teal-600 dark:text-cyan-400 mt-0.5 shrink-0" />
                         <div>
-                          <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                          <span className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 block">
                             Sample Type
                           </span>
-                          <span className="text-slate-700 font-medium text-[11.5px]">
+                          <span className="text-slate-700 dark:text-slate-300 font-medium text-[11.5px]">
                             {viewDrawerService.sampleType}
                           </span>
                         </div>
@@ -1215,13 +1205,13 @@ export default function ServicesPage() {
                     )}
 
                     {viewDrawerService.turnaroundTime && (
-                      <div className="flex items-start gap-2 rounded-lg bg-slate-50 p-2.5 border border-slate-200/70">
-                        <Clock className="h-3.5 w-3.5 text-teal-600 mt-0.5 shrink-0" />
+                      <div className="flex items-start gap-2 rounded-lg bg-slate-50 dark:bg-[#080d17] p-2.5 border border-slate-200/70 dark:border-[#1b283d]">
+                        <Clock className="h-3.5 w-3.5 text-teal-600 dark:text-cyan-400 mt-0.5 shrink-0" />
                         <div>
-                          <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                          <span className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 block">
                             Turnaround Time
                           </span>
-                          <span className="text-slate-700 font-medium text-[11.5px]">
+                          <span className="text-slate-700 dark:text-slate-300 font-medium text-[11.5px]">
                             {viewDrawerService.turnaroundTime}
                           </span>
                         </div>
@@ -1229,13 +1219,13 @@ export default function ServicesPage() {
                     )}
 
                     {viewDrawerService.reportFormat && (
-                      <div className="flex items-start gap-2 rounded-lg bg-slate-50 p-2.5 border border-slate-200/70">
-                        <FileText className="h-3.5 w-3.5 text-teal-600 mt-0.5 shrink-0" />
+                      <div className="flex items-start gap-2 rounded-lg bg-slate-50 dark:bg-[#080d17] p-2.5 border border-slate-200/70 dark:border-[#1b283d]">
+                        <FileText className="h-3.5 w-3.5 text-teal-600 dark:text-cyan-400 mt-0.5 shrink-0" />
                         <div>
-                          <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                          <span className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500 block">
                             Report Format
                           </span>
-                          <span className="text-slate-700 font-medium text-[11.5px]">
+                          <span className="text-slate-700 dark:text-slate-300 font-medium text-[11.5px]">
                             {viewDrawerService.reportFormat}
                           </span>
                         </div>
@@ -1243,13 +1233,13 @@ export default function ServicesPage() {
                     )}
 
                     {viewDrawerService.requisitionPdf && (
-                      <div className="flex items-center gap-2 rounded-lg bg-teal-50 p-2.5 border border-teal-200/80">
-                        <FileDown className="h-4 w-4 text-[#009688] shrink-0" />
+                      <div className="flex items-center gap-2 rounded-lg bg-teal-50 dark:bg-cyan-500/15 p-2.5 border border-teal-200/80 dark:border-cyan-500/30">
+                        <FileDown className="h-4 w-4 text-[#009688] dark:text-[#0da5aa] shrink-0" />
                         <div className="min-w-0 flex-1">
-                          <span className="text-[10px] font-bold uppercase text-teal-700 block">
+                          <span className="text-[10px] font-bold uppercase text-teal-700 dark:text-cyan-300 block">
                             Requisition PDF Available
                           </span>
-                          <span className="text-teal-900 font-medium text-[11px] truncate block">
+                          <span className="text-teal-900 dark:text-cyan-100 font-medium text-[11px] truncate block">
                             {typeof viewDrawerService.requisitionPdf === "string"
                               ? viewDrawerService.requisitionPdf.split("/").pop()
                               : viewDrawerService.requisitionPdf.name || "Requisition-Form.pdf"}
@@ -1261,9 +1251,9 @@ export default function ServicesPage() {
                 </div>
 
                 {viewDrawerService.description && (
-                  <div className="pt-2 border-t border-slate-100">
-                    <span className="text-slate-400 font-medium">Description</span>
-                    <p className="text-slate-600 mt-0.5 leading-relaxed">
+                  <div className="pt-2 border-t border-slate-100 dark:border-[#1b283d]">
+                    <span className="text-slate-400 dark:text-slate-500 font-medium">Description</span>
+                    <p className="text-slate-600 dark:text-slate-300 mt-0.5 leading-relaxed">
                       {viewDrawerService.description}
                     </p>
                   </div>
@@ -1272,12 +1262,12 @@ export default function ServicesPage() {
             </div>
 
             {/* Bottom Actions */}
-            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+            <div className="mt-6 pt-4 border-t border-slate-100 dark:border-[#1b283d] flex items-center justify-between gap-3">
               <a
                 href={`/services/${viewDrawerService.slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-teal-50 border border-teal-200 px-3.5 py-2 text-xs font-bold text-teal-700 hover:bg-teal-100 transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-teal-50 dark:bg-cyan-500/15 border border-teal-200 dark:border-cyan-500/30 px-3.5 py-2 text-xs font-bold text-teal-700 dark:text-cyan-300 hover:bg-teal-100 dark:hover:bg-cyan-500/25 transition-colors"
               >
                 <ExternalLink className="h-3.5 w-3.5" />
                 <span>View Public Page</span>
@@ -1290,7 +1280,7 @@ export default function ServicesPage() {
                   setViewDrawerService(null);
                   handleOpenEdit(s);
                 }}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[#009688] px-4 py-2 text-xs font-bold text-white hover:bg-[#00897b] transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[#0da5aa] hover:bg-[#088395] px-4 py-2 text-xs font-bold text-white transition-colors cursor-pointer"
               >
                 <Edit2 className="h-3.5 w-3.5" />
                 <span>Edit Service</span>

@@ -59,5 +59,37 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react(), tailwindcss(), devApiPlugin()],
+    preview: {
+      headers: {
+        "Cache-Control": "public, max-age=31536000, immutable",
+      },
+    },
+    build: {
+      sourcemap: "hidden", // Generates source maps without referencing them in bundle comments (fixes Lighthouse Best Practices)
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes("node_modules")) {
+              if (id.includes("react") || id.includes("react-dom") || id.includes("scheduler")) {
+                return "vendor-react";
+              }
+              if (id.includes("@supabase")) {
+                return "vendor-supabase";
+              }
+              if (id.includes("lucide-react")) {
+                return "vendor-lucide";
+              }
+              if (id.includes("lenis")) {
+                return "vendor-lenis";
+              }
+              if (id.includes("zod") || id.includes("react-hook-form") || id.includes("@hookform")) {
+                return "vendor-forms";
+              }
+              return "vendor";
+            }
+          },
+        },
+      },
+    },
   };
 });

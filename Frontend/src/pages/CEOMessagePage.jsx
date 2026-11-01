@@ -1,7 +1,7 @@
 import micro from "../assets/micro.jpg";
 import sig from "../assets/sig.png";
 import dnaStrand from "../assets/dna_strand.png";
-import amjadAli from "../assets/team/Amjad Ali.jpeg";
+import amjadAli from "../assets/team/Amjad Ali.webp";
 import taglineText from "../assets/tagline-text@2x.png";
 import { ArrowRight } from "lucide-react";
 import Button from "../components/Button.jsx";

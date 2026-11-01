@@ -5,19 +5,20 @@ import ScrollReveal from "../components/ScrollReveal.jsx";
 import TeamHero from "../components/team/TeamHero.jsx";
 import LeadershipSection from "../components/team/LeadershipSection.jsx";
 import TeamCarousel from "../components/team/TeamCarousel.jsx";
-import teamPhoto from "../assets/team.png";
+import teamPhoto from "../assets/team.webp";
 import { useTheme } from "../context/ThemeContext.jsx";
-import { supabase } from "../lib/supabase.js";
+import { STATIC_TEAM_MEMBERS } from "../data/teamConfig.js";
+import { getOptimizedImageUrl, DEFAULT_AVATAR } from "../lib/imageOptimization.js";
 
-import amjadAli from "../assets/team/Amjad Ali.jpeg";
-import safdarAli from "../assets/team/Safdar Ali.jpeg";
-import abidAli from "../assets/team/Abid Ali.jpeg";
-import samrana from "../assets/team/samrana.jpeg";
-import kifayatUllah from "../assets/team/Kifayat ullah.jpeg";
-import tahirUllah from "../assets/team/Tahir Ali.jpeg";
-import mudassirAlvi from "../assets/team/Mudassir.jpeg";
-import saadKhan from "../assets/team/Saad.jpeg";
-import imadAli from "../assets/team/Imad Ali.jpeg";
+import amjadAli from "../assets/team/Amjad Ali.webp";
+import safdarAli from "../assets/team/Safdar Ali.webp";
+import abidAli from "../assets/team/Abid Ali.webp";
+import samrana from "../assets/team/samrana.webp";
+import kifayatUllah from "../assets/team/Kifayat ullah.webp";
+import tahirUllah from "../assets/team/Tahir Ali.webp";
+import mudassirAlvi from "../assets/team/Mudassir.webp";
+import saadKhan from "../assets/team/Saad.webp";
+import imadAli from "../assets/team/Imad Ali.webp";
 
 const localImageMap = {
   "/assets/team/Amjad Ali.jpeg": amjadAli,
@@ -29,7 +30,33 @@ const localImageMap = {
   "/assets/team/Mudassir.jpeg": mudassirAlvi,
   "/assets/team/Saad.jpeg": saadKhan,
   "/assets/team/Imad Ali.jpeg": imadAli,
+  "/assets/team/Amjad Ali.webp": amjadAli,
+  "/assets/team/Safdar Ali.webp": safdarAli,
+  "/assets/team/Abid Ali.webp": abidAli,
+  "/assets/team/samrana.webp": samrana,
+  "/assets/team/Kifayat ullah.webp": kifayatUllah,
+  "/assets/team/Tahir Ali.webp": tahirUllah,
+  "/assets/team/Mudassir.webp": mudassirAlvi,
+  "/assets/team/Saad.webp": saadKhan,
+  "/assets/team/Imad Ali.webp": imadAli,
 };
+
+function getLocalFallbackForMember(item) {
+  if (item.image_url && localImageMap[item.image_url]) {
+    return localImageMap[item.image_url];
+  }
+  const lowerName = (item.name || "").toLowerCase();
+  if (lowerName.includes("amjad")) return amjadAli;
+  if (lowerName.includes("safdar")) return safdarAli;
+  if (lowerName.includes("abid")) return abidAli;
+  if (lowerName.includes("samrana")) return samrana;
+  if (lowerName.includes("kifayat")) return kifayatUllah;
+  if (lowerName.includes("tahir")) return tahirUllah;
+  if (lowerName.includes("mudassir")) return mudassirAlvi;
+  if (lowerName.includes("saad")) return saadKhan;
+  if (lowerName.includes("imad")) return imadAli;
+  return DEFAULT_AVATAR;
+}
 
 export default function TeamPage() {
   const { theme } = useTheme();
@@ -37,19 +64,17 @@ export default function TeamPage() {
   const isGreen = theme === "green";
   const promisePhoto = teamPhoto;
 
-  const [members, setMembers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [members, setMembers] = useState(STATIC_TEAM_MEMBERS);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!supabase) {
-      setLoading(false);
-      return;
-    }
-
     let isMounted = true;
 
     async function fetchSupabaseTeam() {
       try {
+        const { supabase } = await import("../lib/supabase.js");
+        if (!supabase) return;
+
         const { data, error } = await supabase
           .from("team")
           .select("name, role, department, qualification, email, bio, image_url")
@@ -60,43 +85,33 @@ export default function TeamPage() {
           if (import.meta.env.DEV) {
             console.error("[TeamPage] Error fetching team members:", error);
           }
-          if (isMounted) {
-            setMembers([]);
-            setLoading(false);
-          }
           return;
         }
 
-        if (isMounted) {
-          if (data && data.length > 0) {
-            const formatted = data.map((item) => {
-              const img = localImageMap[item.image_url] || item.image_url || "";
-              return {
-                name: item.name || "",
-                role: item.role || "",
-                designation: item.role || "",
-                department: item.department || "",
-                qualification: item.qualification || "",
-                description: item.qualification || item.bio || "",
-                email: item.email || "",
-                bio: item.bio || item.qualification || "",
-                image: img,
-                image_url: img,
-              };
-            });
-            setMembers(formatted);
-          } else {
-            setMembers([]);
-          }
-          setLoading(false);
+        if (isMounted && data && data.length > 0) {
+          const formatted = data.map((item) => {
+            const fallbackImg = getLocalFallbackForMember(item);
+            const rawImg = localImageMap[item.image_url] || item.image_url || fallbackImg;
+            const img = typeof rawImg === "string" ? getOptimizedImageUrl(rawImg) : rawImg;
+            return {
+              name: item.name || "",
+              role: item.role || "",
+              designation: item.role || "",
+              department: item.department || "",
+              qualification: item.qualification || "",
+              description: item.qualification || item.bio || "",
+              email: item.email || "",
+              bio: item.bio || item.qualification || "",
+              image: img,
+              image_url: img,
+              fallbackImage: fallbackImg,
+            };
+          });
+          setMembers(formatted);
         }
       } catch (err) {
         if (import.meta.env.DEV) {
           console.error("[TeamPage] Failed to fetch team from Supabase:", err);
-        }
-        if (isMounted) {
-          setMembers([]);
-          setLoading(false);
         }
       }
     }

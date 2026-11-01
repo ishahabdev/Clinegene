@@ -2,60 +2,53 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import HeaderNav from "./components/HeaderNav.jsx";
 import SiteFooter from "./components/SiteFooter.jsx";
 import ThemeSwitcher from "./components/ThemeSwitcher.jsx";
-import HomePage from "./pages/HomePage.jsx";
-import PageNotFoundPage from "./pages/PageNotFoundPage.jsx";
 import Button from "./components/Button.jsx";
 import LenisProvider, { useLenisRef } from "./components/LenisProvider.jsx";
 import SectionScrollEffects from "./components/SectionScrollEffects.jsx";
 import ScrollEnhancements from "./components/ScrollEnhancements.jsx";
+import TeamPage from "./pages/TeamPage.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { seoRoutes } from "./data/seoData.js";
-
-import AboutPage from "./pages/AboutPage.jsx";
-import CEOMessagePage from "./pages/CEOMessagePage.jsx";
-import ContactPage from "./pages/ContactPage.jsx";
-import GalleryPage from "./pages/GalleryPage.jsx";
-import NewsPage from "./pages/NewsPage.jsx";
-import OpenPositionsPage from "./pages/OpenPositionsPage.jsx";
-import ResearchPage from "./pages/ResearchPage.jsx";
-import ServicesPage from "./pages/ServicesPage.jsx";
-import ServiceDetailPage from "./pages/ServiceDetailPage.jsx";
-import TeamPage from "./pages/TeamPage.jsx";
-import BlogPage from "./pages/BlogPage.jsx";
 import { ADMIN_BASE } from "./Admin/adminConfig.js";
 
 const cleanAdminBase = ADMIN_BASE ? ADMIN_BASE.replace(/^\/|\/$/g, "").toLowerCase() : "";
 
 const AdminApp = lazy(() => import("./Admin/AdminApp.jsx"));
 
-const pages = {
-  home: { label: "Home", component: HomePage },
-  "ceo-message": { label: "CEO Message", component: CEOMessagePage },
-  about: { label: "About", component: AboutPage },
+const clientPages = {
+  home: { label: "Home", component: lazy(() => import("./pages/HomePage.jsx")) },
+  "ceo-message": { label: "CEO Message", component: lazy(() => import("./pages/CEOMessagePage.jsx")) },
+  about: { label: "About", component: lazy(() => import("./pages/AboutPage.jsx")) },
   team: { label: "Team", component: TeamPage },
-  services: { label: "Services", component: ServicesPage },
-  "service-detail": { label: "Services", component: ServiceDetailPage },
-  research: { label: "Research", component: ResearchPage },
-  gallery: { label: "Gallery", component: GalleryPage },
-  careers: { label: "Careers", component: OpenPositionsPage },
-  "open-positions": { label: "Careers", component: OpenPositionsPage },
-  news: { label: "News", component: NewsPage },
-  blogs: { label: "Blog", component: BlogPage },
-  blog: { label: "Blog", component: BlogPage },
-  resources: { label: "Blog", component: BlogPage },
-  contact: { label: "Contact", component: ContactPage },
-  "not-found": { label: "Page Not Found", component: PageNotFoundPage },
+  services: { label: "Services", component: lazy(() => import("./pages/ServicesPage.jsx")) },
+  "service-detail": { label: "Services", component: lazy(() => import("./pages/ServiceDetailPage.jsx")) },
+  research: { label: "Research", component: lazy(() => import("./pages/ResearchPage.jsx")) },
+  gallery: { label: "Gallery", component: lazy(() => import("./pages/GalleryPage.jsx")) },
+  careers: { label: "Careers", component: lazy(() => import("./pages/OpenPositionsPage.jsx")) },
+  "open-positions": { label: "Careers", component: lazy(() => import("./pages/OpenPositionsPage.jsx")) },
+  news: { label: "News", component: lazy(() => import("./pages/NewsPage.jsx")) },
+  blogs: { label: "Blog", component: lazy(() => import("./pages/BlogPage.jsx")) },
+  blog: { label: "Blog", component: lazy(() => import("./pages/BlogPage.jsx")) },
+  resources: { label: "Blog", component: lazy(() => import("./pages/BlogPage.jsx")) },
+  contact: { label: "Contact", component: lazy(() => import("./pages/ContactPage.jsx")) },
+  "not-found": { label: "Page Not Found", component: lazy(() => import("./pages/PageNotFoundPage.jsx")) },
 };
 
 function AdminLoadingFallback() {
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-slate-50 dark:bg-slate-950 font-inter text-slate-400">
-      <div className="flex flex-col items-center gap-3">
-        <div className="h-9 w-9 animate-spin rounded-full border-3 border-slate-200 border-t-[#b91c1c] dark:border-slate-800" />
-        <span className="font-outfit text-sm font-semibold text-slate-700 dark:text-slate-300">
-          Loading ClinGene Admin Portal...
-        </span>
-      </div>
+    <div
+      aria-label="Loading ClinGene"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-white"
+      role="status"
+    >
+      <img
+        alt="ClinGene"
+        width="733"
+        height="290"
+        className="preloader-logo h-28 w-80 max-w-[85vw] object-contain sm:h-36 sm:w-md lg:h-44 lg:w-xl"
+        src="/images/clingene-logo.webp"
+      />
+      <span className="sr-only">Loading ClinGene</span>
     </div>
   );
 }
@@ -79,7 +72,7 @@ function LoadingScreen() {
   );
 }
 
-function getCurrentPage(ssrUrl) {
+function getCurrentPage(ssrUrl, activePages = clientPages) {
   if (typeof window === "undefined") {
     if (!ssrUrl) return "home";
     const clean = ssrUrl.replace(/^\/|\/$/g, "");
@@ -87,7 +80,7 @@ function getCurrentPage(ssrUrl) {
     if (clean.startsWith("services/")) return "service-detail";
     if (clean === "careers" || clean === "open-positions") return "careers";
     if (clean === "blogs" || clean === "blog" || clean === "resources") return "blogs";
-    if (pages[clean]) return clean;
+    if (activePages[clean]) return clean;
     return "not-found";
   }
 
@@ -122,7 +115,7 @@ function getCurrentPage(ssrUrl) {
   }
 
   // If there's a legacy hash matching a page (e.g. #services), normalize to clean path /services
-  if (pages[hash]) {
+  if (activePages[hash]) {
     const cleanUrl = hash === "home" ? "/" : `/${hash}`;
     if (window.location.hash || window.location.pathname !== cleanUrl) {
       window.history.replaceState(null, "", cleanUrl);
@@ -157,7 +150,7 @@ function getCurrentPage(ssrUrl) {
   }
 
   // If pathname matches a registered page (e.g. /about, /services, /team, /contact):
-  if (pages[pathname]) {
+  if (activePages[pathname]) {
     return pathname;
   }
 
@@ -172,14 +165,15 @@ function getHashTarget(hash) {
   }
 }
 
-function AppContent({ ssrUrl }) {
-  const [pageId, setPageId] = useState(() => getCurrentPage(ssrUrl));
-  const [showPreloader, setShowPreloader] = useState(() => typeof window !== "undefined" && !ssrUrl);
+function AppContent({ ssrUrl, ssrPages }) {
+  const activePages = ssrPages || clientPages;
+  const [pageId, setPageId] = useState(() => getCurrentPage(ssrUrl, activePages));
+  const [showPreloader, setShowPreloader] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const lenisRef = useLenisRef();
   const lastHandledLocationRef = useRef(typeof window !== "undefined" ? window.location.href : (ssrUrl || "/"));
   const backToTopVisibleRef = useRef(false);
-  const CurrentPage = pageId === "admin" ? AdminApp : (pages[pageId]?.component || PageNotFoundPage);
+  const CurrentPage = pageId === "admin" ? AdminApp : (activePages[pageId]?.component || activePages["not-found"]?.component);
 
   useEffect(() => {
     const lenis = lenisRef?.current;
@@ -383,7 +377,6 @@ function AppContent({ ssrUrl }) {
       backToTopVisibleRef.current = isVisible;
       setShowBackToTop(isVisible);
     };
-    updateScrollPosition();
     window.addEventListener("scroll", updateScrollPosition, { passive: true });
     return () => window.removeEventListener("scroll", updateScrollPosition);
   }, []);
@@ -402,10 +395,10 @@ function AppContent({ ssrUrl }) {
   return (
     <>
       {showPreloader && pageId !== "not-found" && <LoadingScreen />}
-      {pageId !== "not-found" && <HeaderNav activePage={pages[pageId].label} />}
-      <main>
+      {pageId !== "not-found" && <HeaderNav activePage={activePages[pageId]?.label || "Home"} />}
+      <main id="main-content">
         <SectionScrollEffects key={pageId} />
-        <Suspense fallback={<LoadingScreen />}>
+        <Suspense fallback={null}>
           <CurrentPage
             key={typeof window !== "undefined" ? window.location.pathname : (ssrUrl || "/")}
             ssrUrl={ssrUrl}
@@ -493,12 +486,12 @@ function AppContent({ ssrUrl }) {
   );
 }
 
-export default function App({ ssrUrl }) {
+export default function App({ ssrUrl, ssrPages }) {
   return (
     <ThemeProvider>
       <LenisProvider>
         <ScrollEnhancements />
-        <AppContent ssrUrl={ssrUrl} />
+        <AppContent ssrUrl={ssrUrl} ssrPages={ssrPages} />
       </LenisProvider>
     </ThemeProvider>
   );

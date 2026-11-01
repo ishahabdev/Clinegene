@@ -40,7 +40,7 @@ export default function AdminLayout({
   return (
     <div
       data-lenis-prevent="true"
-      className="flex h-screen w-screen flex-col overflow-hidden bg-[#f4f7f6] font-inter text-slate-800"
+      className="flex h-screen w-screen flex-col overflow-hidden bg-[#f8fafc] dark:bg-[#070c14] font-inter text-slate-800 dark:text-slate-100 transition-colors duration-200"
     >
       {/* Top Navbar spans full width */}
       <AdminTopbar

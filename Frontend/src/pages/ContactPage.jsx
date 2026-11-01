@@ -177,7 +177,7 @@ function ServiceDropdown({ value, onChange, id = "contact-service", name = "serv
             : "border-slate-200 hover:border-slate-300 focus:border-[#1ecbe1] focus:ring-2 focus:ring-[#1ecbe1]/20 focus:outline-none"
         }`}
       >
-        <span className={`block truncate ${selectedOption ? "font-medium text-[#0c2b48]" : "text-slate-400"}`}>
+        <span className={`block truncate ${selectedOption ? "font-medium text-[#0c2b48]" : "text-slate-500"}`}>
           {selectedOption ? selectedOption.label : "Select an option..."}
         </span>
         <ChevronDown
@@ -253,6 +253,8 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileVisible, setTurnstileVisible] = useState(false);
+  const [mapLoaded, setMapLoaded] = useState(false);
   const [servicesList, setServicesList] = useState([]);
 
   useEffect(() => {
@@ -306,10 +308,10 @@ export default function ContactPage() {
     selectedService === "job-application" ||
     selectedService === "internship";
 
-  // Cloudflare Turnstile Integration (optional / non-blocking)
+  // Cloudflare Turnstile Integration: lazy-load only when form interacts or comes into view
   useEffect(() => {
     const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
-    if (!siteKey || typeof window === "undefined") return;
+    if (!siteKey || typeof window === "undefined" || !turnstileVisible) return;
 
     let widgetId = null;
     const scriptId = "cf-turnstile-script";
@@ -348,7 +350,7 @@ export default function ContactPage() {
         } catch (_) {}
       }
     };
-  }, []);
+  }, [turnstileVisible]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -630,7 +632,7 @@ export default function ContactPage() {
                     style={
                       isFeatured
                         ? { color: featuredAccent, transition: "color 0.6s ease" }
-                        : { color: isRed ? "#b91c1c" : isGreen ? "#059669" : "#079bb0", transition: "color 0.6s ease" }
+                        : { color: isRed ? "#b91c1c" : isGreen ? "#059669" : "#067a8b", transition: "color 0.6s ease" }
                     }
                   >
                     {card.value}
@@ -665,15 +667,30 @@ export default function ContactPage() {
             <p className="contact-location-address">
               {contactAddress}
             </p>
-            <div className="contact-map">
-              <iframe
-                title="Map showing ClinGene’s location in Islamabad"
-                src={mapEmbedUrl}
-                width="600"
-                height="450"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
+            <div className="contact-map bg-slate-100 flex items-center justify-center relative">
+              {mapLoaded ? (
+                <iframe
+                  title="Map showing ClinGene’s location in Islamabad"
+                  src={mapEmbedUrl}
+                  width="600"
+                  height="450"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full border-0"
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setMapLoaded(true)}
+                  className="group flex flex-col items-center justify-center gap-2 p-4 text-center cursor-pointer w-full h-full bg-slate-50 hover:bg-slate-100 transition-colors"
+                >
+                  <div className="p-2.5 rounded-full bg-white shadow-xs text-slate-700 group-hover:scale-105 transition-transform">
+                    <ContactIcon type="location" />
+                  </div>
+                  <span className="text-xs font-semibold text-slate-700">Click to load interactive map</span>
+                  <span className="text-[11px] text-slate-500">Protects your privacy and avoids third-party tracking</span>
+                </button>
+              )}
             </div>
             <a className="contact-directions-link" href={mapUrl} rel="noopener noreferrer" target="_blank">
               View directions on Google Maps <span aria-hidden="true">↗</span>
@@ -689,7 +706,17 @@ export default function ContactPage() {
               Fill in the form and our team will get back to you shortly.
             </p>
 
-            <form ref={formRef} className="mt-6 space-y-4" onSubmit={handleSubmit}>
+            <form
+              ref={formRef}
+              className="mt-6 space-y-4"
+              onSubmit={handleSubmit}
+              onFocus={() => {
+                if (!turnstileVisible) setTurnstileVisible(true);
+              }}
+              onMouseEnter={() => {
+                if (!turnstileVisible) setTurnstileVisible(true);
+              }}
+            >
               {/* Spam Protection Honeypot Field */}
               <div style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }} aria-hidden="true">
                 <label htmlFor="website">Leave this field blank</label>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-outfit: "Outfit", sans-serif;
@@ -507,11 +508,13 @@ main section[data-section-reveal="visible"] {
 .scroll-reveal[data-reveal-state="hidden"] {
   opacity: 0;
   transform: translateY(14px);
+  will-change: transform, opacity;
 }
 
 .scroll-reveal[data-reveal-state="visible"] {
   animation: scroll-reveal-in 520ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   animation-delay: var(--scroll-reveal-delay, 0ms);
+  will-change: transform, opacity;
 }
 
 .scroll-reveal:focus-within {
@@ -2019,9 +2022,9 @@ header[data-theme="ceo"] button:focus-visible {
 
 .contact-page {
   --contact-navy: #050b1c;
-  --contact-accent: var(--accent, #10c8e0);
+  --contact-accent: var(--accent-muted, #087990);
   --contact-text: #233047;
-  --contact-muted: #66748b;
+  --contact-muted: #526077;
   color: var(--contact-text);
 }
 
@@ -2283,7 +2286,7 @@ header[data-theme="ceo"] button:focus-visible {
   align-items: center;
   gap: 7px;
   margin-top: 9px;
-  color: #078da1;
+  color: #056a7a;
   font-size: 12px;
   font-weight: 700;
   text-decoration: none;

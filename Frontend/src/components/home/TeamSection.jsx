@@ -1,9 +1,10 @@
 import { UserRound } from "lucide-react";
 import SectionHeading from "../SectionHeading";
 import ScrollReveal from "../ScrollReveal.jsx";
-import amjadAli from "../../assets/team/Amjad Ali.jpeg";
-import safdarAli from "../../assets/team/Safdar Ali.jpeg";
-import kifayatUllah from "../../assets/team/Kifayat ullah.jpeg";
+import amjadAli from "../../assets/team/Amjad Ali.webp";
+import safdarAli from "../../assets/team/Safdar Ali.webp";
+import kifayatUllah from "../../assets/team/Kifayat ullah.webp";
+import { DEFAULT_AVATAR } from "../../lib/imageOptimization.js";
 
 export default function TeamSection() {
     return (
@@ -66,6 +67,10 @@ export default function TeamSection() {
                   className="h-full w-full object-cover object-[center_20%]"
                   decoding="async"
                   loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = DEFAULT_AVATAR;
+                  }}
                   src={image}
                 />
               ) : (

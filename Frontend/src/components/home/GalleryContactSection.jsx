@@ -3,8 +3,8 @@ import Button from "../Button";
 import SectionHeading from "../SectionHeading";
 import ScrollReveal from "../ScrollReveal.jsx";
 import { useTheme } from "../../context/ThemeContext.jsx";
-import gallery1 from "../../assets/home/gallery1.jpeg";
-import gallery2 from "../../assets/home/gallery2.jpeg";
+import gallery1 from "../../assets/home/gallery1.webp";
+import gallery2 from "../../assets/home/gallery2.webp";
 export default function GalleryContactSection() {
   const { theme } = useTheme();
 

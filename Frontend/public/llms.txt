@@ -1,0 +1,18 @@
+# ClinGene - Clinical Genetic Testing & Precision Genomics
+
+> ClinGene is a premier genetic testing laboratory and bioinformatics facility based in Islamabad, Pakistan. Providing Sanger sequencing, next-generation sequencing (NGS), and bioinformatics solutions.
+
+## Core Services
+
+- [Clinical Genetic Testing](https://www.clingene.co/services): Comprehensive diagnostic panels, Whole Exome Sequencing (WES), Whole Genome Sequencing (WGS), and genetic counseling.
+- [Genomic Sequencing](https://www.clingene.co/services): NGS, Sanger sequencing, RNA-Seq, and metagenomic analysis.
+- [Bioinformatics Services](https://www.clingene.co/services): Phylogenetic analysis, molecular docking, protein modeling, and custom computational workflows.
+
+## Organization Information
+
+- [About Us](https://www.clingene.co/about): Company mission, executive team, accreditations (SECP CUIN: 0363023, FBR: K555253).
+- [Scientific Leadership & Team](https://www.clingene.co/team): Profiles of clinical geneticists, postdocs, and laboratory scientists.
+- [Research & Publications](https://www.clingene.co/research): Published peer-reviewed research and ongoing clinical projects.
+- [Careers](https://www.clingene.co/careers): Open positions and application portal.
+- [Contact & Inquiries](https://www.clingene.co/contact): Laboratory contact information, location, and inquiry form.
+

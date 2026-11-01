@@ -12,6 +12,17 @@ import {
 
 const PAGE_SIZE = 5;
 
+function getDepartmentBadgeClass(dept = "") {
+  const normalized = dept.toLowerCase();
+  if (normalized.includes("leadership")) {
+    return "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-500/30";
+  }
+  if (normalized.includes("lab") || normalized.includes("science")) {
+    return "bg-sky-500/10 text-sky-600 dark:bg-sky-950/40 dark:text-sky-400 border border-sky-500/30";
+  }
+  return "bg-teal-500/10 text-[#088395] dark:bg-teal-950/40 dark:text-[#0da5aa] border border-teal-500/30";
+}
+
 export default function TeamList({
   members = [],
   onEdit,
@@ -40,27 +51,27 @@ export default function TeamList({
 
   const renderSortIcon = (field) => {
     if (sortField !== field) {
-      return <ArrowUpDown className="h-3 w-3 text-slate-300 group-hover:text-slate-500" />;
+      return <ArrowUpDown className="h-3 w-3 text-slate-300 dark:text-slate-600 group-hover:text-slate-500" />;
     }
     return sortDirection === "asc" ? (
-      <ArrowUp className="h-3 w-3 text-[#00bcd4]" />
+      <ArrowUp className="h-3 w-3 text-[#0da5aa]" />
     ) : (
-      <ArrowDown className="h-3 w-3 text-[#00bcd4]" />
+      <ArrowDown className="h-3 w-3 text-[#0da5aa]" />
     );
   };
 
   if (loading) {
     return (
-      <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs animate-pulse">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-6 shadow-xs animate-pulse">
         <div className="space-y-4">
           {[1, 2, 3, 4, 5].map((n) => (
             <div key={n} className="flex items-center gap-4 py-3">
-              <div className="h-4 w-6 bg-slate-200 rounded" />
-              <div className="h-10 w-10 rounded-full bg-slate-200" />
-              <div className="h-4 w-44 bg-slate-200 rounded" />
-              <div className="h-4 w-28 bg-slate-200 rounded" />
-              <div className="h-4 w-36 bg-slate-200 rounded" />
-              <div className="h-4 w-20 bg-slate-200 rounded ml-auto" />
+              <div className="h-4 w-6 bg-slate-200 dark:bg-slate-800 rounded" />
+              <div className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-800" />
+              <div className="h-4 w-44 bg-slate-200 dark:bg-slate-800 rounded" />
+              <div className="h-4 w-28 bg-slate-200 dark:bg-slate-800 rounded" />
+              <div className="h-4 w-36 bg-slate-200 dark:bg-slate-800 rounded" />
+              <div className="h-4 w-20 bg-slate-200 dark:bg-slate-800 rounded ml-auto" />
             </div>
           ))}
         </div>
@@ -69,18 +80,18 @@ export default function TeamList({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] shadow-xs transition-colors">
       {/* Table Container */}
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse text-xs" role="table">
           <thead>
-            <tr className="border-b border-slate-100 bg-slate-50/50 text-slate-700 font-bold text-xs select-none">
+            <tr className="border-b border-slate-200 dark:border-[#1b283d] bg-slate-50/70 dark:bg-[#0b121e]/50 text-slate-500 dark:text-slate-400 font-semibold text-xs select-none">
               <th className="py-4 pl-6 pr-3 w-12 text-left">#</th>
               <th className="py-4 px-4">
                 <button
                   type="button"
                   onClick={() => handleHeaderSort("name")}
-                  className="group inline-flex items-center gap-1.5 font-bold text-slate-700 hover:text-slate-900 cursor-pointer focus:outline-none"
+                  className="group inline-flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white cursor-pointer focus:outline-none"
                 >
                   <span>Member</span>
                   {renderSortIcon("name")}
@@ -90,18 +101,20 @@ export default function TeamList({
                 <button
                   type="button"
                   onClick={() => handleHeaderSort("department")}
-                  className="group inline-flex items-center gap-1.5 font-bold text-slate-700 hover:text-slate-900 cursor-pointer focus:outline-none"
+                  className="group inline-flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white cursor-pointer focus:outline-none"
                 >
                   <span>Designation</span>
                   {renderSortIcon("department")}
                 </button>
               </th>
-              <th className="py-4 px-4 font-bold text-slate-700">Email</th>
-              <th className="py-4 px-4 font-bold text-slate-700">Status</th>
-              <th className="py-4 px-4 text-center font-bold text-slate-700 min-w-[130px] whitespace-nowrap">Actions</th>
+              <th className="py-4 px-4 font-semibold text-slate-600 dark:text-slate-300">Email</th>
+              <th className="py-4 px-4 font-semibold text-slate-600 dark:text-slate-300">Status</th>
+              <th className="py-4 pr-6 pl-4 text-right font-semibold text-slate-600 dark:text-slate-300 min-w-[130px] whitespace-nowrap">
+                Actions
+              </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100 dark:divide-[#172336]/60">
             {currentMembers.map((member, index) => {
               const rowNum = startIndex + index + 1;
               const isPublished =
@@ -112,10 +125,10 @@ export default function TeamList({
               return (
                 <tr
                   key={member.id}
-                  className="hover:bg-slate-50/60 transition-colors group"
+                  className="hover:bg-slate-50/80 dark:hover:bg-[#121c2e]/60 transition-colors group"
                 >
                   {/* # Index Number */}
-                  <td className="py-4 pl-6 pr-3 text-xs font-bold text-slate-800">
+                  <td className="py-4 pl-6 pr-3 text-xs font-semibold text-slate-400 dark:text-slate-400">
                     {rowNum}
                   </td>
 
@@ -125,17 +138,17 @@ export default function TeamList({
                       <img
                         src={member.image_url || member.photo}
                         alt={member.name}
-                        className="h-10 w-10 rounded-full object-cover border border-slate-200 shrink-0 shadow-2xs"
+                        className="h-10 w-10 rounded-full object-cover ring-2 ring-slate-200 dark:ring-slate-700/60 shrink-0"
                         onError={(e) => {
                           e.currentTarget.src =
                             "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&auto=format&fit=crop&q=80";
                         }}
                       />
                       <div className="min-w-0">
-                        <p className="font-outfit text-sm font-bold text-[#0c2b48] leading-tight truncate">
+                        <p className="font-outfit text-sm font-bold text-slate-900 dark:text-white leading-tight truncate">
                           {member.name}
                         </p>
-                        <p className="text-xs text-slate-400 font-normal truncate mt-0.5">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 font-normal truncate mt-0.5">
                           {member.role || member.designation || "Researcher"}
                         </p>
                       </div>
@@ -144,13 +157,17 @@ export default function TeamList({
 
                   {/* Designation Badge (e.g. Leadership, Laboratory Sciences, Human Genetics) */}
                   <td className="py-4 px-4">
-                    <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-semibold bg-[#e0f7fa] text-[#00838f] whitespace-nowrap">
+                    <span
+                      className={`inline-flex items-center px-3.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${getDepartmentBadgeClass(
+                        member.department
+                      )}`}
+                    >
                       {member.department || "Leadership"}
                     </span>
                   </td>
 
                   {/* Email */}
-                  <td className="py-4 px-4 text-slate-700 font-medium text-xs">
+                  <td className="py-4 px-4 text-slate-600 dark:text-slate-300 font-medium text-xs">
                     <span className="truncate block" title={member.email}>
                       {member.email || "—"}
                     </span>
@@ -161,13 +178,15 @@ export default function TeamList({
                     <span
                       className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
                         isPublished
-                          ? "bg-[#e8f5e9] text-[#2e7d32]"
-                          : "bg-amber-50 text-amber-700"
+                          ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                          : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20"
                       }`}
                     >
                       <span
                         className={`h-1.5 w-1.5 rounded-full ${
-                          isPublished ? "bg-[#2e7d32]" : "bg-amber-500"
+                          isPublished
+                            ? "bg-emerald-500 dark:bg-emerald-400"
+                            : "bg-amber-500 dark:bg-amber-400"
                         }`}
                       />
                       {isPublished ? "Published" : "Draft"}
@@ -175,31 +194,31 @@ export default function TeamList({
                   </td>
 
                   {/* Actions (View, Edit, Delete) */}
-                  <td className="py-4 px-4 text-center whitespace-nowrap min-w-[130px]">
-                    <div className="flex items-center justify-center gap-1.5">
+                  <td className="py-4 pr-6 pl-4 text-right whitespace-nowrap min-w-[130px]">
+                    <div className="flex items-center justify-end gap-1.5">
                       <button
                         type="button"
                         onClick={() => onView && onView(member)}
-                        className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
-                        title="View member"
+                        className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-[#152030] text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+                        title="View member details"
                       >
-                        <Eye className="h-3.5 w-3.5" />
+                        <Eye className="h-4 w-4" />
                       </button>
                       <button
                         type="button"
                         onClick={() => onEdit && onEdit(member)}
-                        className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
+                        className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-50 text-sky-600 hover:bg-sky-100 dark:bg-sky-950/40 dark:text-sky-400 dark:hover:bg-sky-900/50 transition-colors cursor-pointer"
                         title="Edit member"
                       >
-                        <Edit2 className="h-3.5 w-3.5" />
+                        <Edit2 className="h-4 w-4" />
                       </button>
                       <button
                         type="button"
                         onClick={() => onDelete && onDelete(member.id)}
-                        className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
+                        className="flex h-8 w-8 items-center justify-center rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-900/50 transition-colors cursor-pointer"
                         title="Delete member"
                       >
-                        <Trash2 className="h-3.5 w-3.5" />
+                        <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                   </td>
@@ -210,9 +229,9 @@ export default function TeamList({
         </table>
       </div>
 
-      {/* Table Footer with Pagination (Showing 1–5 of 9 members) */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100 px-6 py-4 text-xs text-slate-500">
-        <span className="font-medium text-slate-500">
+      {/* Table Footer with Pagination */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200 dark:border-[#1b283d] bg-slate-50/50 dark:bg-[#0b121e]/40 px-6 py-4 text-xs text-slate-500 dark:text-slate-400">
+        <span className="font-medium">
           Showing {members.length > 0 ? startIndex + 1 : 0}–
           {Math.min(startIndex + PAGE_SIZE, members.length)} of {members.length} members
         </span>
@@ -223,7 +242,7 @@ export default function TeamList({
             type="button"
             disabled={validCurrentPage <= 1}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-slate-700 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 dark:border-[#1b283d] text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
             title="Previous page"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -237,10 +256,10 @@ export default function TeamList({
                 key={pageNum}
                 type="button"
                 onClick={() => setCurrentPage(pageNum)}
-                className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                className={`flex h-8 w-8 items-center justify-center rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   isActive
-                    ? "bg-[#00bcd4] text-white shadow-xs"
-                    : "text-slate-600 hover:bg-slate-100"
+                    ? "bg-[#0da5aa] text-white shadow-xs"
+                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
                 }`}
               >
                 {pageNum}
@@ -252,7 +271,7 @@ export default function TeamList({
             type="button"
             disabled={validCurrentPage >= totalPages}
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 dark:border-[#1b283d] text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
             title="Next page"
           >
             <ChevronRight className="h-4 w-4" />

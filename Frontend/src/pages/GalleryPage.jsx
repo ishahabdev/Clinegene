@@ -15,6 +15,7 @@ import ScrollReveal from "../components/ScrollReveal.jsx";
 import serviceHero from "../assets/service-hero.webp";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { fetchPublishedGallery } from "../lib/galleryClient.js";
+import { getOptimizedImageUrl } from "../lib/imageOptimization.js";
 
 export const revalidate = 60;
 export const dynamic = "force-dynamic";
@@ -268,9 +269,12 @@ export default function GalleryPage() {
                     {/* Thumbnail */}
                     <div className="relative aspect-4/3 w-full overflow-hidden bg-slate-100">
                       <img
-                        src={photo.src || photo.image_url}
+                        src={getOptimizedImageUrl(photo.src || photo.image_url, { width: 600, quality: 78, format: "webp" })}
                         alt={photo.image_alt || photo.title}
+                        width="600"
+                        height="450"
                         loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover group-hover:scale-108 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-linear-to-t from-slate-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -342,8 +346,12 @@ export default function GalleryPage() {
                     <div className="relative aspect-16/10 w-full overflow-hidden bg-slate-100">
                       {fld.cover ? (
                         <img
-                          src={fld.cover}
+                          src={getOptimizedImageUrl(fld.cover, { width: 600, quality: 78, format: "webp" })}
                           alt={fld.name}
+                          width="600"
+                          height="375"
+                          loading="lazy"
+                          decoding="async"
                           className="h-full w-full object-cover group-hover:scale-108 transition-transform duration-500"
                         />
                       ) : (
@@ -428,8 +436,11 @@ export default function GalleryPage() {
             {/* Image Viewer */}
             <div className="relative flex-1 flex items-center justify-center bg-black/60 min-h-[300px] sm:min-h-[480px] max-h-[68vh] overflow-hidden p-2">
               <img
-                src={activeLightboxPhoto.src || activeLightboxPhoto.image_url}
+                src={getOptimizedImageUrl(activeLightboxPhoto.src || activeLightboxPhoto.image_url, { width: 1400, quality: 82, format: "webp" })}
                 alt={activeLightboxPhoto.image_alt || activeLightboxPhoto.title}
+                width="1400"
+                height="1050"
+                decoding="async"
                 className="max-h-full max-w-full object-contain select-none"
               />
 

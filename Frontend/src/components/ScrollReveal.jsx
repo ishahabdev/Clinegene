@@ -1,5 +1,31 @@
 import { useEffect, useRef } from "react";
 
+let sharedObserver = null;
+const observerCallbacks = new Map();
+let isReducedMotion = null;
+
+function getSharedObserver() {
+  if (typeof window === "undefined" || !("IntersectionObserver" in window)) return null;
+  if (!sharedObserver) {
+    sharedObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const cb = observerCallbacks.get(entry.target);
+            if (cb) {
+              cb();
+              observerCallbacks.delete(entry.target);
+              sharedObserver.unobserve(entry.target);
+            }
+          }
+        }
+      },
+      { threshold: 0.05, rootMargin: "0px 0px -20px 0px" }
+    );
+  }
+  return sharedObserver;
+}
+
 export default function ScrollReveal({
   as: Element = "div",
   className = "",
@@ -13,24 +39,30 @@ export default function ScrollReveal({
     const element = elementRef.current;
     if (!element) return undefined;
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotion.matches || !("IntersectionObserver" in window)) {
+    if (isReducedMotion === null && typeof window !== "undefined") {
+      isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+
+    if (isReducedMotion) {
       element.dataset.revealState = "visible";
       return undefined;
     }
 
-    element.dataset.revealState = "hidden";
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        element.dataset.revealState = "visible";
-        observer.unobserve(element);
-      },
-      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" },
-    );
+    const observer = getSharedObserver();
+    if (!observer) {
+      element.dataset.revealState = "visible";
+      return undefined;
+    }
+
+    observerCallbacks.set(element, () => {
+      element.dataset.revealState = "visible";
+    });
     observer.observe(element);
 
-    return () => observer.disconnect();
+    return () => {
+      observerCallbacks.delete(element);
+      observer.unobserve(element);
+    };
   }, []);
 
   return (

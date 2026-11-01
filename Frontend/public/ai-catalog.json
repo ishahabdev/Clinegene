@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/ai-catalog.json",
+  "name": "ClinGene",
+  "description": "Clinical genetic testing laboratory, Sanger sequencing, NGS, and bioinformatics services in Islamabad, Pakistan.",
+  "url": "https://www.clingene.co",
+  "version": "1.0.0",
+  "capabilities": [
+    "genetic-testing",
+    "whole-exome-sequencing",
+    "sanger-sequencing",
+    "ngs",
+    "bioinformatics-analysis"
+  ]
+}
+

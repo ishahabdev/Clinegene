@@ -316,22 +316,22 @@ export default function DashboardPage({ onNavigate }) {
             <div
               key={stat.title}
               onClick={() => onNavigate && onNavigate(stat.path)}
-              className="group relative rounded-xl sm:rounded-2xl border border-slate-100 border-l-4 border-l-[#00c5db] bg-white p-3.5 sm:p-4 shadow-xs hover:shadow-md hover:border-slate-200 hover:border-l-[#00c5db] transition-all duration-200 cursor-pointer"
+              className="group relative rounded-xl sm:rounded-2xl border border-slate-200/80 dark:border-[#1b283d] border-l-4 border-l-[#0da5aa] bg-white dark:bg-[#0e1624] p-3.5 sm:p-4 shadow-xs hover:shadow-md hover:border-slate-300 dark:hover:border-[#22334c] transition-all duration-200 cursor-pointer"
             >
               <div className="flex items-center justify-between">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e6f8fa] text-[#009688] group-hover:scale-105 transition-transform">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e6f8fa] text-[#0da5aa] dark:bg-[#0da5aa]/15 dark:text-[#0da5aa] group-hover:scale-105 transition-transform">
                   <Icon className="h-4.5 w-4.5 stroke-[1.9]" />
                 </div>
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#f0f9fa] text-[#00a2b5] group-hover:bg-[#009688] group-hover:text-white transition-colors">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#f0f9fa] text-[#088395] dark:bg-slate-800 dark:text-slate-300 group-hover:bg-[#0da5aa] group-hover:text-white transition-colors">
                   <ArrowUpRight className="h-3.5 w-3.5 stroke-[2.2]" />
                 </div>
               </div>
 
-              <h3 className="mt-2.5 font-outfit text-2xl sm:text-[26px] font-extrabold text-slate-900 tracking-tight leading-none">
+              <h3 className="mt-2.5 font-outfit text-2xl sm:text-[26px] font-extrabold text-slate-900 dark:text-white tracking-tight leading-none">
                 {stat.count}
               </h3>
 
-              <p className="mt-1 font-outfit text-xs sm:text-[13px] font-bold text-slate-700 tracking-tight truncate">
+              <p className="mt-1 font-outfit text-xs sm:text-[13px] font-bold text-slate-700 dark:text-slate-300 tracking-tight truncate">
                 {stat.title}
               </p>
             </div>
@@ -342,15 +342,15 @@ export default function DashboardPage({ onNavigate }) {
       {/* Main Grid: Recent Activity (~58%) + Quick Shortcuts (~42%) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* Left Column: Recent Admin Activity (col-span-7) */}
-        <div className="lg:col-span-7 rounded-xl sm:rounded-2xl border border-slate-200/80 bg-white p-3.5 sm:p-4 shadow-xs">
+        <div className="lg:col-span-7 rounded-xl sm:rounded-2xl border border-slate-200/80 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-3.5 sm:p-4 shadow-xs transition-colors">
           {/* Activity Card Header */}
-          <div className="flex items-center justify-between pb-2.5 mb-1 border-b border-slate-100">
+          <div className="flex items-center justify-between pb-2.5 mb-1 border-b border-slate-100 dark:border-[#1b283d]">
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#009688]/10 text-[#009688]">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0da5aa]/10 text-[#0da5aa]">
                 <Activity className="h-3.5 w-3.5" />
               </div>
               <div>
-                <h3 className="font-outfit text-xs sm:text-sm font-bold text-slate-800">
+                <h3 className="font-outfit text-xs sm:text-sm font-bold text-slate-800 dark:text-white">
                   Recent Admin Activity
                 </h3>
                 <p className="text-[10.5px] text-slate-400">
@@ -365,7 +365,7 @@ export default function DashboardPage({ onNavigate }) {
                 onNavigate &&
                 onNavigate(recentActivities[0]?.path || adminPath("/team"))
               }
-              className="inline-flex items-center gap-1 text-xs font-semibold text-[#009688] hover:text-[#00897b] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-[#0da5aa] hover:text-[#088395] transition-colors cursor-pointer"
             >
               <span>View All</span>
               <ChevronRight className="h-3.5 w-3.5" />
@@ -373,15 +373,15 @@ export default function DashboardPage({ onNavigate }) {
           </div>
 
           {/* Activity Feed Rows */}
-          <div className="divide-y divide-slate-100/80">
+          <div className="divide-y divide-slate-100/80 dark:divide-[#172336]/60">
             {loading ? (
               <div className="py-6 space-y-3">
                 {[1, 2, 3].map((n) => (
                   <div key={n} className="flex items-center gap-3 animate-pulse">
-                    <div className="h-8 w-8 rounded-lg bg-slate-100" />
+                    <div className="h-8 w-8 rounded-lg bg-slate-100 dark:bg-slate-800" />
                     <div className="flex-1 space-y-1.5">
-                      <div className="h-3 w-1/3 rounded bg-slate-100" />
-                      <div className="h-2.5 w-2/3 rounded bg-slate-100" />
+                      <div className="h-3 w-1/3 rounded bg-slate-100 dark:bg-slate-800" />
+                      <div className="h-2.5 w-2/3 rounded bg-slate-100 dark:bg-slate-800" />
                     </div>
                   </div>
                 ))}
@@ -397,25 +397,25 @@ export default function DashboardPage({ onNavigate }) {
                   <div
                     key={act.id}
                     onClick={() => onNavigate && onNavigate(act.path)}
-                    className="py-2.5 flex items-start gap-2.5 hover:bg-slate-50/70 transition-colors rounded-lg px-1.5 cursor-pointer group"
+                    className="py-2.5 flex items-start gap-2.5 hover:bg-slate-50/70 dark:hover:bg-[#121c2e]/60 transition-colors rounded-lg px-1.5 cursor-pointer group"
                   >
-                    <div className="flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-[#009688] mt-0.5 group-hover:scale-105 transition-transform">
+                    <div className="flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-lg bg-teal-50 dark:bg-teal-950/40 text-[#0da5aa] mt-0.5 group-hover:scale-105 transition-transform">
                       <ActIcon className="h-3.5 w-3.5" />
                     </div>
 
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
-                        <h4 className="font-outfit text-xs font-bold text-slate-800 truncate group-hover:text-teal-700 transition-colors">
+                        <h4 className="font-outfit text-xs font-bold text-slate-800 dark:text-slate-100 truncate group-hover:text-[#0da5aa] transition-colors">
                           {act.title}
                         </h4>
                         <span className="text-[10px] text-slate-400 font-medium shrink-0">
                           {act.time}
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5 leading-normal">
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5 leading-normal">
                         {act.description}
                       </p>
-                      <p className="text-[10px] font-medium text-teal-600 mt-0.5">
+                      <p className="text-[10px] font-medium text-[#0da5aa] mt-0.5">
                         {act.author}
                       </p>
                     </div>
@@ -428,12 +428,12 @@ export default function DashboardPage({ onNavigate }) {
 
         {/* Right Column: Quick Shortcuts (col-span-5) */}
         <div className="lg:col-span-5">
-          <div className="rounded-xl sm:rounded-2xl border border-slate-200/80 bg-white p-3.5 sm:p-4 shadow-xs">
-            <div className="flex items-center gap-2 pb-2.5 mb-2.5 border-b border-slate-100">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#009688]/10 text-[#009688]">
+          <div className="rounded-xl sm:rounded-2xl border border-slate-200/80 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-3.5 sm:p-4 shadow-xs transition-colors">
+            <div className="flex items-center gap-2 pb-2.5 mb-2.5 border-b border-slate-100 dark:border-[#1b283d]">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#0da5aa]/10 text-[#0da5aa]">
                 <Zap className="h-3.5 w-3.5" />
               </div>
-              <h3 className="font-outfit text-xs sm:text-sm font-bold text-slate-800">
+              <h3 className="font-outfit text-xs sm:text-sm font-bold text-slate-800 dark:text-white">
                 Quick Shortcuts
               </h3>
             </div>
@@ -444,17 +444,17 @@ export default function DashboardPage({ onNavigate }) {
                   key={idx}
                   type="button"
                   onClick={() => onNavigate && onNavigate(sc.path)}
-                  className="w-full flex items-center justify-between rounded-lg sm:rounded-xl border border-slate-200/70 bg-white py-2 px-3 hover:bg-teal-50/40 hover:border-teal-200 transition-all text-left shadow-2xs group cursor-pointer"
+                  className="w-full flex items-center justify-between rounded-lg sm:rounded-xl border border-slate-200/70 dark:border-[#1b283d] bg-white dark:bg-[#080d17] py-2 px-3 hover:bg-teal-50/40 dark:hover:bg-[#121c2e] hover:border-teal-200 dark:hover:border-[#0da5aa]/40 transition-all text-left shadow-2xs group cursor-pointer"
                 >
                   <div className="flex items-center gap-2.5">
-                    <div className="flex h-5.5 w-5.5 items-center justify-center rounded-md bg-teal-50 text-[#009688] group-hover:scale-105 transition-transform">
+                    <div className="flex h-5.5 w-5.5 items-center justify-center rounded-md bg-teal-50 dark:bg-teal-950/40 text-[#0da5aa] group-hover:scale-105 transition-transform">
                       <Plus className="h-3 w-3 stroke-[2.5]" />
                     </div>
-                    <span className="text-xs font-semibold text-slate-700 group-hover:text-teal-900 transition-colors">
+                    <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 group-hover:text-teal-900 dark:group-hover:text-white transition-colors">
                       {sc.label}
                     </span>
                   </div>
-                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-teal-600 group-hover:translate-x-0.5 transition-all" />
+                  <ChevronRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#0da5aa] group-hover:translate-x-0.5 transition-all" />
                 </button>
               ))}
             </div>

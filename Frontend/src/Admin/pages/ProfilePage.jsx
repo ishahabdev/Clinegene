@@ -10,6 +10,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { ADMIN_USER } from "../mocks/mockData.js";
+import AdminPageHeader from "../components/AdminPageHeader.jsx";
 import { useToast } from "../context/ToastContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { supabase } from "../../lib/supabase.js";
@@ -33,7 +34,6 @@ function loadInitialProfile() {
 }
 
 export default function ProfilePage() {
-  console.log("[BUILD] profile v2"); // TEMP: remove after testing
   const { addToast } = useToast() || { addToast: () => {} };
   const { user } = useAuth();
   const [profile, setProfile] = useState(loadInitialProfile);
@@ -162,31 +162,12 @@ export default function ProfilePage() {
           password: newPassword,
         });
 
-      console.log("[ProfilePage] updateUser response:", {
-        data: updateData,
-        error: updateError,
-      });
-
       if (updateError) {
-        console.error("[ProfilePage] updateUser error:", updateError);
         setPasswordError(
           updateError.message || "Failed to update password. Please try again."
         );
         return;
       }
-
-      // TEMP DEBUG: remove after testing
-      console.log("[DEBUG] supabase project:", supabase.supabaseUrl);
-      console.log("[DEBUG] updated user email:", updateData?.user?.email);
-      console.log("[DEBUG] updated_at:", updateData?.user?.updated_at);
-      const { error: verifyError } = await supabase.auth.signInWithPassword({
-        email,
-        password: newPassword,
-      });
-      console.log(
-        "[DEBUG] login with NEW password:",
-        verifyError ? "FAILED: " + verifyError.message : "OK"
-      );
 
       // 4. Success: only set success state and clear inputs when update truly succeeded
       setCurrentPassword("");
@@ -254,23 +235,16 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      {/* Header: Exact match to screenshot */}
-      <div className="flex items-center gap-3.5 mb-6">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#009688] text-white shadow-xs">
-          <Settings className="h-6 w-6 stroke-[2.2]" />
-        </div>
-        <div>
-          <h1 className="font-outfit text-2xl font-bold text-slate-800 tracking-tight">
-            Profile Settings
-          </h1>
-          <p className="text-xs text-slate-400 font-medium mt-0.5">
-            Manage your profile and account settings
-          </p>
-        </div>
-      </div>
+      {/* Header */}
+      <AdminPageHeader
+        icon={Settings}
+        title="Profile Settings"
+        subtitle="Manage your profile and account settings"
+        breadcrumb="Profile"
+      />
 
       {/* Top Card: Profile Info (Full Name, Email & Status Box) */}
-      <div className="rounded-2xl border border-slate-100 bg-white p-6 sm:p-7 shadow-xs">
+      <div className="rounded-2xl border border-slate-200/80 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-6 sm:p-7 shadow-xs transition-colors">
         <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-8">
           {/* Avatar with Teal Ring & Camera overlay button */}
           <div className="relative shrink-0">
@@ -320,14 +294,14 @@ export default function ProfilePage() {
                 onChange={(e) =>
                   setProfile((prev) => ({ ...prev, fullName: e.target.value }))
                 }
-                className="w-full rounded-xl border border-slate-200/90 bg-[#f8fafc] px-4 py-3 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all"
+                className="w-full rounded-xl border border-slate-200/90 dark:border-[#1b283d] bg-slate-50 dark:bg-[#080d17] px-4 py-3 text-sm font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:bg-white dark:focus:bg-[#0a101d] focus:border-[#0da5aa] focus:ring-1 focus:ring-[#0da5aa] outline-none transition-all"
                 placeholder="Full Name"
               />
             </div>
 
             {/* Email Address with left Mail icon */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Email Address
               </label>
               <div className="relative">
@@ -338,7 +312,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     setProfile((prev) => ({ ...prev, email: e.target.value }))
                   }
-                  className="w-full rounded-xl border border-slate-200/90 bg-[#f8fafc] pl-11 pr-4 py-3 text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all"
+                  className="w-full rounded-xl border border-slate-200/90 dark:border-[#1b283d] bg-slate-50 dark:bg-[#080d17] pl-11 pr-4 py-3 text-sm font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:bg-white dark:focus:bg-[#0a101d] focus:border-[#0da5aa] focus:ring-1 focus:ring-[#0da5aa] outline-none transition-all"
                   placeholder="Email Address"
                 />
               </div>
@@ -347,12 +321,12 @@ export default function ProfilePage() {
 
           {/* Right Status Box: "Your profile is up to date" */}
           <div className="shrink-0 w-full lg:w-auto lg:min-w-[260px] self-center">
-            <div className="rounded-2xl bg-[#f0fdfa]/80 border border-teal-100 p-5 flex items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-teal-100/70 text-[#009688]">
+            <div className="rounded-2xl bg-[#f0fdfa]/80 dark:bg-teal-950/20 border border-teal-100 dark:border-teal-900/40 p-5 flex items-center gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-teal-100/70 dark:bg-teal-900/40 text-[#0da5aa]">
                 <ShieldCheck className="h-6 w-6 stroke-[2]" />
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-bold text-slate-800 tracking-tight">
+                <p className="text-sm font-bold text-slate-800 dark:text-white tracking-tight">
                   Your profile is up to date
                 </p>
                 <p className="text-xs text-slate-400 mt-0.5">
@@ -367,15 +341,15 @@ export default function ProfilePage() {
       {/* Bottom Grid: 2 Columns (Change Password & Change Email Address) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* ================= CARD 1: Change Password ================= */}
-        <div className="rounded-2xl border border-slate-100 bg-white p-6 sm:p-7 shadow-xs flex flex-col justify-between">
+        <div className="rounded-2xl border border-slate-200/80 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-6 sm:p-7 shadow-xs flex flex-col justify-between transition-colors">
           <div>
             {/* Header */}
             <div className="flex items-center gap-3 mb-6">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-[#009688]">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-950/40 text-[#0da5aa]">
                 <Lock className="h-5 w-5 stroke-[2]" />
               </div>
               <div>
-                <h2 className="font-outfit text-base font-bold text-slate-800">
+                <h2 className="font-outfit text-base font-bold text-slate-800 dark:text-white">
                   Change Password
                 </h2>
                 <p className="text-xs text-slate-400 mt-0.5 font-medium">
@@ -398,7 +372,7 @@ export default function ProfilePage() {
                     setPasswordError("");
                   }}
                   placeholder="Current Password"
-                  className="w-full rounded-xl border border-slate-200/90 bg-white pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all disabled:opacity-60"
+                  className="w-full rounded-xl border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#080d17] pl-11 pr-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-[#0da5aa] focus:ring-1 focus:ring-[#0da5aa] outline-none transition-all disabled:opacity-60"
                 />
               </div>
 
@@ -414,7 +388,7 @@ export default function ProfilePage() {
                     setPasswordError("");
                   }}
                   placeholder="New Password"
-                  className="w-full rounded-xl border border-slate-200/90 bg-white pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all disabled:opacity-60"
+                  className="w-full rounded-xl border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#080d17] pl-11 pr-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-[#0da5aa] focus:ring-1 focus:ring-[#0da5aa] outline-none transition-all disabled:opacity-60"
                 />
               </div>
 
@@ -430,19 +404,19 @@ export default function ProfilePage() {
                     setPasswordError("");
                   }}
                   placeholder="Confirm New Password"
-                  className="w-full rounded-xl border border-slate-200/90 bg-white pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all disabled:opacity-60"
+                  className="w-full rounded-xl border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#080d17] pl-11 pr-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-[#0da5aa] focus:ring-1 focus:ring-[#0da5aa] outline-none transition-all disabled:opacity-60"
                 />
               </div>
 
               {/* Password Feedback */}
               {passwordError && (
-                <div className="flex items-center gap-2 text-xs font-medium text-rose-600 bg-rose-50 border border-rose-100 rounded-lg p-2.5">
+                <div className="flex items-center gap-2 text-xs font-medium text-rose-600 bg-rose-50 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-900/40 rounded-lg p-2.5">
                   <AlertCircle className="h-4 w-4 shrink-0" />
                   <span>{passwordError}</span>
                 </div>
               )}
               {passwordSuccess && (
-                <div className="flex items-center gap-2 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg p-2.5">
+                <div className="flex items-center gap-2 text-xs font-medium text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/40 rounded-lg p-2.5">
                   <CheckCircle2 className="h-4 w-4 shrink-0" />
                   <span>{passwordSuccess}</span>
                 </div>
@@ -455,22 +429,22 @@ export default function ProfilePage() {
                 className="w-full mt-4 rounded-xl bg-[#009688] hover:bg-[#008577] text-white py-3 px-4 font-semibold text-sm flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <Lock className="h-4 w-4" />
-                <span>{passwordLoading ? "Updating Password..." : "Update Password (v2)"}</span> {/* TEMP: remove after testing */}
+                <span>{passwordLoading ? "Updating Password..." : "Update Password"}</span>
               </button>
             </form>
           </div>
         </div>
 
         {/* ================= CARD 2: Change Email Address ================= */}
-        <div className="rounded-2xl border border-slate-100 bg-white p-6 sm:p-7 shadow-xs flex flex-col justify-between">
+        <div className="rounded-2xl border border-slate-200/80 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-6 sm:p-7 shadow-xs flex flex-col justify-between transition-colors">
           <div>
             {/* Header */}
             <div className="flex items-center gap-3 mb-6">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-[#009688]">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-950/40 text-[#0da5aa]">
                 <Mail className="h-5 w-5 stroke-[2]" />
               </div>
               <div>
-                <h2 className="font-outfit text-base font-bold text-slate-800">
+                <h2 className="font-outfit text-base font-bold text-slate-800 dark:text-white">
                   Change Email Address
                 </h2>
                 <p className="text-xs text-slate-400 mt-0.5 font-medium">
@@ -492,19 +466,19 @@ export default function ProfilePage() {
                     setEmailError("");
                   }}
                   placeholder="New Email Address"
-                  className="w-full rounded-xl border border-slate-200/90 bg-white pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:border-[#009688] focus:ring-1 focus:ring-[#009688] outline-none transition-all"
+                  className="w-full rounded-xl border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#080d17] pl-11 pr-4 py-3 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-[#0da5aa] focus:ring-1 focus:ring-[#0da5aa] outline-none transition-all"
                 />
               </div>
 
               {/* Email Feedback */}
               {emailError && (
-                <div className="flex items-center gap-2 text-xs font-medium text-rose-600 bg-rose-50 border border-rose-100 rounded-lg p-2.5">
+                <div className="flex items-center gap-2 text-xs font-medium text-rose-600 bg-rose-50 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-900/40 rounded-lg p-2.5">
                   <AlertCircle className="h-4 w-4 shrink-0" />
                   <span>{emailError}</span>
                 </div>
               )}
               {emailSuccess && (
-                <div className="flex items-center gap-2 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-lg p-2.5">
+                <div className="flex items-center gap-2 text-xs font-medium text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/40 rounded-lg p-2.5">
                   <CheckCircle2 className="h-4 w-4 shrink-0" />
                   <span>{emailSuccess}</span>
                 </div>
@@ -513,7 +487,7 @@ export default function ProfilePage() {
               {/* Update Email Button */}
               <button
                 type="submit"
-                className="w-full mt-4 rounded-xl bg-[#009688] hover:bg-[#008577] text-white py-3 px-4 font-semibold text-sm flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer"
+                className="w-full mt-4 rounded-xl bg-[#0da5aa] hover:bg-[#088395] text-white py-3 px-4 font-semibold text-sm flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer"
               >
                 <Send className="h-4 w-4" />
                 <span>Update Email</span>

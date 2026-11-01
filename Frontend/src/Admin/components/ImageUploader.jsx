@@ -125,7 +125,7 @@ export default function ImageUploader({
     <div className="w-full">
       <div className="flex items-center justify-between mb-1.5">
         {label && (
-          <label className="block font-inter text-xs font-semibold text-slate-700">
+          <label className="block font-inter text-xs font-semibold text-slate-700 dark:text-slate-300">
             {label}
             {required && <span className="text-rose-500 ml-1">*</span>}
           </label>
@@ -134,7 +134,7 @@ export default function ImageUploader({
           <button
             type="button"
             onClick={() => setShowUrlInput(!showUrlInput)}
-            className="text-[11px] text-slate-400 hover:text-cyan-700 flex items-center gap-1 cursor-pointer"
+            className="text-[11px] text-slate-400 hover:text-[#0da5aa] dark:hover:text-[#0da5aa] flex items-center gap-1 cursor-pointer"
           >
             <LinkIcon className="h-3 w-3" />
             {showUrlInput ? "Hide URL" : "Enter URL instead"}
@@ -152,25 +152,25 @@ export default function ImageUploader({
               setFinalSizeInfo("");
             }}
             placeholder="Paste image URL..."
-            className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-700 placeholder:text-slate-400 focus:border-[#009688] focus:outline-hidden"
+            className="w-full rounded-xl border border-slate-200 dark:border-[#1b283d] bg-slate-50 dark:bg-[#080d17] px-3 py-1.5 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#0da5aa] focus:outline-hidden"
           />
         </div>
       )}
 
       {uploading ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-teal-200 bg-teal-50/40 p-6 text-center">
-          <Loader2 className="h-7 w-7 text-[#009688] animate-spin mb-2" />
-          <p className="font-inter text-xs font-semibold text-teal-900">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-teal-200 dark:border-teal-900/50 bg-teal-50/40 dark:bg-teal-950/20 p-6 text-center">
+          <Loader2 className="h-7 w-7 text-[#0da5aa] animate-spin mb-2" />
+          <p className="font-inter text-xs font-semibold text-teal-900 dark:text-teal-200">
             {uploadStatus || "Processing Image..."}
           </p>
-          <p className="mt-0.5 font-inter text-[11px] text-teal-600">
+          <p className="mt-0.5 font-inter text-[11px] text-teal-600 dark:text-teal-400">
             Resizing (max 1600px), converting to WebP & compressing
           </p>
         </div>
       ) : value ? (
-        <div className="relative flex items-center gap-3.5 rounded-xl border border-slate-200 bg-slate-50/70 p-3">
+        <div className="relative flex items-center gap-3.5 rounded-xl border border-slate-200 dark:border-[#1b283d] bg-slate-50/70 dark:bg-[#080d17] p-3">
           <div
-            className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-slate-200 ${aspectRatio} bg-white shadow-2xs`}
+            className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-slate-200 dark:border-[#1b283d] ${aspectRatio} bg-white dark:bg-[#0e1624] shadow-2xs`}
           >
             <img
               src={value}
@@ -185,18 +185,18 @@ export default function ImageUploader({
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <p className="font-outfit text-xs font-bold text-slate-800 truncate">
+              <p className="font-outfit text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
                 Image Selected
               </p>
               {finalSizeInfo && (
-                <span className="inline-flex items-center gap-1 rounded bg-teal-100/70 px-2 py-0.5 font-mono text-[10px] font-bold text-teal-800">
-                  <CheckCircle2 className="h-3 w-3 text-teal-600" />
+                <span className="inline-flex items-center gap-1 rounded bg-teal-100/70 dark:bg-teal-950/60 px-2 py-0.5 font-mono text-[10px] font-bold text-teal-800 dark:text-teal-300">
+                  <CheckCircle2 className="h-3 w-3 text-[#0da5aa]" />
                   WebP • {finalSizeInfo}
                 </span>
               )}
             </div>
 
-            <p className="mt-0.5 font-inter text-[11px] text-slate-500 truncate">
+            <p className="mt-0.5 font-inter text-[11px] text-slate-500 dark:text-slate-400 truncate">
               {finalSizeInfo
                 ? `Final optimized size: ${finalSizeInfo} (under 2 MB limit)`
                 : value.startsWith("http")
@@ -208,16 +208,16 @@ export default function ImageUploader({
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
-                className="font-inter text-xs font-semibold text-[#009688] hover:text-[#00796b] flex items-center gap-1 cursor-pointer"
+                className="font-inter text-xs font-semibold text-[#0da5aa] hover:text-[#088395] flex items-center gap-1 cursor-pointer"
               >
                 <RefreshCw className="h-3 w-3" />
                 Change Image
               </button>
-              <span className="text-slate-300">|</span>
+              <span className="text-slate-300 dark:text-slate-700">|</span>
               <button
                 type="button"
                 onClick={clearImage}
-                className="font-inter text-xs font-semibold text-rose-600 hover:text-rose-700 flex items-center gap-1 cursor-pointer"
+                className="font-inter text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 flex items-center gap-1 cursor-pointer"
               >
                 <X className="h-3 w-3" />
                 Remove
@@ -234,21 +234,21 @@ export default function ImageUploader({
           onClick={() => inputRef.current?.click()}
           className={`flex flex-col items-center justify-center cursor-pointer rounded-xl border-2 border-dashed p-4.5 sm:p-5 text-center transition-all ${
             dragActive
-              ? "border-[#009688] bg-teal-50/50"
-              : "border-slate-300 bg-white hover:border-[#009688]/70 hover:bg-slate-50/70"
+              ? "border-[#0da5aa] bg-teal-50/50 dark:bg-teal-950/20"
+              : "border-slate-300 dark:border-[#1e2f47] bg-white dark:bg-[#080d17] hover:border-[#0da5aa]/70 hover:bg-slate-50/70 dark:hover:bg-[#0b121e]"
           }`}
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-50 text-[#009688] mb-2">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-50 dark:bg-[#152a36] text-[#0da5aa] mb-2">
             {dragActive ? (
-              <UploadCloud className="h-5 w-5 text-[#009688] animate-bounce" />
+              <UploadCloud className="h-5 w-5 text-[#0da5aa] animate-bounce" />
             ) : (
               <Upload className="h-5 w-5" />
             )}
           </div>
-          <p className="font-inter text-xs font-semibold text-slate-700">
-            <span className="text-[#009688] hover:underline">Click to upload</span> or drag and drop
+          <p className="font-inter text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <span className="text-[#0da5aa] hover:underline">Click to upload</span> or drag and drop
           </p>
-          <p className="mt-0.5 font-inter text-[11px] text-slate-400">
+          <p className="mt-0.5 font-inter text-[11px] text-slate-400 dark:text-slate-500">
             {helperText}
           </p>
         </div>

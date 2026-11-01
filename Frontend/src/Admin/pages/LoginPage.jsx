@@ -5,11 +5,13 @@ import { LoginSchema } from "../types/index.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { ADMIN_BASE, adminPath } from "../adminConfig.js";
 import { supabase } from "../../lib/supabase.js";
-import { Lock, Mail, ShieldCheck, ArrowRight, Stethoscope, Eye, EyeOff } from "lucide-react";
+import { Lock, Mail, ShieldCheck, ArrowRight, Stethoscope, Eye, EyeOff, Sun, Moon, Dna } from "lucide-react";
 import Input from "../components/Input.jsx";
+import { useAdminTheme } from "../context/AdminThemeContext.jsx";
 
 export default function LoginPage({ onNavigate }) {
   const { login } = useAuth();
+  const { isDark, toggleTheme } = useAdminTheme();
   const [authError, setAuthError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -86,17 +88,29 @@ export default function LoginPage({ onNavigate }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#16222f] p-4 font-inter text-slate-800">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#070c14] p-4 font-inter text-slate-800 dark:text-slate-100 transition-colors duration-200 relative">
+      <div className="absolute top-4 right-4">
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          className="p-2.5 rounded-xl bg-white dark:bg-[#0e1624] border border-slate-200 dark:border-[#1b283d] text-slate-600 dark:text-amber-400 shadow-xs cursor-pointer transition-colors"
+          title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+        </button>
+      </div>
+
       <div className="w-full max-w-md">
         {/* Card */}
-        <div className="rounded-2xl border border-slate-700/80 bg-white p-7 sm:p-9 shadow-2xl transition-all">
+        <div className="rounded-2xl border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-7 sm:p-9 shadow-2xl transition-all">
           {/* Logo / Header */}
           <div className="flex flex-col items-center text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-[#00897b] to-[#00a884] text-white shadow-lg shadow-teal-950/20 mb-3">
-              <Stethoscope className="h-7 w-7" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0da5aa] text-white shadow-lg shadow-teal-950/20 mb-3">
+              <Dna className="h-7 w-7" />
             </div>
-            <h1 className="font-outfit text-xl font-extrabold tracking-wider text-slate-900 sm:text-2xl uppercase">
-              HEALTH <span className="text-[#009688]">ADMIN</span>
+            <h1 className="font-outfit text-xl font-extrabold tracking-wider text-slate-900 dark:text-white sm:text-2xl uppercase">
+              HEALTH <span className="text-[#0da5aa]">ADMIN</span>
             </h1>
             <p className="mt-1 font-inter text-xs font-semibold uppercase tracking-widest text-slate-400">
               {showForgot ? "Password Recovery" : "Medical & Clinical Portal"}

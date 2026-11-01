@@ -20,42 +20,76 @@ export default function LenisProvider({ children }) {
 
     if (prefersReducedMotion) return undefined;
 
-    // High-performance Lenis inertial instance calibrated for 60-120fps displays
-    const lenis = new Lenis({
-      duration: 1.05,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential deceleration curve
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-      wheelMultiplier: 0.95,
-      touchMultiplier: 1.4,
-      syncTouch: false, // Preserves native fluid momentum and gestures on touchscreens
-      autoRaf: true,
-      anchors: true, // Smooth anchor navigation with scroll-padding support
-      respectReducedMotion: true,
-    });
+    let cleanup = null;
+    let initialized = false;
 
-    lenisRef.current = lenis;
+    const initLenis = () => {
+      if (initialized) return;
+      initialized = true;
 
-    // Stop Lenis on admin paths to allow native mouse wheel scrolling in nested admin panels
-    const handleRouteChange = () => {
-      if (typeof window !== "undefined") {
-        if (ADMIN_BASE && (window.location.pathname === ADMIN_BASE || window.location.pathname.startsWith(`${ADMIN_BASE}/`))) {
-          lenis.stop();
-          document.documentElement.classList.remove("lenis", "lenis-smooth");
-        } else {
-          lenis.start();
+      // High-performance Lenis inertial instance calibrated for 60-120fps displays
+      const lenis = new Lenis({
+        duration: 1.05,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential deceleration curve
+        orientation: "vertical",
+        gestureOrientation: "vertical",
+        smoothWheel: true,
+        wheelMultiplier: 0.95,
+        touchMultiplier: 1.4,
+        syncTouch: false, // Preserves native fluid momentum and gestures on touchscreens
+        autoRaf: true,
+        anchors: true, // Smooth anchor navigation with scroll-padding support
+        respectReducedMotion: true,
+      });
+
+      lenisRef.current = lenis;
+
+      // Stop Lenis on admin paths to allow native mouse wheel scrolling in nested admin panels
+      const handleRouteChange = () => {
+        if (typeof window !== "undefined") {
+          if (ADMIN_BASE && (window.location.pathname === ADMIN_BASE || window.location.pathname.startsWith(`${ADMIN_BASE}/`))) {
+            lenis.stop();
+            document.documentElement.classList.remove("lenis", "lenis-smooth");
+          } else {
+            lenis.start();
+          }
         }
-      }
+      };
+
+      handleRouteChange();
+      window.addEventListener("popstate", handleRouteChange);
+
+      cleanup = () => {
+        window.removeEventListener("popstate", handleRouteChange);
+        lenis.destroy();
+        lenisRef.current = null;
+      };
     };
 
-    handleRouteChange();
-    window.addEventListener("popstate", handleRouteChange);
+    // Defer initialization until first user interaction or idle callback (prevents blocking TBT during hydration)
+    const interactionEvents = ["pointerdown", "keydown", "touchstart", "wheel"];
+    const onInteraction = () => {
+      interactionEvents.forEach((evt) => window.removeEventListener(evt, onInteraction));
+      initLenis();
+    };
+
+    interactionEvents.forEach((evt) =>
+      window.addEventListener(evt, onInteraction, { passive: true, once: true })
+    );
+
+    let idleId = null;
+    let timerId = null;
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      idleId = window.requestIdleCallback(() => initLenis(), { timeout: 3000 });
+    } else if (typeof window !== "undefined") {
+      timerId = setTimeout(initLenis, 2500);
+    }
 
     return () => {
-      window.removeEventListener("popstate", handleRouteChange);
-      lenis.destroy();
-      lenisRef.current = null;
+      interactionEvents.forEach((evt) => window.removeEventListener(evt, onInteraction));
+      if (idleId && "cancelIdleCallback" in window) window.cancelIdleCallback(idleId);
+      if (timerId) clearTimeout(timerId);
+      if (cleanup) cleanup();
     };
   }, []);
 

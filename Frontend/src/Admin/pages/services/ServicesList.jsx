@@ -73,11 +73,11 @@ export default function ServicesList({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs">
+    <div className="overflow-hidden rounded-2xl border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] shadow-xs">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse text-xs" role="table">
           <thead>
-            <tr className="border-b border-slate-100 bg-slate-50/50 text-slate-700 font-bold text-xs select-none">
+            <tr className="border-b border-slate-100 dark:border-[#1b283d] bg-slate-50/50 dark:bg-[#080d17]/60 text-slate-700 dark:text-slate-300 font-bold text-xs select-none">
               <th className="py-4 pl-6 pr-3 w-12 text-left">#</th>
               <th className="py-4 px-4 min-w-[240px]">Service</th>
               <th className="py-4 px-4 min-w-[150px]">Category</th>
@@ -86,7 +86,7 @@ export default function ServicesList({
               <th className="py-4 px-4 text-center min-w-[130px] whitespace-nowrap">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100 dark:divide-[#1b283d]">
             {currentServices.map((service, index) => {
               const Icon = getServiceIcon(service);
               const isActive = service.status === "Active" || service.status === "published" || !service.status;
@@ -94,20 +94,20 @@ export default function ServicesList({
               return (
                 <tr
                   key={service.id}
-                  className="hover:bg-slate-50/60 transition-colors group"
+                  className="hover:bg-slate-50/60 dark:hover:bg-[#121c2e]/60 transition-colors group"
                 >
                   {/* Number */}
-                  <td className="py-3.5 pl-6 pr-3 text-xs font-bold text-slate-700">
+                  <td className="py-3.5 pl-6 pr-3 text-xs font-bold text-slate-700 dark:text-slate-400">
                     {startIndex + index + 1}
                   </td>
 
                   {/* Service Icon & Name */}
                   <td className="py-3.5 px-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e0f7fa] text-[#00bcd4]">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e0f7fa] dark:bg-cyan-500/15 text-[#00bcd4] dark:text-[#0da5aa]">
                         <Icon className="h-4.5 w-4.5 stroke-[2]" />
                       </div>
-                      <span className="font-outfit text-xs sm:text-[13px] font-bold text-[#0c2b48] truncate">
+                      <span className="font-outfit text-xs sm:text-[13px] font-bold text-[#0c2b48] dark:text-white truncate">
                         {service.name}
                       </span>
                     </div>
@@ -115,14 +115,14 @@ export default function ServicesList({
 
                   {/* Category Pill Badge */}
                   <td className="py-3.5 px-4">
-                    <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-semibold bg-[#e0f7fa] text-[#00838f] whitespace-nowrap">
+                    <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-semibold bg-[#e0f7fa] dark:bg-cyan-500/15 text-[#00838f] dark:text-cyan-300 whitespace-nowrap">
                       {service.category || "Clinical Diagnostics"}
                     </span>
                   </td>
 
                   {/* Description */}
                   <td className="py-3.5 px-4">
-                    <p className="text-slate-600 text-xs leading-relaxed truncate max-w-xs xl:max-w-md">
+                    <p className="text-slate-600 dark:text-slate-400 text-xs leading-relaxed truncate max-w-xs xl:max-w-md">
                       {service.short_description || service.description || "Comprehensive genomics service..."}
                     </p>
                   </td>
@@ -132,13 +132,13 @@ export default function ServicesList({
                     <span
                       className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
                         isActive
-                          ? "bg-[#e8f5e9] text-[#2e7d32]"
-                          : "bg-slate-100 text-slate-500"
+                          ? "bg-[#e8f5e9] dark:bg-emerald-500/15 text-[#2e7d32] dark:text-emerald-400"
+                          : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
                       }`}
                     >
                       <span
                         className={`h-1.5 w-1.5 rounded-full ${
-                          isActive ? "bg-[#2e7d32]" : "bg-slate-400"
+                          isActive ? "bg-[#2e7d32] dark:bg-emerald-400" : "bg-slate-400"
                         }`}
                       />
                       <span>{isActive ? "Active" : "Inactive"}</span>
@@ -151,7 +151,7 @@ export default function ServicesList({
                       <button
                         type="button"
                         onClick={() => onView && onView(service)}
-                        className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+                        className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 dark:bg-[#080d17] text-slate-600 dark:text-slate-400 border border-transparent dark:border-[#1b283d] hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                         title="View service"
                         aria-label={`View ${service.name}`}
                       >
@@ -161,7 +161,7 @@ export default function ServicesList({
                       <button
                         type="button"
                         onClick={() => onEdit && onEdit(service)}
-                        className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#e0f2fe] text-[#0284c7] hover:bg-[#bae6fd] transition-colors cursor-pointer"
+                        className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#e0f2fe] dark:bg-cyan-500/15 text-[#0284c7] dark:text-cyan-400 border border-transparent dark:border-cyan-500/30 hover:bg-[#bae6fd] dark:hover:bg-cyan-500/25 transition-colors cursor-pointer"
                         title="Edit service"
                         aria-label={`Edit ${service.name}`}
                       >
@@ -171,7 +171,7 @@ export default function ServicesList({
                       <button
                         type="button"
                         onClick={() => onDelete && onDelete(service.id)}
-                        className="flex h-7.5 w-7.5 items-center justify-center rounded-lg bg-[#ffe4e6] text-[#e11d48] hover:bg-[#fecdd3] transition-colors cursor-pointer"
+                        className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#ffe4e6] dark:bg-rose-500/15 text-[#e11d48] dark:text-rose-400 border border-transparent dark:border-rose-500/30 hover:bg-[#fecdd3] dark:hover:bg-rose-500/25 transition-colors cursor-pointer"
                         title="Delete service"
                         aria-label={`Delete ${service.name}`}
                       >
@@ -187,8 +187,8 @@ export default function ServicesList({
       </div>
 
       {/* Table Footer with Pagination matching screenshot */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100 px-6 py-4 text-xs text-slate-500">
-        <span className="font-medium text-slate-500">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100 dark:border-[#1b283d] px-6 py-4 text-xs text-slate-500 dark:text-slate-400">
+        <span className="font-medium text-slate-500 dark:text-slate-400">
           Showing {services.length > 0 ? startIndex + 1 : 0} –{" "}
           {Math.min(startIndex + PAGE_SIZE, services.length)} of {services.length} services
         </span>
@@ -199,7 +199,7 @@ export default function ServicesList({
             type="button"
             disabled={validCurrentPage <= 1}
             onClick={() => setPage(Math.max(1, validCurrentPage - 1))}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-slate-700 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 dark:border-[#1b283d] text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
             title="Previous page"
             aria-label="Previous page"
           >
@@ -214,10 +214,10 @@ export default function ServicesList({
                 key={pageNum}
                 type="button"
                 onClick={() => setPage(pageNum)}
-                className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                className={`flex h-8 w-8 items-center justify-center rounded-xl text-xs font-bold transition-colors cursor-pointer ${
                   isActive
-                    ? "bg-[#00bcd4] text-white shadow-xs"
-                    : "text-slate-600 hover:bg-slate-100"
+                    ? "bg-[#0da5aa] text-white shadow-[0_0_12px_rgba(13,165,170,0.35)]"
+                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
                 }`}
               >
                 {pageNum}
@@ -229,7 +229,7 @@ export default function ServicesList({
             type="button"
             disabled={validCurrentPage >= totalPages}
             onClick={() => setPage(Math.min(totalPages, validCurrentPage + 1))}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 dark:border-[#1b283d] text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
             title="Next page"
             aria-label="Next page"
           >

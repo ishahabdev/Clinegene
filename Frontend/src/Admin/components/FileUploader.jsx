@@ -95,7 +95,7 @@ export default function FileUploader({
   return (
     <div className="w-full">
       {label && (
-        <label className="block mb-1 font-inter text-xs font-semibold text-slate-700">
+        <label className="block mb-1 font-inter text-xs font-semibold text-slate-700 dark:text-slate-300">
           {label}
         </label>
       )}
@@ -112,21 +112,21 @@ export default function FileUploader({
       />
 
       {hasFile ? (
-        <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200/90 bg-white p-3 shadow-2xs">
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#080d17] p-3 shadow-2xs">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-[#009688]">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-50 dark:bg-cyan-500/15 text-[#009688] dark:text-[#0da5aa]">
               <FileText className="h-5 w-5" />
             </div>
             <div className="min-w-0">
-              <p className="font-outfit text-xs font-bold text-slate-800 truncate">
+              <p className="font-outfit text-xs font-bold text-slate-800 dark:text-white truncate">
                 {fileName}
               </p>
               {fileSize ? (
-                <p className="text-[11px] text-slate-400 font-medium">
+                <p className="text-[11px] text-slate-400 dark:text-slate-400 font-medium">
                   {formatFileSize(fileSize)} · PDF document
                 </p>
               ) : (
-                <p className="text-[11px] text-teal-600 font-medium">
+                <p className="text-[11px] text-teal-600 dark:text-cyan-400 font-medium">
                   PDF document ready
                 </p>
               )}
@@ -138,7 +138,7 @@ export default function FileUploader({
               type="button"
               disabled={disabled}
               onClick={() => inputRef.current?.click()}
-              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+              className="inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] px-2.5 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             >
               <RefreshCw className="h-3 w-3" />
               <span>Replace</span>
@@ -147,7 +147,7 @@ export default function FileUploader({
               type="button"
               disabled={disabled}
               onClick={handleRemove}
-              className="inline-flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-100 transition-colors"
+              className="inline-flex items-center gap-1 rounded-lg border border-rose-200 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-500/15 px-2.5 py-1.5 text-xs font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-100 transition-colors cursor-pointer"
             >
               <Trash2 className="h-3 w-3" />
               <span>Remove</span>
@@ -163,24 +163,24 @@ export default function FileUploader({
           onClick={() => !disabled && inputRef.current?.click()}
           className={`group flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-4 text-center cursor-pointer transition-all ${
             dragActive
-              ? "border-[#009688] bg-teal-50/50"
-              : "border-slate-300 hover:border-[#009688] bg-slate-50/60 hover:bg-white"
+              ? "border-[#0da5aa] bg-teal-50/50 dark:bg-cyan-500/10"
+              : "border-slate-300 dark:border-[#1b283d] hover:border-[#0da5aa] bg-slate-50/60 dark:bg-[#080d17] hover:bg-white dark:hover:bg-[#0e1624]"
           } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-teal-50 text-[#009688] mb-2 group-hover:scale-105 transition-transform">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-teal-50 dark:bg-cyan-500/15 text-[#009688] dark:text-[#0da5aa] mb-2 group-hover:scale-105 transition-transform">
             <UploadCloud className="h-5 w-5" />
           </div>
-          <p className="text-xs font-semibold text-slate-700">
+          <p className="text-xs font-semibold text-slate-700 dark:text-slate-200">
             Click to upload or drag &amp; drop
           </p>
-          <p className="text-[11px] text-slate-400 mt-0.5">
+          <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
             PDF files only (max {maxSizeMB} MB)
           </p>
         </div>
       )}
 
       {helperText && !displayError && (
-        <p className="mt-1 text-[11px] text-slate-500">{helperText}</p>
+        <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">{helperText}</p>
       )}
 
       {displayError && (

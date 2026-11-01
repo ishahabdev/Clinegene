@@ -84,13 +84,24 @@ async function prerender() {
 
   for (const route of routes) {
     const seo = allSeoRoutes[route] || allSeoRoutes["/"];
-    const { html: appHtml } = render(route);
+    let { html: appHtml } = render(route);
+
+    // Extract any hoisted <link> tags emitted by React 19 into <head>
+    const hoistedLinks = [];
+    appHtml = appHtml.replace(/<link\s+[^>]*rel="preload"[^>]*\/?>/gi, (match) => {
+      hoistedLinks.push(match);
+      return "";
+    });
 
     // 1. Inject rendered HTML inside #root
     let pageHtml = template.replace(
       '<div id="root"></div>',
       `<div id="root">${appHtml}</div>`
     );
+
+    if (hoistedLinks.length > 0) {
+      pageHtml = pageHtml.replace("</head>", `  ${hoistedLinks.join("\n    ")}\n  </head>`);
+    }
 
     // 2. Inject Page Title
     if (seo.title) {
@@ -181,6 +192,19 @@ async function prerender() {
 
     fs.writeFileSync(outputPath, pageHtml, "utf-8");
     console.log(`  ✓ ${route} -> ${path.relative(__dirname, outputPath)} (${(pageHtml.length / 1024).toFixed(1)} KB)`);
+  }
+
+  // ── 7b. Generate Admin SPA Shell (Ensures direct visits to admin base return 200, not 404) ──
+  const adminBase = (process.env.VITE_ADMIN_BASE || "").trim().replace(/^\/|\/$/g, "");
+  if (adminBase) {
+    const adminDir = path.resolve(__dirname, "dist", adminBase);
+    fs.mkdirSync(adminDir, { recursive: true });
+    const adminHtml = template.replace(
+      /<head>/i,
+      `<head>\n    <meta name="robots" content="noindex, nofollow" />`
+    );
+    fs.writeFileSync(path.join(adminDir, "index.html"), adminHtml, "utf-8");
+    console.log(`  ✓ /${adminBase} -> ${path.relative(__dirname, path.join(adminDir, "index.html"))} (Admin SPA Shell)`);
   }
 
   // ── 8. Generate Sitemap.xml ──

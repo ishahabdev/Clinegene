@@ -24,15 +24,32 @@ export default function Button({
   const variantClasses = {
     crimson:
       "bg-[#b91c1c] text-white hover:bg-[#991b1b] focus-visible:ring-[#b91c1c] shadow-[0_4px_14px_rgba(185,28,28,0.25)]",
+    primary:
+      "bg-[#0da5aa] text-white hover:bg-[#088395] focus-visible:ring-[#0da5aa] shadow-xs",
+    teal:
+      "bg-[#0da5aa] text-white hover:bg-[#088395] focus-visible:ring-[#0da5aa] shadow-xs",
     secondary:
       "bg-slate-100 text-slate-800 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 focus-visible:ring-slate-400",
     outline:
-      "border border-slate-300 bg-transparent text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800 focus-visible:ring-[#b91c1c]",
+      "border border-slate-300 bg-transparent text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800 focus-visible:ring-[#0da5aa]",
     danger:
       "bg-rose-600 text-white hover:bg-rose-700 focus-visible:ring-rose-500 shadow-sm",
     ghost:
       "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 focus-visible:ring-slate-400",
   };
+
+  if (props.href) {
+    return (
+      <a
+        href={props.href}
+        className={`${baseClasses} ${sizeClasses[size] || sizeClasses.md} ${variantClasses[variant] || variantClasses.primary} ${className}`}
+        {...props}
+      >
+        {Icon ? <Icon className="h-4 w-4 shrink-0" /> : null}
+        {children}
+      </a>
+    );
+  }
 
   return (
     <button

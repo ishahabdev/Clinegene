@@ -43,10 +43,10 @@ export default function Modal({
 
       {/* Modal Dialog */}
       <div
-        className={`relative w-full ${maxWidth} rounded-2xl border border-slate-200 bg-white shadow-2xl transition-all dark:border-slate-800 dark:bg-slate-900 overflow-hidden my-8`}
+        className={`relative w-full ${maxWidth} rounded-2xl border border-slate-200 bg-white shadow-2xl transition-all dark:border-[#1b283d] dark:bg-[#0e1624] overflow-hidden my-8`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4.5 dark:border-slate-800">
+        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4.5 dark:border-[#1b283d]">
           <div>
             <h3 id="modal-title" className="font-outfit text-lg font-bold text-slate-900 dark:text-slate-100">
               {title}

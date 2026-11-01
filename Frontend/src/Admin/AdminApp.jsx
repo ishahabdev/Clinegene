@@ -16,6 +16,7 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import ResearchPage from "./pages/ResearchPage.jsx";
 import CareerPage from "./pages/CareerPage.jsx";
 import MessagesPage from "./pages/MessagesPage.jsx";
+import AdminErrorBoundary from "./components/AdminErrorBoundary.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -86,17 +87,23 @@ function AdminRoutes() {
     return <ResetPasswordPage onNavigate={navigate} />;
   }
 
-  // Requirement 1: While session and admins check is in progress, show loading screen.
+  // While session and admins check is in progress, show ClinGene loading logo screen like other pages.
   // The dashboard must NEVER render, even for a moment, before this check completes.
   if (loading) {
     return (
-      <div className="flex min-h-screen w-full items-center justify-center bg-[#16222f] p-4 font-inter text-slate-300">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-9 w-9 animate-spin rounded-full border-3 border-slate-700 border-t-[#009688]" />
-          <span className="text-xs font-semibold tracking-wider uppercase text-slate-400">
-            Verifying Authorization...
-          </span>
-        </div>
+      <div
+        aria-label="Loading ClinGene"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-white"
+        role="status"
+      >
+        <img
+          alt="ClinGene"
+          width="733"
+          height="290"
+          className="preloader-logo h-28 w-80 max-w-[85vw] object-contain sm:h-36 sm:w-md lg:h-44 lg:w-xl"
+          src="/images/clingene-logo.webp"
+        />
+        <span className="sr-only">Loading ClinGene</span>
       </div>
     );
   }
@@ -156,21 +163,25 @@ function AdminRoutes() {
 
   return (
     <AdminLayout currentPath={normalized} onNavigate={navigate}>
-      {pageContent}
+      <AdminErrorBoundary onNavigate={navigate} key={normalized}>
+        {pageContent}
+      </AdminErrorBoundary>
     </AdminLayout>
   );
 }
 
 export default function AdminApp() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <AdminThemeProvider>
-          <ToastProvider>
-            <AdminRoutes />
-          </ToastProvider>
-        </AdminThemeProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+    <AdminErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <AdminThemeProvider>
+            <ToastProvider>
+              <AdminRoutes />
+            </ToastProvider>
+          </AdminThemeProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </AdminErrorBoundary>
   );
 }

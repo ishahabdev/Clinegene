@@ -12,14 +12,14 @@ export default function ServicesToolbar({
   return (
     <div className="mb-6 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
       {/* Search Input Box */}
-      <div className="relative flex-1 rounded-2xl border border-slate-200/90 bg-white px-4 py-2.5 shadow-xs">
-        <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+      <div className="relative flex-1 rounded-2xl border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] px-4 py-2.5 shadow-xs">
+        <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
           placeholder="Search services..."
-          className="w-full bg-transparent pl-7 pr-4 text-xs sm:text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
+          className="w-full bg-transparent pl-7 pr-4 text-xs sm:text-sm text-slate-700 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none"
         />
       </div>
 
@@ -30,7 +30,7 @@ export default function ServicesToolbar({
           <select
             value={selectedCategory}
             onChange={(e) => onCategoryChange && onCategoryChange(e.target.value)}
-            className="appearance-none rounded-xl border border-slate-200/90 bg-white px-4 py-2.5 pr-9 text-xs font-semibold text-slate-700 hover:border-slate-300 focus:outline-none cursor-pointer shadow-xs"
+            className="appearance-none rounded-xl border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-4 py-2.5 pr-9 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700 focus:outline-none cursor-pointer shadow-xs"
           >
             <option value="All Categories">All Categories</option>
             {categories.map((cat) => (
@@ -46,9 +46,9 @@ export default function ServicesToolbar({
         <button
           type="button"
           onClick={() => onCategoryChange && onCategoryChange("All Categories")}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200/90 bg-white px-3.5 py-2.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-xs cursor-pointer"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3.5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-xs cursor-pointer"
         >
-          <Filter className="h-3.5 w-3.5 text-slate-500" />
+          <Filter className="h-3.5 w-3.5 text-slate-500 dark:text-slate-400" />
           <span>Filter</span>
         </button>
 
@@ -59,8 +59,8 @@ export default function ServicesToolbar({
             onClick={() => onViewModeChange && onViewModeChange("list")}
             className={`flex h-9 w-9 items-center justify-center rounded-xl transition-all cursor-pointer ${
               viewMode === "list"
-                ? "bg-[#00695c] text-white shadow-xs"
-                : "border border-slate-200/90 bg-white text-slate-400 hover:text-slate-700 shadow-xs"
+                ? "bg-[#0da5aa] text-white shadow-[0_0_12px_rgba(13,165,170,0.35)]"
+                : "border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#080d17] text-slate-400 hover:text-slate-700 dark:hover:text-white shadow-xs"
             }`}
             title="List view"
             aria-label="List view"
@@ -72,8 +72,8 @@ export default function ServicesToolbar({
             onClick={() => onViewModeChange && onViewModeChange("grid")}
             className={`flex h-9 w-9 items-center justify-center rounded-xl transition-all cursor-pointer ${
               viewMode === "grid"
-                ? "bg-[#00695c] text-white shadow-xs"
-                : "border border-slate-200/90 bg-white text-slate-400 hover:text-slate-700 shadow-xs"
+                ? "bg-[#0da5aa] text-white shadow-[0_0_12px_rgba(13,165,170,0.35)]"
+                : "border border-slate-200/90 dark:border-[#1b283d] bg-white dark:bg-[#080d17] text-slate-400 hover:text-slate-700 dark:hover:text-white shadow-xs"
             }`}
             title="Grid view"
             aria-label="Grid view"

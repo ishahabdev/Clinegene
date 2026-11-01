@@ -1,11 +1,11 @@
 import { ArrowRight, Users, Dna, Lightbulb, Check, ShieldCheck, FileText, Compass } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
-import promiseImage from "../assets/about us/promise.png";
-import injectionImage from "../assets/about us/about-injection.jpeg";
-import aimImage from "../assets/about us/aim-pic.jpeg";
-import characterImage from "../assets/about us/character.png";
-import amjadAli from "../assets/team/Amjad Ali.jpeg";
+import promiseImage from "../assets/about us/promise.webp";
+import injectionImage from "../assets/about us/about-injection.webp";
+import aimImage from "../assets/about us/aim-pic.webp";
+import characterImage from "../assets/about us/character.webp";
+import amjadAli from "../assets/team/Amjad Ali.webp";
 import { useTheme } from "../context/ThemeContext.jsx";
 
 const complianceData = [
@@ -82,6 +82,9 @@ export default function AboutPage() {
 
   return (
     <>
+      {/* High-priority LCP Preload for Hero Image */}
+      <link rel="preload" as="image" href={promiseImage} fetchPriority="high" />
+
       {/* --- About Hero Section --- */}
       <section
         aria-labelledby="about-hero-title"
@@ -91,11 +94,12 @@ export default function AboutPage() {
         {/* Full-screen background image — same picture recolored to theme in green and red */}
         <img
           alt="ClinGene laboratory professional at microscope"
-          width="2014"
-          height="781"
+          width="1400"
+          height="543"
           loading="eager"
           fetchPriority="high"
-          className="hero-bg-img absolute inset-0 -z-20 h-full w-full object-cover object-[80%_center] sm:object-[72%_center] lg:object-center transition-all duration-500"
+          decoding="async"
+          className="hero-bg-img absolute inset-0 -z-20 h-full w-full object-cover object-[80%_center] sm:object-[72%_center] lg:object-center"
           src={promiseImage}
           style={{
             filter: isRed
@@ -124,56 +128,48 @@ export default function AboutPage() {
           }}
         />
 
-        {/* Text content */}
+        {/* Text content - Above-the-fold content rendered immediately without ScrollReveal delay */}
         <div className="site-container w-full py-12 sm:py-16 lg:py-20">
           <div className="max-w-175">
             {/* Breadcrumb */}
-            <ScrollReveal>
-              <nav aria-label="Breadcrumb" className="mb-6">
-                <ol className="flex items-center gap-2 text-[14px] sm:text-[15px]">
-                  <li>
-                    <a
-                      href="/"
-                      className="font-medium transition-colors hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) rounded"
-                      style={{ color: isRed ? "#EF4444" : "var(--accent)", transition: "color 0.4s ease-in-out" }}
-                    >
-                      Home
-                    </a>
-                  </li>
-                  <li aria-hidden="true" className="text-[#E2E8F0]/60">›</li>
-                  <li className="text-[#E2E8F0]" aria-current="page">About Us</li>
-                </ol>
-              </nav>
-            </ScrollReveal>
+            <nav aria-label="Breadcrumb" className="mb-6">
+              <ol className="flex items-center gap-2 text-[14px] sm:text-[15px]">
+                <li>
+                  <a
+                    href="/"
+                    className="font-medium transition-colors hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) rounded"
+                    style={{ color: isRed ? "#EF4444" : "var(--accent)", transition: "color 0.4s ease-in-out" }}
+                  >
+                    Home
+                  </a>
+                </li>
+                <li aria-hidden="true" className="text-[#E2E8F0]/60">›</li>
+                <li className="text-[#E2E8F0]" aria-current="page">About Us</li>
+              </ol>
+            </nav>
 
             {/* Eyebrow with decorative line */}
-            <ScrollReveal delay={50}>
-              <div className="mb-4 flex items-center gap-3">
-                <div className="h-0.5 w-12" style={{ backgroundColor: isRed ? "#EF4444" : "var(--accent)", transition: "background-color 0.4s ease-in-out" }} aria-hidden="true" />
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] sm:text-[12px]" style={{ color: isRed ? "#EF4444" : "var(--accent)", transition: "color 0.4s ease-in-out" }}>
-                  ABOUT US
-                </p>
-              </div>
-            </ScrollReveal>
+            <div className="mb-4 flex items-center gap-3">
+              <div className="h-0.5 w-12" style={{ backgroundColor: isRed ? "#EF4444" : "var(--accent)", transition: "background-color 0.4s ease-in-out" }} aria-hidden="true" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] sm:text-[12px]" style={{ color: isRed ? "#EF4444" : "var(--accent)", transition: "color 0.4s ease-in-out" }}>
+                ABOUT US
+              </p>
+            </div>
 
             {/* Main heading */}
-            <ScrollReveal delay={100}>
-              <h1
-                className="font-['Inter'] text-[32px] sm:text-[40px] md:text-[46px] lg:text-[50px] font-extrabold leading-[1.14] tracking-tight text-white max-w-170"
-                id="about-hero-title"
-              >
-                Decoding Genes.{" "}
-                <span style={{ color: isRed ? "#EF4444" : "var(--accent)", transition: "color 0.4s ease-in-out" }}>Delivering Healthier Lives</span>
-              </h1>
-            </ScrollReveal>
+            <h1
+              className="font-['Inter'] text-[32px] sm:text-[40px] md:text-[46px] lg:text-[50px] font-extrabold leading-[1.14] tracking-tight text-white max-w-170"
+              id="about-hero-title"
+            >
+              Decoding Genes.{" "}
+              <span style={{ color: isRed ? "#EF4444" : "var(--accent)", transition: "color 0.4s ease-in-out" }}>Delivering Healthier Lives</span>
+            </h1>
 
             {/* Description */}
-            <ScrollReveal delay={150}>
-              <p className="mt-4 max-w-125 text-sm sm:text-base leading-6 text-[#E2E8F0]">
-                At ClinGene, we turn genetic insights into better health decisions,<br className="hidden sm:block" />
-                helping individuals and families build a healthier future.
-              </p>
-            </ScrollReveal>
+            <p className="mt-4 max-w-125 text-sm sm:text-base leading-6 text-[#E2E8F0]">
+              At ClinGene, we turn genetic insights into better health decisions,<br className="hidden sm:block" />
+              helping individuals and families build a healthier future.
+            </p>
           </div>
         </div>
       </section>
@@ -230,8 +226,8 @@ export default function AboutPage() {
                   <img
                     src={injectionImage}
                     alt="Genetic testing laboratory professional handling sample"
-                    width="1343"
-                    height="800"
+                    width="800"
+                    height="476"
                     className="w-full h-full min-h-65 sm:min-h-70 object-cover aspect-4/3 sm:aspect-video"
                     decoding="async"
                     loading="lazy"
@@ -251,7 +247,7 @@ export default function AboutPage() {
                       <h3 className="font-['Inter'] text-[13px] sm:text-[13.5px] lg:text-[14.5px] font-bold text-[#0c2b48] leading-tight mb-0.5 sm:mb-1">
                         Advanced<br />Genetic Solutions
                       </h3>
-                      <p className="text-[10.5px] sm:text-[11px] lg:text-[12px] text-[#94a3b8] leading-tight sm:leading-relaxed">
+                      <p className="text-[10.5px] sm:text-[11px] lg:text-[12px] text-slate-600 leading-tight sm:leading-relaxed">
                         From diagnosis to<br />personalized care
                       </p>
                     </div>
@@ -326,8 +322,8 @@ export default function AboutPage() {
                 <img
                   src={amjadAli}
                   alt="Dr. Amjad Ali Tanoli Ph.D - CEO"
-                  width="879"
-                  height="1024"
+                  width="400"
+                  height="466"
                   decoding="async"
                   loading="lazy"
                   className="w-full h-full object-cover object-[top_center] md:object-[center_20%]"
@@ -694,8 +690,8 @@ export default function AboutPage() {
                     <img
                       src={characterImage}
                       alt="ClinGene Laboratory Professional"
-                      width="1024"
-                      height="1536"
+                      width="800"
+                      height="1200"
                       className="h-full w-full object-cover object-[center_15%] transition-all duration-400"
                       style={{ filter: whyImageFilter }}
                       decoding="async"
@@ -863,7 +859,7 @@ export default function AboutPage() {
 
                     {/* Label in small uppercase muted text & Number in bold */}
                     <div>
-                      <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 font-['Inter',sans-serif]">
+                      <span className="block text-[11px] font-semibold uppercase tracking-wider text-slate-600 font-['Inter',sans-serif]">
                         {item.label}
                       </span>
                       <p className="mt-1 font-['Poppins',sans-serif] text-[18px] sm:text-[19px] font-bold text-[#0c2b48] tracking-wide">
