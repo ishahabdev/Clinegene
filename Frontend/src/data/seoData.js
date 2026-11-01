@@ -17,7 +17,7 @@ export const ORGANIZATION_SCHEMA = {
   "@id": `${BASE_URL}/#organization`,
   name: "ClinGene",
   legalName: "ClinGene (SMC-Private) Limited",
-  alternateName: ["Clingene", "ClinGene.co", "ClinGene Pakistan"],
+  alternateName: ["Clingene", "ClinGene Pakistan"],
   url: `${BASE_URL}/`,
   logo: `${BASE_URL}/images/clingene-logo.webp`,
   image: DEFAULT_OG_IMAGE,
@@ -55,7 +55,7 @@ export const WEBSITE_SCHEMA = {
   "@type": "WebSite",
   "@id": `${BASE_URL}/#website`,
   name: "ClinGene",
-  alternateName: ["ClinGene Lab", "Clingene", "ClinGene.co"],
+  alternateName: ["ClinGene Lab", "ClinGene Pakistan", "Clingene"],
   url: `${BASE_URL}/`,
   description: "Pioneer in life sciences, clinical genetic testing, DNA sequencing and genomics research in Pakistan.",
   publisher: {
@@ -139,7 +139,6 @@ export const seoRoutes = {
     ogType: "website",
     schema: [
       ORGANIZATION_SCHEMA,
-      WEBSITE_SCHEMA,
       SITELINKS_NAV_SCHEMA,
     ],
   },

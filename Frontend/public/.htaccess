@@ -5,9 +5,9 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# 2. Canonical Host: Redirect www to non-www
-RewriteCond %{HTTP_HOST} ^www\.clingene\.co [NC]
-RewriteRule ^(.*)$ https://clingene.co/$1 [L,R=301]
+# 2. Canonical Host: Redirect non-www to www
+RewriteCond %{HTTP_HOST} ^clingene\.co [NC]
+RewriteRule ^(.*)$ https://www.clingene.co/$1 [L,R=301]
 
 # 3. Security Headers
 <IfModule mod_headers.c>
