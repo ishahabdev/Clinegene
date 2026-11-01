@@ -174,6 +174,19 @@ export default function ProfilePage() {
         return;
       }
 
+      // TEMP DEBUG: remove after testing
+      console.log("[DEBUG] supabase project:", supabase.supabaseUrl);
+      console.log("[DEBUG] updated user email:", updateData?.user?.email);
+      console.log("[DEBUG] updated_at:", updateData?.user?.updated_at);
+      const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email,
+        password: newPassword,
+      });
+      console.log(
+        "[DEBUG] login with NEW password:",
+        verifyError ? "FAILED: " + verifyError.message : "OK"
+      );
+
       // 4. Success: only set success state and clear inputs when update truly succeeded
       setCurrentPassword("");
       setNewPassword("");
