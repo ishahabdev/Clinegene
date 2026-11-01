@@ -33,6 +33,7 @@ function loadInitialProfile() {
 }
 
 export default function ProfilePage() {
+  console.log("[BUILD] profile v2"); // TEMP: remove after testing
   const { addToast } = useToast() || { addToast: () => {} };
   const { user } = useAuth();
   const [profile, setProfile] = useState(loadInitialProfile);
@@ -454,7 +455,7 @@ export default function ProfilePage() {
                 className="w-full mt-4 rounded-xl bg-[#009688] hover:bg-[#008577] text-white py-3 px-4 font-semibold text-sm flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <Lock className="h-4 w-4" />
-                <span>{passwordLoading ? "Updating Password..." : "Update Password"}</span>
+                <span>{passwordLoading ? "Updating Password..." : "Update Password (v2)"}</span> {/* TEMP: remove after testing */}
               </button>
             </form>
           </div>
