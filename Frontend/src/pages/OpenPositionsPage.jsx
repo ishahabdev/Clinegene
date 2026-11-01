@@ -15,6 +15,7 @@ import ScrollReveal from "../components/ScrollReveal.jsx";
 import Button from "../components/Button.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { fetchPublishedJobs } from "../lib/careersClient.js";
+import carrierHero from "../assets/carrierhero.png";
 
 export const revalidate = 60;
 export const dynamic = "force-dynamic";
@@ -49,7 +50,6 @@ export default function OpenPositionsPage() {
     }));
   };
 
-  const home1 = "/images/home1.webp";
 
   useEffect(() => {
     let isMounted = true;
@@ -102,11 +102,17 @@ export default function OpenPositionsPage() {
         className="relative isolate flex min-h-[360px] sm:min-h-[420px] lg:min-h-[460px] items-center overflow-hidden text-white transition-colors duration-500"
         style={{ backgroundColor: sectionBg }}
       >
-        {/* Background DNA helix image on right */}
-        <div
-          className="absolute inset-y-0 right-0 w-full sm:w-[70%] md:w-[60%] lg:w-[55%] bg-cover bg-position-[80%_center] md:bg-center transition-all duration-500 opacity-40 sm:opacity-75 md:opacity-100 -z-20"
+        {/* Background hero image */}
+        <img
+          alt="Careers at ClinGene"
+          aria-hidden="true"
+          width="2048"
+          height="768"
+          loading="eager"
+          fetchPriority="high"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-[80%_center] sm:object-[72%_center] lg:object-center transition-all duration-500"
+          src={carrierHero}
           style={{
-            backgroundImage: `url(${home1})`,
             filter: isRed
               ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
               : isGreen

@@ -16,13 +16,18 @@ import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import { fetchPublishedResearch } from "../lib/researchClient.js";
 import { useTheme } from "../context/ThemeContext.jsx";
+import researchHero from "../assets/Researchhero.png";
 
 const TYPES = ["All", "Research Project", "Publication", "Clinical Trial"];
 
 export default function ResearchPage() {
   const { theme } = useTheme();
+  const isRed = theme === "red";
+  const isGreen = theme === "green";
+  const sectionBg = isRed ? "#2d0306" : isGreen ? "#021e12" : "#0c2b48";
+
   const [researchList, setResearchList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeType, setActiveType] = useState("All");
   const [activeCategory, setActiveCategory] = useState("All");
@@ -133,10 +138,41 @@ export default function ResearchPage() {
   return (
     <main className="min-h-screen bg-[#f8fbfe]">
       {/* ── Hero Banner ── */}
-      <section className="relative overflow-hidden bg-[#0c2b48] py-16 sm:py-20 text-white">
-        <div
-          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--accent-glow),transparent_60%)] opacity-30 pointer-events-none"
+      <section
+        className="relative overflow-hidden py-16 sm:py-20 text-white transition-colors duration-500"
+        style={{ backgroundColor: sectionBg }}
+      >
+        <img
+          alt="ClinGene Research"
           aria-hidden="true"
+          width="2048"
+          height="768"
+          loading="eager"
+          fetchPriority="high"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-[80%_center] sm:object-[72%_center] lg:object-center transition-all duration-500"
+          src={researchHero}
+          style={{
+            filter: isRed
+              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
+              : isGreen
+                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
+                : "none",
+          }}
+        />
+        <div
+          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--accent-glow),transparent_60%)] opacity-30 pointer-events-none -z-10"
+          aria-hidden="true"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10"
+          style={{
+            background: isRed
+              ? "linear-gradient(105deg, rgba(45, 3, 6, 0.95) 0%, rgba(45, 3, 6, 0.85) 45%, rgba(45, 3, 6, 0.3) 75%, rgba(45, 3, 6, 0.1) 100%)"
+              : isGreen
+                ? "linear-gradient(105deg, rgba(2, 30, 18, 0.95) 0%, rgba(2, 30, 18, 0.85) 45%, rgba(2, 30, 18, 0.3) 75%, rgba(2, 30, 18, 0.1) 100%)"
+                : "linear-gradient(105deg, rgba(3, 26, 46, 0.95) 0%, rgba(3, 26, 46, 0.85) 45%, rgba(3, 26, 46, 0.3) 75%, rgba(3, 26, 46, 0.1) 100%)",
+          }}
         />
         <div className="relative site-container max-w-6xl mx-auto px-4 sm:px-6">
           <ScrollReveal>
@@ -262,7 +298,7 @@ export default function ResearchPage() {
             <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-xs max-w-md mx-auto my-6">
               <FlaskConical className="h-12 w-12 text-slate-300 mx-auto mb-3" />
               <h3 className="font-outfit text-base font-bold text-slate-800">
-                No Research Data Available
+                No Research Present
               </h3>
               <p className="font-inter text-xs text-slate-500 mt-1.5 leading-relaxed">
                 Research projects, clinical trials, and genomic publications will appear here once published from the admin portal.

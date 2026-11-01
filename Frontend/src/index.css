@@ -2102,20 +2102,30 @@ header[data-theme="ceo"] button:focus-visible {
   gap: 14px;
 }
 
+.contact-card-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .contact-info-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
   min-width: 0;
+  height: 100%;
   padding: 22px 22px 20px;
   border: 1px solid #dbe5ee;
   border-radius: 14px;
   background: #fff;
+  transform: translateY(0);
   box-shadow: 0 14px 34px -4px rgba(12, 43, 72, 0.12), 0 4px 14px rgba(12, 43, 72, 0.05);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.contact-info-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 22px 45px -6px rgba(12, 43, 72, 0.18), 0 6px 18px rgba(12, 43, 72, 0.08);
+  transition-property: transform, box-shadow;
+  transition-duration: 700ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, box-shadow;
 }
 
 .contact-info-card-featured {
@@ -2123,7 +2133,33 @@ header[data-theme="ceo"] button:focus-visible {
   background: var(--contact-navy);
   color: #fff;
   box-shadow: 0 18px 45px -8px rgba(5, 11, 28, 0.45);
-  transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Hover on non-moving wrapper or card lifts inner card smoothly by 8px in both directions */
+.contact-card-wrapper:hover .contact-info-card,
+.contact-info-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 22px 45px -6px rgba(12, 43, 72, 0.18), 0 6px 18px rgba(12, 43, 72, 0.08);
+}
+
+.contact-card-wrapper:hover .contact-info-card-featured,
+.contact-info-card-featured:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 26px 50px -6px rgba(5, 11, 28, 0.55), 0 10px 20px rgba(5, 11, 28, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-info-card,
+  .contact-info-card-featured {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .contact-card-wrapper:hover .contact-info-card,
+  .contact-card-wrapper:hover .contact-info-card-featured,
+  .contact-info-card:hover {
+    transform: none !important;
+  }
 }
 
 .contact-info-icon {

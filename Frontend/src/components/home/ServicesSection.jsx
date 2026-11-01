@@ -160,7 +160,7 @@ export default function ServicesSection() {
             {carouselServices.map((service, index) => {
               return (
                 <a
-                  className="service-card group relative flex min-h-117 h-full shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] hover:border-(--accent) focus-within:border-(--accent) text-[#102744] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
+                  className="service-card group relative flex h-[460px] sm:h-[450px] lg:h-[435px] shrink-0 flex-col overflow-hidden rounded-2xl border border-[#d4e5f2] hover:border-(--accent) focus-within:border-(--accent) text-[#102744] focus:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)"
                   href={`/services/${service.slug}`}
                   key={`${service.slug || service.name}-${index}`}
                   style={{ width: `${cardWidth}px` }}
@@ -183,18 +183,18 @@ export default function ServicesSection() {
                     </span>
                     <h3 className="mt-4 text-lg font-bold leading-[1.35] transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-(--accent-dark) group-focus-within:text-(--accent-dark) motion-reduce:transition-none">{service.name}</h3>
                     {service.subServices && service.subServices.length > 0 ? (
-                      <ul className="mt-3 space-y-1.5 text-xs sm:text-[13px] leading-normal text-[#58748d]">
+                      <ul className="mt-2.5 space-y-1 text-xs sm:text-[12.5px] leading-snug text-[#58748d]">
                         {service.subServices.map((sub, sIdx) => (
-                          <li key={sub.id || sIdx} className="flex items-center gap-1.5 leading-normal">
+                          <li key={sub.id || sIdx} className="flex items-center gap-1.5 leading-snug">
                             <span className="font-semibold text-(--accent)">{String.fromCharCode(97 + sIdx)})</span>
                             <span>{sub.label}</span>
                           </li>
                         ))}
                       </ul>
                     ) : service.description ? (
-                      <p className="mt-3 text-base leading-[1.6] text-[#58748d]">{service.description}</p>
+                      <p className="mt-2.5 text-xs sm:text-sm leading-[1.6] text-[#58748d]">{service.description}</p>
                     ) : null}
-                    <span className="service-card-explore mt-auto inline-flex items-center gap-2 whitespace-nowrap pt-5 text-base font-bold">
+                    <span className="service-card-explore mt-auto inline-flex items-center gap-2 whitespace-nowrap pt-4 text-base font-bold">
                       Explore
                       <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-focus-within:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none" />
                     </span>

@@ -567,91 +567,90 @@ export default function ContactPage() {
             const isFeatured = card.isFeatured;
             return (
               <ScrollReveal
-                as="article"
-                className={`contact-info-card${isFeatured ? " contact-info-card-featured" : ""} cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_22px_45px_-6px_rgba(12,43,72,0.18)]`}
+                className="contact-card-wrapper group relative h-full"
                 delay={index * 60}
                 key={card.title}
-                onClick={(e) => {
-                  if (e.target.closest("a")) return;
-                  if (card.href.startsWith("https:")) {
-                    window.open(card.href, "_blank", "noopener,noreferrer");
-                  } else {
-                    window.location.href = card.href;
-                  }
-                }}
-                style={
-                  isFeatured
-                    ? {
-                        backgroundColor: featuredBg,
-                        borderColor: featuredBorder,
-                        boxShadow: "0 18px 45px -8px rgba(5, 11, 28, 0.45)",
-                        transition: "background-color 0.4s ease, border-color 0.4s ease, transform 0.25s ease, box-shadow 0.25s ease",
-                      }
-                    : {
-                        backgroundColor: "#ffffff",
-                        borderColor: "#dbe5ee",
-                        boxShadow: "0 14px 34px -4px rgba(12, 43, 72, 0.12), 0 4px 14px rgba(12, 43, 72, 0.05)",
-                        transition: "background-color 0.4s ease, border-color 0.4s ease, transform 0.25s ease, box-shadow 0.25s ease",
-                      }
-                }
               >
-                <span
-                  className="contact-info-icon"
+                <article
+                  className={`contact-info-card ${isFeatured ? "contact-info-card-featured" : ""} cursor-pointer motion-reduce:transition-none motion-reduce:transform-none`}
+                  onClick={(e) => {
+                    if (e.target.closest("a")) return;
+                    if (card.href.startsWith("https:")) {
+                      window.open(card.href, "_blank", "noopener,noreferrer");
+                    } else {
+                      window.location.href = card.href;
+                    }
+                  }}
                   style={
                     isFeatured
                       ? {
-                          backgroundColor: featuredIconBg,
-                          borderColor: featuredIconBorder,
-                          color: featuredAccent,
-                          transition: "all 0.4s ease",
+                          backgroundColor: featuredBg,
+                          borderColor: featuredBorder,
                         }
                       : {
-                          backgroundColor: isRed
-                            ? "rgba(185, 28, 28, 0.08)"
-                            : isGreen
-                              ? "rgba(16, 185, 129, 0.08)"
-                              : "rgba(16, 200, 224, 0.10)",
-                          borderColor: isRed
-                            ? "rgba(185, 28, 28, 0.3)"
-                            : isGreen
-                              ? "rgba(16, 185, 129, 0.3)"
-                              : "rgba(16, 200, 224, 0.35)",
-                          color: isRed ? "#b91c1c" : isGreen ? "#10b981" : "#10c8e0",
-                          transition: "all 0.4s ease",
+                          backgroundColor: "#ffffff",
+                          borderColor: "#dbe5ee",
                         }
                   }
                 >
-                  <ContactIcon type={card.icon} />
-                </span>
-                <h2>{card.title}</h2>
-                <a
-                  href={card.href}
-                  rel={card.href.startsWith("https:") ? "noopener noreferrer" : undefined}
-                  target={card.href.startsWith("https:") ? "_blank" : undefined}
-                  title={isFeatured ? "Compose email in Gmail" : undefined}
-                  style={
-                    isFeatured
-                      ? { color: featuredAccent, transition: "color 0.3s ease" }
-                      : { color: isRed ? "#b91c1c" : isGreen ? "#059669" : "#079bb0", transition: "color 0.3s ease" }
-                  }
-                >
-                  {card.value}
-                </a>
-                <p style={isFeatured ? { color: featuredMuted } : undefined}>{card.detail}</p>
-                <a
-                  className="contact-card-link"
-                  href={card.href}
-                  rel={card.href.startsWith("https:") ? "noopener noreferrer" : undefined}
-                  target={card.href.startsWith("https:") ? "_blank" : undefined}
-                  title={isFeatured ? "Compose email in Gmail" : undefined}
-                  style={
-                    isFeatured
-                      ? { color: featuredAccent, transition: "color 0.3s ease" }
-                      : undefined
-                  }
-                >
-                  {index === 2 ? "Get directions" : index === 0 ? "Call now" : "Contact us"} <span aria-hidden="true">→</span>
-                </a>
+                  <span
+                    className="contact-info-icon"
+                    style={
+                      isFeatured
+                        ? {
+                            backgroundColor: featuredIconBg,
+                            borderColor: featuredIconBorder,
+                            color: featuredAccent,
+                            transition: "background-color 0.6s ease, border-color 0.6s ease, color 0.6s ease",
+                          }
+                        : {
+                            backgroundColor: isRed
+                              ? "rgba(185, 28, 28, 0.08)"
+                              : isGreen
+                                ? "rgba(16, 185, 129, 0.08)"
+                                : "rgba(16, 200, 224, 0.10)",
+                            borderColor: isRed
+                              ? "rgba(185, 28, 28, 0.3)"
+                              : isGreen
+                                ? "rgba(16, 185, 129, 0.3)"
+                                : "rgba(16, 200, 224, 0.35)",
+                            color: isRed ? "#b91c1c" : isGreen ? "#10b981" : "#10c8e0",
+                            transition: "background-color 0.6s ease, border-color 0.6s ease, color 0.6s ease",
+                          }
+                    }
+                  >
+                    <ContactIcon type={card.icon} />
+                  </span>
+                  <h2>{card.title}</h2>
+                  <a
+                    href={card.href}
+                    rel={card.href.startsWith("https:") ? "noopener noreferrer" : undefined}
+                    target={card.href.startsWith("https:") ? "_blank" : undefined}
+                    title={isFeatured ? "Compose email in Gmail" : undefined}
+                    style={
+                      isFeatured
+                        ? { color: featuredAccent, transition: "color 0.6s ease" }
+                        : { color: isRed ? "#b91c1c" : isGreen ? "#059669" : "#079bb0", transition: "color 0.6s ease" }
+                    }
+                  >
+                    {card.value}
+                  </a>
+                  <p style={isFeatured ? { color: featuredMuted } : undefined}>{card.detail}</p>
+                  <a
+                    className="contact-card-link"
+                    href={card.href}
+                    rel={card.href.startsWith("https:") ? "noopener noreferrer" : undefined}
+                    target={card.href.startsWith("https:") ? "_blank" : undefined}
+                    title={isFeatured ? "Compose email in Gmail" : undefined}
+                    style={
+                      isFeatured
+                        ? { color: featuredAccent, transition: "color 0.6s ease" }
+                        : undefined
+                    }
+                  >
+                    {index === 2 ? "Get directions" : index === 0 ? "Call now" : "Contact us"} <span aria-hidden="true">→</span>
+                  </a>
+                </article>
               </ScrollReveal>
             );
           })}

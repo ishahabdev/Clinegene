@@ -13,6 +13,8 @@ import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import { fetchPublishedBlogs, getInitialCachedBlogs } from "../lib/newsClient.js";
 import { getIdbItem } from "../lib/idbCache.js";
+import { useTheme } from "../context/ThemeContext.jsx";
+import resourcesHero from "../assets/Resources.png";
 
 const DEFAULT_CATEGORIES = [
   "All",
@@ -69,6 +71,11 @@ export const revalidate = 60;
 export const dynamic = "force-dynamic";
 
 export default function BlogPage() {
+  const { theme } = useTheme();
+  const isRed = theme === "red";
+  const isGreen = theme === "green";
+  const sectionBg = isRed ? "#2d0306" : isGreen ? "#021e12" : "#0c2b48";
+
   const [blogs, setBlogs] = useState(() => getInitialCachedBlogs());
   const [loading, setLoading] = useState(() => getInitialCachedBlogs().length === 0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -189,10 +196,41 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       {/* ── Hero Section ── */}
-      <section className="relative overflow-hidden bg-[#0c2b48] py-16 sm:py-20 text-white">
-        <div
-          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--accent-glow),transparent_60%)] opacity-30 pointer-events-none"
+      <section
+        className="relative overflow-hidden py-16 sm:py-20 text-white transition-colors duration-500"
+        style={{ backgroundColor: sectionBg }}
+      >
+        <img
+          alt="ClinGene Resources & Publications"
           aria-hidden="true"
+          width="2048"
+          height="768"
+          loading="eager"
+          fetchPriority="high"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-[80%_center] sm:object-[72%_center] lg:object-center transition-all duration-500"
+          src={resourcesHero}
+          style={{
+            filter: isRed
+              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
+              : isGreen
+                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
+                : "none",
+          }}
+        />
+        <div
+          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--accent-glow),transparent_60%)] opacity-30 pointer-events-none -z-10"
+          aria-hidden="true"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10"
+          style={{
+            background: isRed
+              ? "linear-gradient(105deg, rgba(45, 3, 6, 0.95) 0%, rgba(45, 3, 6, 0.85) 45%, rgba(45, 3, 6, 0.3) 75%, rgba(45, 3, 6, 0.1) 100%)"
+              : isGreen
+                ? "linear-gradient(105deg, rgba(2, 30, 18, 0.95) 0%, rgba(2, 30, 18, 0.85) 45%, rgba(2, 30, 18, 0.3) 75%, rgba(2, 30, 18, 0.1) 100%)"
+                : "linear-gradient(105deg, rgba(3, 26, 46, 0.95) 0%, rgba(3, 26, 46, 0.85) 45%, rgba(3, 26, 46, 0.3) 75%, rgba(3, 26, 46, 0.1) 100%)",
+          }}
         />
         <div className="relative site-container max-w-6xl mx-auto px-4 sm:px-6">
           <ScrollReveal>
