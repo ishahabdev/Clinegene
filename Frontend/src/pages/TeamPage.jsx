@@ -6,7 +6,6 @@ import TeamHero from "../components/team/TeamHero.jsx";
 import LeadershipSection from "../components/team/LeadershipSection.jsx";
 import TeamCarousel from "../components/team/TeamCarousel.jsx";
 import teamPhoto from "../assets/team.webp";
-import { useTheme } from "../context/ThemeContext.jsx";
 import { STATIC_TEAM_MEMBERS } from "../data/teamConfig.js";
 import { getOptimizedImageUrl, DEFAULT_AVATAR } from "../lib/imageOptimization.js";
 
@@ -59,9 +58,6 @@ function getLocalFallbackForMember(item) {
 }
 
 export default function TeamPage() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
   const promisePhoto = teamPhoto;
 
   const [members, setMembers] = useState(STATIC_TEAM_MEMBERS);
@@ -130,12 +126,6 @@ export default function TeamPage() {
       m.role?.toLowerCase().includes("ceo") ||
       m.role?.toLowerCase().includes("director")
   );
-
-  const promiseOverlay = isRed
-    ? "linear-gradient(90deg, rgba(45, 3, 6, 0.97) 0%, rgba(60, 6, 10, 0.88) 45%, rgba(90, 10, 16, 0.45) 100%)"
-    : isGreen
-      ? "linear-gradient(90deg, rgba(2, 30, 18, 0.97) 0%, rgba(4, 42, 24, 0.88) 45%, rgba(6, 60, 34, 0.45) 100%)"
-      : "linear-gradient(90deg, rgba(3,20,43,0.95) 0%, rgba(4,32,64,0.84) 45%, rgba(6,52,96,0.45) 100%)";
 
   return (
     <>
@@ -210,11 +200,7 @@ export default function TeamPage() {
             backgroundPosition: '50% 35%',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
-            filter: isRed
-              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
-              : isGreen
-                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
-                : "none",
+            filter: "var(--hero-img-filter)",
           }}
           aria-hidden="true"
         />
@@ -223,7 +209,7 @@ export default function TeamPage() {
         <div 
           className="absolute inset-0 -z-1 transition-all duration-500"
           style={{
-            background: promiseOverlay
+            background: "var(--promise-overlay)"
           }}
           aria-hidden="true"
         />
@@ -266,7 +252,7 @@ export default function TeamPage() {
                     <br />
                     <span
                       style={{
-                        color: isRed ? "#ef4444" : "var(--accent)",
+                        color: "var(--accent)",
                         transition: "color 0.4s ease-in-out",
                       }}
                     >

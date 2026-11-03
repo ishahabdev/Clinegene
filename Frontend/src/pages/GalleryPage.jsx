@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import serviceHero from "../assets/service-hero.webp";
-import { useTheme } from "../context/ThemeContext.jsx";
 import { fetchPublishedGallery } from "../lib/galleryClient.js";
 import { getOptimizedImageUrl } from "../lib/imageOptimization.js";
 
@@ -21,10 +20,6 @@ export const revalidate = 60;
 export const dynamic = "force-dynamic";
 
 export default function GalleryPage() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedFolder, setSelectedFolder] = useState(null);
@@ -56,13 +51,6 @@ export default function GalleryPage() {
       isMounted = false;
     };
   }, []);
-
-  const accent =
-    theme === "red"
-      ? { primary: "#ef4444", softBg: "rgba(229,62,62,.08)", border: "rgba(229,62,62,.25)" }
-      : theme === "green"
-        ? { primary: "#10b981", softBg: "rgba(56,161,105,.08)", border: "rgba(56,161,105,.25)" }
-        : { primary: "#00bcd4", softBg: "rgba(0,188,212,.08)", border: "rgba(0,188,212,.25)" };
 
   // Group photos by Folder / Event (category)
   const folders = useMemo(() => {
@@ -303,9 +291,9 @@ export default function GalleryPage() {
                 <span
                   className="mb-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-inter text-xs font-semibold uppercase tracking-widest"
                   style={{
-                    backgroundColor: accent.softBg,
-                    color: accent.primary,
-                    border: `1px solid ${accent.border}`,
+                    backgroundColor: "color-mix(in srgb, var(--accent) 8%, transparent)",
+                    color: "var(--accent)",
+                    border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
                   }}
                 >
                   <Folder className="h-3.5 w-3.5" />

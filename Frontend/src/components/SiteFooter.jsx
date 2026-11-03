@@ -1,25 +1,14 @@
 import Button from "./Button.jsx";
-import { useTheme } from "../context/ThemeContext.jsx";
 
 const clingeneLogo = "/images/clingene-logo.webp";
 const homeBackground = "/images/home1.webp";
 
 export default function SiteFooter({ showJoinCta }) {
-  const { theme } = useTheme();
-
-  // Per-theme footer overlay & accent tint
-  const footerBgOverlay =
-    theme === "red"
-      ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97), rgba(60, 6, 10, 0.95))"
-      : theme === "green"
-        ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97), rgba(4, 42, 24, 0.95))"
-        : "linear-gradient(105deg, rgba(2, 19, 42, 0.97), rgba(3, 28, 57, 0.94))";
-
   return (
     <footer
       className="relative isolate overflow-hidden text-white z-1 transition-all duration-500"
       style={{
-        backgroundImage: `${footerBgOverlay}, url(${homeBackground})`,
+        backgroundImage: `var(--footer-overlay), url(${homeBackground})`,
         backgroundPosition: "center 38%",
         backgroundSize: "cover",
         transition: "background-image 0.4s ease-in-out",

@@ -27,10 +27,8 @@ function FeatureIcon({ type }) {
 }
 
 export default function HeroSection() {
-  const { theme, themeConfig } = useTheme();
+  const { themeConfig } = useTheme();
   const { heroImg, heroImgMobile } = themeConfig;
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
 
   return (
     <section
@@ -59,6 +57,7 @@ export default function HeroSection() {
         className="hero-bg-img absolute inset-0 -z-20 h-full w-full object-cover object-[72%_center] sm:object-[68%_center] lg:object-center transition-all duration-500"
         fetchPriority="high"
         src={heroImg}
+        style={{ filter: "var(--hero-img-filter)" }}
       />
 
       {/* Responsive theme-aware gradient overlay */}
@@ -86,7 +85,7 @@ export default function HeroSection() {
             <span
               className="mx-1"
               style={{
-                color: isRed ? "#ef4444" : "var(--accent)",
+                color: "var(--accent)",
                 transition: "color 0.4s ease-in-out",
               }}
             >
@@ -96,7 +95,7 @@ export default function HeroSection() {
             <span
               className="mx-1"
               style={{
-                color: isRed ? "#ef4444" : "var(--accent)",
+                color: "var(--accent)",
                 transition: "color 0.4s ease-in-out",
               }}
             >
@@ -114,7 +113,7 @@ export default function HeroSection() {
             <span
               className="mt-1.5 block"
               style={{
-                color: isRed ? "#ef4444" : "var(--accent)",
+                color: "var(--accent)",
                 transition: "color 0.4s ease-in-out",
               }}
             >
@@ -141,7 +140,7 @@ export default function HeroSection() {
               href="/services"
               variant="transparent"
               style={{
-                borderColor: isRed ? "rgba(255,255,255,0.55)" : "rgba(255,255,255,0.70)",
+                borderColor: "rgba(255,255,255,0.65)",
               }}
             >
               Our Services
@@ -162,8 +161,8 @@ export default function HeroSection() {
                 <span
                   className="grid h-9 w-9 shrink-0 place-items-center rounded-full border shadow-sm"
                   style={{
-                    borderColor: isRed ? "#ef4444" : "var(--accent)",
-                    color: isRed ? "#ef4444" : "var(--accent)",
+                    borderColor: "var(--accent)",
+                    color: "var(--accent)",
                     transition: "border-color 0.4s ease-in-out, color 0.4s ease-in-out",
                   }}
                 >
@@ -179,20 +178,9 @@ export default function HeroSection() {
         <div
           className="absolute bottom-17 right-10 hidden w-50 flex-col justify-center overflow-hidden rounded-[14px] backdrop-blur-sm lg:flex xl:right-16"
           style={{
-            /* Per-theme dark background */
-            background: isRed
-              ? "rgba(28, 4, 8, 0.88)"
-              : isGreen
-                ? "rgba(4, 51, 27, 0.92)"
-                : "rgba(3, 27, 55, 0.85)",
-            /* Per-theme border — consistent use of CSS variable */
-            border: isRed
-              ? `1.5px solid var(--accent)`
-              : `1px solid color-mix(in srgb, var(--accent) 65%, transparent)`,
-            /* Themed glow using CSS variable */
-            boxShadow: isRed
-              ? `0 0 28px var(--accent-glow), 0 4px 24px rgba(0,0,0,0.45)`
-              : `0 0 24px var(--accent-glow), 0 4px 20px rgba(0,0,0,0.40)`,
+            background: "var(--card-hero-badge-bg)",
+            border: "1px solid color-mix(in srgb, var(--accent) 55%, transparent)",
+            boxShadow: "0 0 24px var(--accent-glow), 0 4px 20px rgba(0,0,0,0.40)",
             padding: "20px 22px 18px",
             transition: "border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out, background 0.4s ease-in-out",
           }}

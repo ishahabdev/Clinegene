@@ -23,7 +23,6 @@ import Button from "../components/Button.jsx";
 import dnaStrand from "../assets/dna_strand.png";
 import PageNotFoundPage from "./PageNotFoundPage.jsx";
 import { fetchServiceBySlug, fetchPublishedServices } from "../lib/servicesClient.js";
-import { useTheme } from "../context/ThemeContext.jsx";
 import { buildServiceSeo } from "../data/seoData.js";
 
 export const revalidate = 60;
@@ -107,21 +106,17 @@ function SubServiceIcon({ id, className = "h-11 w-11", style }) {
 }
 
 export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
-  // Dynamic theme colors
+  // Dynamic theme CSS variables
   const themeColors = {
-    accent: isRed ? "#b91c1c" : isGreen ? "#10b981" : "#10c8e0",
-    accentDark: isRed ? "#2d0306" : isGreen ? "#072419" : "#0c2b48",
-    accentHover: isRed ? "#991b1b" : isGreen ? "#059669" : "#0891b2",
-    accentSoftBg: isRed ? "#fff1f2" : isGreen ? "#ecfdf5" : "#e5f8fb",
-    accentSoftBorder: isRed ? "rgba(185, 28, 28, 0.25)" : isGreen ? "rgba(16, 185, 129, 0.25)" : "rgba(16, 200, 224, 0.25)",
-    badgeText: isRed ? "#991b1b" : isGreen ? "#065f46" : "#0a7a94",
-    badgeBg: isRed ? "#ffe4e6" : isGreen ? "#d1fae5" : "#e5f8fb",
-    sectionAltBg: isRed ? "#fdf8f8" : isGreen ? "#f8fdfa" : "#f8fafc",
-    cardBgTint: isRed ? "rgba(185, 28, 28, 0.03)" : isGreen ? "rgba(16, 185, 129, 0.03)" : "rgba(16, 200, 224, 0.03)",
+    accent: "var(--accent)",
+    accentDark: "var(--accent-dark)",
+    accentHover: "var(--accent-hover)",
+    accentSoftBg: "var(--accent-soft)",
+    accentSoftBorder: "color-mix(in srgb, var(--accent) 25%, transparent)",
+    badgeText: "var(--accent-muted)",
+    badgeBg: "var(--accent-soft-2)",
+    sectionAltBg: "var(--service-detail-alt-bg)",
+    cardBgTint: "color-mix(in srgb, var(--accent) 3%, transparent)",
   };
 
   // Determine slug from prop, ssrUrl, or window.location.pathname
@@ -598,20 +593,17 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
                   {service.subServices.map((sub) => {
-                    const themeAccentColor = isRed ? "#c81e25" : isGreen ? "#059669" : "#00bcd4";
-                    const themeCardBorderHover = isRed ? "hover:border-[#c81e25]" : isGreen ? "hover:border-[#059669]" : "hover:border-[#00bcd4]";
-
                     return (
                       <a
                         key={sub.id}
                         href={`/contact?service=genetic-counseling-${sub.id}`}
-                        className={`group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-[0_2px_10px_rgba(12,43,72,0.04)] hover:shadow-lg ${themeCardBorderHover} hover:-translate-y-1 transition-all duration-300`}
+                        className="group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-[0_2px_10px_rgba(12,43,72,0.04)] hover:shadow-lg hover:border-(--accent) hover:-translate-y-1 transition-all duration-300"
                       >
                         <div className="flex h-14 w-14 items-center justify-center transition-transform duration-300 group-hover:scale-110">
                           <SubServiceIcon
                             id={sub.id}
                             className="h-11 w-11 transition-colors duration-300"
-                            style={{ color: themeAccentColor }}
+                            style={{ color: "var(--accent)" }}
                           />
                         </div>
 

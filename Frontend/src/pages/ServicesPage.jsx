@@ -6,7 +6,6 @@ import ScrollReveal from "../components/ScrollReveal.jsx";
 import serviceHero from "../assets/service-hero.webp";
 import { getOptimizedImageUrl } from "../lib/imageOptimization.js";
 import { fetchPublishedServices } from "../lib/servicesClient.js";
-import { useTheme } from "../context/ThemeContext.jsx";
 
 export const revalidate = 60;
 export const dynamic = "force-dynamic";
@@ -69,10 +68,6 @@ function SubServiceIcon({ id, className = "h-11 w-11", style }) {
 }
 
 export default function ServicesPage() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -103,12 +98,7 @@ export default function ServicesPage() {
     };
   }, []);
 
-  const badgeBg =
-    theme === "red"
-      ? "rgba(45, 3, 6, 0.88)"
-      : theme === "green"
-        ? "rgba(2, 30, 18, 0.88)"
-        : "rgba(2, 19, 42, 0.88)";
+  const badgeBg = "var(--card-hero-badge-bg)";
 
   return (
     <>
@@ -166,7 +156,7 @@ export default function ServicesPage() {
               <span
                 className="block transition-colors"
                 style={{
-                  color: isRed ? "#ef4444" : "var(--accent)",
+                  color: "var(--accent)",
                   transition: "color 0.4s ease-in-out",
                 }}
               >
@@ -203,14 +193,14 @@ export default function ServicesPage() {
         </div>
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden site-container xl:block">
           <div
-            className="absolute right-10 top-[24%] flex w-48 items-center gap-3 rounded-2xl border p-3 text-white shadow-[0_10px_28px_rgba(0,12,28,0.4)] backdrop-blur-sm"
+            className="absolute right-10 top-[24%] flex w-48 items-center gap-3 rounded-2xl border p-3 text-white shadow-[0_10px_28px_rgba(0,12,28,0.4)] backdrop-blur-sm transition-all duration-500"
             style={{
               borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
-              backgroundColor: isRed ? "rgba(45,3,6,0.92)" : isGreen ? "rgba(2,30,18,0.92)" : "rgba(6,52,81,0.92)",
+              backgroundColor: "var(--card-hero-badge-bg)",
             }}
           >
             <span
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-xl"
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-colors duration-500"
               style={{
                 backgroundColor: "color-mix(in srgb, var(--accent) 15%, transparent)",
                 color: "var(--accent)",
@@ -221,14 +211,14 @@ export default function ServicesPage() {
             <span className="font-inter text-xs font-semibold leading-[1.4]">Genomic insights<br />for your research</span>
           </div>
           <div
-            className="absolute bottom-[9%] right-28 flex w-48 items-center gap-3 rounded-2xl border p-3 text-white shadow-[0_10px_28px_rgba(0,12,28,0.4)] backdrop-blur-sm"
+            className="absolute bottom-[9%] right-28 flex w-48 items-center gap-3 rounded-2xl border p-3 text-white shadow-[0_10px_28px_rgba(0,12,28,0.4)] backdrop-blur-sm transition-all duration-500"
             style={{
               borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
-              backgroundColor: isRed ? "rgba(45,3,6,0.92)" : isGreen ? "rgba(2,30,18,0.92)" : "rgba(6,52,81,0.92)",
+              backgroundColor: "var(--card-hero-badge-bg)",
             }}
           >
             <span
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-xl"
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-xl transition-colors duration-500"
               style={{
                 backgroundColor: "color-mix(in srgb, var(--accent) 15%, transparent)",
                 color: "var(--accent)",
@@ -245,11 +235,7 @@ export default function ServicesPage() {
         aria-labelledby="service-catalog-title"
         className="py-12 md:py-16 transition-colors duration-500"
         style={{
-          background: isRed
-            ? "linear-gradient(180deg, #fff5f5 0%, #ffffff 100%)"
-            : isGreen
-              ? "linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%)"
-              : "linear-gradient(180deg, #eaf8fc 0%, #f7fbfd 100%)",
+          background: "var(--service-catalog-bg)",
         }}
         id="service-catalog"
       >
@@ -271,7 +257,7 @@ export default function ServicesPage() {
                 Our{" "}
                 <span
                   style={{
-                    color: isRed ? "#b91c1c" : "var(--accent-dark)",
+                    color: "var(--accent-dark)",
                     transition: "color 0.4s ease-in-out",
                   }}
                 >
@@ -334,17 +320,15 @@ export default function ServicesPage() {
                   services.find((s) => s.slug === "genetic-counseling" || s.slug === "genetic-counselling") ||
                   services[0] ||
                   defaultGc;
-                const themeAccentColor = isRed ? "#c81e25" : isGreen ? "#059669" : "#00bcd4";
-                const themeCardBorderHover = isRed ? "hover:border-[#c81e25]" : isGreen ? "hover:border-[#059669]" : "hover:border-[#00bcd4]";
-                const themeBannerBorder = isRed ? "border-[#fecdd3]" : isGreen ? "border-[#a7f3d0]" : "border-[#cbe8f6]";
-                const themeBannerBg = isRed
-                  ? "bg-linear-to-r from-[#fff5f5] via-white to-[#fff1f2]"
-                  : isGreen
-                    ? "bg-linear-to-r from-[#f0fdf4] via-white to-[#ecfdf5]"
-                    : "bg-linear-to-r from-[#eef9fd] via-[#f5fbfe] to-[#eaf5fc]";
-
                 return (
-                  <ScrollReveal as="div" className={`relative mb-7 overflow-hidden rounded-2xl sm:rounded-3xl border ${themeBannerBorder} ${themeBannerBg} p-5 sm:p-7 lg:p-8 shadow-[0_4px_22px_rgba(12,43,72,0.06)] transition-colors duration-500`}>
+                  <ScrollReveal
+                    as="div"
+                    className="relative mb-7 overflow-hidden rounded-2xl sm:rounded-3xl border p-5 sm:p-7 lg:p-8 shadow-[0_4px_22px_rgba(12,43,72,0.06)] transition-colors duration-500"
+                    style={{
+                      borderColor: "var(--service-featured-banner-border)",
+                      background: "var(--service-featured-banner-bg)",
+                    }}
+                  >
                     
                     {/* Number 1 Badge on Card */}
                     <div className="flex items-center gap-2 mb-3">
@@ -364,7 +348,7 @@ export default function ServicesPage() {
                       {/* Left Column: Main Service Info */}
                       <div className="flex flex-col items-start pr-0 lg:pr-6 lg:border-r border-slate-200/80">
                         <h2 className="font-outfit text-2xl sm:text-3xl font-extrabold text-[#0c2b48] leading-tight">
-                          <span className="mr-2 transition-colors duration-300" style={{ color: themeAccentColor }}>1.</span>{gc.name}
+                          <span className="mr-2 transition-colors duration-300" style={{ color: "var(--accent)" }}>1.</span>{gc.name}
                         </h2>
                         <p className="mt-3 font-inter text-xs sm:text-[13.5px] leading-relaxed text-[#4a6e8b]">
                           {gc.description || "Professional guidance and support to help you understand genetic risks and make informed decisions."}
@@ -372,7 +356,7 @@ export default function ServicesPage() {
                         <a
                           href={`/services/${gc.slug}`}
                           className="mt-6 inline-flex items-center gap-2 rounded-full text-white font-inter font-bold text-xs sm:text-sm px-6 py-2.5 shadow-sm transition-all hover:shadow-md hover:scale-[1.02] active:scale-95"
-                          style={{ backgroundColor: themeAccentColor }}
+                          style={{ backgroundColor: "var(--accent)" }}
                         >
                           <span>Learn More</span>
                           <span aria-hidden="true" className="text-sm font-bold">›</span>
@@ -383,7 +367,7 @@ export default function ServicesPage() {
                       <div className="min-w-0 w-full">
                         <div
                           className="flex items-center gap-1.5 font-inter text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-3 sm:mb-3.5 transition-colors duration-300"
-                          style={{ color: themeAccentColor }}
+                          style={{ color: "var(--accent)" }}
                         >
                           <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
                             <circle cx="12" cy="12" r="9" />
@@ -397,13 +381,13 @@ export default function ServicesPage() {
                             <a
                               key={sub.id}
                               href={`/contact?service=genetic-counseling-${sub.id}`}
-                              className={`group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-[0_2px_8px_rgba(12,43,72,0.03)] hover:shadow-md ${themeCardBorderHover} hover:-translate-y-0.5 transition-all duration-300`}
+                              className="group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-[0_2px_8px_rgba(12,43,72,0.03)] hover:shadow-md hover:border-(--accent) hover:-translate-y-0.5 transition-all duration-300"
                             >
                               <div className="flex h-12 w-12 items-center justify-center transition-transform duration-300 group-hover:scale-110">
                                 <SubServiceIcon
                                   id={sub.id}
                                   className="h-10 w-10 transition-colors duration-300"
-                                  style={{ color: themeAccentColor }}
+                                  style={{ color: "var(--accent)" }}
                                 />
                               </div>
 
@@ -413,7 +397,7 @@ export default function ServicesPage() {
 
                               <span
                                 className="mt-auto flex h-6.5 w-6.5 sm:h-7 sm:w-7 items-center justify-center rounded-full text-white shadow-2xs transition-transform duration-300 group-hover:scale-110"
-                                style={{ backgroundColor: themeAccentColor }}
+                                style={{ backgroundColor: "var(--accent)" }}
                               >
                                 <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={2.5} />
                               </span>
@@ -485,7 +469,7 @@ export default function ServicesPage() {
           <div
             className="mt-9 overflow-hidden rounded-2xl p-6 text-white shadow-[0_12px_28px_rgba(12,43,72,0.18)] sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-8 transition-colors duration-500"
             style={{
-              backgroundColor: isRed ? "#380408" : isGreen ? "#022013" : "#062b47",
+              backgroundColor: "var(--service-banner-bg)",
             }}
           >
             <div>

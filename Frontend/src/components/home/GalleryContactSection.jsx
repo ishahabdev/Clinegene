@@ -2,19 +2,9 @@ import { ArrowRight } from "lucide-react";
 import Button from "../Button";
 import SectionHeading from "../SectionHeading";
 import ScrollReveal from "../ScrollReveal.jsx";
-import { useTheme } from "../../context/ThemeContext.jsx";
 import gallery1 from "../../assets/home/gallery1.webp";
 import gallery2 from "../../assets/home/gallery2.webp";
 export default function GalleryContactSection() {
-  const { theme } = useTheme();
-
-  const overlayColor =
-    theme === "red"
-      ? "rgba(45, 3, 6, 0.65)"
-      : theme === "green"
-        ? "rgba(2, 30, 18, 0.65)"
-        : "rgba(2, 19, 42, 0.65)";
-
   return (
     <section
       aria-labelledby="home-gallery-title"
@@ -66,7 +56,7 @@ export default function GalleryContactSection() {
                 />
                 <span
                   className="absolute inset-0 bg-linear-to-t via-transparent to-transparent opacity-70 transition-opacity group-hover:opacity-90"
-                  style={{ backgroundColor: overlayColor }}
+                  style={{ backgroundColor: "var(--gallery-card-overlay)" }}
                 />
                 <span className="absolute inset-x-4 bottom-4 text-sm font-semibold text-white sm:text-base">
                   {label}
@@ -87,7 +77,7 @@ export default function GalleryContactSection() {
         <p className="mt-4 text-sm leading-6 text-slate-600">
           Have a question or need assistance? We’re here to help.
         </p>
-        <Button className="mt-6" variant={theme === "red" ? "red" : "blue"} href="/contact">
+        <Button className="mt-6" variant="primary" href="/contact">
           Contact Us <ArrowRight aria-hidden="true" className="h-4 w-4" />
         </Button>
         <address className="mt-7 space-y-5 not-italic text-sm leading-6 text-slate-600">

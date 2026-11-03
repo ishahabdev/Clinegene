@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ArrowRight, Loader2, CheckCircle, AlertCircle, Check } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
-import { useTheme } from "../context/ThemeContext.jsx";
 import { fetchPublishedServices } from "../lib/servicesClient.js";
 
 const homeBackground = "/images/home1.webp";
@@ -246,10 +245,6 @@ function ServiceDropdown({ value, onChange, id = "contact-service", name = "serv
 }
 
 export default function ContactPage() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [turnstileToken, setTurnstileToken] = useState("");
@@ -500,25 +495,7 @@ export default function ContactPage() {
     return () => window.removeEventListener("popstate", updateServiceFromQuery);
   }, []);
 
-  // Featured card theme adaptive styling (Dark Green in Green theme, Dark Red in Red theme, Dark Blue in Cyan theme)
-  const featuredBg = isRed ? "#200407" : isGreen ? "#0b1f1a" : "#050b1c";
-  const featuredBorder = isRed
-    ? "rgba(185, 28, 28, 0.35)"
-    : isGreen
-      ? "rgba(16, 185, 129, 0.3)"
-      : "#0c2b48";
-  const featuredAccent = isRed ? "#ef4444" : isGreen ? "#10b981" : "#10c8e0";
-  const featuredIconBg = isRed
-    ? "rgba(185, 28, 28, 0.16)"
-    : isGreen
-      ? "rgba(16, 185, 129, 0.16)"
-      : "rgba(16, 200, 224, 0.12)";
-  const featuredIconBorder = isRed
-    ? "rgba(185, 28, 28, 0.45)"
-    : isGreen
-      ? "rgba(16, 185, 129, 0.4)"
-      : "rgba(16, 200, 224, 0.35)";
-  const featuredMuted = isRed ? "#d4b8bb" : isGreen ? "#9eb5ab" : "#c7d1e0";
+  // Contact page uses CSS variables (--contact-featured-*, --accent) so theme switches seamlessly across SSR and client navigation.
 
   return (
     <div className="contact-page">
@@ -576,8 +553,8 @@ export default function ContactPage() {
                   style={
                     isFeatured
                       ? {
-                          backgroundColor: featuredBg,
-                          borderColor: featuredBorder,
+                          backgroundColor: "var(--contact-featured-bg)",
+                          borderColor: "var(--contact-featured-border)",
                         }
                       : {
                           backgroundColor: "#ffffff",
@@ -590,23 +567,15 @@ export default function ContactPage() {
                     style={
                       isFeatured
                         ? {
-                            backgroundColor: featuredIconBg,
-                            borderColor: featuredIconBorder,
-                            color: featuredAccent,
+                            backgroundColor: "var(--contact-featured-icon-bg)",
+                            borderColor: "var(--contact-featured-icon-border)",
+                            color: "var(--contact-featured-accent)",
                             transition: "background-color 0.6s ease, border-color 0.6s ease, color 0.6s ease",
                           }
                         : {
-                            backgroundColor: isRed
-                              ? "rgba(185, 28, 28, 0.08)"
-                              : isGreen
-                                ? "rgba(16, 185, 129, 0.08)"
-                                : "rgba(16, 200, 224, 0.10)",
-                            borderColor: isRed
-                              ? "rgba(185, 28, 28, 0.3)"
-                              : isGreen
-                                ? "rgba(16, 185, 129, 0.3)"
-                                : "rgba(16, 200, 224, 0.35)",
-                            color: isRed ? "#b91c1c" : isGreen ? "#10b981" : "#10c8e0",
+                            backgroundColor: "color-mix(in srgb, var(--accent) 10%, transparent)",
+                            borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
+                            color: "var(--accent)",
                             transition: "background-color 0.6s ease, border-color 0.6s ease, color 0.6s ease",
                           }
                     }
@@ -621,13 +590,13 @@ export default function ContactPage() {
                     title={isFeatured ? "Compose email in Gmail" : undefined}
                     style={
                       isFeatured
-                        ? { color: featuredAccent, transition: "color 0.6s ease" }
-                        : { color: isRed ? "#b91c1c" : isGreen ? "#059669" : "#067a8b", transition: "color 0.6s ease" }
+                        ? { color: "var(--contact-featured-accent)", transition: "color 0.6s ease" }
+                        : { color: "var(--accent-hover)", transition: "color 0.6s ease" }
                     }
                   >
                     {card.value}
                   </a>
-                  <p style={isFeatured ? { color: featuredMuted } : undefined}>{card.detail}</p>
+                  <p style={isFeatured ? { color: "var(--contact-featured-muted)" } : undefined}>{card.detail}</p>
                   <a
                     className="contact-card-link"
                     href={card.href}
@@ -636,7 +605,7 @@ export default function ContactPage() {
                     title={isFeatured ? "Compose email in Gmail" : undefined}
                     style={
                       isFeatured
-                        ? { color: featuredAccent, transition: "color 0.6s ease" }
+                        ? { color: "var(--contact-featured-accent)", transition: "color 0.6s ease" }
                         : undefined
                     }
                   >

@@ -6,11 +6,9 @@ import taglineText from "../assets/tagline-text@2x.png";
 import { ArrowRight } from "lucide-react";
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
-import { useTheme } from "../context/ThemeContext.jsx";
 
 /* ─── Hero Banner ─── */
 function Hero() {
-  const { theme } = useTheme();
   const home1 = "/images/home1.webp";
 
   return (
@@ -80,11 +78,6 @@ function Hero() {
 
 /* ─── Profile & Vision Sidebar ─── */
 function ProfileSidebar() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-  const gradColor1 = isRed ? "#ef4444" : isGreen ? "#10b981" : "#32d5ec";
-  const gradColor2 = isRed ? "#b91c1c" : isGreen ? "#059669" : "#7ee4f1";
   const visionBgImg = "/images/home1.webp";
 
   return (
@@ -101,8 +94,8 @@ function ProfileSidebar() {
         >
           <defs>
             <linearGradient id="cornerThemeGrad" x1="1" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={gradColor1} />
-              <stop offset="100%" stopColor={gradColor2} />
+              <stop offset="0%" stopColor="var(--accent)" />
+              <stop offset="100%" stopColor="var(--accent-hover)" />
             </linearGradient>
           </defs>
           <path
@@ -118,24 +111,16 @@ function ProfileSidebar() {
         <div
           className="relative z-10 overflow-hidden rounded-[20px] transition-all duration-500"
           style={{
-            background: isRed
-              ? "linear-gradient(180deg, #380408 0%, #540810 50%, #700c16 100%)"
-              : isGreen
-                ? "linear-gradient(180deg, #022013 0%, #033620 50%, #054c2d 100%)"
-                : "linear-gradient(180deg, #032236 0%, #043a50 100%)",
-            boxShadow: isRed
-              ? "0 16px 36px rgba(56, 4, 8, 0.45)"
-              : isGreen
-                ? "0 16px 36px rgba(2, 32, 19, 0.45)"
-                : "0 16px 36px rgba(2, 24, 38, 0.32)",
-            border: `1px solid ${isRed ? "rgba(239, 68, 68, 0.3)" : isGreen ? "rgba(16, 185, 129, 0.3)" : "rgba(18, 197, 223, 0.2)"}`,
+            background: "var(--ceo-card-bg)",
+            boxShadow: "var(--ceo-card-shadow)",
+            border: "1px solid var(--ceo-card-border)",
           }}
         >
           <div
             aria-label="Portrait of Dr. Amjad Ali Tanoli Ph.D"
             className="relative aspect-[4/4.2] w-full overflow-hidden transition-colors duration-500"
             style={{
-              backgroundColor: isRed ? "#220305" : isGreen ? "#01170d" : "#032236",
+              backgroundColor: "var(--ceo-card-portrait-bg)",
             }}
           >
             <img
@@ -151,11 +136,7 @@ function ProfileSidebar() {
           <div
             className="p-5 text-white transition-colors duration-500"
             style={{
-              background: isRed
-                ? "linear-gradient(180deg, #300407 0%, #46060b 100%)"
-                : isGreen
-                  ? "linear-gradient(180deg, #022415 0%, #03381f 100%)"
-                  : "linear-gradient(180deg, #032439 0%, #04374d 100%)",
+              background: "var(--ceo-card-info-bg)",
             }}
           >
             <h3 className="font-['Outfit',sans-serif] text-[17px] font-bold tracking-tight text-white">
@@ -170,7 +151,7 @@ function ProfileSidebar() {
             <div
               className="mt-1 text-[11.5px] leading-relaxed transition-colors duration-500"
               style={{
-                color: isRed ? "#fecdd3" : isGreen ? "#a7f3d0" : "#c0d6e5",
+                color: "var(--ceo-card-info-text)",
               }}
             >
               <p>Human Geneticist</p>
@@ -188,11 +169,7 @@ function ProfileSidebar() {
       <div
         className="relative isolate overflow-hidden rounded-[20px] p-5 text-white shadow-[0_14px_32px_rgba(2,24,38,0.25)] min-h-43.75 flex flex-col justify-between transition-colors duration-500"
         style={{
-          background: isRed
-            ? "linear-gradient(135deg, #380408 0%, #540810 50%, #700c16 100%)"
-            : isGreen
-              ? "linear-gradient(135deg, #022013 0%, #033620 50%, #054c2d 100%)"
-              : "linear-gradient(135deg, #022a3f 0%, #03445b 50%, #055c75 100%)",
+          background: "var(--ceo-vision-bg)",
         }}
       >
         {/* DNA Graphic background */}
@@ -201,11 +178,7 @@ function ProfileSidebar() {
           style={{
             backgroundImage: `url(${visionBgImg})`,
             backgroundPosition: "right -15px center",
-            filter: isRed
-              ? "hue-rotate(160deg) saturate(1.25)"
-              : isGreen
-                ? "hue-rotate(295deg) saturate(1.25)"
-                : "none",
+            filter: "var(--hero-img-filter)",
           }}
         />
         <div
@@ -251,8 +224,6 @@ function ProfileSidebar() {
 
 /* ─── Main CEO Message Copy ─── */
 function CeoMessageBody() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
   const pStyle = "text-[15px] leading-7 text-slate-600 sm:text-[16.5px] sm:leading-[1.85]";
 
   return (
@@ -271,7 +242,7 @@ function CeoMessageBody() {
         Advancing Science for a<br />
         <span
           style={{
-            color: isRed ? "#ef4444" : "var(--accent)",
+            color: "var(--accent)",
             transition: "color 0.4s ease-in-out",
           }}
         >
@@ -324,25 +295,13 @@ function CeoMessageBody() {
 
 /* ─── Quote Card with Watermark ─── */
 function QuoteCard() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
   return (
     <div
       className="relative flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-[22px] p-4 sm:p-5 min-h-0 sm:min-h-48 lg:min-h-76.25 w-full transition-all duration-500"
       style={{
-        background: isRed
-          ? "linear-gradient(180deg, #fff1f2 0%, #ffe4e6 100%)"
-          : isGreen
-            ? "linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%)"
-            : "linear-gradient(180deg, #eaf8fc 0%, #d7f2f7 100%)",
-        color: isRed ? "#4c0519" : isGreen ? "#064e3b" : "#1e456c",
-        boxShadow: isRed
-          ? "0 8px 24px rgba(185,28,28,0.10)"
-          : isGreen
-            ? "0 8px 24px rgba(16,185,129,0.10)"
-            : "0 8px 24px rgba(18,197,223,0.10)",
+        background: "var(--ceo-quote-bg)",
+        color: "var(--ceo-quote-text)",
+        boxShadow: "var(--ceo-quote-shadow)",
       }}
     >
       {/* 3D DNA Helix Watermark anchored at bottom-right */}
@@ -354,11 +313,7 @@ function QuoteCard() {
         className="pointer-events-none absolute -bottom-2 -right-1 w-20 sm:w-24 lg:w-28 object-contain select-none transition-all duration-500"
         style={{
           opacity: 0.55,
-          filter: isRed
-            ? "hue-rotate(150deg) saturate(1.8)"
-            : isGreen
-              ? "hue-rotate(240deg) saturate(1.5)"
-              : "none",
+          filter: "var(--hero-img-filter)",
         }}
       />
 
@@ -431,23 +386,15 @@ const pillarsData = [
 ];
 
 function Pillars() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
   const dividerColor = "color-mix(in srgb, var(--accent) 35%, transparent)";
 
   return (
     <div
       className="mt-14 grid w-full grid-cols-2 gap-y-8 rounded-2xl px-6 py-8 lg:grid-cols-4 transition-all duration-500 border-2"
       style={{
-        backgroundColor: isRed ? "#fff5f5" : isGreen ? "#f0fdf4" : "#eff9fc",
+        backgroundColor: "var(--ceo-pillars-bg)",
         borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)",
-        boxShadow: isRed
-          ? "0 10px 30px rgba(185,28,28,0.08)"
-          : isGreen
-            ? "0 10px 30px rgba(16,185,129,0.08)"
-            : "0 10px 30px rgba(18,197,223,0.08)",
+        boxShadow: "var(--ceo-pillars-shadow)",
       }}
     >
       {pillarsData.map(({ title, desc, icon }, idx) => (
@@ -465,7 +412,7 @@ function Pillars() {
           <div
             className="mx-auto flex h-13.5 w-13.5 items-center justify-center rounded-full transition-all duration-400"
             style={{
-              backgroundColor: isRed ? "#fee2e2" : isGreen ? "#dcfce7" : "#d4f3f7",
+              backgroundColor: "var(--ceo-pillars-icon-bg)",
               color: "var(--accent)",
             }}
           >
@@ -501,16 +448,10 @@ function Pillars() {
 
 /* ─── Commitment Section ─── */
 function Commitment() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
-  const bgSection = isRed ? "#280306" : isGreen ? "#021a10" : "#01192b";
-
   return (
     <section
       className="relative mt-12 md:mt-14 overflow-hidden transition-colors duration-500"
-      style={{ backgroundColor: bgSection }}
+      style={{ backgroundColor: "var(--ceo-commitment-bg)" }}
     >
       {/* 1. Left-side ambient lab background */}
       <div className="pointer-events-none absolute inset-y-0 left-0 w-[55%] overflow-hidden opacity-25 hidden sm:block">
@@ -520,17 +461,13 @@ function Commitment() {
             backgroundImage: `url(${micro})`,
             backgroundSize: "200% 100%",
             backgroundPosition: "left center",
-            filter: isRed
-              ? "hue-rotate(150deg) saturate(1.4) brightness(0.85)"
-              : isGreen
-                ? "hue-rotate(240deg) saturate(1.2) brightness(0.85)"
-                : "none",
+            filter: "var(--hero-img-filter)",
           }}
         />
         <div
           className="absolute inset-0 transition-all duration-500"
           style={{
-            background: `linear-gradient(to right, transparent, ${bgSection} 80%, ${bgSection} 100%)`,
+            background: "linear-gradient(to right, transparent, var(--ceo-commitment-bg) 80%, var(--ceo-commitment-bg) 100%)",
           }}
         />
       </div>
@@ -551,11 +488,7 @@ function Commitment() {
             backgroundImage: `url(${micro})`,
             backgroundSize: "cover",
             backgroundPosition: "right center",
-            filter: isRed
-              ? "hue-rotate(150deg) saturate(1.4) brightness(0.85)"
-              : isGreen
-                ? "hue-rotate(240deg) saturate(1.2) brightness(0.85)"
-                : "none",
+            filter: "var(--hero-img-filter)",
           }}
         />
       </div>
@@ -564,7 +497,7 @@ function Commitment() {
       <div
         className="pointer-events-none absolute inset-0 transition-all duration-500"
         style={{
-          background: `linear-gradient(to right, ${bgSection} 0%, ${bgSection}f0 50%, ${bgSection}50 100%)`,
+          background: "linear-gradient(to right, var(--ceo-commitment-bg) 0%, color-mix(in srgb, var(--ceo-commitment-bg) 94%, transparent) 50%, color-mix(in srgb, var(--ceo-commitment-bg) 30%, transparent) 100%)",
         }}
       />
       <div className="relative site-container flex flex-col md:flex-row min-h-60 sm:min-h-65 items-start md:items-center py-10 sm:py-12">
@@ -580,7 +513,7 @@ function Commitment() {
             Building a Future<br />
             <span
               style={{
-                color: isRed ? "#ef4444" : "var(--accent)",
+                color: "var(--accent)",
                 transition: "color 0.4s ease-in-out",
               }}
             >

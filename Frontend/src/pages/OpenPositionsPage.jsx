@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import Button from "../components/Button.jsx";
-import { useTheme } from "../context/ThemeContext.jsx";
 import { fetchPublishedJobs } from "../lib/careersClient.js";
 import carrierHero from "../assets/carrierhero.png";
 
@@ -35,10 +34,6 @@ function getDepartmentIcon(dept) {
 }
 
 export default function OpenPositionsPage() {
-  const { theme, themeConfig } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedJobs, setExpandedJobs] = useState({});
@@ -154,7 +149,7 @@ export default function OpenPositionsPage() {
               Build the Future of{" "}
               <span
                 style={{
-                  color: isRed ? "#ef4444" : "var(--accent)",
+                  color: "var(--accent)",
                   transition: "color 0.4s ease-in-out",
                 }}
               >
@@ -193,9 +188,9 @@ export default function OpenPositionsPage() {
             <span
               className="inline-flex items-center rounded-full px-4 py-1 font-inter text-[11px] font-bold uppercase tracking-[0.2em]"
               style={{
-                backgroundColor: "rgba(0, 188, 212, 0.08)",
-                color: isRed ? "#dc2626" : isGreen ? "#059669" : "#0097a7",
-                border: `1px solid ${isRed ? "#fca5a5" : isGreen ? "#a7f3d0" : "#80deea"}`,
+                backgroundColor: "color-mix(in srgb, var(--accent) 8%, transparent)",
+                color: "var(--accent)",
+                border: "1px solid color-mix(in srgb, var(--accent) 35%, transparent)",
               }}
             >
               CAREER OPPORTUNITIES

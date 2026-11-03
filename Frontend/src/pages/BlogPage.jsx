@@ -13,7 +13,6 @@ import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import { fetchPublishedBlogs, getInitialCachedBlogs } from "../lib/newsClient.js";
 import { getIdbItem } from "../lib/idbCache.js";
-import { useTheme } from "../context/ThemeContext.jsx";
 import resourcesHero from "../assets/Resources.webp";
 
 const DEFAULT_CATEGORIES = [
@@ -71,10 +70,6 @@ export const revalidate = 60;
 export const dynamic = "force-dynamic";
 
 export default function BlogPage() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
   const [blogs, setBlogs] = useState(() => getInitialCachedBlogs());
   const [loading, setLoading] = useState(() => getInitialCachedBlogs().length === 0);
   const [searchTerm, setSearchTerm] = useState("");

@@ -15,16 +15,11 @@ import {
 import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import { fetchPublishedResearch } from "../lib/researchClient.js";
-import { useTheme } from "../context/ThemeContext.jsx";
 import researchHero from "../assets/Researchhero.webp";
 
 const TYPES = ["All", "Research Project", "Publication", "Clinical Trial"];
 
 export default function ResearchPage() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
   const [researchList, setResearchList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");

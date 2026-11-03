@@ -17,17 +17,12 @@ import Button from "../components/Button.jsx";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import { fetchPublishedNews, getInitialCachedNews } from "../lib/newsClient.js";
 import { getIdbItem } from "../lib/idbCache.js";
-import { useTheme } from "../context/ThemeContext.jsx";
 import resourcesHero from "../assets/Resources.webp";
 
 export const revalidate = 60;
 export const dynamic = "force-dynamic";
 
 export default function NewsPage() {
-  const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
   const [news, setNews] = useState(() => getInitialCachedNews());
   const [loading, setLoading] = useState(() => getInitialCachedNews().length === 0);
   const [searchTerm, setSearchTerm] = useState("");
