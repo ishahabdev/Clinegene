@@ -29,27 +29,15 @@ function FeatureIcon({ type }) {
 export default function HeroSection() {
   const { theme, themeConfig } = useTheme();
   const { heroImg, heroImgMobile } = themeConfig;
-
-  const isRed   = theme === "red";
+  const isRed = theme === "red";
   const isGreen = theme === "green";
-
-  const overlayGradientMobile = isRed
-    ? "linear-gradient(180deg, rgba(45, 3, 6, 0.90) 0%, rgba(45, 3, 6, 0.65) 45%, rgba(45, 3, 6, 0.94) 100%)"
-    : isGreen
-      ? "linear-gradient(180deg, rgba(2, 30, 18, 0.90) 0%, rgba(2, 30, 18, 0.65) 45%, rgba(2, 30, 18, 0.94) 100%)"
-      : "linear-gradient(180deg, rgba(2, 19, 42, 0.90) 0%, rgba(2, 19, 42, 0.65) 45%, rgba(2, 19, 42, 0.94) 100%)";
-
-  const overlayGradientDesktop = isRed
-    ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97) 0%, rgba(45, 3, 6, 0.84) 48%, rgba(45, 3, 6, 0.30) 80%, rgba(45, 3, 6, 0.15) 100%)"
-    : isGreen
-      ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97) 0%, rgba(2, 30, 18, 0.84) 48%, rgba(2, 30, 18, 0.30) 80%, rgba(2, 30, 18, 0.15) 100%)"
-      : "linear-gradient(105deg, rgba(2, 19, 42, 0.97) 0%, rgba(2, 19, 42, 0.84) 48%, rgba(2, 19, 42, 0.30) 80%, rgba(2, 19, 42, 0.15) 100%)";
 
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-145 sm:min-h-155 lg:min-h-[calc(100svh-84px)] items-center overflow-hidden text-white"
+      className="relative isolate flex min-h-145 sm:min-h-155 lg:min-h-[calc(100svh-84px)] items-center overflow-hidden text-white transition-colors duration-500"
       id="home"
+      style={{ backgroundColor: "var(--hero-bg)" }}
     >
       <link
         rel="preload"
@@ -76,18 +64,16 @@ export default function HeroSection() {
       {/* Responsive theme-aware gradient overlay */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 block lg:hidden"
+        className="absolute inset-0 -z-10 block lg:hidden transition-all duration-500"
         style={{
-          background: overlayGradientMobile,
-          transition: "background 0.4s ease-in-out",
+          background: "var(--hero-overlay-mobile)",
         }}
       />
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 hidden lg:block"
+        className="absolute inset-0 -z-10 hidden lg:block transition-all duration-500"
         style={{
-          background: overlayGradientDesktop,
-          transition: "background 0.4s ease-in-out",
+          background: "var(--hero-overlay-desktop)",
         }}
       />
 

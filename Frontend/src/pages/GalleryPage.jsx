@@ -57,14 +57,6 @@ export default function GalleryPage() {
     };
   }, []);
 
-  const sectionBg = isRed ? "#2d0306" : isGreen ? "#021e12" : "#02132a";
-
-  const overlayGradient = isRed
-    ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97) 0%, rgba(45, 3, 6, 0.84) 48%, rgba(45, 3, 6, 0.30) 80%, rgba(45, 3, 6, 0.15) 100%)"
-    : isGreen
-      ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97) 0%, rgba(2, 30, 18, 0.84) 48%, rgba(2, 30, 18, 0.30) 80%, rgba(2, 30, 18, 0.15) 100%)"
-      : "linear-gradient(105deg, rgba(2, 19, 42, 0.97) 0%, rgba(2, 19, 42, 0.84) 48%, rgba(2, 19, 42, 0.30) 80%, rgba(2, 19, 42, 0.15) 100%)";
-
   const accent =
     theme === "red"
       ? { primary: "#ef4444", softBg: "rgba(229,62,62,.08)", border: "rgba(229,62,62,.25)" }
@@ -127,7 +119,7 @@ export default function GalleryPage() {
         aria-labelledby="gallery-hero-title"
         className="relative isolate flex min-h-75 items-center overflow-hidden text-white sm:min-h-80 transition-colors duration-500"
         id="gallery-hero"
-        style={{ backgroundColor: sectionBg }}
+        style={{ backgroundColor: "var(--hero-bg)" }}
       >
         <img
           alt=""
@@ -138,17 +130,13 @@ export default function GalleryPage() {
           className="absolute inset-0 -z-20 h-full w-full object-cover object-[64%_center] transition-all duration-500"
           src={serviceHero}
           style={{
-            filter: isRed
-              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
-              : isGreen
-                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
-                : "none",
+            filter: "var(--hero-img-filter)",
           }}
         />
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-10 transition-all duration-500"
-          style={{ background: overlayGradient }}
+          style={{ background: "var(--hero-overlay)" }}
         />
         <div className="site-container py-8 sm:py-12">
           <nav aria-label="Breadcrumb" className="mb-7 flex items-center gap-3 font-inter text-sm">
@@ -494,7 +482,7 @@ export default function GalleryPage() {
       <section
         aria-label="Related pages"
         className="pb-6 pt-4 md:pb-8 md:pt-6 border-t border-(--accent)/20"
-        style={{ backgroundImage: sectionBg }}
+        style={{ backgroundColor: "var(--hero-bg)" }}
       >
         <div className="site-container">
           <ScrollReveal className="flex flex-wrap justify-center gap-4 text-sm">

@@ -4,28 +4,18 @@ import { useTheme } from "../../context/ThemeContext.jsx";
 
 export default function TeamHero({ memberCount }) {
   const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
-
-  const sectionBg = isRed ? "#2d0306" : isGreen ? "#021e12" : "#02132a";
-
-  const overlayGradient = isRed
-    ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97) 0%, rgba(45, 3, 6, 0.84) 48%, rgba(45, 3, 6, 0.30) 80%, rgba(45, 3, 6, 0.15) 100%)"
-    : isGreen
-      ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97) 0%, rgba(2, 30, 18, 0.84) 48%, rgba(2, 30, 18, 0.30) 80%, rgba(2, 30, 18, 0.15) 100%)"
-      : "linear-gradient(105deg, rgba(2, 19, 42, 0.97) 0%, rgba(2, 19, 42, 0.84) 48%, rgba(2, 19, 42, 0.30) 80%, rgba(2, 19, 42, 0.15) 100%)";
 
   return (
     <section
       aria-labelledby="team-hero-title"
       className="relative isolate min-h-[38vh] overflow-hidden text-white sm:min-h-[42vh] lg:min-h-[46vh] z-1 transition-colors duration-500"
       id="team-hero"
-      style={{ backgroundColor: sectionBg }}
+      style={{ backgroundColor: "var(--hero-bg)" }}
     >
       {/* High-priority LCP Preload for Hero Image */}
       <link rel="preload" as="image" href={teamPhoto} fetchPriority="high" />
 
-      {/* Full-screen background image — same team picture recolored with theme */}
+      {/* Full-screen background image — recolored with theme CSS variables */}
       <img
         alt="ClinGene team collaborating in laboratory environment"
         width="1400"
@@ -36,11 +26,7 @@ export default function TeamHero({ memberCount }) {
         className="absolute inset-0 -z-20 h-full w-full object-cover object-center transition-all duration-500"
         src={teamPhoto}
         style={{
-          filter: isRed
-            ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
-            : isGreen
-              ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
-              : "none",
+          filter: "var(--hero-img-filter)",
         }}
       />
 
@@ -49,7 +35,7 @@ export default function TeamHero({ memberCount }) {
         aria-hidden="true"
         className="absolute inset-0 -z-10 transition-all duration-500"
         style={{
-          background: overlayGradient,
+          background: "var(--hero-overlay)",
         }}
       />
 
@@ -97,7 +83,7 @@ export default function TeamHero({ memberCount }) {
               The Minds Behind{" "}
               <span
                 style={{
-                  color: isRed ? "#ef4444" : "var(--accent)",
+                  color: "var(--hero-accent)",
                   transition: "color 0.4s ease-in-out",
                 }}
               >

@@ -78,29 +78,13 @@ export default function OpenPositionsPage() {
     };
   }, []);
 
-  const sectionBg = isRed ? "#2d0306" : isGreen ? "#021e12" : "#031a2e";
-
-  const overlayGradientDesktop = isRed
-    ? "linear-gradient(105deg, rgba(45, 3, 6, 0.98) 0%, rgba(45, 3, 6, 0.88) 45%, rgba(45, 3, 6, 0.35) 75%, rgba(45, 3, 6, 0.15) 100%)"
-    : isGreen
-      ? "linear-gradient(105deg, rgba(2, 30, 18, 0.98) 0%, rgba(2, 30, 18, 0.88) 45%, rgba(2, 30, 18, 0.35) 75%, rgba(2, 30, 18, 0.15) 100%)"
-      : "linear-gradient(105deg, rgba(3, 26, 46, 0.98) 0%, rgba(3, 26, 46, 0.88) 48%, rgba(3, 26, 46, 0.30) 75%, rgba(3, 26, 46, 0.10) 100%)";
-
-  const overlayGradientMobile = isRed
-    ? "linear-gradient(180deg, rgba(45, 3, 6, 0.92) 0%, rgba(45, 3, 6, 0.70) 50%, rgba(45, 3, 6, 0.96) 100%)"
-    : isGreen
-      ? "linear-gradient(180deg, rgba(2, 30, 18, 0.92) 0%, rgba(2, 30, 18, 0.70) 50%, rgba(2, 30, 18, 0.96) 100%)"
-      : "linear-gradient(180deg, rgba(3, 26, 46, 0.92) 0%, rgba(3, 26, 46, 0.70) 50%, rgba(3, 26, 46, 0.96) 100%)";
-
-  const accentColor = isRed ? "#ef4444" : isGreen ? "#10b981" : "#00bcd4";
-
   return (
     <>
       {/* ══════════════════════════ HERO SECTION ══════════════════════════ */}
       <section
         aria-labelledby="careers-hero-heading"
         className="relative isolate flex min-h-[360px] sm:min-h-[420px] lg:min-h-[460px] items-center overflow-hidden text-white transition-colors duration-500"
-        style={{ backgroundColor: sectionBg }}
+        style={{ backgroundColor: "var(--hero-bg)" }}
       >
         {/* Background hero image */}
         <img
@@ -113,11 +97,7 @@ export default function OpenPositionsPage() {
           className="absolute inset-0 -z-20 h-full w-full object-cover object-[80%_center] sm:object-[72%_center] lg:object-center transition-all duration-500"
           src={carrierHero}
           style={{
-            filter: isRed
-              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
-              : isGreen
-                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
-                : "none",
+            filter: "var(--hero-img-filter)",
           }}
         />
 
@@ -125,12 +105,12 @@ export default function OpenPositionsPage() {
         <div
           aria-hidden="true"
           className="absolute inset-0 block md:hidden -z-10 transition-all duration-500"
-          style={{ background: overlayGradientMobile }}
+          style={{ background: "var(--hero-overlay-mobile)" }}
         />
         <div
           aria-hidden="true"
           className="absolute inset-0 hidden md:block -z-10 transition-all duration-500"
-          style={{ background: overlayGradientDesktop }}
+          style={{ background: "var(--hero-overlay-desktop)" }}
         />
 
         <div className="site-container py-12 sm:py-16">

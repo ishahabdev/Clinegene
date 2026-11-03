@@ -11,49 +11,31 @@ import { useTheme } from "../context/ThemeContext.jsx";
 /* ─── Hero Banner ─── */
 function Hero() {
   const { theme } = useTheme();
-  const isRed = theme === "red";
-  const isGreen = theme === "green";
   const home1 = "/images/home1.webp";
-
-  const overlayGradientMobile = isRed
-    ? "linear-gradient(180deg, rgba(45, 3, 6, 0.94) 0%, rgba(45, 3, 6, 0.72) 45%, rgba(45, 3, 6, 0.96) 100%)"
-    : isGreen
-      ? "linear-gradient(180deg, rgba(2, 30, 18, 0.94) 0%, rgba(2, 30, 18, 0.72) 45%, rgba(2, 30, 18, 0.96) 100%)"
-      : "linear-gradient(180deg, rgba(3, 31, 49, 0.94) 0%, rgba(3, 31, 49, 0.72) 45%, rgba(3, 31, 49, 0.96) 100%)";
-
-  const overlayGradientDesktop = isRed
-    ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97) 0%, rgba(45, 3, 6, 0.84) 48%, rgba(45, 3, 6, 0.30) 80%, rgba(45, 3, 6, 0.15) 100%)"
-    : isGreen
-      ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97) 0%, rgba(2, 30, 18, 0.84) 48%, rgba(2, 30, 18, 0.30) 80%, rgba(2, 30, 18, 0.15) 100%)"
-      : "linear-gradient(105deg, rgba(3, 31, 49, 0.97) 0%, rgba(3, 31, 49, 0.84) 48%, rgba(3, 31, 49, 0.30) 80%, rgba(3, 31, 49, 0.15) 100%)";
 
   return (
     <section
       className="relative overflow-hidden transition-colors duration-500"
-      style={{ backgroundColor: isRed ? "#2d0306" : isGreen ? "#021e12" : "#031f31" }}
+      style={{ backgroundColor: "var(--hero-bg)" }}
     >
       {/* Background image — responsive across mobile and desktop */}
       <div
         className="absolute inset-y-0 right-0 w-full sm:w-[75%] md:w-[68%] bg-cover bg-position-[75%_center] md:bg-left opacity-35 sm:opacity-55 md:opacity-100 transition-all duration-500"
         style={{
           backgroundImage: `url(${home1})`,
-          filter: isRed
-            ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
-            : isGreen
-              ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
-              : "none",
+          filter: "var(--hero-img-filter)",
         }}
       />
       {/* Responsive theme-aware gradient overlay */}
       <div
         aria-hidden="true"
         className="absolute inset-0 block md:hidden transition-all duration-500"
-        style={{ background: overlayGradientMobile }}
+        style={{ background: "var(--hero-overlay-mobile)" }}
       />
       <div
         aria-hidden="true"
         className="absolute inset-0 hidden md:block transition-all duration-500"
-        style={{ background: overlayGradientDesktop }}
+        style={{ background: "var(--hero-overlay-desktop)" }}
       />
       <div className="relative site-container pb-9 pt-10">
         <div
@@ -77,7 +59,7 @@ function Hero() {
           CEO{" "}
           <span
             style={{
-              color: isRed ? "#ef4444" : "var(--accent)",
+              color: "var(--hero-accent)",
               transition: "color 0.4s ease-in-out",
             }}
           >

@@ -4,6 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#061a2b" />
+
+    <!-- Synchronous Theme Initializer: Runs before HTML paint to prevent FOUC / theme flash -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('clingene-theme');
+          var theme = (saved === 'red' || saved === 'green' || saved === 'cyan') ? saved : (saved === 'blue' ? 'cyan' : 'cyan');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch(e) {
+          document.documentElement.setAttribute('data-theme', 'cyan');
+        }
+      })();
+    </script>
     <title>ClinGene | Clinical Genetic Testing Laboratory</title>
     <meta
       name="description"

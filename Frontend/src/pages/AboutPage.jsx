@@ -67,19 +67,6 @@ export default function AboutPage() {
   const whyParagraphColor = isRed ? "#5c3d42" : isGreen ? "#3d5a50" : "#3d4f5a";
   const whyChecklistTextColor = isRed ? "#2d1f21" : isGreen ? "#1f2d28" : "#1f252d";
 
-  // Dark overlay matching theme, with smooth transition toward the right
-  const overlayGradientMobile = isRed
-    ? "linear-gradient(180deg, rgba(45, 3, 6, 0.95) 0%, rgba(45, 3, 6, 0.85) 60%, rgba(45, 3, 6, 0.50) 100%)"
-    : isGreen
-      ? "linear-gradient(180deg, rgba(2, 30, 18, 0.95) 0%, rgba(2, 30, 18, 0.85) 60%, rgba(2, 30, 18, 0.50) 100%)"
-      : "linear-gradient(180deg, rgba(3, 20, 38, 0.95) 0%, rgba(3, 20, 38, 0.85) 60%, rgba(3, 20, 38, 0.50) 100%)";
-
-  const overlayGradientDesktop = isRed
-    ? "linear-gradient(105deg, rgba(45, 3, 6, 0.95) 0%, rgba(45, 3, 6, 0.88) 45%, rgba(45, 3, 6, 0.75) 65%, rgba(45, 3, 6, 0.35) 85%, rgba(45, 3, 6, 0.15) 100%)"
-    : isGreen
-      ? "linear-gradient(105deg, rgba(2, 30, 18, 0.95) 0%, rgba(2, 30, 18, 0.88) 45%, rgba(2, 30, 18, 0.75) 65%, rgba(2, 30, 18, 0.35) 85%, rgba(2, 30, 18, 0.15) 100%)"
-      : "linear-gradient(105deg, rgba(3, 20, 38, 0.95) 0%, rgba(3, 20, 38, 0.88) 45%, rgba(3, 20, 38, 0.75) 65%, rgba(3, 20, 38, 0.35) 85%, rgba(3, 20, 38, 0.15) 100%)";
-
   return (
     <>
       {/* High-priority LCP Preload for Hero Image */}
@@ -88,10 +75,11 @@ export default function AboutPage() {
       {/* --- About Hero Section --- */}
       <section
         aria-labelledby="about-hero-title"
-        className="relative isolate flex min-h-100 sm:min-h-110 lg:min-h-117.5 items-center overflow-hidden text-white"
+        className="relative isolate flex min-h-100 sm:min-h-110 lg:min-h-117.5 items-center overflow-hidden text-white transition-colors duration-500"
         id="about-hero"
+        style={{ backgroundColor: "var(--hero-bg)" }}
       >
-        {/* Full-screen background image — same picture recolored to theme in green and red */}
+        {/* Full-screen background image — recolored via theme CSS variables */}
         <img
           alt="ClinGene laboratory professional at microscope"
           width="1400"
@@ -99,32 +87,26 @@ export default function AboutPage() {
           loading="eager"
           fetchPriority="high"
           decoding="async"
-          className="hero-bg-img absolute inset-0 -z-20 h-full w-full object-cover object-[80%_center] sm:object-[72%_center] lg:object-center"
+          className="hero-bg-img absolute inset-0 -z-20 h-full w-full object-cover object-[80%_center] sm:object-[72%_center] lg:object-center transition-all duration-500"
           src={promiseImage}
           style={{
-            filter: isRed
-              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
-              : isGreen
-                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
-                : "none",
+            filter: "var(--hero-img-filter)",
           }}
         />
 
         {/* Dark overlay: 90-95% opacity on left, 70-80% in middle, lighter on right */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 block lg:hidden"
+          className="absolute inset-0 -z-10 block lg:hidden transition-all duration-500"
           style={{
-            background: overlayGradientMobile,
-            transition: "background 0.4s ease-in-out",
+            background: "var(--hero-overlay-mobile)",
           }}
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 hidden lg:block"
+          className="absolute inset-0 -z-10 hidden lg:block transition-all duration-500"
           style={{
-            background: overlayGradientDesktop,
-            transition: "background 0.4s ease-in-out",
+            background: "var(--hero-overlay-desktop)",
           }}
         />
 
@@ -138,7 +120,7 @@ export default function AboutPage() {
                   <a
                     href="/"
                     className="font-medium transition-colors hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) rounded"
-                    style={{ color: isRed ? "#EF4444" : "var(--accent)", transition: "color 0.4s ease-in-out" }}
+                    style={{ color: "var(--hero-accent)", transition: "color 0.4s ease-in-out" }}
                   >
                     Home
                   </a>
@@ -150,8 +132,8 @@ export default function AboutPage() {
 
             {/* Eyebrow with decorative line */}
             <div className="mb-4 flex items-center gap-3">
-              <div className="h-0.5 w-12" style={{ backgroundColor: isRed ? "#EF4444" : "var(--accent)", transition: "background-color 0.4s ease-in-out" }} aria-hidden="true" />
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] sm:text-[12px]" style={{ color: isRed ? "#EF4444" : "var(--accent)", transition: "color 0.4s ease-in-out" }}>
+              <div className="h-0.5 w-12" style={{ backgroundColor: "var(--hero-accent)", transition: "background-color 0.4s ease-in-out" }} aria-hidden="true" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] sm:text-[12px]" style={{ color: "var(--hero-accent)", transition: "color 0.4s ease-in-out" }}>
                 ABOUT US
               </p>
             </div>
@@ -162,7 +144,7 @@ export default function AboutPage() {
               id="about-hero-title"
             >
               Decoding Genes.{" "}
-              <span style={{ color: isRed ? "#EF4444" : "var(--accent)", transition: "color 0.4s ease-in-out" }}>Delivering Healthier Lives</span>
+              <span style={{ color: "var(--hero-accent)", transition: "color 0.4s ease-in-out" }}>Delivering Healthier Lives</span>
             </h1>
 
             {/* Description */}

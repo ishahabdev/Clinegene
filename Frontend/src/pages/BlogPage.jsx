@@ -14,7 +14,7 @@ import ScrollReveal from "../components/ScrollReveal.jsx";
 import { fetchPublishedBlogs, getInitialCachedBlogs } from "../lib/newsClient.js";
 import { getIdbItem } from "../lib/idbCache.js";
 import { useTheme } from "../context/ThemeContext.jsx";
-import resourcesHero from "../assets/Resources.png";
+import resourcesHero from "../assets/Resources.webp";
 
 const DEFAULT_CATEGORIES = [
   "All",
@@ -74,7 +74,6 @@ export default function BlogPage() {
   const { theme } = useTheme();
   const isRed = theme === "red";
   const isGreen = theme === "green";
-  const sectionBg = isRed ? "#2d0306" : isGreen ? "#021e12" : "#0c2b48";
 
   const [blogs, setBlogs] = useState(() => getInitialCachedBlogs());
   const [loading, setLoading] = useState(() => getInitialCachedBlogs().length === 0);
@@ -195,63 +194,103 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
-      {/* ── Hero Section ── */}
+      {/* High-priority LCP Preload for Hero Image */}
+      <link rel="preload" as="image" href={resourcesHero} fetchPriority="high" />
+
+      {/* ── Blog Hero Section ── */}
       <section
-        className="relative overflow-hidden py-16 sm:py-20 text-white transition-colors duration-500"
-        style={{ backgroundColor: sectionBg }}
+        aria-labelledby="blog-hero-title"
+        className="relative isolate flex min-h-100 sm:min-h-110 lg:min-h-117.5 items-center overflow-hidden text-white transition-colors duration-500"
+        id="blog-hero"
+        style={{ backgroundColor: "var(--hero-bg)" }}
       >
+        {/* Full-screen background image across the whole hero section */}
         <img
-          alt="ClinGene Resources & Publications"
-          aria-hidden="true"
+          alt="ClinGene scientific publications, bioinformatics articles, and resources"
           width="2048"
           height="768"
           loading="eager"
           fetchPriority="high"
-          className="absolute inset-0 -z-20 h-full w-full object-cover object-[80%_center] sm:object-[72%_center] lg:object-center transition-all duration-500"
+          decoding="async"
+          className="hero-bg-img absolute inset-0 -z-20 h-full w-full object-cover object-[80%_center] sm:object-[72%_center] lg:object-center transition-all duration-500"
           src={resourcesHero}
           style={{
-            filter: isRed
-              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
-              : isGreen
-                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
-                : "none",
+            filter: "var(--hero-img-filter)",
           }}
         />
-        <div
-          className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--accent-glow),transparent_60%)] opacity-30 pointer-events-none -z-10"
-          aria-hidden="true"
-        />
+
+        {/* Responsive theme-aware gradient overlay: solid readability on left, reveals resource photography across the right */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10"
+          className="absolute inset-0 -z-10 block lg:hidden transition-all duration-500"
           style={{
-            background: isRed
-              ? "linear-gradient(105deg, rgba(45, 3, 6, 0.95) 0%, rgba(45, 3, 6, 0.85) 45%, rgba(45, 3, 6, 0.3) 75%, rgba(45, 3, 6, 0.1) 100%)"
-              : isGreen
-                ? "linear-gradient(105deg, rgba(2, 30, 18, 0.95) 0%, rgba(2, 30, 18, 0.85) 45%, rgba(2, 30, 18, 0.3) 75%, rgba(2, 30, 18, 0.1) 100%)"
-                : "linear-gradient(105deg, rgba(3, 26, 46, 0.95) 0%, rgba(3, 26, 46, 0.85) 45%, rgba(3, 26, 46, 0.3) 75%, rgba(3, 26, 46, 0.1) 100%)",
+            background: "var(--hero-overlay-mobile)",
           }}
         />
-        <div className="relative site-container max-w-6xl mx-auto px-4 sm:px-6">
-          <ScrollReveal>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-xs font-semibold backdrop-blur-sm text-cyan-200">
-              <BookOpen className="h-3.5 w-3.5" />
-              <span>Scientific Articles &amp; Insights</span>
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 hidden lg:block transition-all duration-500"
+          style={{
+            background: "var(--hero-overlay-desktop)",
+          }}
+        />
+
+        {/* Text content */}
+        <div className="site-container w-full py-12 sm:py-16 lg:py-20">
+          <div className="max-w-175">
+            {/* Breadcrumb */}
+            <nav aria-label="Breadcrumb" className="mb-6">
+              <ol className="flex items-center gap-2 text-[14px] sm:text-[15px]">
+                <li>
+                  <a
+                    href="/"
+                    className="font-medium transition-colors hover:opacity-80 rounded"
+                    style={{ color: "var(--hero-accent)", transition: "color 0.4s ease-in-out" }}
+                  >
+                    Home
+                  </a>
+                </li>
+                <li aria-hidden="true" className="text-[#E2E8F0]/60">›</li>
+                <li>
+                  <span className="text-[#E2E8F0]/80">Resources</span>
+                </li>
+                <li aria-hidden="true" className="text-[#E2E8F0]/60">›</li>
+                <li className="text-[#E2E8F0]" aria-current="page">Blog</li>
+              </ol>
+            </nav>
+
+            {/* Eyebrow with decorative line */}
+            <div className="mb-4 flex items-center gap-3">
+              <div
+                className="h-0.5 w-12"
+                style={{ backgroundColor: "var(--hero-accent)", transition: "background-color 0.4s ease-in-out" }}
+                aria-hidden="true"
+              />
+              <p
+                className="text-[11px] font-bold uppercase tracking-[0.2em] sm:text-[12px]"
+                style={{ color: "var(--hero-accent)", transition: "color 0.4s ease-in-out" }}
+              >
+                PUBLICATIONS &amp; INSIGHTS
+              </p>
             </div>
-          </ScrollReveal>
 
-          <ScrollReveal delay={100}>
-            <h1 className="mt-4 font-outfit text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl text-white">
-              ClinGene <span style={{ color: "var(--accent)" }}>Blog</span> &amp; Publications
+            {/* Main heading */}
+            <h1
+              className="font-['Inter'] text-[32px] sm:text-[40px] md:text-[46px] lg:text-[50px] font-extrabold leading-[1.14] tracking-tight text-white max-w-170"
+              id="blog-hero-title"
+            >
+              Scientific Blog.{" "}
+              <span style={{ color: "var(--hero-accent)", transition: "color 0.4s ease-in-out" }}>
+                Genomic Perspectives
+              </span>
             </h1>
-          </ScrollReveal>
 
-          <ScrollReveal delay={150}>
-            <p className="mt-3 max-w-2xl text-sm sm:text-base leading-relaxed text-slate-300">
+            {/* Description */}
+            <p className="mt-4 max-w-125 text-sm sm:text-base leading-6 text-[#E2E8F0]">
               Explore scientific articles, clinical genetics perspectives, and bioinformatics
               breakthroughs authored by our scientists and directors.
             </p>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
 

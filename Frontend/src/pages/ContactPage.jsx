@@ -500,12 +500,6 @@ export default function ContactPage() {
     return () => window.removeEventListener("popstate", updateServiceFromQuery);
   }, []);
 
-  const overlayGradient = isRed
-    ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97) 0%, rgba(45, 3, 6, 0.84) 48%, rgba(45, 3, 6, 0.30) 80%, rgba(45, 3, 6, 0.15) 100%)"
-    : isGreen
-      ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97) 0%, rgba(2, 30, 18, 0.84) 48%, rgba(2, 30, 18, 0.30) 80%, rgba(2, 30, 18, 0.15) 100%)"
-      : "linear-gradient(105deg, rgba(2, 19, 42, 0.97) 0%, rgba(2, 19, 42, 0.84) 48%, rgba(2, 19, 42, 0.30) 80%, rgba(2, 19, 42, 0.15) 100%)";
-
   // Featured card theme adaptive styling (Dark Green in Green theme, Dark Red in Red theme, Dark Blue in Cyan theme)
   const featuredBg = isRed ? "#200407" : isGreen ? "#0b1f1a" : "#050b1c";
   const featuredBorder = isRed
@@ -532,7 +526,7 @@ export default function ContactPage() {
         aria-labelledby="contact-page-title"
         className="contact-hero relative isolate overflow-hidden transition-colors duration-500"
         style={{
-          backgroundColor: isRed ? "#2d0306" : isGreen ? "#021e12" : "#050b1c",
+          backgroundColor: "var(--hero-bg)",
         }}
       >
         <img
@@ -544,16 +538,12 @@ export default function ContactPage() {
           className="absolute inset-0 -z-20 h-full w-full object-cover object-center transition-all duration-500"
           src={homeBackground}
           style={{
-            filter: isRed
-              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
-              : isGreen
-                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
-                : "none",
+            filter: "var(--hero-img-filter)",
           }}
         />
         <div
           className="contact-hero-overlay transition-all duration-500"
-          style={{ background: overlayGradient }}
+          style={{ background: "var(--hero-overlay)" }}
         />
         <div className="site-container contact-hero-content">
           <p className="contact-breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span> Contact</p>

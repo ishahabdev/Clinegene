@@ -356,9 +356,9 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
       <section 
         ref={heroRef}
         aria-labelledby="service-hero-title"
-        className="relative overflow-hidden pt-6 pb-9 sm:pt-7 sm:pb-11 lg:pt-8 lg:pb-12 border-b border-slate-200/60"
+        className="relative overflow-hidden pt-6 pb-9 sm:pt-7 sm:pb-11 lg:pt-8 lg:pb-12 border-b border-slate-200/60 transition-colors duration-500"
         style={{
-          background: `radial-gradient(ellipse 60% 70% at 80% 40%, ${themeColors.accentSoftBg} 0%, #ffffff 80%)`,
+          background: "radial-gradient(ellipse 60% 70% at 80% 40%, var(--accent-soft) 0%, #ffffff 80%)",
         }}
       >
         {/* Decorative DNA watermark strand on right */}

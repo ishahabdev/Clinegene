@@ -76,24 +76,40 @@ export function ThemeProvider({ children }) {
   const [theme, setThemeRaw] = useState(() => {
     try {
       const saved = localStorage.getItem(LS_KEY);
-      if (saved && THEMES[saved]) return saved;
+      if (saved && (THEMES[saved] || saved === "blue")) {
+        const normalized = saved === "blue" ? "cyan" : saved;
+        if (typeof document !== "undefined") {
+          document.documentElement.setAttribute("data-theme", normalized);
+        }
+        return normalized;
+      }
     } catch { /* ignore */ }
+    if (typeof document !== "undefined") {
+      document.documentElement.setAttribute("data-theme", "cyan");
+    }
     return "cyan";
   });
 
-  // Apply CSS variables to :root whenever theme changes
+  // Apply data-theme attribute and CSS variables to documentElement whenever theme changes
   useEffect(() => {
-    const config = THEMES[theme];
+    const config = THEMES[theme] || THEMES.cyan;
     const root = document.documentElement;
+    root.setAttribute("data-theme", theme);
     Object.entries(config).forEach(([key, val]) => {
       if (key.startsWith("--")) root.style.setProperty(key, val);
     });
   }, [theme]);
 
   const setTheme = useCallback((id) => {
-    if (!THEMES[id]) return;
-    setThemeRaw(id);
-    try { localStorage.setItem(LS_KEY, id); } catch { /* ignore */ }
+    const normalized = id === "blue" ? "cyan" : id;
+    if (!THEMES[normalized]) return;
+    setThemeRaw(normalized);
+    try {
+      localStorage.setItem(LS_KEY, normalized);
+      if (typeof document !== "undefined") {
+        document.documentElement.setAttribute("data-theme", normalized);
+      }
+    } catch { /* ignore */ }
   }, []);
 
   return (

@@ -103,14 +103,6 @@ export default function ServicesPage() {
     };
   }, []);
 
-  const sectionBg = isRed ? "#2d0306" : isGreen ? "#021e12" : "#02132a";
-
-  const overlayGradient = isRed
-    ? "linear-gradient(105deg, rgba(45, 3, 6, 0.97) 0%, rgba(45, 3, 6, 0.84) 48%, rgba(45, 3, 6, 0.30) 80%, rgba(45, 3, 6, 0.15) 100%)"
-    : isGreen
-      ? "linear-gradient(105deg, rgba(2, 30, 18, 0.97) 0%, rgba(2, 30, 18, 0.84) 48%, rgba(2, 30, 18, 0.30) 80%, rgba(2, 30, 18, 0.15) 100%)"
-      : "linear-gradient(105deg, rgba(2, 19, 42, 0.97) 0%, rgba(2, 19, 42, 0.84) 48%, rgba(2, 19, 42, 0.30) 80%, rgba(2, 19, 42, 0.15) 100%)";
-
   const badgeBg =
     theme === "red"
       ? "rgba(45, 3, 6, 0.88)"
@@ -123,7 +115,7 @@ export default function ServicesPage() {
       <section
         aria-labelledby="services-hero-title"
         className="relative isolate flex min-h-75 items-center overflow-hidden text-white sm:min-h-80 transition-colors duration-500"
-        style={{ backgroundColor: sectionBg }}
+        style={{ backgroundColor: "var(--hero-bg)" }}
       >
         <img
           alt=""
@@ -134,18 +126,14 @@ export default function ServicesPage() {
           fetchPriority="high"
           src={serviceHero}
           style={{
-            filter: isRed
-              ? "hue-rotate(160deg) saturate(1.25) brightness(0.9)"
-              : isGreen
-                ? "hue-rotate(295deg) saturate(1.25) brightness(0.9)"
-                : "none",
+            filter: "var(--hero-img-filter)",
           }}
         />
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-10 transition-all duration-500"
           style={{
-            background: overlayGradient,
+            background: "var(--hero-overlay)",
           }}
         />
 
