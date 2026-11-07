@@ -9,7 +9,9 @@
     <script>
       (function() {
         try {
-          var saved = localStorage.getItem('clingene-theme');
+          var params = typeof window !== 'undefined' && window.location && window.location.search ? new URLSearchParams(window.location.search) : null;
+          var qTheme = params ? params.get('theme') : null;
+          var saved = qTheme || localStorage.getItem('clingene-theme');
           var theme = (saved === 'red' || saved === 'green' || saved === 'cyan') ? saved : (saved === 'blue' ? 'cyan' : 'cyan');
           document.documentElement.setAttribute('data-theme', theme);
         } catch(e) {

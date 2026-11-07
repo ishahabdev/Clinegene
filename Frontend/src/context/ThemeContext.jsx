@@ -217,10 +217,12 @@ export function ThemeProvider({ children }) {
   // Always initialize with "cyan" so initial client render matches SSG prerender (0 hydration mismatch)
   const [theme, setThemeRaw] = useState("cyan");
 
-  // Sync with saved localStorage / data-theme on mount
+  // Sync with saved localStorage / query param / data-theme on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(LS_KEY);
+      const params = typeof window !== "undefined" && window.location?.search ? new URLSearchParams(window.location.search) : null;
+      const qTheme = params ? params.get("theme") : null;
+      const saved = qTheme || localStorage.getItem(LS_KEY);
       const domTheme = document.documentElement.getAttribute("data-theme");
       const activeTheme = (saved && (THEMES[saved] || saved === "blue"))
         ? (saved === "blue" ? "cyan" : saved)
