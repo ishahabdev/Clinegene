@@ -28,7 +28,7 @@ function FeatureIcon({ type }) {
 
 export default function HeroSection() {
   const { themeConfig } = useTheme();
-  const { heroImg, heroImgMobile } = themeConfig;
+  const { heroImg, heroImgMobile, heroImg640 } = themeConfig;
 
   return (
     <section
@@ -40,8 +40,8 @@ export default function HeroSection() {
       <link
         rel="preload"
         as="image"
-        href="/images/homepic-640.webp"
-        imageSrcSet={`/images/homepic-640.webp 640w, ${heroImgMobile} 1200w, ${heroImg} 2014w`}
+        href={heroImg640}
+        imageSrcSet={`${heroImg640} 640w, ${heroImgMobile} 1200w, ${heroImg} 2014w`}
         imageSizes="(max-width: 640px) 640px, (max-width: 1200px) 1200px, 100vw"
         fetchPriority="high"
       />
@@ -52,12 +52,12 @@ export default function HeroSection() {
         key={heroImg}
         width="2014"
         height="781"
-        srcSet={`/images/homepic-640.webp 640w, ${heroImgMobile} 1200w, ${heroImg} 2014w`}
+        srcSet={`${heroImg640} 640w, ${heroImgMobile} 1200w, ${heroImg} 2014w`}
         sizes="(max-width: 640px) 640px, (max-width: 1200px) 1200px, 100vw"
         className="hero-bg-img absolute inset-0 -z-20 h-full w-full object-cover object-[72%_center] sm:object-[68%_center] lg:object-center transition-all duration-500"
         fetchPriority="high"
         src={heroImg}
-        style={{ filter: "var(--hero-img-filter)" }}
+        style={{ filter: "var(--home-hero-img-filter, var(--hero-img-filter))" }}
       />
 
       {/* Responsive theme-aware gradient overlay */}

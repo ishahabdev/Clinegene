@@ -65,6 +65,7 @@ export const THEMES = {
     "--service-detail-alt-bg": "#f8fafc",
     heroImg: "/images/homepic.webp",
     heroImgMobile: "/images/homepic-1200.webp",
+    heroImg640: "/images/homepic-640.webp",
     swatch: "#10c8e0",
   },
   green: {
@@ -129,8 +130,9 @@ export const THEMES = {
     "--ceo-pillars-icon-bg": "#dcfce7",
     "--ceo-commitment-bg": "#021a10",
     "--service-detail-alt-bg": "#f8fdfa",
-    heroImg: "/images/greenhero.jpg",
-    heroImgMobile: "/images/greenhero.jpg",
+    heroImg: "/images/greenhero.webp",
+    heroImgMobile: "/images/greenhero-1200.webp",
+    heroImg640: "/images/greenhero-640.webp",
     swatch: "#10b981",
   },
   red: {
@@ -195,8 +197,9 @@ export const THEMES = {
     "--ceo-pillars-icon-bg": "#fee2e2",
     "--ceo-commitment-bg": "#280306",
     "--service-detail-alt-bg": "#fdf8f8",
-    heroImg: "/images/redhero.jpg",
-    heroImgMobile: "/images/redhero.jpg",
+    heroImg: "/images/redhero.webp",
+    heroImgMobile: "/images/redhero-1200.webp",
+    heroImg640: "/images/redhero-640.webp",
     swatch: "#b91c1c",
   },
 };
@@ -211,24 +214,24 @@ const ThemeContext = createContext({
 });
 
 export function ThemeProvider({ children }) {
-  const [theme, setThemeRaw] = useState(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem(LS_KEY);
-        if (saved && (THEMES[saved] || saved === "blue")) {
-          const normalized = saved === "blue" ? "cyan" : saved;
-          document.documentElement.setAttribute("data-theme", normalized);
-          return normalized;
-        }
-        // Check data-theme attribute set by synchronous head script
-        const domTheme = document.documentElement.getAttribute("data-theme");
-        if (domTheme && (THEMES[domTheme] || domTheme === "blue")) {
-          return domTheme === "blue" ? "cyan" : domTheme;
-        }
-      } catch { /* ignore */ }
-    }
-    return "cyan";
-  });
+  // Always initialize with "cyan" so initial client render matches SSG prerender (0 hydration mismatch)
+  const [theme, setThemeRaw] = useState("cyan");
+
+  // Sync with saved localStorage / data-theme on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(LS_KEY);
+      const domTheme = document.documentElement.getAttribute("data-theme");
+      const activeTheme = (saved && (THEMES[saved] || saved === "blue"))
+        ? (saved === "blue" ? "cyan" : saved)
+        : (domTheme && (THEMES[domTheme] || domTheme === "blue"))
+        ? (domTheme === "blue" ? "cyan" : domTheme)
+        : "cyan";
+      if (activeTheme !== "cyan") {
+        setThemeRaw(activeTheme);
+      }
+    } catch { /* ignore */ }
+  }, []);
 
   // Apply data-theme attribute and CSS variables to documentElement whenever theme changes
   useEffect(() => {

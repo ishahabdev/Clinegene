@@ -191,7 +191,10 @@ function CarouselCard({ member, offset, stageWidth, onClick, isActive }) {
                       e.currentTarget.src = DEFAULT_AVATAR;
                     }
                   }}
-                  className="h-full w-full object-cover object-[top_center] sm:object-[center_20%]"
+                  className="h-full w-full object-cover"
+                  style={{
+                    objectPosition: member.imagePosition || "center 20%",
+                  }}
                 />
               </div>
             ) : (
