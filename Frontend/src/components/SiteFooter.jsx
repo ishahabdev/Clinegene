@@ -1,9 +1,21 @@
+import { memo } from "react";
 import Button from "./Button.jsx";
 
 const clingeneLogo = "/images/clingene-logo.webp";
 const homeBackground = "/images/home1.webp";
 
-export default function SiteFooter({ showJoinCta }) {
+function SiteFooter({ showJoinCta }) {
+  // Never render public Footer on any admin route
+  if (
+    typeof window !== "undefined" &&
+    (window.location.pathname.toLowerCase().includes("opclin-23410") ||
+      window.location.pathname.toLowerCase().includes("admin") ||
+      window.location.hash.toLowerCase().includes("opclin-23410") ||
+      window.location.hash.toLowerCase().includes("admin"))
+  ) {
+    return null;
+  }
+
   return (
     <footer
       className="relative isolate overflow-hidden text-white z-1 transition-all duration-500"
@@ -289,3 +301,5 @@ export default function SiteFooter({ showJoinCta }) {
     </footer>
   );
 }
+
+export default memo(SiteFooter);

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { ChevronDown, Newspaper, BookOpen } from "lucide-react";
 import Button from "./Button";
 
@@ -44,7 +44,18 @@ function MenuIcon({ open }) {
   );
 }
 
-export default function HeaderNav({ activePage }) {
+function HeaderNav({ activePage }) {
+  // Never render public Header on any admin route
+  if (
+    typeof window !== "undefined" &&
+    (window.location.pathname.toLowerCase().includes("opclin-23410") ||
+      window.location.pathname.toLowerCase().includes("admin") ||
+      window.location.hash.toLowerCase().includes("opclin-23410") ||
+      window.location.hash.toLowerCase().includes("admin"))
+  ) {
+    return null;
+  }
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
@@ -546,3 +557,5 @@ export default function HeaderNav({ activePage }) {
     </>
   );
 }
+
+export default memo(HeaderNav);

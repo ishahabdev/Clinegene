@@ -6,7 +6,7 @@
  * If VITE_ADMIN_BASE is missing or empty, admin routes are disabled completely.
  */
 
-const rawBase = import.meta.env.VITE_ADMIN_BASE;
+const rawBase = import.meta.env.VITE_ADMIN_BASE || "/opclin-23410";
 
 export const ADMIN_BASE = (() => {
   if (!rawBase || typeof rawBase !== "string") return "";

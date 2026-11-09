@@ -1,24 +1,34 @@
 import { supabase } from "./supabase.js";
 
+let careersCache = null;
+let careersCacheTime = 0;
+const CACHE_TTL = 3 * 60 * 1000; // 3 minutes
+
 /**
  * Fetch published job openings from Supabase `jobs` table ordered by sort_order
  */
-export async function fetchPublishedJobs() {
+export async function fetchPublishedJobs(forceRefresh = false) {
   if (!supabase) return [];
+  const now = Date.now();
+  if (!forceRefresh && careersCache && now - careersCacheTime < CACHE_TTL) {
+    return careersCache;
+  }
 
   try {
     let { data, error } = await supabase
       .from("jobs")
-      .select("*")
+      .select("id, title, position, short_description, subtitle, description, department, job_type, type, location, job_status, applicants_count, sort_order, status, created_at")
       .eq("status", "published")
-      .order("sort_order", { ascending: true });
+      .order("sort_order", { ascending: true })
+      .limit(30);
 
     if (error) {
       const fallback = await supabase
         .from("jobs")
-        .select("*")
+        .select("id, title, position, short_description, subtitle, description, department, job_type, type, location, job_status, applicants_count, sort_order, status, created_at")
         .eq("status", "published")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(30);
       data = fallback.data;
       error = fallback.error;
     }
@@ -27,10 +37,10 @@ export async function fetchPublishedJobs() {
       if (import.meta.env.DEV) {
         console.error("[fetchPublishedJobs] Supabase error:", error);
       }
-      return [];
+      return careersCache || [];
     }
 
-    return (data || []).map((row) => ({
+    const mapped = (data || []).map((row) => ({
       id: row.id,
       title: row.title || row.position || "",
       shortDescription: row.short_description || row.subtitle || row.description || "",
@@ -44,11 +54,15 @@ export async function fetchPublishedJobs() {
       sortOrder: row.sort_order ?? 1,
       createdAt: row.created_at,
     }));
+
+    careersCache = mapped;
+    careersCacheTime = now;
+    return mapped;
   } catch (err) {
     if (import.meta.env.DEV) {
       console.error("[fetchPublishedJobs] Exception:", err);
     }
-    return [];
+    return careersCache || [];
   }
 }
 
