@@ -21,16 +21,8 @@ export async function fetchPublishedArticles() {
 
   try {
     const [blogsRes, newsRes] = await Promise.all([
-      supabase
-        .from("blog_posts")
-        .select("id, title, slug, excerpt, content, image_url, image_alt, author, category, tags, read_time, published_at, created_at, status, is_featured")
-        .order("created_at", { ascending: false })
-        .limit(40),
-      supabase
-        .from("news_posts")
-        .select("id, title, slug, excerpt, content, image_url, image_alt, author, category, tags, read_time, published_at, created_at, status, is_featured")
-        .order("created_at", { ascending: false })
-        .limit(40),
+      supabase.from("blog_posts").select("*").order("created_at", { ascending: false }),
+      supabase.from("news_posts").select("*").order("created_at", { ascending: false }),
     ]);
 
     if (!blogsRes.error && blogsRes.data && Array.isArray(blogsRes.data)) {

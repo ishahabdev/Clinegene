@@ -161,29 +161,16 @@ export function mapServiceFromDb(row) {
   };
 }
 
-// In-memory cache to prevent repeated Supabase network queries
-let servicesCache = null;
-let servicesCacheTime = 0;
-const CACHE_TTL = 3 * 60 * 1000; // 3 minutes
-
 /**
  * Fetch all published services from Supabase ordered by sort_order
  */
-export async function fetchPublishedServices(forceRefresh = false) {
+export async function fetchPublishedServices() {
   if (!supabase) return [];
-  const now = Date.now();
-  if (!forceRefresh && servicesCache && now - servicesCacheTime < CACHE_TTL) {
-    return servicesCache;
-  }
-
   const { data, error } = await supabase
     .from("services")
-    .select(
-      "id, slug, title, short_description, icon_name, service_type, sort_order, banner_image, overview, features, applications, requirements, requirements_label, deliverables, deliverables_note, sub_services, related_slugs, faq, status"
-    )
+    .select("*")
     .eq("status", "published")
-    .order("sort_order", { ascending: true })
-    .limit(50);
+    .order("sort_order", { ascending: true });
 
   if (error) {
     if (import.meta.env.DEV) {
@@ -191,10 +178,7 @@ export async function fetchPublishedServices(forceRefresh = false) {
     }
     throw error;
   }
-  const mapped = (data || []).map(mapServiceFromDb);
-  servicesCache = mapped;
-  servicesCacheTime = now;
-  return mapped;
+  return (data || []).map(mapServiceFromDb);
 }
 
 /**
@@ -205,19 +189,9 @@ export async function fetchServiceBySlug(slug) {
   const cleanSlug = slug.trim().toLowerCase();
   const normalized = cleanSlug === "genetic-counselling" ? "genetic-counseling" : cleanSlug;
 
-  // Check cache first for instant load
-  if (servicesCache && servicesCache.length > 0) {
-    const cachedMatch = servicesCache.find(
-      (s) => s.slug === normalized || s.slug === cleanSlug
-    );
-    if (cachedMatch) return cachedMatch;
-  }
-
   const { data, error } = await supabase
     .from("services")
-    .select(
-      "id, slug, title, short_description, icon_name, service_type, sort_order, banner_image, overview, features, applications, requirements, requirements_label, deliverables, deliverables_note, sub_services, related_slugs, faq, status"
-    )
+    .select("*")
     .eq("status", "published")
     .eq("slug", normalized)
     .maybeSingle();
@@ -237,9 +211,7 @@ export async function fetchServiceBySlug(slug) {
   if (normalized !== cleanSlug) {
     const { data: fallbackData } = await supabase
       .from("services")
-      .select(
-        "id, slug, title, short_description, icon_name, service_type, sort_order, banner_image, overview, features, applications, requirements, requirements_label, deliverables, deliverables_note, sub_services, related_slugs, faq, status"
-      )
+      .select("*")
       .eq("status", "published")
       .eq("slug", cleanSlug)
       .maybeSingle();

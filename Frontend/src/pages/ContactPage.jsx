@@ -11,10 +11,9 @@ const contactPhoneRaw = "+923485607051";
 const contactEmail = "info@clingene.co";
 const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contactEmail)}&su=${encodeURIComponent("Inquiry - ClinGene")}`;
 const contactAddress = "Street 13, Lane 10, Hostel City, Chatta Bakhtawar, Chak Shahzad, Park Road, Islamabad, Pakistan";
-const mapCoordinates = "33.65788,73.15820";
-const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.7303030635445!2d73.1556191764121!3d33.65768313845941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfeb3c23075e77%3A0x6b0fb5c88c3a1bf1!2sHostel%20City!5e0!3m2!1sen!2spk!4v1731166000000!5m2!1sen!2spk";
-const mapUrl = `https://www.google.com/maps/search/?api=1&query=${mapCoordinates}`;
-const mapDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${mapCoordinates}`;
+const mapQuery = "Street 13, Lane 10, Hostel City, Chatta Bakhtawar, Chak Shahzad, Park Road, Islamabad, Pakistan";
+const mapUrl = `https://maps.google.com/?q=${encodeURIComponent(mapQuery)}`;
+const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&output=embed`;
 
 const contactCards = [
   {
@@ -37,7 +36,7 @@ const contactCards = [
     icon: "location",
     title: "Visit us",
     value: "Hostel City, Chak Shahzad, Islamabad",
-    href: mapDirectionsUrl,
+    href: mapUrl,
     detail: contactAddress,
     isFeatured: false,
   },
@@ -250,6 +249,7 @@ export default function ContactPage() {
   const [submitStatus, setSubmitStatus] = useState(null);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [turnstileVisible, setTurnstileVisible] = useState(false);
+  const [mapLoaded, setMapLoaded] = useState(false);
   const [servicesList, setServicesList] = useState([]);
 
   useEffect(() => {
@@ -627,36 +627,33 @@ export default function ContactPage() {
               {contactAddress}
             </p>
             <div className="contact-map bg-slate-100 flex items-center justify-center relative">
-              <iframe
-                title="Google Map showing ClinGene location in Hostel City, Chak Shahzad, Islamabad"
-                src={mapEmbedUrl}
-                width="100%"
-                height="100%"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full border-0"
-              />
+              {mapLoaded ? (
+                <iframe
+                  title="Map showing ClinGene’s location in Islamabad"
+                  src={mapEmbedUrl}
+                  width="600"
+                  height="450"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full border-0"
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setMapLoaded(true)}
+                  className="group flex flex-col items-center justify-center gap-2 p-4 text-center cursor-pointer w-full h-full bg-slate-50 hover:bg-slate-100 transition-colors"
+                >
+                  <div className="p-2.5 rounded-full bg-white shadow-xs text-slate-700 group-hover:scale-105 transition-transform">
+                    <ContactIcon type="location" />
+                  </div>
+                  <span className="text-xs font-semibold text-slate-700">Click to load interactive map</span>
+                  <span className="text-[11px] text-slate-500">Protects your privacy and avoids third-party tracking</span>
+                </button>
+              )}
             </div>
-            <div className="mt-3.5 flex flex-wrap items-center justify-between gap-3">
-              <a
-                className="contact-directions-link"
-                href={mapDirectionsUrl}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <span>Get directions on Google Maps</span>
-                <span aria-hidden="true">↗</span>
-              </a>
-              <a
-                href={mapUrl}
-                rel="noopener noreferrer"
-                target="_blank"
-                className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-(--accent) transition-colors"
-              >
-                <span>Open in Maps</span>
-                <span aria-hidden="true">↗</span>
-              </a>
-            </div>
+            <a className="contact-directions-link" href={mapUrl} rel="noopener noreferrer" target="_blank">
+              View directions on Google Maps <span aria-hidden="true">↗</span>
+            </a>
           </div>
 
           {/* Send us a message Form Card */}
