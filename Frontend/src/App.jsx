@@ -168,6 +168,9 @@ function getHashTarget(hash) {
 function AppContent({ ssrUrl, ssrPages }) {
   const activePages = ssrPages || clientPages;
   const [pageId, setPageId] = useState(() => getCurrentPage(ssrUrl, activePages));
+  const [routeKey, setRouteKey] = useState(
+    () => (typeof window !== "undefined" ? window.location.href : (ssrUrl || "/"))
+  );
   const [showPreloader, setShowPreloader] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const lenisRef = useLenisRef();
@@ -197,7 +200,7 @@ function AppContent({ ssrUrl, ssrPages }) {
         seo?.title ||
         (pageId === "home"
           ? "ClinGene | Clinical Genetic Testing Laboratory"
-          : `${pages[pageId]?.label || "ClinGene"} - ClinGene`);
+          : `${activePages[pageId]?.label || "ClinGene"} - ClinGene`);
       if (title && pageId !== "service-detail") {
         document.title = title;
       }
@@ -240,6 +243,7 @@ function AppContent({ ssrUrl, ssrPages }) {
 
       const page = getCurrentPage();
       setPageId(page);
+      setRouteKey(currentLocation);
 
       const hash = window.location.hash.slice(1);
       const target = hash && getHashTarget(hash);
@@ -318,7 +322,7 @@ function AppContent({ ssrUrl, ssrPages }) {
       } else if (normalized.startsWith("services/")) {
         targetPage = "service-detail";
         targetPath = `/${normalized}`;
-      } else if (pages[normalized]) {
+      } else if (activePages[normalized]) {
         targetPage = normalized;
         targetPath = `/${normalized}`;
       }
@@ -334,6 +338,7 @@ function AppContent({ ssrUrl, ssrPages }) {
           window.history.pushState(null, "", fullTargetUrl);
         }
         lastHandledLocationRef.current = window.location.href;
+        setRouteKey(window.location.href);
 
         if (isSamePage) {
           lenisRef.current?.scrollTo(0, {
@@ -400,7 +405,14 @@ function AppContent({ ssrUrl, ssrPages }) {
         <SectionScrollEffects key={pageId} />
         <Suspense fallback={null}>
           <CurrentPage
-            key={typeof window !== "undefined" ? window.location.pathname : (ssrUrl || "/")}
+            key={routeKey}
+            currentSlug={
+              pageId === "service-detail" && typeof window !== "undefined"
+                ? window.location.pathname
+                    .replace(/^\/services\//, "")
+                    .replace(/\/$/, "")
+                : undefined
+            }
             ssrUrl={ssrUrl}
           />
         </Suspense>

@@ -10,6 +10,43 @@ import { fetchPublishedServices } from "../lib/servicesClient.js";
 export const revalidate = 60;
 export const dynamic = "force-dynamic";
 
+const ACADEMIC_SERVICE_PATTERNS = [
+  /rna.{0,20}seq|transcriptome/,
+  /metagenom/,
+  /phylogenetic|phylogeny/,
+  /pangenome/,
+  /molecular.{0,15}dynamic|md.{0,10}simulation/,
+  /protein.{0,20}model/,
+  /immunogenic/,
+  /virtual.{0,15}screen/,
+  /library.{0,15}generation/,
+  /molecular.{0,15}biology/,
+  /project.{0,15}design/,
+];
+
+function getServiceCategory(service) {
+  const category = String(service.category || "").toLowerCase();
+  if (category.includes("academic")) return "academic";
+
+  const identity = `${service.slug || ""} ${service.title || ""} ${service.name || ""}`
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ");
+  const matchesAcademicService = ACADEMIC_SERVICE_PATTERNS.some((pattern) =>
+    pattern.test(identity)
+  );
+  if (category.includes("clinical") && category !== "clinical diagnostics") {
+    return "clinical";
+  }
+  return matchesAcademicService ? "academic" : "clinical";
+}
+
+function getCategoryFromUrl(url) {
+  const query = url?.includes("?") ? url.split("?")[1].split("#")[0] : "";
+  return new URLSearchParams(query).get("category") === "academic"
+    ? "academic"
+    : "clinical";
+}
+
 function SubServiceIcon({ id, className = "h-11 w-11", style }) {
   if (id === "prenatal-diagnosis") {
     return (
@@ -67,9 +104,19 @@ function SubServiceIcon({ id, className = "h-11 w-11", style }) {
   );
 }
 
-export default function ServicesPage() {
+export default function ServicesPage({ ssrUrl }) {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(() => getCategoryFromUrl(ssrUrl));
+
+  useEffect(() => {
+    const updateCategoryFromUrl = () => {
+      setSelectedCategory(getCategoryFromUrl(window.location.href));
+    };
+    updateCategoryFromUrl();
+    window.addEventListener("popstate", updateCategoryFromUrl);
+    return () => window.removeEventListener("popstate", updateCategoryFromUrl);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -97,6 +144,16 @@ export default function ServicesPage() {
       isMounted = false;
     };
   }, []);
+
+  const categorizedServices = services.filter(
+    (service) => getServiceCategory(service) === selectedCategory
+  );
+  const hasFeaturedGeneticCounseling = categorizedServices.some(
+    (service) =>
+      service.slug === "genetic-counseling" || service.slug === "genetic-counselling"
+  );
+  const selectedCategoryLabel =
+    selectedCategory === "academic" ? "Academic" : "Clinical";
 
   const badgeBg = "var(--card-hero-badge-bg)";
 
@@ -254,19 +311,19 @@ export default function ServicesPage() {
                 Our Services
               </p>
               <h2 className="font-outfit text-[28px] font-bold leading-tight text-[#0c2b48] sm:text-[34px]" id="service-catalog-title">
-                Our{" "}
+                Our {selectedCategoryLabel}{" "}
                 <span
                   style={{
                     color: "var(--accent-dark)",
                     transition: "color 0.4s ease-in-out",
                   }}
                 >
-                  Specialized Services
+                  Services
                 </span>
               </h2>
               <p className="mt-2 max-w-2xl font-inter text-sm leading-6 text-[#4a6e8b]">
-                Explore ClinGene’s clinical testing, sequencing and bioinformatics services, with
-                clear descriptions of the work each service supports.
+                Explore ClinGene’s {selectedCategoryLabel.toLowerCase()} services, with clear
+                descriptions of the work each service supports.
               </p>
             </div>
             <Button
@@ -301,25 +358,23 @@ export default function ServicesPage() {
               </p>
             </div>
           ) : (
+            categorizedServices.length === 0 ? (
+              <div className="rounded-2xl border border-slate-200/80 bg-white p-12 text-center shadow-xs my-6">
+                <Layers className="mx-auto h-10 w-10 text-slate-400 mb-3" />
+                <h3 className="text-base font-bold text-slate-700">
+                  No {selectedCategoryLabel} Services Available
+                </h3>
+                <p className="text-xs text-slate-500 mt-1">
+                  Published {selectedCategoryLabel.toLowerCase()} services will appear here.
+                </p>
+              </div>
+            ) : (
             <>
               {/* ── Featured Top Card: Genetic Counselling & Sub-Services ── */}
-              {(() => {
-                const defaultGc = {
-                  slug: "genetic-counseling",
-                  name: "Genetic Counseling",
-                  description: "Professional guidance and support to help you understand genetic risks and make informed decisions.",
-                  subServices: [
-                    { id: "prenatal-diagnosis", label: "Prenatal Diagnosis" },
-                    { id: "newborn-screening", label: "Newborn Screening" },
-                    { id: "genetic-diseases", label: "Genetic Diseases" },
-                    { id: "chromosomal-abnormalities", label: "Chromosomal Abnormalities" },
-                    { id: "hereditary-cancer", label: "Hereditary Cancer" },
-                  ],
-                };
+              {selectedCategory === "clinical" && (() => {
                 const gc =
-                  services.find((s) => s.slug === "genetic-counseling" || s.slug === "genetic-counselling") ||
-                  services[0] ||
-                  defaultGc;
+                  categorizedServices.find((s) => s.slug === "genetic-counseling" || s.slug === "genetic-counselling");
+                if (!gc) return null;
                 return (
                   <ScrollReveal
                     as="div"
@@ -413,8 +468,11 @@ export default function ServicesPage() {
 
               {/* ── Remaining Services Grid (02 to 15) in other line ── */}
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {services
-                  .filter((s) => s.slug !== "genetic-counseling" && s.slug !== "genetic-counselling")
+                {categorizedServices
+                  .filter((s) =>
+                    !hasFeaturedGeneticCounseling ||
+                    (s.slug !== "genetic-counseling" && s.slug !== "genetic-counselling")
+                  )
                   .map(({ slug, name, description, Icon, image, imageAlt, width, height }, index) => {
                     const serviceUrl = `/services/${slug}`;
 
@@ -440,7 +498,7 @@ export default function ServicesPage() {
                             className="absolute left-2 top-2 rounded-md px-2 py-1 font-inter text-[10px] font-bold tracking-wide text-white"
                             style={{ backgroundColor: badgeBg }}
                           >
-                            {String(index + 2).padStart(2, "0")}
+                            {String(index + (hasFeaturedGeneticCounseling ? 2 : 1)).padStart(2, "0")}
                           </span>
                         </div>
                         <div className="relative flex flex-1 flex-col px-3 pb-3 pt-7 transition-colors duration-300">
@@ -464,6 +522,7 @@ export default function ServicesPage() {
                   })}
               </div>
             </>
+            )
           )}
 
           <div

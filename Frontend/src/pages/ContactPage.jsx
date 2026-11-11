@@ -249,7 +249,7 @@ export default function ContactPage() {
   const [submitStatus, setSubmitStatus] = useState(null);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [turnstileVisible, setTurnstileVisible] = useState(false);
-  const [mapLoaded, setMapLoaded] = useState(false);
+  const [isLocationOpen, setIsLocationOpen] = useState(true);
   const [servicesList, setServicesList] = useState([]);
 
   useEffect(() => {
@@ -623,11 +623,24 @@ export default function ContactPage() {
           <div className="contact-location-column">
             <p className="contact-section-eyebrow">Find us</p>
             <h2>Our location</h2>
-            <p className="contact-location-address">
-              {contactAddress}
-            </p>
-            <div className="contact-map bg-slate-100 flex items-center justify-center relative">
-              {mapLoaded ? (
+            <button
+              type="button"
+              className="contact-directions-link cursor-pointer border-0 bg-transparent p-0 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+              aria-expanded={isLocationOpen}
+              aria-controls="contact-location-details"
+              onClick={() => setIsLocationOpen((isOpen) => !isOpen)}
+            >
+              {isLocationOpen ? "Hide address and map" : "Show address and map"}
+              <ChevronDown
+                aria-hidden="true"
+                className={`h-4 w-4 ${isLocationOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+            <div id="contact-location-details" hidden={!isLocationOpen}>
+              <p className="contact-location-address">
+                {contactAddress}
+              </p>
+              <div className="contact-map bg-slate-100 flex items-center justify-center relative">
                 <iframe
                   title="Map showing ClinGene’s location in Islamabad"
                   src={mapEmbedUrl}
@@ -637,19 +650,7 @@ export default function ContactPage() {
                   referrerPolicy="no-referrer-when-downgrade"
                   className="w-full h-full border-0"
                 />
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setMapLoaded(true)}
-                  className="group flex flex-col items-center justify-center gap-2 p-4 text-center cursor-pointer w-full h-full bg-slate-50 hover:bg-slate-100 transition-colors"
-                >
-                  <div className="p-2.5 rounded-full bg-white shadow-xs text-slate-700 group-hover:scale-105 transition-transform">
-                    <ContactIcon type="location" />
-                  </div>
-                  <span className="text-xs font-semibold text-slate-700">Click to load interactive map</span>
-                  <span className="text-[11px] text-slate-500">Protects your privacy and avoids third-party tracking</span>
-                </button>
-              )}
+              </div>
             </div>
             <a className="contact-directions-link" href={mapUrl} rel="noopener noreferrer" target="_blank">
               View directions on Google Maps <span aria-hidden="true">↗</span>

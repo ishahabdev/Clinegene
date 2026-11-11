@@ -13,6 +13,28 @@ export function slugify(text) {
     .replace(/-+/g, "-");
 }
 
+const ACADEMIC_SERVICE_PATTERNS = [
+  /rna.{0,20}seq|transcriptome/,
+  /metagenom/,
+  /phylogenetic|phylogeny/,
+  /pangenome/,
+  /molecular.{0,15}dynamic|md.{0,10}simulation/,
+  /protein.{0,20}model/,
+  /immunogenic/,
+  /virtual.{0,15}screen/,
+  /library.{0,15}generation/,
+  /project.{0,15}design/,
+];
+
+function getServiceCategory(service) {
+  const identity = `${service.slug || ""} ${service.title || ""} ${service.name || ""}`
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ");
+  return ACADEMIC_SERVICE_PATTERNS.some((pattern) => pattern.test(identity))
+    ? "Academic Service"
+    : "Clinical Service";
+}
+
 /**
  * Map database row from `services` table to the frontend service model
  */
@@ -26,9 +48,10 @@ export function mapServiceFromDb(row) {
     slug: row.slug || "",
     subtitle: row.subtitle || "",
     tagline: row.subtitle || "",
-    category: row.category || "Clinical Diagnostics",
+    category: getServiceCategory(row),
     type: row.service_type || "lab",
     service_type: row.service_type || "lab",
+    serviceType: row.title || "",
     pricing: row.pricing_display || "On request",
     pricing_display: row.pricing_display || "On request",
     description: row.short_description || row.overview || "",
@@ -115,7 +138,7 @@ export function mapServiceToDb(data, nextSortOrder) {
     title,
     slug,
     subtitle: (data.subtitle || data.tagline || "").trim() || null,
-    category: data.category || "Clinical Diagnostics",
+    category: getServiceCategory({ ...data, title, name: title, slug }),
     service_type: data.type || data.service_type || "lab",
     pricing_display: data.pricing || data.pricing_display || null,
     short_description: short_description || null,

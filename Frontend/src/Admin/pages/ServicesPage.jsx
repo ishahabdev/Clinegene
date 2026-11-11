@@ -35,12 +35,28 @@ import {
   uploadServiceImage,
 } from "../api/services.js";
 
+const WEBSITE_SERVICE_TYPES = [
+  "Genetic Counseling",
+  "Clinical Whole Exome/Genome Sequencing",
+  "Panel Sequencing",
+  "Sanger Sequencing",
+  "RNA-Sequencing/Transcriptome Sequencing",
+  "Metagenome Sequencing",
+  "Phylogenetic Tree Construction & Analysis",
+  "Pangenome Analysis",
+  "MD Simulation",
+  "Protein Modeling",
+  "Immunogenicity Analysis",
+  "Virtual Screening",
+  "Library Generation",
+  "Molecular Biology Services",
+  "Project Design",
+  "Whole Exome/Genome Sequencing",
+];
+
 const CATEGORIES = [
-  "Clinical Diagnostics",
-  "Genomic Sequencing",
-  "Bioinformatics",
-  "Computational Biology",
-  "Laboratory Services",
+  "Clinical Service",
+  "Academic Service",
 ];
 
 const DEFAULT_FORM_STATE = {
@@ -48,7 +64,8 @@ const DEFAULT_FORM_STATE = {
   subtitle: "",
   slug: "",
   type: "lab",
-  category: "Clinical Diagnostics",
+  serviceType: "",
+  category: "Clinical Service",
   pricing: "On request",
   status: "Active",
   icon: "dna",
@@ -139,6 +156,15 @@ export default function ServicesPage() {
     return counts;
   }, [services]);
 
+  const serviceTypeOptions = useMemo(
+    () =>
+      [...new Set([
+        ...WEBSITE_SERVICE_TYPES,
+        ...services.map((service) => service.name).filter(Boolean),
+      ])],
+    [services]
+  );
+
   // Dynamic KPI Stats Cards (Matching exact screenshot values & statuses)
   const statsCards = useMemo(() => {
     const total = services.length;
@@ -221,7 +247,8 @@ export default function ServicesPage() {
       subtitle: service.subtitle || "",
       slug: service.slug || "",
       type: service.type || "lab",
-      category: service.category || "Clinical Diagnostics",
+      serviceType: service.serviceType || "",
+      category: service.category || "Clinical Service",
       pricing: service.pricing || "On request",
       status: service.status || "Active",
       icon: service.icon || "dna",
@@ -266,6 +293,7 @@ export default function ServicesPage() {
   // Auto-generate slug from name if new service
   const handleNameChange = (val) => {
     const updates = { name: val };
+    updates.serviceType = val;
     if (!editingService && (!formData.slug || formData.slug === slugify(formData.name))) {
       updates.slug = slugify(val);
     }
@@ -377,25 +405,6 @@ export default function ServicesPage() {
       setIsDeleting(false);
     }
   };
-
-  // Live mini preview quick facts helper
-  const previewFacts = [
-    formData.sampleType && {
-      label: "Sample Type",
-      value: formData.sampleType,
-      icon: TestTubes,
-    },
-    formData.turnaroundTime && {
-      label: "Turnaround Time",
-      value: formData.turnaroundTime,
-      icon: Clock,
-    },
-    formData.reportFormat && {
-      label: "Report Format",
-      value: formData.reportFormat,
-      icon: FileText,
-    },
-  ].filter(Boolean);
 
   const hasRequisitionPdf = Boolean(
     formData.requisitionPdf &&
@@ -648,6 +657,7 @@ export default function ServicesPage() {
               >
                 <span>Overview &amp; Scope</span>
               </button>
+
             </div>
 
             {/* Modal Body (Scrollable) */}
@@ -744,61 +754,6 @@ export default function ServicesPage() {
                     )}
                   </div>
 
-                  {/* Live Mini Preview of Quick Facts Bar */}
-                  <div className="mt-6 rounded-xl border border-slate-200 dark:border-[#1b283d] bg-slate-50/90 dark:bg-[#080d17] p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-cyan-400 flex items-center gap-1.5">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-teal-600 dark:text-cyan-400" />
-                        Live Quick Facts Bar Preview
-                      </span>
-                      <span className="text-[10.5px] font-medium text-slate-400 dark:text-slate-500">
-                        Matches public service page
-                      </span>
-                    </div>
-
-                    {previewFacts.length === 0 && !hasRequisitionPdf ? (
-                      <div className="rounded-lg border border-dashed border-slate-300 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-5 text-center text-xs text-slate-400 dark:text-slate-500">
-                        No quick facts entered. Enter sample type, turnaround time, or report format above to see the live preview.
-                      </div>
-                    ) : (
-                      <div className="rounded-xl border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#0e1624] p-3.5 shadow-2xs">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                          {previewFacts.length > 0 && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 flex-1">
-                              {previewFacts.map((fact, idx) => {
-                                const FactIcon = fact.icon;
-                                return (
-                                  <div
-                                    key={idx}
-                                    className="flex items-start gap-2.5 rounded-lg border border-slate-100 dark:border-[#1b283d] bg-slate-50/60 dark:bg-[#080d17] p-2.5"
-                                  >
-                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-teal-50 dark:bg-cyan-500/15 text-teal-600 dark:text-cyan-400 mt-0.5">
-                                      <FactIcon className="h-3.5 w-3.5 stroke-2" />
-                                    </div>
-                                    <div className="min-w-0 flex-1">
-                                      <span className="block text-[9.5px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                                        {fact.label}
-                                      </span>
-                                      <span className="block text-[11px] font-semibold text-slate-800 dark:text-white leading-snug line-clamp-2">
-                                        {fact.value}
-                                      </span>
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          )}
-
-                          {hasRequisitionPdf && (
-                            <div className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-slate-300 dark:border-[#1b283d] bg-slate-50 dark:bg-[#080d17] px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-200 shrink-0 self-start md:self-center">
-                              <FileDown className="h-3.5 w-3.5 text-teal-600 dark:text-cyan-400" />
-                              <span>Download requisition form</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
                 </div>
               )}
 
@@ -858,7 +813,7 @@ export default function ServicesPage() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     <div>
                       <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                         Category
@@ -883,31 +838,33 @@ export default function ServicesPage() {
                         Service Type
                       </label>
                       <select
-                        value={formData.type}
-                        onChange={(e) =>
-                          setFormData({ ...formData, type: e.target.value })
-                        }
+                        value={formData.serviceType}
+                        onChange={(e) => {
+                          const serviceType = e.target.value;
+                          setFormData((prev) => ({
+                            ...prev,
+                            serviceType,
+                            name: serviceType,
+                            slug: slugify(serviceType),
+                          }));
+                        }}
                         className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none cursor-pointer"
                       >
-                        <option value="lab">Genetic Analysis (Lab)</option>
-                        <option value="computational">Computational (In Silico)</option>
+                        <option value="">Select a service type</option>
+                        {formData.serviceType &&
+                          !serviceTypeOptions.includes(formData.serviceType) && (
+                            <option value={formData.serviceType}>
+                              {formData.serviceType}
+                            </option>
+                          )}
+                        {serviceTypeOptions.map((serviceType) => (
+                          <option key={serviceType} value={serviceType}>
+                            {serviceType}
+                          </option>
+                        ))}
                       </select>
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                        Pricing Display
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.pricing}
-                        onChange={(e) =>
-                          setFormData({ ...formData, pricing: e.target.value })
-                        }
-                        placeholder="e.g. Rs. 45,000"
-                        className="w-full rounded-lg border border-slate-200 dark:border-[#1b283d] bg-white dark:bg-[#080d17] px-3 py-2 text-xs text-slate-800 dark:text-white focus:border-[#0da5aa] focus:outline-none"
-                      />
-                    </div>
                   </div>
 
                   <div>

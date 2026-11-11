@@ -35,16 +35,10 @@ const ICON_MAP = {
 
 function getCategoryBadgeStyle(category) {
   switch (category) {
-    case "Clinical Diagnostics":
+    case "Clinical Service":
       return "bg-cyan-50 text-cyan-700 border border-cyan-200/60";
-    case "Genomic Sequencing":
+    case "Academic Service":
       return "bg-purple-50 text-purple-700 border border-purple-200/60";
-    case "Bioinformatics":
-      return "bg-blue-50 text-blue-700 border border-blue-200/60";
-    case "Computational Biology":
-      return "bg-sky-50 text-sky-700 border border-sky-200/60";
-    case "Laboratory Services":
-      return "bg-teal-50 text-teal-700 border border-teal-200/60";
     default:
       return "bg-slate-100 text-slate-700 border border-slate-200";
   }
@@ -275,4 +269,3 @@ export default function ServicesGrid({
     </div>
   );
 }
-

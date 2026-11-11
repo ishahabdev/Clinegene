@@ -1,26 +1,19 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
-  Activity,
   ArrowRight,
   Check,
   Clock,
-  Dna,
   FileCheck,
   FileDown,
   FileText,
   FlaskConical,
-  GitBranch,
   Info,
-  Microscope,
-  Minus,
-  Plus,
-  ShieldCheck,
-  Sparkles,
   TestTubes,
 } from "lucide-react";
 import ScrollReveal from "../components/ScrollReveal.jsx";
 import Button from "../components/Button.jsx";
 import dnaStrand from "../assets/dna_strand.png";
+import fallbackServiceImage from "../assets/services/service-hero.webp";
 import PageNotFoundPage from "./PageNotFoundPage.jsx";
 import { fetchServiceBySlug, fetchPublishedServices } from "../lib/servicesClient.js";
 import { buildServiceSeo } from "../data/seoData.js";
@@ -31,6 +24,11 @@ export const dynamic = "force-dynamic";
 export function notFound() {
   return <PageNotFoundPage />;
 }
+
+const SERVICE_NAV_SECTIONS = [
+  { id: "about", label: "About" },
+  { id: "requirements", label: "Requirements" },
+];
 
 // Helper to sanitize placeholder brackets e.g. "[To be confirmed by the lab]"
 function cleanText(text) {
@@ -192,24 +190,10 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
     };
   }, [activeSlug]);
 
-  // Accordion state for FAQs: first item open by default
-  const [openFaq, setOpenFaq] = useState(0);
-
   // Active section for in-page navigation spy
   const [activeNav, setActiveNav] = useState("about");
 
-  // Sticky CTA visibility (shown when scrolled past hero)
-  const [showStickyCta, setShowStickyCta] = useState(false);
-  const heroRef = useRef(null);
-
   // In-page navigation items
-  const navSections = [
-    { id: "about", label: "About" },
-    { id: "applications", label: "Applications" },
-    { id: "requirements", label: "Requirements" },
-    { id: "faq", label: "FAQ" },
-  ];
-
   // Set document title and meta description using buildServiceSeo
   useEffect(() => {
     if (!service) return;
@@ -240,23 +224,14 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
     }
   }, [service]);
 
-  // Scroll spy & Sticky CTA scroll listener
+  // In-page navigation scroll spy
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const handleScroll = () => {
-      // 1. Show sticky CTA after scrolling past hero
-      if (heroRef.current) {
-        const heroRect = heroRef.current.getBoundingClientRect();
-        setShowStickyCta(heroRect.bottom < 80);
-      } else {
-        setShowStickyCta(window.scrollY > 400);
-      }
-
-      // 2. Active in-page navigation highlight based on scroll position
       const scrollPosition = window.scrollY + 160;
-      for (let i = navSections.length - 1; i >= 0; i--) {
-        const sectionId = navSections[i].id;
+      for (let i = SERVICE_NAV_SECTIONS.length - 1; i >= 0; i--) {
+        const sectionId = SERVICE_NAV_SECTIONS[i].id;
         const el = document.getElementById(sectionId);
         if (el) {
           const top = el.offsetTop;
@@ -274,7 +249,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [navSections]);
+  }, []);
 
   // Smooth scroll handler for in-page navigation
   const scrollToSection = (e, sectionId) => {
@@ -323,8 +298,6 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
   }
 
   // Application icons cycle
-  const appIcons = [Dna, FileCheck, Microscope, GitBranch, FlaskConical, Sparkles, Activity, ShieldCheck];
-
   // Quick facts array (only non-empty fields)
   const quickFacts = [
     service.sampleType && {
@@ -349,9 +322,9 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
       
       {/* ================= 1. HERO SECTION ================= */}
       <section 
-        ref={heroRef}
+
         aria-labelledby="service-hero-title"
-        className="relative overflow-hidden pt-6 pb-9 sm:pt-7 sm:pb-11 lg:pt-8 lg:pb-12 border-b border-slate-200/60 transition-colors duration-500"
+        className="relative overflow-hidden border-b border-slate-200/70 py-10 transition-colors duration-500 sm:py-14 lg:py-18"
         style={{
           background: "radial-gradient(ellipse 60% 70% at 80% 40%, var(--accent-soft) 0%, #ffffff 80%)",
         }}
@@ -366,19 +339,19 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
           }}
         />
 
-        <div className="site-container relative z-10 max-w-5xl">
+        <div className="site-container relative z-10 max-w-6xl">
           
           {/* Breadcrumb Navigation */}
-          <nav aria-label="Breadcrumb" className="mb-3.5">
-            <ol className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+          <nav aria-label="Breadcrumb" className="mb-7">
+            <ol className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
               <li>
-                <a href="/" className="hover:text-(--accent) transition-colors">
+                <a href="/" className="rounded-sm transition-colors hover:text-(--accent) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)">
                   Home
                 </a>
               </li>
               <li aria-hidden="true" className="text-slate-300">›</li>
               <li>
-                <a href="/services" className="hover:text-(--accent) transition-colors">
+                <a href="/services" className="rounded-sm transition-colors hover:text-(--accent) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)">
                   Services
                 </a>
               </li>
@@ -389,43 +362,47 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
             </ol>
           </nav>
 
-          <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-12 lg:gap-8">
+          <div className="grid grid-cols-1 items-center gap-9 lg:grid-cols-12 lg:gap-14">
             
             {/* Left Column: Hero Text (~58%) */}
             <div className="lg:col-span-7">
               <ScrollReveal delay={50}>
                 
                 {/* Pill Category Badge */}
-                <div className="inline-flex items-center rounded-full px-3 py-0.5 text-[10px] sm:text-[10.5px] font-bold uppercase tracking-wider shadow-2xs"
+                <div className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] shadow-2xs sm:text-[11px]"
                   style={{
                     backgroundColor: themeColors.badgeBg,
                     color: themeColors.badgeText,
+                    borderColor: themeColors.accentSoftBorder,
                   }}
                 >
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--accent)" }} />
                   {service.type === "lab" ? "Genetic Analysis Service" : "Computational Service"}
                 </div>
 
                 {/* Main Heading (Only 1 H1 on page) */}
                 <h1 
                   id="service-hero-title"
-                  className="mt-2.5 font-['Poppins',sans-serif] text-2xl font-bold tracking-tight text-[#0c2b48] sm:text-3xl lg:text-[34px] leading-tight"
+                  className="mt-4 max-w-3xl font-['Poppins',sans-serif] text-3xl font-bold tracking-tight text-[#0c2b48] leading-[1.12] sm:text-4xl lg:text-[48px]"
                 >
                   {service.name}
                 </h1>
 
                 {/* Subtitle / Tagline */}
-                <p className="mt-2 text-xs sm:text-[14px] text-slate-600 leading-normal max-w-lg font-normal">
-                  {service.tagline}
-                </p>
+                {(service.tagline || service.description) && (
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+                    {service.tagline || service.description}
+                  </p>
+                )}
 
                 {/* Primary CTA Button */}
-                <div className="mt-5 flex flex-wrap items-center gap-3">
+                <div className="mt-7 flex flex-wrap items-center gap-3">
                   <Button
                     href={`/contact?service=${service.slug}`}
-                    className="min-h-9 px-5 py-2 text-xs sm:text-[13px] font-bold shadow-xs"
+                    className="min-h-12 rounded-xl px-6 py-3 text-sm font-bold shadow-md transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                   >
                     Request this service
-                    <ArrowRight className="ml-1.5 h-3.5 w-3.5" aria-hidden="true" />
+                    <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
                   </Button>
                 </div>
 
@@ -433,23 +410,23 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
             </div>
 
             {/* Right Column: Hero Image Card (~42%) */}
-            <div className="lg:col-span-5 flex justify-center">
+            <div className="lg:col-span-5 flex justify-center lg:justify-end">
               <ScrollReveal delay={120}>
-                <div className="relative mx-auto w-full max-w-90 sm:max-w-97.5">
+                <div className="relative mx-auto w-full max-w-120">
                   <div 
                     aria-hidden="true" 
-                    className="absolute -inset-1.5 rounded-2xl blur-lg opacity-25 pointer-events-none"
+                    className="absolute -inset-3 rounded-[2rem] blur-2xl opacity-20 pointer-events-none"
                     style={{ backgroundColor: themeColors.accent }}
                   />
                   
-                  <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-slate-200/90 bg-white p-2 shadow-[0_10px_28px_rgba(12,43,72,0.1)] transition-all duration-300 hover:shadow-[0_14px_36px_rgba(12,43,72,0.14)]">
-                    <div className="relative aspect-16/10 w-full overflow-hidden rounded-lg sm:rounded-xl bg-slate-100">
+                  <div className="relative overflow-hidden rounded-2xl border border-white/80 bg-white/80 p-2.5 shadow-[0_24px_70px_rgba(12,43,72,0.16)] backdrop-blur transition-all duration-300 hover:shadow-[0_28px_80px_rgba(12,43,72,0.2)] sm:rounded-3xl sm:p-3">
+                    <div className="relative aspect-4/3 w-full overflow-hidden rounded-xl bg-slate-100 sm:rounded-2xl">
                       <img
-                        src={service.image}
+                        src={service.image || fallbackServiceImage}
                         alt={service.imageAlt || service.name}
                         width={service.width}
                         height={service.height}
-                        className={`h-full w-full object-cover ${service.slug === "library-generation" ? "object-[center_top]" : "object-center"} transition-transform duration-700 hover:scale-105`}
+                        className={`h-full w-full object-cover ${service.slug === "library-generation" ? "object-[center_top]" : "object-center"} transition-transform duration-700 hover:scale-[1.03]`}
                         loading="eager"
                         fetchPriority="high"
                       />
@@ -467,23 +444,23 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
       {(quickFacts.length > 0 || service.requisitionPdf) && (
         <section 
           aria-label="Service Quick Facts" 
-          className="border-b border-slate-200/80 bg-slate-50/70 py-4 sm:py-5"
+          className="border-b border-slate-200/80 bg-slate-50/80 py-6 sm:py-7"
         >
-          <div className="site-container max-w-5xl">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="site-container max-w-6xl">
+            <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
               
               {/* Up to 3 Quick Facts Cards */}
               {quickFacts.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 flex-1">
+                <div className="grid flex-1 grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
                   {quickFacts.map((fact, index) => {
                     const FactIcon = fact.icon;
                     return (
                       <div
                         key={index}
-                        className="flex items-start gap-3 rounded-xl border border-slate-200/80 bg-white p-3 sm:p-3.5 shadow-2xs"
+                        className="flex items-start gap-3 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_6px_20px_rgba(12,43,72,0.04)] transition-shadow hover:shadow-[0_10px_28px_rgba(12,43,72,0.08)]"
                       >
                         <div
-                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg mt-0.5"
+                          className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                           style={{
                             backgroundColor: themeColors.accentSoftBg,
                             color: "var(--accent)",
@@ -492,10 +469,10 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                           <FactIcon className="h-4 w-4 stroke-2" aria-hidden="true" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <span className="block text-[10px] sm:text-[10.5px] font-bold uppercase tracking-wider text-slate-400">
+                          <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">
                             {fact.label}
                           </span>
-                          <span className="block text-xs sm:text-[12.5px] font-semibold text-[#0c2b48] leading-snug">
+                          <span className="mt-1 block text-sm font-semibold leading-snug text-[#0c2b48]">
                             {fact.value}
                           </span>
                         </div>
@@ -512,7 +489,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                   download
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-white px-4 py-2.5 text-xs sm:text-[13px] font-bold text-[#0c2b48] shadow-2xs hover:border-(--accent) hover:text-(--accent) hover:bg-slate-50 transition-all shrink-0 self-start md:self-center"
+                  className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-[#0c2b48] shadow-sm transition-all hover:-translate-y-0.5 hover:border-(--accent) hover:text-(--accent) hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) md:self-center sm:text-[13px]"
                 >
                   <FileDown className="h-4 w-4" style={{ color: "var(--accent)" }} aria-hidden="true" />
                   <span>Download requisition form</span>
@@ -526,22 +503,22 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
 
       {/* ================= 3. STICKY IN-PAGE NAVIGATION ================= */}
       <div 
-        className="sticky top-18 sm:top-19 lg:top-21 z-30 border-b border-slate-200/90 bg-white/95 backdrop-blur-md shadow-2xs"
+        className="sticky top-18 sm:top-19 lg:top-21 z-30 border-b border-slate-200/80 bg-white/90 shadow-sm backdrop-blur-xl"
       >
-        <div className="site-container max-w-5xl">
-          <nav aria-label="Service sections navigation" className="overflow-x-auto no-scrollbar py-2.5">
-            <ul className="flex items-center gap-1.5 sm:gap-2 min-w-max">
-              {navSections.map((item) => {
+        <div className="site-container max-w-6xl">
+          <nav aria-label="Service sections navigation" className="no-scrollbar overflow-x-auto py-3">
+            <ul className="flex min-w-max items-center gap-2">
+              {SERVICE_NAV_SECTIONS.map((item) => {
                 const isActive = activeNav === item.id;
                 return (
                   <li key={item.id}>
                     <a
                       href={`#${item.id}`}
                       onClick={(e) => scrollToSection(e, item.id)}
-                      className={`inline-flex items-center rounded-lg px-3.5 py-1.5 text-xs sm:text-[13px] font-semibold transition-all select-none ${
+                      className={`inline-flex min-h-10 items-center rounded-xl px-4 text-xs font-semibold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) sm:text-[13px] ${
                         isActive
-                          ? "text-white shadow-2xs"
-                          : "text-slate-600 hover:text-[#0c2b48] hover:bg-slate-100"
+                          ? "text-white shadow-sm"
+                          : "text-slate-600 hover:bg-slate-100 hover:text-[#0c2b48]"
                       }`}
                       style={
                         isActive
@@ -563,20 +540,23 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
       <section 
         id="about" 
         aria-labelledby="service-about-heading" 
-        className="scroll-mt-36 py-8 sm:py-10 bg-white"
+        className="scroll-mt-36 bg-white py-12 sm:py-16"
       >
-        <div className="site-container max-w-5xl">
+        <div className="site-container max-w-6xl">
           <ScrollReveal>
-            <div>
+            <div className="max-w-4xl">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-(--accent)">
+                Service overview
+              </p>
               <h2 
                 id="service-about-heading"
-                className="font-['Poppins',sans-serif] text-xl sm:text-2xl font-bold text-[#0c2b48]"
+                className="font-['Poppins',sans-serif] text-2xl font-bold tracking-tight text-[#0c2b48] sm:text-3xl"
               >
                 About {service.name}
               </h2>
 
               {/* Overview Paragraphs */}
-              <div className="mt-3.5 space-y-2.5 text-xs sm:text-[13.5px] leading-relaxed text-slate-600 max-w-4xl">
+              <div className="mt-4 space-y-3 text-sm leading-7 text-slate-600 sm:text-[15px]">
                 {service.overview.map((paragraph, index) => (
                   <p key={index} className="leading-relaxed">
                     {paragraph}
@@ -587,35 +567,47 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
 
             {/* Sub-Services if applicable (e.g. Genetic Counselling) */}
             {service.subServices && service.subServices.length > 0 && (
-              <div className="mt-8 border-t border-slate-100 pt-7">
-                <h3 className="font-['Poppins',sans-serif] text-sm sm:text-base font-bold text-[#0c2b48] mb-4">
+              <div className="mt-10 border-t border-slate-200/80 pt-8">
+                <div className="mb-5">
+                  <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-(--accent)">
+                    Explore this service
+                  </p>
+                  <h3 className="font-['Poppins',sans-serif] text-lg font-bold text-[#0c2b48] sm:text-xl">
                   Specialized Clinical Focus Areas
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
+                  </h3>
+                </div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 sm:gap-4">
                   {service.subServices.map((sub) => {
                     return (
                       <a
                         key={sub.id}
-                        href={`/contact?service=genetic-counseling-${sub.id}`}
-                        className="group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-[0_2px_10px_rgba(12,43,72,0.04)] hover:shadow-lg hover:border-(--accent) hover:-translate-y-1 transition-all duration-300"
+                        href={`/contact?service=${service.slug}-${sub.id}`}
+                        className="group flex min-h-56 flex-col items-start rounded-2xl border border-slate-200/90 bg-white p-5 text-left shadow-[0_6px_24px_rgba(12,43,72,0.045)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_18px_40px_rgba(12,43,72,0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) sm:p-6"
                       >
-                        <div className="flex h-14 w-14 items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                        <div
+                          className="flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-105"
+                          style={{
+                            backgroundColor: themeColors.accentSoftBg,
+                            color: "var(--accent)",
+                          }}
+                        >
                           <SubServiceIcon
                             id={sub.id}
-                            className="h-11 w-11 transition-colors duration-300"
-                            style={{ color: "var(--accent)" }}
+                            className="h-8 w-8 transition-colors duration-300"
                           />
                         </div>
 
-                        <h4 className="mt-3 mb-3.5 font-outfit text-xs sm:text-sm font-bold text-[#0c2b48] leading-tight min-h-8 flex items-center justify-center">
+                        <h4 className="mt-4 font-outfit text-sm font-bold leading-snug text-[#0c2b48] sm:text-base">
                           {sub.label}
                         </h4>
-
-                        <span
-                          className="mt-auto flex h-7 w-7 items-center justify-center rounded-full text-white shadow-xs transition-transform duration-300 group-hover:scale-115"
-                          style={{ backgroundColor: themeAccentColor }}
-                        >
-                          <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+                        {sub.description && (
+                          <p className="mt-2 text-xs leading-5 text-slate-500">
+                            {sub.description}
+                          </p>
+                        )}
+                        <span className="mt-auto inline-flex items-center gap-2 pt-5 text-xs font-bold text-(--accent)">
+                          Request this focus area
+                          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                         </span>
                       </a>
                     );
@@ -626,8 +618,8 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
 
             {/* Features in a 2-Column Grid */}
             {service.features && service.features.length > 0 && (
-              <div className="mt-8 border-t border-slate-100 pt-7">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-3.5">
+              <div className="mt-10 border-t border-slate-200/80 pt-8">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   {service.features.map((feature, index) => {
                     const parts = feature.split(" - ");
                     const title = parts[0];
@@ -636,7 +628,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                     return (
                       <div 
                         key={index}
-                        className="group flex items-start gap-3 rounded-xl border border-slate-200/90 bg-slate-50/60 p-3.5 sm:p-4 shadow-2xs transition-all duration-300 hover:shadow-sm hover:border-slate-300"
+                        className="group flex items-start gap-3 rounded-2xl border border-slate-200/90 bg-slate-50/60 p-5 shadow-[0_4px_16px_rgba(12,43,72,0.035)] transition-all duration-300 hover:border-slate-300 hover:bg-white hover:shadow-md"
                       >
                         <span 
                           className="flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-full mt-0.5 shadow-2xs transition-transform duration-300 group-hover:scale-105"
@@ -668,81 +660,34 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
         </div>
       </section>
 
-      {/* ================= 5. APPLICATIONS ================= */}
-      <section 
-        id="applications" 
-        aria-labelledby="service-applications-heading" 
-        className="scroll-mt-36 py-8 sm:py-10 border-t border-slate-200/60 bg-slate-50/50"
-      >
-        <div className="site-container max-w-5xl">
-          <ScrollReveal>
-            <div>
-              <h2 
-                id="service-applications-heading"
-                className="font-['Poppins',sans-serif] text-xl sm:text-2xl font-bold text-[#0c2b48]"
-              >
-                Applications
-              </h2>
-            </div>
-
-            {/* 4 Cards in Responsive Grid */}
-            <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5">
-              {service.applications.map((app, index) => {
-                const IconComp = appIcons[index % appIcons.length];
-
-                return (
-                  <div 
-                    key={index}
-                    className="group flex flex-col h-full rounded-xl border border-slate-200/80 bg-white p-4 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(12,43,72,0.06)]"
-                  >
-                    <div 
-                      className="flex h-8 w-8 items-center justify-center rounded-lg mb-3 transition-transform duration-300 group-hover:scale-105"
-                      style={{
-                        backgroundColor: themeColors.accentSoftBg,
-                        color: "var(--accent)",
-                      }}
-                    >
-                      <IconComp className="h-4 w-4 stroke-2" aria-hidden="true" />
-                    </div>
-                    <h3 className="font-['Poppins',sans-serif] text-xs sm:text-sm font-bold text-[#0c2b48] leading-snug">
-                      {app.title}
-                    </h3>
-                    <p className="mt-1 text-[11.5px] sm:text-xs leading-relaxed text-slate-600 flex-1">
-                      {app.description}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* ================= 6. REQUIREMENTS & DELIVERABLES ================= */}
+      {/* ================= 5. REQUIREMENTS & DELIVERABLES ================= */}
       <section 
         id="requirements" 
         aria-labelledby="requirements-deliverables-heading" 
-        className="scroll-mt-36 py-8 sm:py-10 border-t border-slate-200/60 bg-white"
+        className="scroll-mt-36 border-t border-slate-200/70 bg-slate-50/60 py-12 sm:py-16"
       >
-        <div className="site-container max-w-5xl">
+        <div className="site-container max-w-6xl">
           <ScrollReveal>
-            <div>
+            <div className="mb-6">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-(--accent)">
+                Before you get started
+              </p>
               <h2 
                 id="requirements-deliverables-heading"
-                className="font-['Poppins',sans-serif] text-xl sm:text-2xl font-bold text-[#0c2b48]"
+                className="font-['Poppins',sans-serif] text-2xl font-bold tracking-tight text-[#0c2b48] sm:text-3xl"
               >
                 Requirements &amp; Deliverables
               </h2>
             </div>
 
-            <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+            <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2">
               
               {/* Left Card: Sample Requirements */}
-              <div className="rounded-xl border border-slate-200/90 bg-white p-4.5 sm:p-5 shadow-2xs flex flex-col justify-between transition-all duration-300 hover:shadow-md">
+              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_8px_28px_rgba(12,43,72,0.05)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg sm:p-6">
                 <div>
                   <div className="flex items-center gap-3 mb-3.5">
                     <div 
-                      className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-lg"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                       style={{
                         backgroundColor: themeColors.accentSoftBg,
                         color: "var(--accent)",
@@ -750,12 +695,12 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                     >
                       <FlaskConical className="h-4 w-4 stroke-2" aria-hidden="true" />
                     </div>
-                    <h3 className="font-['Poppins',sans-serif] text-xs sm:text-sm font-bold text-[#0c2b48]">
+                    <h3 className="font-['Poppins',sans-serif] text-sm font-bold text-[#0c2b48] sm:text-base">
                       {service.requirementsLabel || "Sample Requirements"}
                     </h3>
                   </div>
 
-                  <ul className="space-y-2 text-xs sm:text-[12.5px] text-slate-700">
+                  <ul className="space-y-3 text-sm leading-6 text-slate-700">
                     {service.requirements.map((req, index) => {
                       const cleanReq = cleanText(req);
                       if (!cleanReq) return null;
@@ -776,11 +721,11 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
               </div>
 
               {/* Right Card: Deliverables */}
-              <div className="rounded-xl border border-slate-200/90 bg-white p-4.5 sm:p-5 shadow-2xs flex flex-col justify-between transition-all duration-300 hover:shadow-md">
+              <div className="flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_8px_28px_rgba(12,43,72,0.05)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg sm:p-6">
                 <div>
                   <div className="flex items-center gap-3 mb-3.5">
                     <div 
-                      className="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-lg"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                       style={{
                         backgroundColor: themeColors.accentSoftBg,
                         color: "var(--accent)",
@@ -788,12 +733,12 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                     >
                       <FileCheck className="h-4 w-4 stroke-2" aria-hidden="true" />
                     </div>
-                    <h3 className="font-['Poppins',sans-serif] text-xs sm:text-sm font-bold text-[#0c2b48]">
+                    <h3 className="font-['Poppins',sans-serif] text-sm font-bold text-[#0c2b48] sm:text-base">
                       Deliverables
                     </h3>
                   </div>
 
-                  <ul className="space-y-2 text-xs sm:text-[12.5px] text-slate-700">
+                  <ul className="space-y-3 text-sm leading-6 text-slate-700">
                     {service.deliverables.map((deliv, index) => (
                       <li key={index} className="flex items-start gap-2">
                         <Check 
@@ -811,7 +756,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                 {/* Soft highlighted callout note */}
                 {service.deliverablesNote && (
                   <div 
-                    className="mt-4 rounded-lg border p-3 text-[11px] sm:text-xs font-medium leading-relaxed flex items-start gap-2.5"
+                    className="mt-5 flex items-start gap-2.5 rounded-xl border p-4 text-xs font-medium leading-6 sm:text-sm"
                     style={{
                       borderColor: themeColors.accentSoftBorder,
                       backgroundColor: themeColors.accentSoftBg,
@@ -828,8 +773,8 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
 
             {/* Optional Comparison Table */}
             {service.comparisonTable && (
-              <div className="mt-5 rounded-xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-2xs">
-                <h3 className="font-['Poppins',sans-serif] text-sm sm:text-base font-bold text-[#0c2b48] mb-1.5">
+              <div className="mt-5 overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm sm:p-6">
+                <h3 className="mb-1.5 font-['Poppins',sans-serif] text-base font-bold text-[#0c2b48] sm:text-lg">
                   Whole Exome Sequencing (WES) vs. Whole Genome Sequencing (WGS)
                 </h3>
                 <p className="text-[11.5px] sm:text-xs text-slate-600 mb-3.5">
@@ -872,89 +817,29 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
         </div>
       </section>
 
-      {/* ================= 7. FREQUENTLY ASKED QUESTIONS (FAQ) ================= */}
-      <section 
-        id="faq" 
-        aria-labelledby="service-faq-heading" 
-        className="scroll-mt-36 py-8 sm:py-10 bg-slate-50/50 border-t border-slate-200/60"
-      >
-        <div className="site-container max-w-3xl">
-          <ScrollReveal>
-            <div>
-              <h2 
-                id="service-faq-heading"
-                className="font-['Poppins',sans-serif] text-xl sm:text-2xl font-bold text-[#0c2b48]"
-              >
-                Frequently Asked Questions
-              </h2>
-            </div>
-
-            <div className="mt-5 space-y-2.5">
-              {service.faq.map((item, index) => {
-                const isOpen = openFaq === index;
-                const questionId = `faq-q-${index}`;
-                const answerId = `faq-a-${index}`;
-
-                return (
-                  <div 
-                    key={index}
-                    className="rounded-xl border border-slate-200/90 overflow-hidden bg-white shadow-2xs transition-all duration-200"
-                  >
-                    <button
-                      id={questionId}
-                      type="button"
-                      aria-expanded={isOpen}
-                      aria-controls={answerId}
-                      onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                      className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left font-['Poppins',sans-serif] text-xs sm:text-[13.5px] font-semibold text-[#0c2b48] hover:bg-slate-50/70 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
-                    >
-                      <span className="leading-snug">{cleanText(item.question)}</span>
-                      <span 
-                        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
-                        style={{ color: "var(--accent)" }}
-                        aria-hidden="true"
-                      >
-                        {isOpen ? <Minus className="h-3.5 w-3.5" strokeWidth={2.5} /> : <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />}
-                      </span>
-                    </button>
-
-                    {isOpen && (
-                      <div 
-                        id={answerId}
-                        role="region"
-                        aria-labelledby={questionId}
-                        className="px-4 pb-3.5 pt-1 text-[11.5px] sm:text-xs text-slate-600 leading-relaxed border-t border-slate-100"
-                      >
-                        {cleanText(item.answer)}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* ================= 8. RELATED SERVICES (COMPACT CARDS) ================= */}
+      {/* ================= 6. RELATED SERVICES (COMPACT CARDS) ================= */}
+      {relatedServices.length > 0 && (
       <section 
         aria-labelledby="related-services-heading" 
-        className="py-8 sm:py-10 border-t border-slate-200/60 bg-white"
+        className="border-t border-slate-200/70 bg-white py-12 sm:py-16"
       >
-        <div className="site-container max-w-5xl">
+        <div className="site-container max-w-6xl">
           <ScrollReveal>
-            <div className="flex flex-wrap items-end justify-between gap-3 mb-5">
+            <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
               <div>
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-(--accent)">
+                  Discover more
+                </p>
                 <h2 
                   id="related-services-heading"
-                  className="font-['Poppins',sans-serif] text-xl sm:text-2xl font-bold text-[#0c2b48]"
+                  className="font-['Poppins',sans-serif] text-2xl font-bold tracking-tight text-[#0c2b48] sm:text-3xl"
                 >
                   Related Services
                 </h2>
               </div>
               <a 
                 href="/services" 
-                className="inline-flex items-center gap-1.5 text-xs font-bold transition-colors"
+                className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 px-4 text-xs font-bold transition-all hover:-translate-y-0.5 hover:border-(--accent) hover:bg-(--accent-soft) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                 style={{ color: "var(--accent)" }}
               >
                 View all services <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -962,16 +847,16 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
             </div>
 
             {/* Compact Cards: 3 per row on desktop, stacked on mobile */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 items-stretch">
+            <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {relatedServices.map((rel) => {
                 return (
                   <a
                     key={rel.slug}
                     href={`/services/${rel.slug}`}
-                    className="group flex items-center gap-3 rounded-xl border border-slate-200/90 bg-white p-3 shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+                    className="group flex items-center gap-4 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_6px_22px_rgba(12,43,72,0.045)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_16px_38px_rgba(12,43,72,0.11)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                   >
                     {/* Small thumbnail image */}
-                    <div className="relative h-16 w-20 sm:h-18 sm:w-22 shrink-0 overflow-hidden rounded-lg bg-slate-900">
+                    <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-xl bg-slate-900">
                       <img
                         src={rel.image}
                         alt={rel.imageAlt || rel.name}
@@ -1007,39 +892,43 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
           </ScrollReveal>
         </div>
       </section>
-
-      {/* ================= 9. STICKY "REQUEST THIS SERVICE" CTA ================= */}
-      {showStickyCta && (
-        <>
-          {/* Mobile Bottom Bar (Fixed across screen width) */}
-          <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2.5 shadow-lg flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom duration-200 sm:hidden">
-            <div className="min-w-0 flex-1">
-              <span className="block truncate text-xs font-bold text-[#0c2b48]">
-                {service.name}
-              </span>
-              <span className="block text-[10.5px] text-slate-500">
-                {service.type === "lab" ? "Clinical Lab Service" : "Computational Service"}
-              </span>
-            </div>
-            <Button
-              href={`/contact?service=${service.slug}`}
-              className="shrink-0 px-4 py-2 text-xs font-bold shadow-xs"
-            >
-              Request service
-              <ArrowRight className="ml-1 h-3 w-3" aria-hidden="true" />
-            </Button>
-          </div>
-
-          {/* Desktop Floating Pill Button (Bottom Right) */}
-          <Button
-            href={`/contact?service=${service.slug}`}
-            className="hidden sm:inline-flex fixed bottom-6 right-6 z-40 px-5 py-2.5 text-xs sm:text-sm font-bold shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-300"
-          >
-            <span>Request this service</span>
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Button>
-        </>
       )}
+
+      {/* ================= 7. FINAL "REQUEST THIS SERVICE" CTA ================= */}
+      <section
+        aria-label={`Request ${service.name}`}
+        className="border-t border-slate-200/70 bg-slate-50 py-10 sm:py-14"
+      >
+        <div className="site-container max-w-6xl">
+          <div
+            className="flex flex-col items-start justify-between gap-5 rounded-2xl border p-6 shadow-sm sm:flex-row sm:items-center sm:p-8"
+            style={{
+              borderColor: themeColors.accentSoftBorder,
+              backgroundColor: themeColors.accentSoftBg,
+            }}
+          >
+            <div>
+              <h2 className="font-['Poppins',sans-serif] text-xl font-bold text-[#0c2b48] sm:text-2xl">
+                Ready to request this service?
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Contact us to get started with {service.name}.
+              </p>
+            </div>
+            <a
+              href={`/contact?service=${service.slug}`}
+              className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold shadow-md transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+              style={{
+                backgroundColor: "var(--accent-btn-bg, var(--accent))",
+                color: "var(--accent-btn-text, white)",
+              }}
+            >
+              Request this service
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      </section>
 
     </div>
   );
