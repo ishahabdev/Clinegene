@@ -14,6 +14,11 @@ jobs:
       run:
         working-directory: Frontend
 
+    env:
+      VITE_ADMIN_BASE: /opclin-23410
+      VITE_SUPABASE_URL: https://vardexszujcvrepiguvu.supabase.co
+      VITE_SUPABASE_ANON_KEY: sb_publishable_BLGqrC-bRgz9_3jnsxTHdQ_xx8OBZY5
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,8 +36,10 @@ jobs:
       - name: Run Frontend Source Lint
         run: npm run lint
 
+      - name: Check env (temporary)
+        run: |
+          [ -n "$VITE_SUPABASE_URL" ] && echo "URL is set" || echo "URL is EMPTY"
+          [ -n "$VITE_SUPABASE_ANON_KEY" ] && echo "KEY is set" || echo "KEY is EMPTY"
+
       - name: Build and Prerender SSG
         run: npm run build
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
