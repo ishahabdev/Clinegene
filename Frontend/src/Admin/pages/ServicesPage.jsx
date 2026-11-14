@@ -394,8 +394,11 @@ export default function ServicesPage() {
     if (!deleteId) return;
     try {
       setIsDeleting(true);
-      await deleteService(deleteId);
-      showToast("Service removed successfully.");
+      const result = await deleteService(deleteId);
+      showToast(
+        result.cleanupWarning ||
+          "Service and its sub-services removed successfully."
+      );
       setDeleteId(null);
       await loadServicesList();
     } catch (err) {

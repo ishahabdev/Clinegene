@@ -391,7 +391,7 @@ export default function HeaderNav({ activePage }) {
             }`}
           >
             <div
-              className={`${link.label === "Services" ? "w-[min(90vw,720px)] overflow-visible p-0" : link.groups ? "grid w-[min(90vw,640px)] grid-cols-2 gap-4 p-4" : "w-60 p-2"} rounded-2xl border shadow-[0_12px_32px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5`}
+              className={`${link.label === "Services" ? "w-[min(90vw,720px)] overflow-visible p-0" : link.groups ? "grid w-[min(90vw,640px)] grid-cols-2 gap-4 p-4" : "w-60 p-2"} rounded-2xl border bg-white shadow-[0_12px_32px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/5`}
               style={{
                 borderColor:
                   link.label === "Services"

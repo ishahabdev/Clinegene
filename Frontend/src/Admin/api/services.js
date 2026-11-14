@@ -1,5 +1,6 @@
 import { supabase } from "../../lib/supabase.js";
 import { processAndOptimizeImage } from "../../lib/imageOptimizer.js";
+import { removeSubServiceImages } from "./subServices.js";
 
 /**
  * Generate URL-friendly slug from text
@@ -289,13 +290,34 @@ export async function deleteService(id) {
     throw new Error("Supabase client is not initialized.");
   }
 
+  const { data: subServices, error: subServicesError } = await supabase
+    .from("sub_services")
+    .select("image_url")
+    .eq("service_id", id);
+
+  if (subServicesError) {
+    throw subServicesError;
+  }
+
   const { error } = await supabase.from("services").delete().eq("id", id);
 
   if (error) {
     throw error;
   }
 
-  return { success: true, id };
+  let cleanupWarning = "";
+  const imageUrls = (subServices || []).map((subService) => subService.image_url).filter(Boolean);
+  if (imageUrls.length > 0) {
+    try {
+      await removeSubServiceImages(imageUrls);
+    } catch (cleanupError) {
+      console.error("[Services] Failed to remove deleted sub-service images:", cleanupError);
+      cleanupWarning =
+        "The service and its sub-services were deleted, but some sub-service images could not be removed.";
+    }
+  }
+
+  return { success: true, id, cleanupWarning };
 }
 
 /**

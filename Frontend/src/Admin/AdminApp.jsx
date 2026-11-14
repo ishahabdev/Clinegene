@@ -10,6 +10,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import TeamPage from "./pages/TeamPage.jsx";
 import ServicesPage from "./pages/ServicesPage.jsx";
+import SubServicesPage from "./pages/SubServicesPage.jsx";
 import GalleryPage from "./pages/GalleryPage.jsx";
 import BlogPage from "./pages/BlogPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
@@ -138,6 +139,8 @@ function AdminRoutes() {
     pageContent = <TeamPage />;
   } else if (normalized === adminPath("/services")) {
     pageContent = <ServicesPage />;
+  } else if (normalized === adminPath("/sub-services")) {
+    pageContent = <SubServicesPage />;
   } else if (normalized === adminPath("/research")) {
     pageContent = <ResearchPage />;
   } else if (normalized === adminPath("/career") || normalized === adminPath("/jobs")) {

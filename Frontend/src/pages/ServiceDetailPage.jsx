@@ -566,22 +566,23 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
             </div>
 
             {/* Sub-Services if applicable (e.g. Genetic Counselling) */}
-            {service.subServices && service.subServices.length > 0 && (
+            {Array.isArray(service.subServices) && (
               <div className="mt-10 border-t border-slate-200/80 pt-8">
                 <div className="mb-5">
                   <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-(--accent)">
-                    Explore this service
+                    Available options
                   </p>
                   <h3 className="font-['Poppins',sans-serif] text-lg font-bold text-[#0c2b48] sm:text-xl">
-                  Specialized Clinical Focus Areas
+                    Sub-Services
                   </h3>
                 </div>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 sm:gap-4">
+                {service.subServices.length > 0 ? (
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 sm:gap-4">
                   {service.subServices.map((sub) => {
                     return (
                       <a
                         key={sub.id}
-                        href={`/contact?service=${service.slug}-${sub.id}`}
+                        href={`/contact?service=${service.slug}-${sub.slug || sub.id}`}
                         className="group flex min-h-56 flex-col items-start rounded-2xl border border-slate-200/90 bg-white p-5 text-left shadow-[0_6px_24px_rgba(12,43,72,0.045)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_18px_40px_rgba(12,43,72,0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) sm:p-6"
                       >
                         <div
@@ -591,10 +592,19 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                             color: "var(--accent)",
                           }}
                         >
-                          <SubServiceIcon
-                            id={sub.id}
-                            className="h-8 w-8 transition-colors duration-300"
-                          />
+                          {sub.image_url ? (
+                            <img
+                              src={sub.image_url}
+                              alt=""
+                              loading="lazy"
+                              className="h-12 w-12 rounded-2xl object-cover"
+                            />
+                          ) : (
+                            <SubServiceIcon
+                              id={sub.id}
+                              className="h-8 w-8 transition-colors duration-300"
+                            />
+                          )}
                         </div>
 
                         <h4 className="mt-4 font-outfit text-sm font-bold leading-snug text-[#0c2b48] sm:text-base">
@@ -605,6 +615,9 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                             {sub.description}
                           </p>
                         )}
+                        {sub.duration && (
+                          <p className="mt-2 text-xs text-slate-500">Duration: {sub.duration}</p>
+                        )}
                         <span className="mt-auto inline-flex items-center gap-2 pt-5 text-xs font-bold text-(--accent)">
                           Request this focus area
                           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
@@ -612,7 +625,12 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                       </a>
                     );
                   })}
-                </div>
+                  </div>
+                ) : (
+                  <p className="rounded-xl border border-dashed border-slate-200 px-4 py-6 text-sm text-slate-500">
+                    Sub-services for this service will be listed here when available.
+                  </p>
+                )}
               </div>
             )}
 

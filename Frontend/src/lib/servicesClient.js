@@ -104,6 +104,17 @@ export function mapServiceFromDb(row) {
 
   const isGeneticCounseling =
     row.slug === "genetic-counseling" || row.slug === "genetic-counselling";
+  const subServices = Array.isArray(row.sub_services)
+    ? row.sub_services
+        .filter((item) => item.is_active !== false)
+        .map((item) => ({
+          ...item,
+          id: item.slug || item.id,
+          label: item.name || "",
+        }))
+    : isGeneticCounseling
+      ? GENETIC_COUNSELING_SUBSERVICES
+      : null;
 
   // Requisition form / PDF
   let requisitionPdf = row.requisition_form_url || null;
@@ -155,7 +166,7 @@ export function mapServiceFromDb(row) {
     deliverables: Array.isArray(row.deliverables) ? row.deliverables : [],
     deliverablesNote: row.deliverables_note || null,
     comparisonTable: row.comparison_table || null,
-    subServices: row.sub_services || (isGeneticCounseling ? GENETIC_COUNSELING_SUBSERVICES : null),
+    subServices,
     relatedSlugs: Array.isArray(row.related_slugs) ? row.related_slugs : (row.relatedSlugs || []),
     faq: Array.isArray(row.faq) ? row.faq : [],
   };
@@ -168,8 +179,10 @@ export async function fetchPublishedServices() {
   if (!supabase) return [];
   const { data, error } = await supabase
     .from("services")
-    .select("*")
+    .select("*, sub_services(*)")
     .eq("status", "published")
+    .eq("sub_services.is_active", true)
+    .order("sort_order", { ascending: true, referencedTable: "sub_services" })
     .order("sort_order", { ascending: true });
 
   if (error) {
@@ -191,8 +204,10 @@ export async function fetchServiceBySlug(slug) {
 
   const { data, error } = await supabase
     .from("services")
-    .select("*")
+    .select("*, sub_services(*)")
     .eq("status", "published")
+    .eq("sub_services.is_active", true)
+    .order("sort_order", { ascending: true, referencedTable: "sub_services" })
     .eq("slug", normalized)
     .maybeSingle();
 
@@ -211,8 +226,10 @@ export async function fetchServiceBySlug(slug) {
   if (normalized !== cleanSlug) {
     const { data: fallbackData } = await supabase
       .from("services")
-      .select("*")
+      .select("*, sub_services(*)")
       .eq("status", "published")
+      .eq("sub_services.is_active", true)
+      .order("sort_order", { ascending: true, referencedTable: "sub_services" })
       .eq("slug", cleanSlug)
       .maybeSingle();
 

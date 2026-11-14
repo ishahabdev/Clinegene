@@ -431,19 +431,29 @@ export default function ServicesPage({ ssrUrl }) {
                           <span>Sub Services</span>
                         </div>
 
+                        {(gc.subServices || []).length > 0 ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2.5 sm:gap-3">
                           {(gc.subServices || []).map((sub) => (
                             <a
                               key={sub.id}
-                              href={`/contact?service=genetic-counseling-${sub.id}`}
+                              href={`/contact?service=${gc.slug}-${sub.slug || sub.id}`}
                               className="group flex flex-col items-center text-center rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-[0_2px_8px_rgba(12,43,72,0.03)] hover:shadow-md hover:border-(--accent) hover:-translate-y-0.5 transition-all duration-300"
                             >
                               <div className="flex h-12 w-12 items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                                <SubServiceIcon
-                                  id={sub.id}
-                                  className="h-10 w-10 transition-colors duration-300"
-                                  style={{ color: "var(--accent)" }}
-                                />
+                                {sub.image_url ? (
+                                  <img
+                                    src={sub.image_url}
+                                    alt=""
+                                    loading="lazy"
+                                    className="h-12 w-12 rounded-xl object-cover"
+                                  />
+                                ) : (
+                                  <SubServiceIcon
+                                    id={sub.id}
+                                    className="h-10 w-10 transition-colors duration-300"
+                                    style={{ color: "var(--accent)" }}
+                                  />
+                                )}
                               </div>
 
                               <h3 className="mt-2.5 mb-3 font-outfit text-xs sm:text-[12.5px] font-bold text-[#0c2b48] leading-tight min-h-7 flex items-center justify-center">
@@ -459,6 +469,11 @@ export default function ServicesPage({ ssrUrl }) {
                             </a>
                           ))}
                         </div>
+                        ) : (
+                          <p className="rounded-xl border border-dashed border-slate-200 px-4 py-6 text-sm text-slate-500">
+                            Sub-services will appear here when available.
+                          </p>
+                        )}
                       </div>
 
                     </div>
@@ -473,7 +488,7 @@ export default function ServicesPage({ ssrUrl }) {
                     !hasFeaturedGeneticCounseling ||
                     (s.slug !== "genetic-counseling" && s.slug !== "genetic-counselling")
                   )
-                  .map(({ slug, name, description, Icon, image, imageAlt, width, height }, index) => {
+                  .map(({ slug, name, description, Icon, image, imageAlt, width, height, subServices = [] }, index) => {
                     const serviceUrl = `/services/${slug}`;
 
                     return (
@@ -510,6 +525,11 @@ export default function ServicesPage({ ssrUrl }) {
                           </span>
                           <h3 className="font-outfit text-[15px] font-bold leading-snug text-[#0c2b48] group-hover:text-(--accent-dark) transition-colors">{name}</h3>
                           <p className="mt-1.5 font-inter text-xs leading-normal text-[#4a6e8b]">{description}</p>
+                          {subServices?.length > 0 && (
+                            <p className="mt-2 line-clamp-2 text-[10px] leading-relaxed text-slate-500">
+                              Options: {subServices.slice(0, 3).map((sub) => sub.label).join(", ")}
+                            </p>
+                          )}
                           <span
                             className="mt-auto inline-flex items-center gap-1.5 pt-3 font-inter text-[11px] font-bold transition-colors text-[#0c2b48] group-hover:text-(--accent)"
                           >
