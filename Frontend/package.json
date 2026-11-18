@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build:client": "vite build",
-    "build:server": "vite build --ssr src/entry-server.jsx --outDir dist-ssr",
-    "build:prerender": "node prerender.js",
-    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node prerender.js",
+    "dev": "node init && vite",
+    "build:client": "node init && vite build",
+    "build:server": "node init && vite build --ssr src/entry-server.jsx --outDir dist-ssr",
+    "build:prerender": "node init && node prerender.js",
+    "build": "node init && vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node prerender.js",
     "lint": "node scripts/lint.js",
     "optimize-images": "node scripts/optimize-images.mjs",
     "preview": "vite preview"

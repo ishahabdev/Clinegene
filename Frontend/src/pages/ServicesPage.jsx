@@ -25,18 +25,16 @@ const ACADEMIC_SERVICE_PATTERNS = [
 ];
 
 function getServiceCategory(service) {
-  const category = String(service.category || "").toLowerCase();
+  const category = String(service?.category || "").toLowerCase();
   if (category.includes("academic")) return "academic";
+  if (category.includes("clinical") && !category.includes("diagnostic")) return "clinical";
 
-  const identity = `${service.slug || ""} ${service.title || ""} ${service.name || ""}`
+  const identity = `${service?.slug || ""} ${service?.title || ""} ${service?.name || ""}`
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ");
   const matchesAcademicService = ACADEMIC_SERVICE_PATTERNS.some((pattern) =>
     pattern.test(identity)
   );
-  if (category.includes("clinical") && category !== "clinical diagnostics") {
-    return "clinical";
-  }
   return matchesAcademicService ? "academic" : "clinical";
 }
 
@@ -115,7 +113,11 @@ export default function ServicesPage({ ssrUrl }) {
     };
     updateCategoryFromUrl();
     window.addEventListener("popstate", updateCategoryFromUrl);
-    return () => window.removeEventListener("popstate", updateCategoryFromUrl);
+    window.addEventListener("hashchange", updateCategoryFromUrl);
+    return () => {
+      window.removeEventListener("popstate", updateCategoryFromUrl);
+      window.removeEventListener("hashchange", updateCategoryFromUrl);
+    };
   }, []);
 
   useEffect(() => {
@@ -145,9 +147,10 @@ export default function ServicesPage({ ssrUrl }) {
     };
   }, []);
 
-  const categorizedServices = services.filter(
-    (service) => getServiceCategory(service) === selectedCategory
-  );
+  const clinicalServices = services.filter((s) => getServiceCategory(s) === "clinical");
+  const academicServices = services.filter((s) => getServiceCategory(s) === "academic");
+  const categorizedServices = selectedCategory === "academic" ? academicServices : clinicalServices;
+
   const hasFeaturedGeneticCounseling = categorizedServices.some(
     (service) =>
       service.slug === "genetic-counseling" || service.slug === "genetic-counselling"
@@ -339,6 +342,7 @@ export default function ServicesPage({ ssrUrl }) {
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Button>
           </ScrollReveal>
+
           {/* ── Services Content (Live from Supabase) ── */}
           {loading && services.length === 0 ? (
             <div className="space-y-6 py-8">

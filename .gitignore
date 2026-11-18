@@ -16,7 +16,6 @@ coverage
 *.local
 
 # Editor directories and files
-.vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
 .idea
@@ -28,8 +27,6 @@ coverage
 *.sw?
 
 # Environment variables
-.env
-.env.local
 .env.*.local
 Frontend/.env
 Frontend/.env.local
@@ -44,3 +41,4 @@ Frontend/.env.*.local
 assets-original/
 
 Frontend/.env
+config.bat

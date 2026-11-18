@@ -104,9 +104,12 @@ export function mapServiceFromDb(row) {
 
   const isGeneticCounseling =
     row.slug === "genetic-counseling" || row.slug === "genetic-counselling";
-  const subServices = Array.isArray(row.sub_services)
+  const hasDbSubServices =
+    Array.isArray(row.sub_services) && row.sub_services.length > 0;
+  const subServices = hasDbSubServices
     ? row.sub_services
         .filter((item) => item.is_active !== false)
+        .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
         .map((item) => ({
           ...item,
           id: item.slug || item.id,
@@ -172,26 +175,83 @@ export function mapServiceFromDb(row) {
   };
 }
 
+let servicesCache = null;
+let servicesCacheTime = 0;
+const CACHE_TTL_MS = 3 * 60 * 1000; // 3 minutes
+
+/**
+ * Check if a database row represents an active / published service
+ */
+function isRowPublished(row) {
+  if (!row) return false;
+  const status = String(row.status || "").toLowerCase().trim();
+  if (!status) return true;
+  return status !== "draft" && status !== "inactive";
+}
+
 /**
  * Fetch all published services from Supabase ordered by sort_order
  */
-export async function fetchPublishedServices() {
+export async function fetchPublishedServices(forceRefresh = false) {
   if (!supabase) return [];
-  const { data, error } = await supabase
-    .from("services")
-    .select("*, sub_services(*)")
-    .eq("status", "published")
-    .eq("sub_services.is_active", true)
-    .order("sort_order", { ascending: true, referencedTable: "sub_services" })
-    .order("sort_order", { ascending: true });
 
-  if (error) {
-    if (import.meta.env.DEV) {
-      console.error("[fetchPublishedServices] Error:", error);
-    }
-    throw error;
+  // Return cached result if still fresh
+  if (!forceRefresh && servicesCache && (Date.now() - servicesCacheTime < CACHE_TTL_MS)) {
+    return servicesCache;
   }
-  return (data || []).map(mapServiceFromDb);
+
+  let rows = null;
+
+  // 1. Try querying services with embedded sub_services
+  try {
+    const { data, error } = await supabase
+      .from("services")
+      .select("*, sub_services(*)")
+      .order("sort_order", { ascending: true });
+
+    if (!error && Array.isArray(data) && data.length > 0) {
+      rows = data;
+    } else if (error && import.meta.env.DEV) {
+      console.warn("[fetchPublishedServices] Joined query returned error, trying flat query:", error);
+    }
+  } catch (err) {
+    if (import.meta.env.DEV) {
+      console.warn("[fetchPublishedServices] Joined query exception:", err);
+    }
+  }
+
+  // 2. Fallback: query flat services table without foreign table join
+  if (!rows) {
+    try {
+      const { data, error } = await supabase
+        .from("services")
+        .select("*")
+        .order("sort_order", { ascending: true });
+
+      if (!error && Array.isArray(data)) {
+        rows = data;
+      } else if (error && import.meta.env.DEV) {
+        console.error("[fetchPublishedServices] Flat query error:", error);
+      }
+    } catch (err) {
+      if (import.meta.env.DEV) {
+        console.error("[fetchPublishedServices] Flat query exception:", err);
+      }
+    }
+  }
+
+  if (!rows || rows.length === 0) {
+    return [];
+  }
+
+  // Filter out any explicitly draft or inactive services
+  const publishedRows = rows.filter(isRowPublished);
+  const mapped = publishedRows.map(mapServiceFromDb).filter(Boolean);
+
+  servicesCache = mapped;
+  servicesCacheTime = Date.now();
+
+  return mapped;
 }
 
 /**
@@ -202,40 +262,57 @@ export async function fetchServiceBySlug(slug) {
   const cleanSlug = slug.trim().toLowerCase();
   const normalized = cleanSlug === "genetic-counselling" ? "genetic-counseling" : cleanSlug;
 
-  const { data, error } = await supabase
-    .from("services")
-    .select("*, sub_services(*)")
-    .eq("status", "published")
-    .eq("sub_services.is_active", true)
-    .order("sort_order", { ascending: true, referencedTable: "sub_services" })
-    .eq("slug", normalized)
-    .maybeSingle();
+  let row = null;
 
-  if (error) {
-    if (import.meta.env.DEV) {
-      console.error("[fetchServiceBySlug] Error:", error);
-    }
-    throw error;
-  }
-
-  if (data) {
-    return mapServiceFromDb(data);
-  }
-
-  // Fallback to exact slug if normalized differed
-  if (normalized !== cleanSlug) {
-    const { data: fallbackData } = await supabase
+  // 1. Try joined query for normalized slug
+  try {
+    const { data, error } = await supabase
       .from("services")
       .select("*, sub_services(*)")
-      .eq("status", "published")
-      .eq("sub_services.is_active", true)
-      .order("sort_order", { ascending: true, referencedTable: "sub_services" })
-      .eq("slug", cleanSlug)
+      .eq("slug", normalized)
       .maybeSingle();
 
-    if (fallbackData) {
-      return mapServiceFromDb(fallbackData);
+    if (!error && data) {
+      row = data;
     }
+  } catch {
+    // ignore
+  }
+
+  // 2. Fallback: flat query for normalized slug
+  if (!row) {
+    try {
+      const { data, error } = await supabase
+        .from("services")
+        .select("*")
+        .eq("slug", normalized)
+        .maybeSingle();
+
+      if (!error && data) {
+        row = data;
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  // 3. Fallback: if normalized differed from cleanSlug, try cleanSlug
+  if (!row && normalized !== cleanSlug) {
+    try {
+      const { data } = await supabase
+        .from("services")
+        .select("*")
+        .eq("slug", cleanSlug)
+        .maybeSingle();
+
+      if (data) row = data;
+    } catch {
+      // ignore
+    }
+  }
+
+  if (row && isRowPublished(row)) {
+    return mapServiceFromDb(row);
   }
 
   return null;
