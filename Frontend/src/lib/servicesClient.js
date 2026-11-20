@@ -200,58 +200,33 @@ export async function fetchPublishedServices(forceRefresh = false) {
     return servicesCache;
   }
 
-  let rows = null;
-
-  // 1. Try querying services with embedded sub_services
   try {
     const { data, error } = await supabase
       .from("services")
-      .select("*, sub_services(*)")
+      .select("*")
       .order("sort_order", { ascending: true });
 
-    if (!error && Array.isArray(data) && data.length > 0) {
-      rows = data;
-    } else if (error && import.meta.env.DEV) {
-      console.warn("[fetchPublishedServices] Joined query returned error, trying flat query:", error);
+    if (error) {
+      console.error("[fetchPublishedServices] Supabase query error:", error);
+      return servicesCache || [];
     }
+
+    if (!Array.isArray(data) || data.length === 0) {
+      return [];
+    }
+
+    // Filter out any explicitly draft or inactive services
+    const publishedRows = data.filter(isRowPublished);
+    const mapped = publishedRows.map(mapServiceFromDb).filter(Boolean);
+
+    servicesCache = mapped;
+    servicesCacheTime = Date.now();
+
+    return mapped;
   } catch (err) {
-    if (import.meta.env.DEV) {
-      console.warn("[fetchPublishedServices] Joined query exception:", err);
-    }
+    console.error("[fetchPublishedServices] Exception:", err);
+    return servicesCache || [];
   }
-
-  // 2. Fallback: query flat services table without foreign table join
-  if (!rows) {
-    try {
-      const { data, error } = await supabase
-        .from("services")
-        .select("*")
-        .order("sort_order", { ascending: true });
-
-      if (!error && Array.isArray(data)) {
-        rows = data;
-      } else if (error && import.meta.env.DEV) {
-        console.error("[fetchPublishedServices] Flat query error:", error);
-      }
-    } catch (err) {
-      if (import.meta.env.DEV) {
-        console.error("[fetchPublishedServices] Flat query exception:", err);
-      }
-    }
-  }
-
-  if (!rows || rows.length === 0) {
-    return [];
-  }
-
-  // Filter out any explicitly draft or inactive services
-  const publishedRows = rows.filter(isRowPublished);
-  const mapped = publishedRows.map(mapServiceFromDb).filter(Boolean);
-
-  servicesCache = mapped;
-  servicesCacheTime = Date.now();
-
-  return mapped;
 }
 
 /**
@@ -262,57 +237,30 @@ export async function fetchServiceBySlug(slug) {
   const cleanSlug = slug.trim().toLowerCase();
   const normalized = cleanSlug === "genetic-counselling" ? "genetic-counseling" : cleanSlug;
 
-  let row = null;
-
-  // 1. Try joined query for normalized slug
   try {
     const { data, error } = await supabase
       .from("services")
-      .select("*, sub_services(*)")
+      .select("*")
       .eq("slug", normalized)
       .maybeSingle();
 
-    if (!error && data) {
-      row = data;
+    if (!error && data && isRowPublished(data)) {
+      return mapServiceFromDb(data);
     }
-  } catch {
-    // ignore
-  }
 
-  // 2. Fallback: flat query for normalized slug
-  if (!row) {
-    try {
-      const { data, error } = await supabase
-        .from("services")
-        .select("*")
-        .eq("slug", normalized)
-        .maybeSingle();
-
-      if (!error && data) {
-        row = data;
-      }
-    } catch {
-      // ignore
-    }
-  }
-
-  // 3. Fallback: if normalized differed from cleanSlug, try cleanSlug
-  if (!row && normalized !== cleanSlug) {
-    try {
-      const { data } = await supabase
+    if (normalized !== cleanSlug) {
+      const { data: fallbackData, error: fallbackError } = await supabase
         .from("services")
         .select("*")
         .eq("slug", cleanSlug)
         .maybeSingle();
 
-      if (data) row = data;
-    } catch {
-      // ignore
+      if (!fallbackError && fallbackData && isRowPublished(fallbackData)) {
+        return mapServiceFromDb(fallbackData);
+      }
     }
-  }
-
-  if (row && isRowPublished(row)) {
-    return mapServiceFromDb(row);
+  } catch (err) {
+    console.error("[fetchServiceBySlug] Exception:", err);
   }
 
   return null;
