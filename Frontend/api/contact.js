@@ -1,4 +1,3 @@
-
 import { Resend } from "resend";
 import { createClient } from "@supabase/supabase-js";
 
@@ -6,6 +5,11 @@ import { createClient } from "@supabase/supabase-js";
 const rateLimitMap = new Map();
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const MAX_REQUESTS_PER_WINDOW = 5;
+
+const ALLOWED_ORIGINS = new Set([
+  "https://www.clingene.co",
+  "https://clingene.co",
+]);
 
 function isRateLimited(ip) {
   if (!ip || ip === "127.0.0.1" || ip === "::1" || ip === "localhost") {
@@ -61,25 +65,43 @@ function stripNewlines(str) {
   return str.replace(/[\r\n]+/g, " ").trim();
 }
 
+function parseRequestBody(rawBody) {
+  if (!rawBody) return {};
+  if (typeof rawBody === "string") {
+    try {
+      return JSON.parse(rawBody);
+    } catch {
+      return {};
+    }
+  }
+  return typeof rawBody === "object" ? rawBody : {};
+}
+
 // Verify Cloudflare Turnstile token
 async function verifyTurnstile(token, secretKey, remoteIp) {
-  if (!secretKey) {
+  const cleanSecret = (secretKey || "").trim();
+
+  if (!cleanSecret) {
+    console.warn("[Turnstile] TURNSTILE_SECRET_KEY is not set; skipping verification.");
     return { success: true, skipped: true };
   }
 
-  if (!token) {
+  const cleanToken = typeof token === "string" ? token.trim() : "";
+
+  if (!cleanToken) {
     return {
       success: false,
       error: "Missing Turnstile verification token",
+      errorCodes: ["missing-input-response"],
     };
   }
 
   try {
     const formData = new URLSearchParams();
-    formData.append("secret", secretKey);
-    formData.append("response", token);
+    formData.append("secret", cleanSecret);
+    formData.append("response", cleanToken);
 
-    if (remoteIp) {
+    if (remoteIp && remoteIp !== "unknown") {
       formData.append("remoteip", remoteIp);
     }
 
@@ -87,25 +109,57 @@ async function verifyTurnstile(token, secretKey, remoteIp) {
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formData.toString(),
       }
     );
 
     const data = await response.json();
-    return { success: data.success === true, data };
+    const errorCodes = Array.isArray(data?.["error-codes"])
+      ? data["error-codes"]
+      : [];
+
+    if (!data?.success) {
+      console.warn("[Turnstile Verification Failed]", {
+        errorCodes,
+        hostname: data?.hostname,
+        challengeTs: data?.challenge_ts,
+      });
+    }
+
+    return {
+      success: data?.success === true,
+      errorCodes,
+      data,
+    };
   } catch (err) {
     console.error("[Turnstile Error]", err);
 
     return {
       success: false,
       error: "Turnstile verification service unreachable",
+      errorCodes: ["internal-error"],
     };
   }
 }
 
 export default async function handler(req, res) {
+  const origin = req.headers?.origin;
+  if (origin && ALLOWED_ORIGINS.has(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+  }
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method !== "POST") {
-    res.setHeader("Allow", ["POST"]);
+    res.setHeader("Allow", ["POST", "OPTIONS"]);
     return res.status(405).json({
       error: "Method not allowed. Use POST.",
     });
@@ -140,10 +194,10 @@ export default async function handler(req, res) {
       cvBase64 = "",
       website = "",
       turnstileToken = "",
-    } = req.body || {};
+    } = parseRequestBody(req.body);
 
     // Honeypot spam protection
-    if (website && website.trim() !== "") {
+    if (typeof website === "string" && website.trim() !== "") {
       return res.status(200).json({
         success: true,
         message:
@@ -152,16 +206,16 @@ export default async function handler(req, res) {
     }
 
     // Turnstile verification
-    const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
     const turnstileResult = await verifyTurnstile(
       turnstileToken,
-      turnstileSecret,
+      process.env.TURNSTILE_SECRET_KEY,
       clientIp
     );
 
     if (!turnstileResult.success) {
       return res.status(400).json({
         error: "Security verification failed. Please refresh and try again.",
+        codes: turnstileResult.errorCodes || [],
       });
     }
 
@@ -224,13 +278,13 @@ export default async function handler(req, res) {
       cleanService === "job" ||
       Boolean(cleanPosition || cvBase64);
 
-    if (!isCareer && (!message || message.trim().length < 5)) {
+    if (!isCareer && (!message || String(message).trim().length < 5)) {
       return res.status(400).json({
         error: "Please provide your project requirements or inquiry details.",
       });
     }
 
-    if (message && message.length > 5000) {
+    if (message && String(message).length > 5000) {
       return res.status(400).json({
         error: "Message content exceeds maximum length of 5000 characters.",
       });
@@ -280,7 +334,9 @@ export default async function handler(req, res) {
     const dbSubject = (
       cleanPosition
         ? `[Career] ${cleanPosition} - ${cleanService}`
-        : (cleanCustomSubject ? `${cleanService}: ${cleanCustomSubject}` : cleanService)
+        : cleanCustomSubject
+          ? `${cleanService}: ${cleanCustomSubject}`
+          : cleanService
     ).slice(0, 200);
 
     const dbMessage = (
@@ -299,8 +355,14 @@ export default async function handler(req, res) {
     };
 
     // 2. Setup Supabase Client (Server-side only with service role key)
-    const supabaseUrl = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "").trim();
-    const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
+    const supabaseUrl = (
+      process.env.SUPABASE_URL ||
+      process.env.VITE_SUPABASE_URL ||
+      ""
+    ).trim();
+    const supabaseServiceKey = (
+      process.env.SUPABASE_SERVICE_ROLE_KEY || ""
+    ).trim();
 
     let dbPromise = Promise.resolve({ skipped: true });
     if (supabaseUrl && supabaseServiceKey) {
@@ -310,10 +372,15 @@ export default async function handler(req, res) {
         });
         dbPromise = supabaseServer.from("contact_messages").insert(dbRecord);
       } catch (dbInitErr) {
-        console.error("[Contact API] Supabase client init error:", dbInitErr?.message || dbInitErr);
+        console.error(
+          "[Contact API] Supabase client init error:",
+          dbInitErr?.message || dbInitErr
+        );
       }
     } else {
-      console.warn("[Contact API] Supabase URL or SUPABASE_SERVICE_ROLE_KEY not configured; skipping database insert.");
+      console.warn(
+        "[Contact API] Supabase URL or SUPABASE_SERVICE_ROLE_KEY not configured; skipping database insert."
+      );
     }
 
     // 3. Setup Email via Resend
@@ -324,8 +391,7 @@ export default async function handler(req, res) {
       "ClinGene Website <onboarding@resend.dev>"
     ).trim();
 
-    const emailSubject =
-      `[ClinGene Website] ${cleanService} - ${cleanName}`;
+    const emailSubject = `[ClinGene Website] ${cleanService} - ${cleanName}`;
 
     const resendApiKey = (process.env.RESEND_API_KEY || "").trim();
 
@@ -395,7 +461,12 @@ export default async function handler(req, res) {
     `.trim();
 
     let emailPromise = Promise.resolve({ skipped: true });
-    if (resendApiKey && clientEmail && resendApiKey.startsWith("re_") && resendApiKey !== "re_your_api_key_here") {
+    if (
+      resendApiKey &&
+      clientEmail &&
+      resendApiKey.startsWith("re_") &&
+      resendApiKey !== "re_your_api_key_here"
+    ) {
       const resend = new Resend(resendApiKey);
       const sendPayload = {
         from: fromEmail,
@@ -411,11 +482,16 @@ export default async function handler(req, res) {
 
       emailPromise = resend.emails.send(sendPayload);
     } else {
-      console.warn("[Contact API] RESEND_API_KEY or CLIENT_EMAIL not configured correctly; skipping email dispatch.");
+      console.warn(
+        "[Contact API] RESEND_API_KEY or CLIENT_EMAIL not configured correctly; skipping email dispatch."
+      );
     }
 
     // 4. Concurrently execute both via Promise.allSettled
-    const [dbResult, emailResult] = await Promise.allSettled([dbPromise, emailPromise]);
+    const [dbResult, emailResult] = await Promise.allSettled([
+      dbPromise,
+      emailPromise,
+    ]);
 
     let dbSuccess = false;
     let emailSuccess = false;
@@ -425,7 +501,10 @@ export default async function handler(req, res) {
     if (dbResult.status === "fulfilled") {
       if (dbResult.value?.error) {
         dbErrorMsg = dbResult.value.error.message || "Database insert error";
-        console.error("[Contact API] Supabase insert failed:", dbResult.value.error);
+        console.error(
+          "[Contact API] Supabase insert failed:",
+          dbResult.value.error
+        );
       } else if (!dbResult.value?.skipped) {
         dbSuccess = true;
       }
@@ -436,8 +515,12 @@ export default async function handler(req, res) {
 
     if (emailResult.status === "fulfilled") {
       if (emailResult.value?.error) {
-        emailErrorMsg = emailResult.value.error.message || "Resend email delivery error";
-        console.error("[Contact API] Resend email delivery failed:", emailResult.value.error);
+        emailErrorMsg =
+          emailResult.value.error.message || "Resend email delivery error";
+        console.error(
+          "[Contact API] Resend email delivery failed:",
+          emailResult.value.error
+        );
       } else if (!emailResult.value?.skipped) {
         emailSuccess = true;
       }
@@ -448,9 +531,13 @@ export default async function handler(req, res) {
 
     // 5. Fail only if BOTH fail
     if (!dbSuccess && !emailSuccess) {
-      console.error("[Contact API] Both DB insert and Email delivery failed.", { dbErrorMsg, emailErrorMsg });
+      console.error("[Contact API] Both DB insert and Email delivery failed.", {
+        dbErrorMsg,
+        emailErrorMsg,
+      });
       return res.status(500).json({
-        error: "Failed to process message through email and database. Please try again or email us directly at info@clingene.co.",
+        error:
+          "Failed to process message through email and database. Please try again or email us directly at info@clingene.co.",
       });
     }
 
