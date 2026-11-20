@@ -136,7 +136,6 @@ function ServiceDropdown({ value, onChange, id = "contact-service", name = "serv
     };
   }, [isOpen]);
 
-  // Isolate mouse wheel events so smooth scroll libraries (Lenis) don't hijack dropdown scrolling
   useEffect(() => {
     const el = menuRef.current;
     if (!el || !isOpen) return;
@@ -158,10 +157,8 @@ function ServiceDropdown({ value, onChange, id = "contact-service", name = "serv
 
   return (
     <div ref={containerRef} className="relative w-full">
-      {/* Hidden input to ensure FormData captures the exact value on submit */}
       <input type="hidden" name={name} value={value || ""} />
 
-      {/* Dropdown Trigger Button */}
       <button
         id={id}
         type="button"
@@ -187,7 +184,6 @@ function ServiceDropdown({ value, onChange, id = "contact-service", name = "serv
         />
       </button>
 
-      {/* Dropdown Menu Panel */}
       {isOpen && (
         <div
           ref={menuRef}
@@ -206,12 +202,10 @@ function ServiceDropdown({ value, onChange, id = "contact-service", name = "serv
         >
           {serviceGroups.map((group) => (
             <div key={group.label} className="border-t first:border-t-0 border-slate-100">
-              {/* Category Heading in Bold Navy */}
               <div className="px-3.5 pt-2.5 pb-1 text-[11px] sm:text-xs font-bold text-[#0c2b48] uppercase tracking-wider bg-slate-50/70 select-none">
                 {group.label}
               </div>
 
-              {/* Options in this category */}
               <div className="py-0.5">
                 {group.options.map((opt) => {
                   const isSelected = opt.value === value;
@@ -248,7 +242,6 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [turnstileToken, setTurnstileToken] = useState("");
-  const [turnstileVisible, setTurnstileVisible] = useState(false);
   const [isLocationOpen, setIsLocationOpen] = useState(true);
   const [servicesList, setServicesList] = useState([]);
 
@@ -270,6 +263,7 @@ export default function ContactPage() {
 
   const formRef = useRef(null);
   const turnstileContainerRef = useRef(null);
+  const widgetIdRef = useRef(null);
 
   const [selectedService, setSelectedService] = useState(() => {
     if (typeof window !== "undefined") {
@@ -303,22 +297,36 @@ export default function ContactPage() {
     selectedService === "job-application" ||
     selectedService === "internship";
 
-  // Cloudflare Turnstile Integration: lazy-load only when form interacts or comes into view
+  // Cloudflare Turnstile Integration
   useEffect(() => {
-    const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
-    if (!siteKey || typeof window === "undefined" || !turnstileVisible) return;
+    const siteKey = (import.meta.env.VITE_TURNSTILE_SITE_KEY || "").trim();
+    if (!siteKey || typeof window === "undefined") return;
 
-    let widgetId = null;
+    let cancelled = false;
     const scriptId = "cf-turnstile-script";
 
     const renderWidget = () => {
+      if (cancelled) return;
       if (window.turnstile && turnstileContainerRef.current) {
         try {
-          widgetId = window.turnstile.render(turnstileContainerRef.current, {
+          if (widgetIdRef.current !== null && typeof window.turnstile.remove === "function") {
+            window.turnstile.remove(widgetIdRef.current);
+            widgetIdRef.current = null;
+          }
+          turnstileContainerRef.current.innerHTML = "";
+          widgetIdRef.current = window.turnstile.render(turnstileContainerRef.current, {
             sitekey: siteKey,
-            callback: (token) => setTurnstileToken(token),
-            "expired-callback": () => setTurnstileToken(""),
-            "error-callback": () => setTurnstileToken(""),
+            callback: (token) => {
+              if (!cancelled) {
+                setTurnstileToken(typeof token === "string" ? token.trim() : "");
+              }
+            },
+            "expired-callback": () => {
+              if (!cancelled) setTurnstileToken("");
+            },
+            "error-callback": () => {
+              if (!cancelled) setTurnstileToken("");
+            },
           });
         } catch (e) {
           console.warn("Turnstile render warning:", e);
@@ -326,7 +334,8 @@ export default function ContactPage() {
       }
     };
 
-    if (!document.getElementById(scriptId)) {
+    const existingScript = document.getElementById(scriptId);
+    if (!existingScript) {
       const script = document.createElement("script");
       script.id = scriptId;
       script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
@@ -334,18 +343,25 @@ export default function ContactPage() {
       script.defer = true;
       script.onload = renderWidget;
       document.head.appendChild(script);
-    } else {
+    } else if (window.turnstile) {
       renderWidget();
+    } else {
+      existingScript.addEventListener("load", renderWidget);
     }
 
     return () => {
-      if (widgetId && window.turnstile) {
+      cancelled = true;
+      if (existingScript) {
+        existingScript.removeEventListener("load", renderWidget);
+      }
+      if (widgetIdRef.current !== null && window.turnstile && typeof window.turnstile.remove === "function") {
         try {
-          window.turnstile.remove(widgetId);
+          window.turnstile.remove(widgetIdRef.current);
         } catch (_) {}
+        widgetIdRef.current = null;
       }
     };
-  }, [turnstileVisible]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -365,7 +381,6 @@ export default function ContactPage() {
     const coverNote = (formData.get("coverNote") || "").toString().trim();
     const websiteHoneypot = (formData.get("website") || "").toString().trim();
 
-    // Inline field validation
     if (!fullName || fullName.length < 2) {
       setSubmitStatus({ type: "error", message: "Please enter your full name (minimum 2 characters)." });
       return;
@@ -389,6 +404,20 @@ export default function ContactPage() {
       setSubmitStatus({
         type: "error",
         message: "Please provide your project requirements or inquiry details.",
+      });
+      return;
+    }
+
+    const activeToken =
+      turnstileToken ||
+      (typeof window !== "undefined" && window.turnstile && widgetIdRef.current !== null && typeof window.turnstile.getResponse === "function"
+        ? (window.turnstile.getResponse(widgetIdRef.current) || "").trim()
+        : "");
+
+    if (!activeToken) {
+      setSubmitStatus({
+        type: "error",
+        message: "Please complete the security verification check before submitting.",
       });
       return;
     }
@@ -430,7 +459,7 @@ export default function ContactPage() {
       position,
       coverNote,
       website: websiteHoneypot,
-      turnstileToken,
+      turnstileToken: activeToken,
     };
 
     setIsSubmitting(true);
@@ -462,13 +491,12 @@ export default function ContactPage() {
         message: result.message || "Thank you! Your message has been sent. Our team will get back to you shortly.",
       });
 
-      // Clear the form
       form.reset();
       setTurnstileToken("");
       setSelectedService("");
       if (typeof window !== "undefined" && window.turnstile && typeof window.turnstile.reset === "function") {
         try {
-          window.turnstile.reset();
+          window.turnstile.reset(widgetIdRef.current ?? undefined);
         } catch (_) {}
       }
     } catch (err) {
@@ -494,8 +522,6 @@ export default function ContactPage() {
     window.addEventListener("popstate", updateServiceFromQuery);
     return () => window.removeEventListener("popstate", updateServiceFromQuery);
   }, []);
-
-  // Contact page uses CSS variables (--contact-featured-*, --accent) so theme switches seamlessly across SSR and client navigation.
 
   return (
     <div className="contact-page">
@@ -531,7 +557,7 @@ export default function ContactPage() {
       </section>
 
       <section aria-label="ClinGene contact details" className="contact-details-section">
-        <div className="site-container contact-cards !grid-cols-1 md:!grid-cols-3 max-w-6xl mx-auto">
+        <div className="site-container contact-cards grid-cols-1 md:grid-cols-3 max-w-6xl mx-auto">
           {contactCards.map((card, index) => {
             const isFeatured = card.isFeatured;
             return (
@@ -657,7 +683,6 @@ export default function ContactPage() {
             </a>
           </div>
 
-          {/* Send us a message Form Card */}
           <div className="rounded-2xl sm:rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 lg:p-9 shadow-[0_12px_36px_rgba(5,11,28,0.06)]">
             <h2 className="font-['Poppins',sans-serif] text-2xl sm:text-[28px] font-bold leading-snug text-[#0c2b48]">
               Send us a message
@@ -670,14 +695,7 @@ export default function ContactPage() {
               ref={formRef}
               className="mt-6 space-y-4"
               onSubmit={handleSubmit}
-              onFocus={() => {
-                if (!turnstileVisible) setTurnstileVisible(true);
-              }}
-              onMouseEnter={() => {
-                if (!turnstileVisible) setTurnstileVisible(true);
-              }}
             >
-              {/* Spam Protection Honeypot Field */}
               <div style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }} aria-hidden="true">
                 <label htmlFor="website">Leave this field blank</label>
                 <input
@@ -708,7 +726,6 @@ export default function ContactPage() {
                 </div>
               )}
 
-              {/* Row 1: Full Name & Email Address */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="contact-full-name" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
@@ -740,7 +757,6 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Row 2: Phone & Organization */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="contact-phone" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
@@ -769,7 +785,6 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Row 3: Area of Interest with custom dropdown */}
               <div>
                 <label htmlFor="contact-service" className="block text-xs sm:text-[13px] font-semibold text-slate-800 mb-1.5 font-['Inter',sans-serif]">
                   Primary Service of Interest <span className="text-red-500">*</span>
@@ -783,7 +798,6 @@ export default function ContactPage() {
                 />
               </div>
 
-              {/* Conditional Careers Fields: Position & CV upload */}
               {isCareerOption && (
                 <div className="space-y-4 rounded-xl border border-blue-200/80 bg-blue-50/40 p-4 transition-all">
                   <div className="flex items-center justify-between text-xs font-semibold text-blue-900">
@@ -819,7 +833,6 @@ export default function ContactPage() {
                 </div>
               )}
 
-              {/* Standard Subject & Message (when not careers) */}
               {!isCareerOption && (
                 <>
                   <div>
@@ -851,9 +864,8 @@ export default function ContactPage() {
               )}
 
               {/* Cloudflare Turnstile Verification Widget */}
-              <div ref={turnstileContainerRef} className="my-2" />
+              <div ref={turnstileContainerRef} className="my-2 min-h-16.25" />
 
-              {/* Submit Button */}
               <div className="pt-2">
                 <Button
                   type="submit"

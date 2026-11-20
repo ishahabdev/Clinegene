@@ -133,7 +133,7 @@ export default function TeamPage() {
 
       {loading ? (
         <section className="py-20 bg-white" aria-label="Loading team members">
-          <div className="site-container flex flex-col items-center justify-center min-h-[320px]">
+          <div className="site-container flex flex-col items-center justify-center min-h-80">
             <div
               className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200"
               style={{ borderTopColor: "var(--accent)" }}
