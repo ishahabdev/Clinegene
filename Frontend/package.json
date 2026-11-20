@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node init && vite",
+    "start": "node server.js",
     "build:client": "node init && vite build",
     "build:server": "node init && vite build --ssr src/entry-server.jsx --outDir dist-ssr",
     "build:prerender": "node init && node prerender.js",
