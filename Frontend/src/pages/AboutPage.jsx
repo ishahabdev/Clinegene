@@ -344,7 +344,12 @@ export default function AboutPage() {
       </section>
 
       {/* --- Our Aim & Stats Section --- */}
-      <section className="relative bg-linear-to-br from-[#F4FAFC] to-[#EAF5F8] py-8 sm:py-10 overflow-hidden">
+      <section
+        className="relative py-8 sm:py-10 overflow-hidden transition-colors duration-500"
+        style={{
+          backgroundColor: "var(--accent-soft, #eaf6fa)",
+        }}
+      >
         <div className="relative w-full">
           <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-8 lg:gap-0 items-center">
 
@@ -363,20 +368,20 @@ export default function AboutPage() {
                   width: 100%;
                   pointer-events: none;
                   background: linear-gradient(90deg,
-                    rgba(var(--panel-rgb, 2, 10, 7), 0) 0%,
-                    rgba(var(--panel-rgb, 2, 10, 7), 0.15) 20%,
-                    rgba(var(--panel-rgb, 2, 10, 7), 0.45) 45%,
-                    rgba(var(--panel-rgb, 2, 10, 7), 0.8) 75%,
-                    var(--panel-dark, #020a07) 100%);
+                    transparent 0%,
+                    rgba(var(--panel-rgb, 4, 23, 40), 0.15) 20%,
+                    rgba(var(--panel-rgb, 4, 23, 40), 0.55) 50%,
+                    rgba(var(--panel-rgb, 4, 23, 40), 0.92) 80%,
+                    var(--panel-dark, #041728) 100%);
                 }
-                @media (max-width: 720px) {
+                @media (max-width: 1023px) {
                   .dna-aim-image::after {
                     background: linear-gradient(180deg,
-                      rgba(var(--panel-rgb, 2, 10, 7), 0) 0%,
-                      rgba(var(--panel-rgb, 2, 10, 7), 0.15) 20%,
-                      rgba(var(--panel-rgb, 2, 10, 7), 0.45) 45%,
-                      rgba(var(--panel-rgb, 2, 10, 7), 0.8) 75%,
-                      var(--panel-dark, #020a07) 100%);
+                      transparent 0%,
+                      rgba(var(--panel-rgb, 4, 23, 40), 0.15) 20%,
+                      rgba(var(--panel-rgb, 4, 23, 40), 0.55) 50%,
+                      rgba(var(--panel-rgb, 4, 23, 40), 0.92) 80%,
+                      var(--panel-dark, #041728) 100%);
                   }
                 }
               `}</style>
@@ -384,9 +389,7 @@ export default function AboutPage() {
               <div
                 className="dna-aim-banner relative flex flex-col lg:flex-row overflow-hidden mx-4 sm:mx-6 lg:mx-0 rounded-3xl lg:rounded-l-none lg:rounded-r-[210px] min-h-105 lg:min-h-97.5 shadow-xl transition-colors duration-500"
                 style={{
-                  backgroundColor: "var(--panel-dark)",
-                  '--panel-dark': "var(--panel-dark)",
-                  '--panel-rgb': "var(--panel-rgb)",
+                  backgroundColor: "var(--panel-dark, #041728)",
                 }}
               >
                 {/* DNA Image Container: 40% of banner width on desktop, full-width on mobile */}
@@ -444,8 +447,14 @@ export default function AboutPage() {
             {/* RIGHT - Stats Section (2x2 Grid with Premium Background) */}
             <ScrollReveal delay={150}>
               <div className="relative h-full flex flex-col justify-center items-center px-4 sm:px-6 lg:px-10 py-0 lg:py-8">
-                {/* Premium Container with Subtle Gray Background */}
-                <div className="bg-linear-to-br from-[#F8FAFB] to-[#F0F4F7] rounded-3xl shadow-[0_8px_30px_rgba(15,23,42,0.08)] p-6 lg:p-7 border border-white/60 w-full max-w-md mx-auto lg:mx-0">
+                {/* Premium Container with Theme-Aware Background */}
+                <div
+                  className="rounded-3xl shadow-[0_8px_30px_rgba(15,23,42,0.08)] p-6 lg:p-7 border w-full max-w-md mx-auto lg:mx-0 transition-colors duration-500"
+                  style={{
+                    background: "var(--service-featured-banner-bg, #ffffff)",
+                    borderColor: "var(--service-featured-banner-border, rgba(0,0,0,0.08))",
+                  }}
+                >
                   <div className="grid grid-cols-2">
 
                     {/* Stat 1 - Expert Researchers */}
