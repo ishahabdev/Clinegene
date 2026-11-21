@@ -37,6 +37,9 @@ const localImageMap = {
   "/assets/team/Mudassir.webp": mudassirAlvi,
   "/assets/team/Saad.webp": saadKhan,
   "/assets/team/Imad Ali.webp": imadAli,
+  "https://vardexszujcvrepiguvu.supabase.co/storage/v1/object/public/images/team/6bc417bc-2968-4ba9-aa4b-d2f9032e0616.webp": amjadAli,
+  "https://vardexszujcvrepiguvu.supabase.co/storage/v1/object/public/images/team/916bd13f-b441-4c4b-b762-36cd862b2b1d.webp": safdarAli,
+  "https://vardexszujcvrepiguvu.supabase.co/storage/v1/object/public/images/team/54bb39d1-de91-4ab1-b9d9-3e2b1532037d.webp": abidAli,
 };
 
 function getLocalFallbackForMember(item) {

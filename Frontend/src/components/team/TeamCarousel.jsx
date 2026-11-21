@@ -21,14 +21,14 @@ function TeamMemberCard({ member }) {
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-[0_4px_16px_rgba(12,43,72,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_14px_30px_rgba(12,43,72,0.12)]">
-      {/* Photo Header (Compact height) */}
-      <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100">
+      {/* Photo Header (Clean 4:3 portrait, not over-zoomed) */}
+      <div className="relative aspect-4/3 w-full overflow-hidden bg-slate-100">
         {member.image || member.image_url ? (
           <img
             src={member.image || member.image_url}
             alt={member.imageAlt || member.name}
             width={member.width || 800}
-            height={member.height || 800}
+            height={member.height || 600}
             decoding="async"
             loading="lazy"
             onError={(e) => {
@@ -39,9 +39,9 @@ function TeamMemberCard({ member }) {
                 e.currentTarget.src = DEFAULT_AVATAR;
               }
             }}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
             style={{
-              objectPosition: member.imagePosition || "center 15%",
+              objectPosition: member.imagePosition || "center",
             }}
           />
         ) : (
