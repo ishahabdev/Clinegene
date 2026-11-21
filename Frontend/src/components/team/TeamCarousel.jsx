@@ -1,8 +1,8 @@
-import { ChevronLeft, ChevronRight, Mail } from "lucide-react";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { Mail } from "lucide-react";
+import ScrollReveal from "../ScrollReveal.jsx";
 import { DEFAULT_AVATAR } from "../../lib/imageOptimization.js";
 
-// Single Team Member Card (Clean, upright, no 3D tilt)
+// Single Team Member Card (Clean, upright, premium card)
 function TeamMemberCard({ member }) {
   const getInitials = (name = "") => {
     return (name || "")
@@ -72,10 +72,10 @@ function TeamMemberCard({ member }) {
       </div>
 
       {/* Card Content */}
-      <div className="flex flex-1 flex-col justify-between p-5 text-center">
+      <div className="flex flex-1 flex-col justify-between p-5 sm:p-6 text-center">
         <div>
           {/* Member Name */}
-          <h3 className="font-serif text-lg font-bold text-[#0c2b48] line-clamp-1 transition-colors group-hover:text-(--accent-dark)">
+          <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0c2b48] line-clamp-1 transition-colors group-hover:text-(--accent-dark)">
             {member.name}
           </h3>
 
@@ -116,121 +116,14 @@ function TeamMemberCard({ member }) {
   );
 }
 
-// Main 3-Cards-In-A-Row Carousel Component
+// 3 Cards In A Row Grid Showcase (Step by step scroll reveal, no sliding)
 export default function TeamCarousel({ members = [] }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [containerWidth, setContainerWidth] = useState(1200);
-  const containerRef = useRef(null);
-  const touchStartRef = useRef({ x: 0, time: 0 });
-  const isDraggingRef = useRef(false);
-
-  // Responsive cards per view: Desktop = 3 in a row, Tablet = 2, Mobile = 1
-  const cardsPerView = containerWidth >= 1024 ? 3 : containerWidth >= 640 ? 2 : 1;
-  const gap = 24; // gap-6 in pixels
-  const cardWidth = containerWidth ? Math.max(0, (containerWidth - (cardsPerView - 1) * gap) / cardsPerView) : 0;
-  const step = cardWidth + gap;
-  const maxIndex = Math.max(0, members.length - cardsPerView);
-
-  // Measure container width via ResizeObserver
-  useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      if (entries[0]?.contentRect?.width) {
-        setContainerWidth(entries[0].contentRect.width);
-      }
-    });
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  // Ensure currentIndex stays within bounds when resizing
-  useEffect(() => {
-    if (currentIndex > maxIndex) {
-      setCurrentIndex(maxIndex);
-    }
-  }, [maxIndex, currentIndex]);
-
-  // Navigation handlers
-  const goToNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
-  }, [maxIndex]);
-
-  const goToPrev = useCallback(() => {
-    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
-  }, [maxIndex]);
-
-  const goToIndex = useCallback(
-    (index) => {
-      const clamped = Math.max(0, Math.min(index, maxIndex));
-      setCurrentIndex(clamped);
-    },
-    [maxIndex]
-  );
-
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        goToPrev();
-      } else if (e.key === "ArrowRight") {
-        e.preventDefault();
-        goToNext();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [goToPrev, goToNext]);
-
-  // Touch Swipe handlers
-  const handleTouchStart = (e) => {
-    touchStartRef.current = { x: e.touches[0].clientX, time: Date.now() };
-    isDraggingRef.current = false;
-  };
-
-  const handleTouchMove = (e) => {
-    if (!touchStartRef.current) return;
-    const diff = e.touches[0].clientX - touchStartRef.current.x;
-    if (Math.abs(diff) > 10) {
-      isDraggingRef.current = true;
-    }
-  };
-
-  const handleTouchEnd = (e) => {
-    if (!touchStartRef.current) return;
-    const diff = e.changedTouches[0].clientX - touchStartRef.current.x;
-    const timeDiff = Date.now() - touchStartRef.current.time;
-    const velocity = Math.abs(diff) / timeDiff;
-
-    if ((Math.abs(diff) > 40 || velocity > 0.4) && isDraggingRef.current) {
-      if (diff > 0) {
-        goToPrev();
-      } else {
-        goToNext();
-      }
-    }
-
-    touchStartRef.current = null;
-    isDraggingRef.current = false;
-  };
-
   if (!members || members.length === 0) {
     return null;
   }
 
-  // Calculate range displayed (e.g. 1 - 3 of 11)
-  const rangeStart = currentIndex + 1;
-  const rangeEnd = Math.min(currentIndex + cardsPerView, members.length);
-
-  // Calculate page dots
-  const totalPages = Math.max(1, maxIndex + 1);
-
   return (
-    <section className="relative bg-white py-12 pb-16 md:py-16 md:pb-20 overflow-hidden" id="team-carousel">
+    <section className="relative bg-white py-12 pb-16 md:py-16 md:pb-24 overflow-hidden" id="team-carousel">
       {/* Diagnostic grid background pattern */}
       <div
         className="absolute inset-0 opacity-[0.02]"
@@ -246,7 +139,7 @@ export default function TeamCarousel({ members = [] }) {
 
       <div className="relative site-container">
         {/* Section Header */}
-        <div className="mb-8 sm:mb-10 text-center">
+        <ScrollReveal className="mb-10 sm:mb-12 text-center">
           <p
             className="mb-2 font-['Inter'] text-[11px] font-bold uppercase tracking-[0.24em] transition-colors"
             style={{ color: "var(--accent)" }}
@@ -268,87 +161,22 @@ export default function TeamCarousel({ members = [] }) {
             Our multidisciplinary team combines decades of expertise in clinical diagnostics, genomic medicine,
             bioinformatics, and laboratory science.
           </p>
-        </div>
-
-        {/* 3-Cards-In-A-Row Carousel Viewport */}
-        <div
-          ref={containerRef}
-          className="relative overflow-hidden w-full select-none py-2"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <div
-            className="flex transition-transform duration-500 ease-out"
-            style={{
-              gap: `${gap}px`,
-              transform: `translateX(-${currentIndex * step}px)`,
-            }}
-          >
-            {members.map((member, index) => (
-              <div
-                key={member.name || index}
-                className="shrink-0"
-                style={{
-                  width: `${cardWidth}px`,
-                }}
-              >
-                <TeamMemberCard member={member} />
-              </div>
-            ))}
+          <div className="mt-4 inline-flex items-center rounded-full bg-slate-100 px-3.5 py-1 text-xs font-semibold text-slate-600">
+            {members.length} Team Members
           </div>
-        </div>
+        </ScrollReveal>
 
-        {/* Carousel Navigation Controls (Arrows, Counter, Dots) */}
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 pt-6">
-          {/* Members Counter Display */}
-          <div className="font-['Inter'] text-xs font-semibold text-slate-500">
-            Showing{" "}
-            <span className="font-bold text-[#0c2b48]">
-              {rangeStart}–{rangeEnd}
-            </span>{" "}
-            of <span className="font-bold text-[#0c2b48]">{members.length}</span> team members
-          </div>
-
-          {/* Dots Indicator */}
-          <div className="flex items-center gap-1.5" aria-label="Carousel pages">
-            {Array.from({ length: totalPages }).map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => goToIndex(idx)}
-                aria-label={`Go to team card ${idx + 1}`}
-                aria-current={idx === currentIndex ? "true" : "false"}
-                className="group p-1 cursor-pointer"
-              >
-                <span
-                  className={`block h-2 rounded-full transition-all duration-300 ${
-                    idx === currentIndex ? "w-7" : "w-2 bg-slate-200 group-hover:bg-slate-300"
-                  }`}
-                  style={idx === currentIndex ? { backgroundColor: "var(--accent)" } : undefined}
-                />
-              </button>
-            ))}
-          </div>
-
-          {/* Previous / Next Buttons */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={goToPrev}
-              disabled={members.length <= cardsPerView}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-[#0c2b48] transition-all hover:border-(--accent) hover:bg-(--accent) hover:text-white active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
-              aria-label="Previous team member"
+        {/* 3-Cards-In-A-Row Grid with step-by-step ScrollReveal */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 lg:gap-8">
+          {members.map((member, index) => (
+            <ScrollReveal
+              key={member.name || index}
+              delay={Math.min((index % 3) * 100, 300)}
+              className="h-full"
             >
-              <ChevronLeft className="h-5 w-5" strokeWidth={2.2} />
-            </button>
-            <button
-              onClick={goToNext}
-              disabled={members.length <= cardsPerView}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-[#0c2b48] transition-all hover:border-(--accent) hover:bg-(--accent) hover:text-white active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
-              aria-label="Next team member"
-            >
-              <ChevronRight className="h-5 w-5" strokeWidth={2.2} />
-            </button>
-          </div>
+              <TeamMemberCard member={member} />
+            </ScrollReveal>
+          ))}
         </div>
       </div>
     </section>
