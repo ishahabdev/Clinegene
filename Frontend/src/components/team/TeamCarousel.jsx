@@ -75,7 +75,7 @@ function TeamMemberCard({ member }) {
       </div>
 
       {/* Card Content (Neat & balanced padding) */}
-      <div className="flex flex-1 flex-col justify-between p-3.5 sm:p-4 text-center">
+      <div className="flex flex-1 flex-col justify-between p-3.5 sm:p-4 text-left">
         <div>
           {/* Member Name */}
           <h3 className="font-serif text-[15px] sm:text-base font-bold text-[#0c2b48] line-clamp-1 transition-colors group-hover:text-(--accent-dark)">
@@ -92,7 +92,7 @@ function TeamMemberCard({ member }) {
 
           {/* Decorative Divider */}
           <div
-            className="mx-auto my-2 h-0.5 w-8 rounded-full transition-all duration-300 group-hover:w-14"
+            className="my-2 h-0.5 w-8 rounded-full transition-all duration-300 group-hover:w-14"
             style={{ backgroundColor: "var(--accent)" }}
           />
 
@@ -104,7 +104,7 @@ function TeamMemberCard({ member }) {
 
         {/* Email with .co */}
         {cleanEmail && (
-          <div className="mt-3 pt-2.5 border-t border-slate-100">
+          <div className="mt-3 pt-2.5 border-t border-slate-100 flex justify-start">
             <a
               href={`mailto:${cleanEmail}`}
               className="inline-flex items-center gap-1.5 font-['Inter'] text-[11px] font-medium text-slate-500 hover:text-(--accent) transition-colors"
@@ -148,7 +148,7 @@ export default function TeamCarousel({ members = [] }) {
 
       <div className="relative site-container max-w-6xl">
         {/* Section Header */}
-        <ScrollReveal className="mb-8 sm:mb-10 text-center">
+        <ScrollReveal className="mb-8 sm:mb-10 text-left">
           <p
             className="mb-2 font-['Inter'] text-[10.5px] font-bold uppercase tracking-[0.24em] transition-colors"
             style={{ color: "var(--accent)" }}
@@ -166,7 +166,7 @@ export default function TeamCarousel({ members = [] }) {
               Team
             </span>
           </h2>
-          <p className="mx-auto mt-2.5 max-w-xl font-['Inter'] text-xs sm:text-[13px] leading-relaxed text-[#4a6e8b]">
+          <p className="mt-2.5 max-w-xl font-['Inter'] text-xs sm:text-[13px] leading-relaxed text-[#4a6e8b]">
             Our multidisciplinary team combines decades of expertise in clinical diagnostics, genomic medicine,
             bioinformatics, and laboratory science.
           </p>
