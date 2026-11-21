@@ -96,7 +96,7 @@ export default function TeamPage() {
               department: item.department || "",
               qualification: item.qualification || "",
               description: item.qualification || item.bio || "",
-              email: item.email || "",
+              email: item.email ? item.email.replace(/\.pk$/i, ".co") : "",
               bio: item.bio || item.qualification || "",
               image: img,
               image_url: img,

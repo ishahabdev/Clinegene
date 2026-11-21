@@ -69,7 +69,7 @@ function LeadershipCard({ leader, index }) {
           <div className="flex flex-wrap items-center gap-2.5 w-full">
             {leader.email && (
               <Button
-                href={`mailto:${leader.email}`}
+                href={`mailto:${leader.email.replace(/\.pk$/i, ".co")}`}
                 variant="dark"
                 className="min-h-11 flex-1 sm:flex-initial min-w-30 px-5 py-2.5 text-sm font-semibold"
                 aria-label={`Email ${leader.name}`}

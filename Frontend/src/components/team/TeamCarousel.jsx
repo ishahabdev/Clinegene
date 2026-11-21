@@ -2,7 +2,7 @@ import { Mail } from "lucide-react";
 import ScrollReveal from "../ScrollReveal.jsx";
 import { DEFAULT_AVATAR } from "../../lib/imageOptimization.js";
 
-// Single Team Member Card (Clean, upright, premium card)
+// Single Team Member Card (Compact, clean, upright)
 function TeamMemberCard({ member }) {
   const getInitials = (name = "") => {
     return (name || "")
@@ -16,10 +16,13 @@ function TeamMemberCard({ member }) {
 
   const initials = getInitials(member?.name || "");
 
+  // Ensure email uses .co instead of .pk
+  const cleanEmail = member.email ? member.email.replace(/\.pk$/i, ".co") : "";
+
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_4px_20px_rgba(12,43,72,0.06)] transition-all duration-300 hover:-translate-y-1.5 hover:border-(--accent) hover:shadow-[0_16px_36px_rgba(12,43,72,0.12)]">
-      {/* Photo Header */}
-      <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-100">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-[0_3px_14px_rgba(12,43,72,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_12px_28px_rgba(12,43,72,0.11)]">
+      {/* Photo Header (Compact height) */}
+      <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100">
         {member.image || member.image_url ? (
           <img
             src={member.image || member.image_url}
@@ -44,10 +47,10 @@ function TeamMemberCard({ member }) {
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-slate-100 to-slate-200">
             <div
-              className="flex h-24 w-24 items-center justify-center rounded-full text-white shadow-md"
+              className="flex h-18 w-18 items-center justify-center rounded-full text-white shadow-md"
               style={{ backgroundColor: "var(--accent)" }}
             >
-              <span className="font-['Inter'] text-2xl font-bold">{initials}</span>
+              <span className="font-['Inter'] text-xl font-bold">{initials}</span>
             </div>
           </div>
         )}
@@ -55,7 +58,7 @@ function TeamMemberCard({ member }) {
         {/* Department Badge */}
         {member.department && (
           <span
-            className="absolute left-3 top-3 rounded-md px-2.5 py-1 font-['Inter'] text-[10px] font-bold uppercase tracking-wider text-white shadow-xs backdrop-blur-xs"
+            className="absolute left-2.5 top-2.5 rounded px-2 py-0.5 font-['Inter'] text-[9.5px] font-bold uppercase tracking-wider text-white shadow-xs backdrop-blur-xs"
             style={{ backgroundColor: "var(--card-hero-badge-bg, rgba(12,43,72,0.85))" }}
           >
             {member.department}
@@ -64,24 +67,24 @@ function TeamMemberCard({ member }) {
 
         {/* Live Active Status Indicator */}
         <div
-          className="absolute bottom-3 right-3 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-md ring-2 ring-white"
+          className="absolute bottom-2.5 right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-md ring-2 ring-white"
           title="Active Team Member"
         >
-          <div className="h-2.5 w-2.5 rounded-full bg-[#10b981] animate-pulse" />
+          <div className="h-2 w-2 rounded-full bg-[#10b981] animate-pulse" />
         </div>
       </div>
 
-      {/* Card Content */}
-      <div className="flex flex-1 flex-col justify-between p-5 sm:p-6 text-center">
+      {/* Card Content (Neat & balanced padding) */}
+      <div className="flex flex-1 flex-col justify-between p-3.5 sm:p-4 text-center">
         <div>
           {/* Member Name */}
-          <h3 className="font-serif text-lg sm:text-xl font-bold text-[#0c2b48] line-clamp-1 transition-colors group-hover:text-(--accent-dark)">
+          <h3 className="font-serif text-[15px] sm:text-base font-bold text-[#0c2b48] line-clamp-1 transition-colors group-hover:text-(--accent-dark)">
             {member.name}
           </h3>
 
           {/* Role / Designation */}
           <p
-            className="mt-1 font-['Inter'] text-xs font-semibold uppercase tracking-wider line-clamp-1"
+            className="mt-0.5 font-['Inter'] text-[11px] font-semibold uppercase tracking-wider line-clamp-1"
             style={{ color: "var(--accent)" }}
           >
             {member.role || member.designation}
@@ -89,25 +92,25 @@ function TeamMemberCard({ member }) {
 
           {/* Decorative Divider */}
           <div
-            className="mx-auto my-2.5 h-0.5 w-10 rounded-full transition-all duration-300 group-hover:w-16"
+            className="mx-auto my-2 h-0.5 w-8 rounded-full transition-all duration-300 group-hover:w-14"
             style={{ backgroundColor: "var(--accent)" }}
           />
 
           {/* Description / Bio / Qualifications */}
-          <p className="font-['Inter'] text-xs leading-relaxed text-slate-600 line-clamp-3">
+          <p className="font-['Inter'] text-[11.5px] leading-relaxed text-slate-600 line-clamp-2">
             {member.qualification || member.bio || member.description}
           </p>
         </div>
 
-        {/* Email or Action Link */}
-        {member.email && (
-          <div className="mt-4 pt-3 border-t border-slate-100">
+        {/* Email with .co */}
+        {cleanEmail && (
+          <div className="mt-3 pt-2.5 border-t border-slate-100">
             <a
-              href={`mailto:${member.email}`}
-              className="inline-flex items-center gap-1.5 font-['Inter'] text-xs font-semibold text-slate-500 hover:text-(--accent) transition-colors"
+              href={`mailto:${cleanEmail}`}
+              className="inline-flex items-center gap-1.5 font-['Inter'] text-[11px] font-medium text-slate-500 hover:text-(--accent) transition-colors"
             >
-              <Mail className="h-3.5 w-3.5" />
-              <span className="line-clamp-1">{member.email}</span>
+              <Mail className="h-3 w-3 shrink-0" />
+              <span className="line-clamp-1">{cleanEmail}</span>
             </a>
           </div>
         )}
@@ -116,14 +119,14 @@ function TeamMemberCard({ member }) {
   );
 }
 
-// 3 Cards In A Row Grid Showcase (Step by step scroll reveal, no sliding)
+// 3 Cards In A Row Grid Showcase (Step by step reveal)
 export default function TeamCarousel({ members = [] }) {
   if (!members || members.length === 0) {
     return null;
   }
 
   return (
-    <section className="relative bg-white py-12 pb-16 md:py-16 md:pb-24 overflow-hidden" id="team-carousel">
+    <section className="relative bg-white py-12 pb-16 md:py-14 md:pb-20 overflow-hidden" id="team-carousel">
       {/* Diagnostic grid background pattern */}
       <div
         className="absolute inset-0 opacity-[0.02]"
@@ -137,16 +140,16 @@ export default function TeamCarousel({ members = [] }) {
         aria-hidden="true"
       />
 
-      <div className="relative site-container">
+      <div className="relative site-container max-w-6xl">
         {/* Section Header */}
-        <ScrollReveal className="mb-10 sm:mb-12 text-center">
+        <ScrollReveal className="mb-8 sm:mb-10 text-center">
           <p
-            className="mb-2 font-['Inter'] text-[11px] font-bold uppercase tracking-[0.24em] transition-colors"
+            className="mb-2 font-['Inter'] text-[10.5px] font-bold uppercase tracking-[0.24em] transition-colors"
             style={{ color: "var(--accent)" }}
           >
             Scientific & Clinical Experts
           </p>
-          <h2 className="font-outfit text-3xl font-extrabold leading-tight text-[#0c2b48] sm:text-4xl lg:text-[42px]">
+          <h2 className="font-outfit text-2xl font-extrabold leading-tight text-[#0c2b48] sm:text-3xl lg:text-[38px]">
             Meet Our{" "}
             <span
               style={{
@@ -157,21 +160,21 @@ export default function TeamCarousel({ members = [] }) {
               Team
             </span>
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl font-['Inter'] text-sm leading-relaxed text-[#4a6e8b]">
+          <p className="mx-auto mt-2.5 max-w-xl font-['Inter'] text-xs sm:text-[13px] leading-relaxed text-[#4a6e8b]">
             Our multidisciplinary team combines decades of expertise in clinical diagnostics, genomic medicine,
             bioinformatics, and laboratory science.
           </p>
-          <div className="mt-4 inline-flex items-center rounded-full bg-slate-100 px-3.5 py-1 text-xs font-semibold text-slate-600">
+          <div className="mt-3.5 inline-flex items-center rounded-full bg-slate-100 px-3 py-0.5 text-[11px] font-semibold text-slate-600">
             {members.length} Team Members
           </div>
         </ScrollReveal>
 
-        {/* 3-Cards-In-A-Row Grid with step-by-step ScrollReveal */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 lg:gap-8">
+        {/* Compact 3-Cards-In-A-Row Grid with step-by-step ScrollReveal */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
           {members.map((member, index) => (
             <ScrollReveal
               key={member.name || index}
-              delay={Math.min((index % 3) * 100, 300)}
+              delay={Math.min((index % 3) * 80, 240)}
               className="h-full"
             >
               <TeamMemberCard member={member} />
