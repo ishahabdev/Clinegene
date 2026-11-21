@@ -139,9 +139,12 @@ export default function LeadershipSection({ leaders = [] }) {
 
   return (
     <section 
-      className="relative bg-white pt-14 pb-24 sm:pt-16 sm:pb-20 md:py-20 z-1"
+      className="relative pt-14 pb-24 sm:pt-16 sm:pb-20 md:py-20 z-1 transition-colors duration-500"
       id="leadership"
       aria-labelledby="leadership-title"
+      style={{
+        backgroundColor: "color-mix(in srgb, var(--accent-soft, #f0f4f8) 70%, #e2e8f0 30%)",
+      }}
     >
       <div 
         className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(16,200,224,0.03),transparent_50%)]"

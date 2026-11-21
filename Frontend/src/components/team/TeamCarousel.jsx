@@ -20,7 +20,7 @@ function TeamMemberCard({ member }) {
   const cleanEmail = member.email ? member.email.replace(/\.pk$/i, ".co") : "";
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-[0_3px_14px_rgba(12,43,72,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_12px_28px_rgba(12,43,72,0.11)]">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-[0_4px_16px_rgba(12,43,72,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_14px_30px_rgba(12,43,72,0.12)]">
       {/* Photo Header (Compact height) */}
       <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100">
         {member.image || member.image_url ? (
@@ -126,14 +126,20 @@ export default function TeamCarousel({ members = [] }) {
   }
 
   return (
-    <section className="relative bg-white py-12 pb-16 md:py-14 md:pb-20 overflow-hidden" id="team-carousel">
+    <section
+      className="relative py-14 pb-18 md:py-16 md:pb-22 overflow-hidden transition-colors duration-500"
+      id="team-carousel"
+      style={{
+        backgroundColor: "color-mix(in srgb, var(--accent-soft, #f0f4f8) 70%, #e2e8f0 30%)",
+      }}
+    >
       {/* Diagnostic grid background pattern */}
       <div
-        className="absolute inset-0 opacity-[0.02]"
+        className="absolute inset-0 opacity-[0.035]"
         style={{
           backgroundImage: `
-            linear-gradient(to right, #10C8E0 1px, transparent 1px),
-            linear-gradient(to bottom, #10C8E0 1px, transparent 1px)
+            linear-gradient(to right, var(--accent, #10C8E0) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--accent, #10C8E0) 1px, transparent 1px)
           `,
           backgroundSize: "40px 40px",
         }}
@@ -164,7 +170,7 @@ export default function TeamCarousel({ members = [] }) {
             Our multidisciplinary team combines decades of expertise in clinical diagnostics, genomic medicine,
             bioinformatics, and laboratory science.
           </p>
-          <div className="mt-3.5 inline-flex items-center rounded-full bg-slate-100 px-3 py-0.5 text-[11px] font-semibold text-slate-600">
+          <div className="mt-3.5 inline-flex items-center rounded-full bg-white px-3.5 py-1 text-[11px] font-semibold text-slate-700 shadow-xs border border-slate-200/80">
             {members.length} Team Members
           </div>
         </ScrollReveal>
