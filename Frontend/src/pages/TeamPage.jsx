@@ -6,7 +6,6 @@ import TeamHero from "../components/team/TeamHero.jsx";
 import LeadershipSection from "../components/team/LeadershipSection.jsx";
 import TeamCarousel from "../components/team/TeamCarousel.jsx";
 import teamPhoto from "../assets/team.webp";
-import { STATIC_TEAM_MEMBERS } from "../data/teamConfig.js";
 import { getOptimizedImageUrl, DEFAULT_AVATAR } from "../lib/imageOptimization.js";
 
 import amjadAli from "../assets/team/Amjad Ali.webp";
@@ -60,8 +59,8 @@ function getLocalFallbackForMember(item) {
 export default function TeamPage() {
   const promisePhoto = teamPhoto;
 
-  const [members, setMembers] = useState(STATIC_TEAM_MEMBERS);
-  const [loading, setLoading] = useState(false);
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
@@ -84,7 +83,7 @@ export default function TeamPage() {
           return;
         }
 
-        if (isMounted && data && data.length > 0) {
+        if (isMounted && data) {
           const formatted = data.map((item) => {
             const fallbackImg = getLocalFallbackForMember(item);
             const rawImg = localImageMap[item.image_url] || item.image_url || fallbackImg;
@@ -108,6 +107,10 @@ export default function TeamPage() {
       } catch (err) {
         if (import.meta.env.DEV) {
           console.error("[TeamPage] Failed to fetch team from Supabase:", err);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
         }
       }
     }

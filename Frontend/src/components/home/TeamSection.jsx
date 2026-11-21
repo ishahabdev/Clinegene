@@ -1,128 +1,167 @@
+import { useState, useEffect } from "react";
 import { UserRound } from "lucide-react";
 import SectionHeading from "../SectionHeading";
 import ScrollReveal from "../ScrollReveal.jsx";
+import { DEFAULT_AVATAR, getOptimizedImageUrl } from "../../lib/imageOptimization.js";
 import amjadAli from "../../assets/team/Amjad Ali.webp";
 import safdarAli from "../../assets/team/Safdar Ali.webp";
 import kifayatUllah from "../../assets/team/Kifayat ullah.webp";
-import { DEFAULT_AVATAR } from "../../lib/imageOptimization.js";
+
+const localFallbackMap = {
+  amjad: amjadAli,
+  safdar: safdarAli,
+  kifayat: kifayatUllah,
+};
+
+function getMemberFallback(name = "") {
+  const lower = name.toLowerCase();
+  for (const [key, img] of Object.entries(localFallbackMap)) {
+    if (lower.includes(key)) return img;
+  }
+  return DEFAULT_AVATAR;
+}
 
 export default function TeamSection() {
-    return (
-<section
-    aria-labelledby="team-title"
-    className="relative isolate overflow-hidden bg-[#eaf6fa] py-16 md:py-24"
-    id="team"
-  >
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_20%_15%,rgba(255,255,255,0.9),transparent_55%)]" />
-    <div className="site-container">
-      <SectionHeading
-        action={{ label: "View Team", href: "/team" }}
-        description="Scientists, clinicians and bioinformaticians turning genomic research into healthier futures."
-        descriptionClassName="text-slate-600"
-        eyebrow="Our Team"
-        id="team-title"
-        highlight="Scientific Team"
-        title="Meet our"
-      />
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-      <div className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4" id="team-members">
-        {[
-          {
-            name: "Dr. Amjad Ali Tanoli Ph.D",
-            designation: "CEO/Director",
-            details: ["Human Geneticist", "Consultant Genetic Counselor"],
-            image: amjadAli,
-            width: 879,
-            height: 1024,
-          },
-          {
-            name: "Dr. Safdar Ali, Ph.D, Postdoc",
-            designation: "Managing Director",
-            details: ["Princess Margaret Cancer Research Center, Toronto, Canada", "Medical Physicist"],
-            image: safdarAli,
-            width: 554,
-            height: 526,
-          },
-          {
-            name: "Dr. Kifayat Ullah, Ph.D",
-            designation: "Molecular Biologist, Human Geneticist",
-            details: ["Quaid-i-Azam University, Islamabad, Pakistan.", "Yale School of Medicine, Yale University, USA."],
-            image: kifayatUllah,
-            width: 341,
-            height: 238,
-          },
-        ].map(({ name, designation, details, image, width, height }, index) => (
-          <ScrollReveal
-            as="article"
-            className="flex min-h-57 items-center gap-4  border border-[#d4e5f2] bg-white/85 p-4 shadow-[0_8px_24px_rgba(29,78,116,0.06)] transition-all duration-100  hover:-translate-y-1 hover:border-3 hover:border-b-(--accent)  hover:bg-white hover:shadow-[0_14px_30px_rgba(12,43,72,0.12)] motion-reduce:transform-none motion-reduce:transition-none sm:gap-5"
-            delay={index * 70}
-            key={name}
-          >
-            <div className="relative h-48 w-[38%] max-w-38 shrink-0 overflow-hidden rounded-xl bg-[#dceaf2]">
-              {image ? (
-                <img
-                  alt={name}
-                  width={width}
-                  height={height}
-                  className="h-full w-full object-cover object-[center_20%]"
-                  decoding="async"
-                  loading="lazy"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = DEFAULT_AVATAR;
-                  }}
-                  src={image}
-                />
-              ) : (
-                <div aria-label={`Portrait placeholder for ${name}`} className="flex h-full w-full items-center justify-center bg-linear-to-b from-[#dceaf2] to-[#c9dce8]" role="img">
-                  <UserRound aria-hidden="true" className="h-20 w-20 text-[#496680]" strokeWidth={1.2} />
-                </div>
-              )}
-            </div>
-            
-            <div className="flex min-w-0 flex-1 flex-col items-start self-stretch py-2">
-              <h3 className="text-[15px] font-bold leading-[1.35] text-[#0c2b48] sm:text-base">
-                {name}
-              </h3>
-              {designation && (
-                <p className="mt-2 rounded-md bg-(--accent-soft) px-2 py-1 text-[10px] font-bold uppercase leading-tight tracking-[0.04em]"
-                  style={{ color: "var(--accent-muted)", transition: "background 0.4s ease-in-out, color 0.4s ease-in-out" }}
-                >
-                  {designation}
-                </p>
-              )}
-              <div className="mt-2 space-y-0.5 text-[12px] leading-[1.45] text-[#4a6e8b] sm:text-[13px]">
-                {details.map((detail) => <p key={detail}>{detail}</p>)}
-              </div>
-              <a
-                aria-label={`View ${name}`}
-                className="mt-auto grid h-11 w-11 min-h-11 min-w-11 place-items-center rounded-full border transition-all duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] touch-manipulation"
-                href="/team"
-                style={{
-                  borderColor: "color-mix(in srgb, var(--accent) 60%, transparent)",
-                  color: "var(--accent-muted)",
-                  transition: "border-color 0.4s ease, background 0.4s ease, color 0.4s ease",
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background = "var(--accent)";
-                  e.currentTarget.style.borderColor = "var(--accent)";
-                  e.currentTarget.style.color = "#0c2b48";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background = "";
-                  e.currentTarget.style.borderColor = "color-mix(in srgb, var(--accent) 60%, transparent)";
-                  e.currentTarget.style.color = "var(--accent-muted)";
-                }}
+  useEffect(() => {
+    let isMounted = true;
+    async function loadHomeTeam() {
+      try {
+        const { supabase } = await import("../../lib/supabase.js");
+        if (!supabase) return;
+        const { data, error } = await supabase
+          .from("team")
+          .select("name, role, department, qualification, bio, image_url")
+          .eq("status", "published")
+          .order("sort_order", { ascending: true })
+          .limit(3);
+        if (!error && isMounted && data && data.length > 0) {
+          setMembers(data);
+        }
+      } catch (_) {
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+    loadHomeTeam();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  if (!loading && members.length === 0) {
+    return null;
+  }
+
+  return (
+    <section
+      aria-labelledby="team-title"
+      className="relative isolate overflow-hidden bg-[#eaf6fa] py-16 md:py-24"
+      id="team"
+    >
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_20%_15%,rgba(255,255,255,0.9),transparent_55%)]" />
+      <div className="site-container">
+        <SectionHeading
+          action={{ label: "View Team", href: "/team" }}
+          description="Scientists, clinicians and bioinformaticians turning genomic research into healthier futures."
+          descriptionClassName="text-slate-600"
+          eyebrow="Our Team"
+          id="team-title"
+          highlight="Scientific Team"
+          title="Meet our"
+        />
+
+        <div className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4" id="team-members">
+          {members.map((member, index) => {
+            const name = member.name || "";
+            const designation = member.role || member.department || "";
+            const fallback = getMemberFallback(name);
+            const image = member.image_url ? getOptimizedImageUrl(member.image_url) : fallback;
+            const detailsText = member.qualification || member.bio || "";
+            const details = detailsText
+              ? detailsText.split(/[|;]/).map((d) => d.trim()).filter(Boolean).slice(0, 2)
+              : [];
+
+            return (
+              <ScrollReveal
+                as="article"
+                className="flex min-h-57 items-center gap-4 border border-[#d4e5f2] bg-white/85 p-4 shadow-[0_8px_24px_rgba(29,78,116,0.06)] transition-all duration-100 hover:-translate-y-1 hover:border-3 hover:border-b-(--accent) hover:bg-white hover:shadow-[0_14px_30px_rgba(12,43,72,0.12)] motion-reduce:transform-none motion-reduce:transition-none sm:gap-5"
+                delay={index * 70}
+                key={name || index}
               >
-                <svg aria-hidden="true" className="h-5 w-5" fill="none" viewBox="0 0 24 24">
-                  <path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" />
-                </svg>
-              </a>
-            </div>
-          </ScrollReveal>
-        ))}
+                <div className="relative h-48 w-[38%] max-w-38 shrink-0 overflow-hidden rounded-xl bg-[#dceaf2]">
+                  {image ? (
+                    <img
+                      alt={name}
+                      width={600}
+                      height={600}
+                      className="h-full w-full object-cover object-[center_20%]"
+                      decoding="async"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = fallback || DEFAULT_AVATAR;
+                      }}
+                      src={image}
+                    />
+                  ) : (
+                    <div aria-label={`Portrait placeholder for ${name}`} className="flex h-full w-full items-center justify-center bg-linear-to-b from-[#dceaf2] to-[#c9dce8]" role="img">
+                      <UserRound aria-hidden="true" className="h-20 w-20 text-[#496680]" strokeWidth={1.2} />
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex min-w-0 flex-1 flex-col items-start self-stretch py-2">
+                  <h3 className="text-[15px] font-bold leading-[1.35] text-[#0c2b48] sm:text-base line-clamp-1">
+                    {name}
+                  </h3>
+                  {designation && (
+                    <p
+                      className="mt-2 rounded-md bg-(--accent-soft) px-2 py-1 text-[10px] font-bold uppercase leading-tight tracking-[0.04em] line-clamp-1"
+                      style={{ color: "var(--accent-muted)", transition: "background 0.4s ease-in-out, color 0.4s ease-in-out" }}
+                    >
+                      {designation}
+                    </p>
+                  )}
+                  <div className="mt-2 space-y-0.5 text-[12px] leading-[1.45] text-[#4a6e8b] sm:text-[13px] line-clamp-2">
+                    {details.length > 0 ? (
+                      details.map((detail) => <p key={detail} className="line-clamp-1">{detail}</p>)
+                    ) : (
+                      <p className="line-clamp-2">{detailsText}</p>
+                    )}
+                  </div>
+                  <a
+                    aria-label={`View ${name}`}
+                    className="mt-auto grid h-11 w-11 min-h-11 min-w-11 place-items-center rounded-full border transition-all duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] touch-manipulation"
+                    href="/team"
+                    style={{
+                      borderColor: "color-mix(in srgb, var(--accent) 60%, transparent)",
+                      color: "var(--accent-muted)",
+                      transition: "border-color 0.4s ease, background 0.4s ease, color 0.4s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "var(--accent)";
+                      e.currentTarget.style.borderColor = "var(--accent)";
+                      e.currentTarget.style.color = "#0c2b48";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "";
+                      e.currentTarget.style.borderColor = "color-mix(in srgb, var(--accent) 60%, transparent)";
+                      e.currentTarget.style.color = "var(--accent-muted)";
+                    }}
+                  >
+                    <svg aria-hidden="true" className="h-5 w-5" fill="none" viewBox="0 0 24 24">
+                      <path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" />
+                    </svg>
+                  </a>
+                </div>
+              </ScrollReveal>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  </section>
-    );
+    </section>
+  );
 }
