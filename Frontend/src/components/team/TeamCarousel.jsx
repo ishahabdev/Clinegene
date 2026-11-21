@@ -41,7 +41,7 @@ function TeamMemberCard({ member }) {
             }}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             style={{
-              objectPosition: member.imagePosition || "center 20%",
+              objectPosition: member.imagePosition || "center 15%",
             }}
           />
         ) : (

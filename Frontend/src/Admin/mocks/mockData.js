@@ -5,7 +5,7 @@ import amjadAli from "../../assets/team/Amjad Ali.jpeg";
 export const ADMIN_USER = {
   fullName: "Dr. Amjad Ali Tanoli Ph.D",
   role: "CEO & Director",
-  email: "amjad.tanoli@clingene.pk",
+  email: "amjad.tanoli@clingene.co",
   phone: "+92 300 1234567",
   dateOfBirth: "Mar 12, 1982",
   joinDate: "Jan 15, 2024",
