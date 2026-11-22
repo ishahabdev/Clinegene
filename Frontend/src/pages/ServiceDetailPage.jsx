@@ -16,6 +16,7 @@ import dnaStrand from "../assets/dna_strand.png";
 import fallbackServiceImage from "../assets/services/service-hero.webp";
 import PageNotFoundPage from "./PageNotFoundPage.jsx";
 import { fetchServiceBySlug, fetchPublishedServices } from "../lib/servicesClient.js";
+import { getActiveSubServicesForService } from "../Admin/api/subServices.js";
 import { buildServiceSeo } from "../data/seoData.js";
 
 export const revalidate = 60;
@@ -29,6 +30,27 @@ const SERVICE_NAV_SECTIONS = [
   { id: "about", label: "About" },
   { id: "requirements", label: "Requirements" },
 ];
+
+// Helper to format sub-service price display based on price and price_type
+function formatSubServicePrice(price, priceType) {
+  if (priceType === "on_request") {
+    return "Price on request";
+  }
+  if (priceType === "starting_from") {
+    return price != null && price !== ""
+      ? `Starting from PKR ${Number(price).toLocaleString()}`
+      : "On request";
+  }
+  if (priceType === "fixed") {
+    return price != null && price !== ""
+      ? `PKR ${Number(price).toLocaleString()}`
+      : "On request";
+  }
+  if (price != null && price !== "") {
+    return `PKR ${Number(price).toLocaleString()}`;
+  }
+  return null;
+}
 
 // Helper to sanitize placeholder brackets e.g. "[To be confirmed by the lab]"
 function cleanText(text) {
@@ -124,6 +146,8 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
   const activeSlug = currentSlug || (path.startsWith("services/") ? path.slice("services/".length) : "");
 
   const [service, setService] = useState(null);
+  const [subServices, setSubServices] = useState([]);
+  const [subServicesLoading, setSubServicesLoading] = useState(false);
   const [relatedServices, setRelatedServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isNotFound, setIsNotFound] = useState(false);
@@ -139,12 +163,16 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
     if (!activeSlug) {
       setIsNotFound(true);
       setLoading(false);
+      setSubServices([]);
+      setSubServicesLoading(false);
       return;
     }
 
     let isMounted = true;
     setLoading(true);
     setIsNotFound(false);
+    setSubServices([]);
+    setSubServicesLoading(false);
 
     async function loadDetail() {
       try {
@@ -154,12 +182,43 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
         if (!item) {
           setIsNotFound(true);
           setService(null);
+          setSubServices([]);
           setLoading(false);
           return;
         }
 
         setService(item);
         setLoading(false);
+
+        // Fetch sub-services from the new sub_services table using service.id (uuid)
+        if (item.id) {
+          setSubServicesLoading(true);
+          try {
+            const dbSubServices = await getActiveSubServicesForService(item.id);
+            if (isMounted) {
+              if (Array.isArray(dbSubServices) && dbSubServices.length > 0) {
+                setSubServices(dbSubServices);
+              } else if (Array.isArray(item.subServices) && item.subServices.length > 0) {
+                // Fallback to legacy sub-services if new table has no records for this service
+                setSubServices(item.subServices);
+              } else {
+                setSubServices([]);
+              }
+            }
+          } catch (subErr) {
+            console.error("[ServiceDetailPage] Error fetching sub-services from sub_services table:", subErr);
+            if (isMounted) {
+              // Fallback to legacy sub-services on error
+              setSubServices(Array.isArray(item.subServices) ? item.subServices : []);
+            }
+          } finally {
+            if (isMounted) {
+              setSubServicesLoading(false);
+            }
+          }
+        } else {
+          setSubServices(Array.isArray(item.subServices) ? item.subServices : []);
+        }
 
         // Fetch related services
         try {
@@ -179,6 +238,7 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
         if (isMounted) {
           setIsNotFound(true);
           setService(null);
+          setSubServices([]);
           setLoading(false);
         }
       }
@@ -565,8 +625,8 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
               </div>
             </div>
 
-            {/* Sub-Services if applicable (e.g. Genetic Counselling) */}
-            {Array.isArray(service.subServices) && (
+            {/* Sub-Services from sub_services table */}
+            {(subServicesLoading || (Array.isArray(subServices) && subServices.length > 0)) && (
               <div className="mt-10 border-t border-slate-200/80 pt-8">
                 <div className="mb-5">
                   <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-(--accent)">
@@ -576,60 +636,82 @@ export default function ServiceDetailPage({ currentSlug, ssrUrl }) {
                     Sub-Services
                   </h3>
                 </div>
-                {service.subServices.length > 0 ? (
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 sm:gap-4">
-                  {service.subServices.map((sub) => {
-                    return (
-                      <a
-                        key={sub.id}
-                        href={`/contact?service=${service.slug}-${sub.slug || sub.id}`}
-                        className="group flex min-h-56 flex-col items-start rounded-2xl border border-slate-200/90 bg-white p-5 text-left shadow-[0_6px_24px_rgba(12,43,72,0.045)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_18px_40px_rgba(12,43,72,0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) sm:p-6"
-                      >
-                        <div
-                          className="flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-105"
-                          style={{
-                            backgroundColor: themeColors.accentSoftBg,
-                            color: "var(--accent)",
-                          }}
-                        >
-                          {sub.image_url ? (
-                            <img
-                              src={sub.image_url}
-                              alt=""
-                              loading="lazy"
-                              className="h-12 w-12 rounded-2xl object-cover"
-                            />
-                          ) : (
-                            <SubServiceIcon
-                              id={sub.id}
-                              className="h-8 w-8 transition-colors duration-300"
-                            />
-                          )}
-                        </div>
 
-                        <h4 className="mt-4 font-outfit text-sm font-bold leading-snug text-[#0c2b48] sm:text-base">
-                          {sub.label}
-                        </h4>
-                        {sub.description && (
-                          <p className="mt-2 text-xs leading-5 text-slate-500">
-                            {sub.description}
-                          </p>
-                        )}
-                        {sub.duration && (
-                          <p className="mt-2 text-xs text-slate-500">Duration: {sub.duration}</p>
-                        )}
-                        <span className="mt-auto inline-flex items-center gap-2 pt-5 text-xs font-bold text-(--accent)">
-                          Request this focus area
-                          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                        </span>
-                      </a>
-                    );
-                  })}
+                {subServicesLoading ? (
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 sm:gap-4">
+                    {[1, 2, 3].map((i) => (
+                      <div
+                        key={i}
+                        className="flex min-h-56 animate-pulse flex-col items-start rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6"
+                      >
+                        <div className="h-12 w-12 rounded-2xl bg-slate-200" />
+                        <div className="mt-4 h-4 w-3/4 rounded bg-slate-200" />
+                        <div className="mt-2 h-3 w-full rounded bg-slate-200" />
+                        <div className="mt-1 h-3 w-1/2 rounded bg-slate-200" />
+                      </div>
+                    ))}
                   </div>
                 ) : (
-                  <p className="rounded-xl border border-dashed border-slate-200 px-4 py-6 text-sm text-slate-500">
-                    Sub-services for this service will be listed here when available.
-                  </p>
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 sm:gap-4">
+                    {subServices.map((sub) => {
+                      const priceLabel = formatSubServicePrice(sub.price, sub.price_type);
+                      const subName = sub.name || sub.label || "Sub-Service";
+                      const subSlugOrId = sub.slug || sub.id;
+
+                      return (
+                        <a
+                          key={sub.id}
+                          href={`/contact?service=${service.slug}-${subSlugOrId}`}
+                          className="group flex min-h-56 flex-col items-start rounded-2xl border border-slate-200/90 bg-white p-5 text-left shadow-[0_6px_24px_rgba(12,43,72,0.045)] transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:shadow-[0_18px_40px_rgba(12,43,72,0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) sm:p-6"
+                        >
+                          <div
+                            className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl transition-transform duration-300 group-hover:scale-105"
+                            style={{
+                              backgroundColor: themeColors.accentSoftBg,
+                              color: "var(--accent)",
+                            }}
+                          >
+                            {sub.image_url ? (
+                              <img
+                                src={sub.image_url}
+                                alt={subName}
+                                loading="lazy"
+                                className="h-12 w-12 rounded-2xl object-cover"
+                              />
+                            ) : (
+                              <SubServiceIcon
+                                id={subSlugOrId}
+                                className="h-8 w-8 transition-colors duration-300"
+                              />
+                            )}
+                          </div>
+
+                          <h4 className="mt-4 font-outfit text-sm font-bold leading-snug text-[#0c2b48] sm:text-base">
+                            {subName}
+                          </h4>
+                          {sub.description && (
+                            <p className="mt-2 text-xs leading-5 text-slate-500 line-clamp-3">
+                              {sub.description}
+                            </p>
+                          )}
+                          {sub.duration && (
+                            <p className="mt-2 text-xs font-medium text-slate-500">
+                              Duration: {sub.duration}
+                            </p>
+                          )}
+                          {priceLabel && (
+                            <div className="mt-2.5 inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-semibold text-slate-700">
+                              {priceLabel}
+                            </div>
+                          )}
+                          <span className="mt-auto inline-flex items-center gap-2 pt-5 text-xs font-bold text-(--accent)">
+                            Request this focus area
+                            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                          </span>
+                        </a>
+                      );
+                    })}
+                  </div>
                 )}
               </div>
             )}
