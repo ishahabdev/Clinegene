@@ -79,11 +79,11 @@ export default function ServicesList({
           <thead>
             <tr className="border-b border-slate-100 dark:border-[#1b283d] bg-slate-50/50 dark:bg-[#080d17]/60 text-slate-700 dark:text-slate-300 font-bold text-xs select-none">
               <th className="py-4 pl-6 pr-3 w-12 text-left">#</th>
-              <th className="py-4 px-4 min-w-[240px]">Service</th>
-              <th className="py-4 px-4 min-w-[150px]">Category</th>
-              <th className="py-4 px-4 min-w-[240px]">Description</th>
-              <th className="py-4 px-4 min-w-[110px]">Status</th>
-              <th className="py-4 px-4 text-center min-w-[130px] whitespace-nowrap">Actions</th>
+              <th className="py-4 px-4 min-w-60">Service</th>
+              <th className="py-4 px-4 min-w-37.5">Category</th>
+              <th className="py-4 px-4 min-w-60">Description</th>
+              <th className="py-4 px-4 min-w-27.5">Status</th>
+              <th className="py-4 px-4 text-center min-w-32.5 whitespace-nowrap">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-[#1b283d]">
@@ -146,7 +146,7 @@ export default function ServicesList({
                   </td>
 
                   {/* Actions (View, Edit, Delete) */}
-                  <td className="py-3.5 px-4 text-center whitespace-nowrap min-w-[130px]">
+                  <td className="py-3.5 px-4 text-center whitespace-nowrap min-w-32.5">
                     <div className="flex items-center justify-center gap-1.5">
                       <button
                         type="button"
