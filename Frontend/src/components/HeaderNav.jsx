@@ -509,7 +509,7 @@ export default function HeaderNav({ activePage }) {
                       return (
                         <a
                           key={category}
-                          href={`/services?category=${category.toLowerCase()}`}
+                          href={`/services?category=${category.toLowerCase().includes("academic") ? "academic" : "clinical"}`}
                           aria-current={isSelected ? "page" : undefined}
                           onMouseEnter={() => {
                             setActiveServicesCategory(category);
@@ -519,7 +519,14 @@ export default function HeaderNav({ activePage }) {
                             setActiveServicesCategory(category);
                             setExpandedServiceMenu(null);
                           }}
-                          onClick={() => setOpenDesktopDropdown(null)}
+                          onClick={() => {
+                            setOpenDesktopDropdown(null);
+                            if (typeof window !== "undefined" && window.location.pathname === "/services") {
+                              const targetCat = category.toLowerCase().includes("academic") ? "academic" : "clinical";
+                              window.history.pushState(null, "", `/services?category=${targetCat}`);
+                              window.dispatchEvent(new Event("popstate"));
+                            }
+                          }}
                           className={`flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) ${
                             isSelected
                               ? "text-white shadow-sm"
@@ -896,7 +903,7 @@ export default function HeaderNav({ activePage }) {
                             return (
                               <a
                                 key={category}
-                                href={`/services?category=${category.toLowerCase()}`}
+                                href={`/services?category=${category.toLowerCase().includes("academic") ? "academic" : "clinical"}`}
                                 aria-current={isSelected ? "page" : undefined}
                                 onFocus={() => {
                                   setActiveServicesCategory(category);
@@ -905,6 +912,11 @@ export default function HeaderNav({ activePage }) {
                                 onClick={() => {
                                   setMenuOpen(false);
                                   setMobileResourcesOpen(false);
+                                  if (typeof window !== "undefined" && window.location.pathname === "/services") {
+                                    const targetCat = category.toLowerCase().includes("academic") ? "academic" : "clinical";
+                                    window.history.pushState(null, "", `/services?category=${targetCat}`);
+                                    window.dispatchEvent(new Event("popstate"));
+                                  }
                                 }}
                                 className={`flex min-h-10 flex-1 items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) ${
                                   isSelected

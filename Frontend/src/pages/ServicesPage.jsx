@@ -55,9 +55,9 @@ function getCategoryFromUrl(url) {
   const query = targetUrl?.includes("?") ? targetUrl.split("?")[1].split("#")[0] : "";
   const cat = new URLSearchParams(query).get("category");
   if (!cat) return "all";
-  const clean = cat.toLowerCase().trim();
-  if (clean === "academic") return "academic";
-  if (clean === "clinical") return "clinical";
+  const clean = decodeURIComponent(cat).toLowerCase().trim();
+  if (clean.includes("academic")) return "academic";
+  if (clean.includes("clinical")) return "clinical";
   return "all";
 }
 
@@ -331,10 +331,10 @@ export default function ServicesPage({ ssrUrl }) {
 
   const selectedCategoryLabel =
     selectedCategory === "academic"
-      ? "Academic & Bioinformatics"
+      ? "Academic Research"
       : selectedCategory === "clinical"
-      ? "Clinical Diagnostic"
-      : "Specialized";
+      ? "Clinical Research"
+      : "";
 
   const badgeBg = "var(--card-hero-badge-bg)";
 
@@ -543,19 +543,19 @@ export default function ServicesPage({ ssrUrl }) {
               {/* ── CLINICAL SECTION (shown when category is 'all' or 'clinical') ── */}
               {(selectedCategory === "all" || selectedCategory === "clinical") && (
                 <div id="clinical-services" className={selectedCategory === "all" ? "mb-14" : ""}>
-                  {selectedCategory === "all" && (
-                    <div className="mb-6 flex items-center justify-between border-b border-slate-200/80 pb-3">
-                      <div>
-                        <p
-                          className="font-inter text-[10px] font-bold uppercase tracking-[0.2em] transition-colors"
-                          style={{ color: "var(--accent)" }}
-                        >
-                          Diagnostic Healthcare
-                        </p>
-                        <h3 className="font-outfit text-xl sm:text-2xl font-bold text-[#0c2b48]">
-                          Clinical Research Services
-                        </h3>
-                      </div>
+                  <div className="mb-6 flex items-center justify-between border-b border-slate-200/80 pb-3">
+                    <div>
+                      <p
+                        className="font-inter text-[10px] font-bold uppercase tracking-[0.2em] transition-colors"
+                        style={{ color: "var(--accent)" }}
+                      >
+                        Diagnostic Healthcare
+                      </p>
+                      <h3 className="font-outfit text-xl sm:text-2xl font-bold text-[#0c2b48]">
+                        Clinical Research Services
+                      </h3>
+                    </div>
+                    {selectedCategory === "all" ? (
                       <a
                         href="/services?category=clinical"
                         onClick={(e) => {
@@ -567,8 +567,20 @@ export default function ServicesPage({ ssrUrl }) {
                       >
                         View only clinical research <ArrowRight className="h-3.5 w-3.5" />
                       </a>
-                    </div>
-                  )}
+                    ) : (
+                      <a
+                        href="/services"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.history.pushState(null, "", "/services");
+                          setSelectedCategory("all");
+                        }}
+                        className="font-inter text-xs font-semibold text-[#0c2b48] hover:text-(--accent) transition-colors flex items-center gap-1"
+                      >
+                        View all services <ArrowRight className="h-3.5 w-3.5" />
+                      </a>
+                    )}
+                  </div>
 
                   {/* Featured Top Card: Genetic Counseling */}
                   {gcService && (
@@ -596,19 +608,19 @@ export default function ServicesPage({ ssrUrl }) {
                   id="academic-services"
                   className={selectedCategory === "all" ? "mt-12 pt-8 border-t border-slate-200/90" : ""}
                 >
-                  {selectedCategory === "all" && (
-                    <div className="mb-6 flex items-center justify-between border-b border-slate-200/80 pb-3">
-                      <div>
-                        <p
-                          className="font-inter text-[10px] font-bold uppercase tracking-[0.2em] transition-colors"
-                          style={{ color: "var(--accent)" }}
-                        >
-                          Bioinformatics & Genomics
-                        </p>
-                        <h3 className="font-outfit text-xl sm:text-2xl font-bold text-[#0c2b48]">
-                          Academic Research Services
-                        </h3>
-                      </div>
+                  <div className="mb-6 flex items-center justify-between border-b border-slate-200/80 pb-3">
+                    <div>
+                      <p
+                        className="font-inter text-[10px] font-bold uppercase tracking-[0.2em] transition-colors"
+                        style={{ color: "var(--accent)" }}
+                      >
+                        Bioinformatics & Genomics
+                      </p>
+                      <h3 className="font-outfit text-xl sm:text-2xl font-bold text-[#0c2b48]">
+                        Academic Research Services
+                      </h3>
+                    </div>
+                    {selectedCategory === "all" ? (
                       <a
                         href="/services?category=academic"
                         onClick={(e) => {
@@ -620,8 +632,20 @@ export default function ServicesPage({ ssrUrl }) {
                       >
                         View only academic research <ArrowRight className="h-3.5 w-3.5" />
                       </a>
-                    </div>
-                  )}
+                    ) : (
+                      <a
+                        href="/services"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.history.pushState(null, "", "/services");
+                          setSelectedCategory("all");
+                        }}
+                        className="font-inter text-xs font-semibold text-[#0c2b48] hover:text-(--accent) transition-colors flex items-center gap-1"
+                      >
+                        View all services <ArrowRight className="h-3.5 w-3.5" />
+                      </a>
+                    )}
+                  </div>
 
                   {/* Academic Research Services Grid (01 to 11) */}
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
