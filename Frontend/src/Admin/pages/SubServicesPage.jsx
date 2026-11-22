@@ -7,6 +7,7 @@ import {
   Pencil,
   Plus,
   Search,
+  Sparkles,
   Trash2,
 } from "lucide-react";
 import AdminPageHeader from "../components/AdminPageHeader.jsx";
@@ -18,6 +19,7 @@ import {
   getSubServiceServices,
   getSubServices,
   saveSubService,
+  seedDefaultSubServices,
   setSubServiceActive,
   validateSubServiceImage,
 } from "../api/subServices.js";
@@ -65,6 +67,7 @@ export default function SubServicesPage() {
   const [deleting, setDeleting] = useState(false);
   const [updatingActiveId, setUpdatingActiveId] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
+  const [seeding, setSeeding] = useState(false);
   const requestIdRef = useRef(0);
 
   const totalPages = Math.max(1, Math.ceil(count / PAGE_SIZE));
@@ -126,6 +129,52 @@ export default function SubServicesPage() {
   useEffect(() => {
     if (page > totalPages) setPage(totalPages);
   }, [page, totalPages]);
+
+  const handleSeedDefaults = async () => {
+    setSeeding(true);
+    try {
+      const res = await seedDefaultSubServices();
+      showToast({
+        type: "success",
+        title: "Sub-services updated",
+        message: res.message,
+      });
+      await loadItems();
+    } catch (err) {
+      console.error("[SubServicesPage] Seed failed:", err);
+      showToast({
+        type: "error",
+        title: "Seed failed",
+        message: err.message || "Could not add default sub-services.",
+      });
+    } finally {
+      setSeeding(false);
+    }
+  };
+
+  // Auto-seed default sub-services on load if Genetic Counseling is missing them
+  useEffect(() => {
+    let isMounted = true;
+    async function autoSeed() {
+      try {
+        const res = await seedDefaultSubServices();
+        if (isMounted && res && res.inserted > 0) {
+          showToast({
+            type: "success",
+            title: "Default sub-services added",
+            message: `Added ${res.inserted} default sub-services for Genetic Counseling.`,
+          });
+          loadItems();
+        }
+      } catch {
+        // non-blocking
+      }
+    }
+    autoSeed();
+    return () => {
+      isMounted = false;
+    };
+  }, [loadItems, showToast]);
 
   const serviceNameById = useMemo(
     () => new Map(services.map((service) => [service.id, service.title])),
@@ -267,8 +316,27 @@ export default function SubServicesPage() {
         title="Sub-Services"
         subtitle="Manage service options, pricing, and public visibility"
         breadcrumb="Sub-Services"
-        actionLabel="Add Sub-Service"
-        onAction={openCreate}
+        actions={
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleSeedDefaults}
+              disabled={seeding}
+              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white dark:border-slate-700 dark:bg-[#0e1624] px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 shadow-xs hover:bg-slate-50 dark:hover:bg-slate-800 transition active:scale-95 cursor-pointer disabled:opacity-50"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-[#0da5aa]" aria-hidden="true" />
+              {seeding ? "Adding..." : "Add Default Sub-Services"}
+            </button>
+            <button
+              type="button"
+              onClick={openCreate}
+              className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#0da5aa] hover:bg-[#088395] px-5 py-2 text-xs sm:text-sm font-semibold text-white shadow-[0_0_15px_rgba(13,165,170,0.35)] active:scale-95 transition-all cursor-pointer"
+            >
+              <Plus className="h-4 w-4 stroke-[2.5]" />
+              Add Sub-Service
+            </button>
+          </div>
+        }
       />
 
       <section

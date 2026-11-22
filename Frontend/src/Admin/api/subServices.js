@@ -290,3 +290,94 @@ export async function deleteSubService(subService) {
   }
   return { cleanupWarning: "" };
 }
+
+export const DEFAULT_GENETIC_COUNSELING_SUBSERVICES = [
+  {
+    name: "Prenatal Diagnosis",
+    slug: "prenatal-diagnosis",
+    description: "Genetic testing and counseling for expectant parents to identify potential chromosomal or inherited conditions in the fetus.",
+    price_type: "on_request",
+    sort_order: 1,
+  },
+  {
+    name: "Newborn Screening",
+    slug: "newborn-screening",
+    description: "Early identification of genetic, metabolic, and hormonal disorders shortly after birth to enable timely intervention.",
+    price_type: "on_request",
+    sort_order: 2,
+  },
+  {
+    name: "Genetic Diseases",
+    slug: "genetic-diseases",
+    description: "Diagnosis, risk evaluation, and personalized management guidance for inherited single-gene and complex genetic conditions.",
+    price_type: "on_request",
+    sort_order: 3,
+  },
+  {
+    name: "Chromosomal Abnormalities",
+    slug: "chromosomal-abnormalities",
+    description: "Comprehensive assessment of structural and numerical chromosomal variations such as trisomies and translocations.",
+    price_type: "on_request",
+    sort_order: 4,
+  },
+  {
+    name: "Hereditary Cancer",
+    slug: "hereditary-cancer",
+    description: "Risk assessment, genetic screening, and preventative counseling for familial and inherited cancer syndromes.",
+    price_type: "on_request",
+    sort_order: 5,
+  },
+];
+
+export async function seedDefaultSubServices() {
+  const client = requireSupabase();
+
+  // Find genetic counseling service ID
+  const { data: service, error: sErr } = await client
+    .from("services")
+    .select("id, title, slug")
+    .or("slug.eq.genetic-counseling,slug.eq.genetic-counselling,title.ilike.%genetic counseling%")
+    .maybeSingle();
+
+  if (sErr || !service) {
+    throw new Error("Genetic Counseling service not found in database.");
+  }
+
+  // Fetch existing sub-services for this service to avoid duplicates
+  const { data: existing, error: eErr } = await client
+    .from("sub_services")
+    .select("name, slug")
+    .eq("service_id", service.id);
+
+  if (eErr) throw eErr;
+
+  const existingNames = new Set((existing || []).map((x) => String(x.name || "").trim().toLowerCase()));
+  const existingSlugs = new Set((existing || []).map((x) => String(x.slug || "").trim().toLowerCase()));
+
+  const toInsert = DEFAULT_GENETIC_COUNSELING_SUBSERVICES.filter(
+    (item) => !existingNames.has(item.name.toLowerCase()) && !existingSlugs.has(item.slug.toLowerCase())
+  ).map((item) => ({
+    service_id: service.id,
+    name: item.name,
+    slug: item.slug,
+    description: item.description,
+    price_type: item.price_type,
+    price: null,
+    duration: null,
+    image_url: null,
+    is_active: true,
+    sort_order: item.sort_order,
+  }));
+
+  if (toInsert.length === 0) {
+    return { inserted: 0, message: "All default sub-services already exist in the database." };
+  }
+
+  const { data: inserted, error: iErr } = await client
+    .from("sub_services")
+    .insert(toInsert)
+    .select("*");
+
+  if (iErr) throw iErr;
+  return { inserted: (inserted || []).length, message: `Added ${(inserted || []).length} default sub-services.` };
+}
