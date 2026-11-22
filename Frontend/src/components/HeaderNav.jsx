@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import Button from "./Button";
 import { GENETIC_COUNSELING_SUBSERVICES } from "../lib/servicesClient.js";
+import { supabase } from "../lib/supabase.js";
 
 const links = [
   { label: "Home", href: "/" },
@@ -148,8 +149,96 @@ export default function HeaderNav({ activePage }) {
   const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false);
   const [openDesktopDropdown, setOpenDesktopDropdown] = useState(null);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const [activeServicesCategory, setActiveServicesCategory] = useState("Clinical");
+  const [activeServicesCategory, setActiveServicesCategory] = useState(
+    serviceCategories[0] || "Clinical Research"
+  );
+  const [dynamicServicesByCategory, setDynamicServicesByCategory] = useState(servicesByCategory);
   const [expandedServiceMenu, setExpandedServiceMenu] = useState(null);
+
+  // Dynamically load active sub-services from Supabase so any admin additions show up immediately in the menu
+  useEffect(() => {
+    if (!supabase) return undefined;
+    let isMounted = true;
+
+    async function loadNavigationSubServices() {
+      try {
+        const [subServicesRes, servicesRes] = await Promise.all([
+          supabase
+            .from("sub_services")
+            .select("id, service_id, name, slug, is_active, sort_order")
+            .eq("is_active", true)
+            .order("sort_order", { ascending: true })
+            .order("name", { ascending: true }),
+          supabase
+            .from("services")
+            .select("id, slug, title")
+            .order("sort_order", { ascending: true }),
+        ]);
+
+        if (!isMounted) return;
+
+        const subData = subServicesRes.data;
+        const servicesData = servicesRes.data;
+
+        if (!Array.isArray(subData) || subData.length === 0) return;
+
+        const serviceIdToSlug = {};
+        if (Array.isArray(servicesData)) {
+          for (const s of servicesData) {
+            if (s.id && s.slug) {
+              serviceIdToSlug[s.id] = s.slug.trim().toLowerCase();
+            }
+          }
+        }
+
+        const subsByServiceSlug = {};
+        for (const sub of subData) {
+          const serviceSlug = serviceIdToSlug[sub.service_id];
+          if (serviceSlug) {
+            if (!subsByServiceSlug[serviceSlug]) {
+              subsByServiceSlug[serviceSlug] = [];
+            }
+            subsByServiceSlug[serviceSlug].push({
+              id: sub.slug || sub.id,
+              name: sub.name,
+              label: sub.name,
+              slug: sub.slug,
+              service_id: sub.service_id,
+            });
+          }
+        }
+
+        setDynamicServicesByCategory((prev) => {
+          const updated = {};
+          for (const category of Object.keys(prev)) {
+            updated[category] = prev[category].map((service) => {
+              const svcSlug = service.href
+                ? service.href.replace(/^\/services\/?/, "").toLowerCase()
+                : "";
+              const dynamicSubs = subsByServiceSlug[svcSlug];
+              if (dynamicSubs && dynamicSubs.length > 0) {
+                return {
+                  ...service,
+                  subServices: dynamicSubs,
+                };
+              }
+              return service;
+            });
+          }
+          return updated;
+        });
+      } catch (err) {
+        if (import.meta.env?.DEV) {
+          console.error("[HeaderNav] Error loading navigation sub-services:", err);
+        }
+      }
+    }
+
+    loadNavigationSubServices();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const desktopCloseTimerRef = useRef(null);
   const desktopDropdownRefs = useRef({});
@@ -454,7 +543,7 @@ export default function HeaderNav({ activePage }) {
                   </div>
                   <div className="min-w-0 p-3">
                     <div className="space-y-0.5 p-1">
-                      {(servicesByCategory[activeServicesCategory] || []).map((service) => {
+                      {(dynamicServicesByCategory[activeServicesCategory] || []).map((service) => {
                         const hasSubServices = Boolean(service.subServices?.length);
                         const isExpanded = expandedServiceMenu === service.label;
                         const ServiceIcon = getServiceMenuIcon(service.label);
@@ -523,11 +612,16 @@ export default function HeaderNav({ activePage }) {
                                 }}
                               >
                                 {service.subServices.map((subService, index) => {
-                                  const SubServiceIcon = getServiceMenuIcon(subService.label);
+                                  const subLabel = subService.name || subService.label;
+                                  const SubServiceIcon = getServiceMenuIcon(subLabel);
+                                  const serviceSlug =
+                                    service.slug ||
+                                    (service.href ? service.href.replace(/^\/services\/?/, "") : "genetic-counseling");
+                                  const subSlug = subService.slug || subService.id;
                                   return (
                                     <a
                                       key={subService.id}
-                                      href={`/contact?service=genetic-counseling-${subService.id}`}
+                                      href={`/contact?service=${serviceSlug}-${subSlug}`}
                                       onClick={() => setOpenDesktopDropdown(null)}
                                       className={`flex min-h-10 items-center gap-2 px-2 py-1.5 text-[11px] leading-snug text-slate-600 transition-colors hover:bg-(--accent-soft) hover:text-(--accent-dark) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) ${
                                         index < service.subServices.length - 1
@@ -547,7 +641,7 @@ export default function HeaderNav({ activePage }) {
                                         aria-hidden="true"
                                         className="h-4 w-4 shrink-0"
                                       />
-                                      <span>{subService.label}</span>
+                                      <span>{subLabel}</span>
                                     </a>
                                   );
                                 })}
@@ -830,7 +924,7 @@ export default function HeaderNav({ activePage }) {
                           })}
                         </div>
                         <div className="py-2">
-                          {(servicesByCategory[activeServicesCategory] || []).map((service) => {
+                          {(dynamicServicesByCategory[activeServicesCategory] || []).map((service) => {
                             const hasSubServices = Boolean(service.subServices?.length);
                             const isExpanded = expandedServiceMenu === service.label;
                             const ServiceIcon = getServiceMenuIcon(service.label);
@@ -880,11 +974,16 @@ export default function HeaderNav({ activePage }) {
                                 {hasSubServices && isExpanded && (
                                   <div className="ml-8 space-y-0.5 border-l border-slate-200 pl-2">
                                     {service.subServices.map((subService) => {
-                                      const SubServiceIcon = getServiceMenuIcon(subService.label);
+                                      const subLabel = subService.name || subService.label;
+                                      const SubServiceIcon = getServiceMenuIcon(subLabel);
+                                      const serviceSlug =
+                                        service.slug ||
+                                        (service.href ? service.href.replace(/^\/services\/?/, "") : "genetic-counseling");
+                                      const subSlug = subService.slug || subService.id;
                                       return (
                                         <a
                                           key={subService.id}
-                                          href={`/contact?service=genetic-counseling-${subService.id}`}
+                                          href={`/contact?service=${serviceSlug}-${subSlug}`}
                                           onClick={() => {
                                             setMenuOpen(false);
                                             setMobileResourcesOpen(false);
@@ -896,7 +995,7 @@ export default function HeaderNav({ activePage }) {
                                             aria-hidden="true"
                                             className="h-4 w-4 shrink-0"
                                           />
-                                          {subService.label}
+                                          {subLabel}
                                         </a>
                                       );
                                     })}
