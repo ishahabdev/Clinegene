@@ -492,7 +492,7 @@ export default function ServicesPage({ ssrUrl }) {
                 Our Services
               </p>
               <h2 className="font-outfit text-[28px] font-bold leading-tight text-[#0c2b48] sm:text-[34px]" id="service-catalog-title">
-                Our {selectedCategoryLabel}{" "}
+                {selectedCategoryLabel ? `Our ${selectedCategoryLabel} ` : "Our "}
                 <span
                   style={{
                     color: "var(--accent-dark)",
@@ -503,65 +503,8 @@ export default function ServicesPage({ ssrUrl }) {
                 </span>
               </h2>
               <p className="mt-2 max-w-2xl font-inter text-sm leading-6 text-[#4a6e8b]">
-                {selectedCategory === "academic"
-                  ? "Explore ClinGene’s academic research services, bioinformatics, high-throughput sequencing, and molecular biology."
-                  : selectedCategory === "clinical"
-                  ? "Explore ClinGene’s clinical research services, genetic testing, and diagnostic expertise for patients and researchers."
-                  : "Explore ClinGene’s comprehensive clinical research services and academic research services."}
+                Explore ClinGene’s comprehensive clinical research services and academic research services.
               </p>
-
-              {/* Category Filter Pills */}
-              <div className="mt-4 flex flex-wrap items-center gap-2 font-inter text-xs">
-                <span className="font-semibold text-[#0c2b48] mr-1">Filter:</span>
-                <a
-                  href="/services"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.history.pushState(null, "", "/services");
-                    setSelectedCategory("all");
-                  }}
-                  className={`rounded-full px-3 py-1 font-medium transition-all ${
-                    selectedCategory === "all"
-                      ? "text-white shadow-xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                  }`}
-                  style={selectedCategory === "all" ? { backgroundColor: "var(--accent)" } : {}}
-                >
-                  All Services ({services.length})
-                </a>
-                <a
-                  href="/services?category=clinical"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.history.pushState(null, "", "/services?category=clinical");
-                    setSelectedCategory("clinical");
-                  }}
-                  className={`rounded-full px-3 py-1 font-medium transition-all ${
-                    selectedCategory === "clinical"
-                      ? "text-white shadow-xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                  }`}
-                  style={selectedCategory === "clinical" ? { backgroundColor: "var(--accent)" } : {}}
-                >
-                  Clinical Research Services ({clinicalServices.length})
-                </a>
-                <a
-                  href="/services?category=academic"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.history.pushState(null, "", "/services?category=academic");
-                    setSelectedCategory("academic");
-                  }}
-                  className={`rounded-full px-3 py-1 font-medium transition-all ${
-                    selectedCategory === "academic"
-                      ? "text-white shadow-xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                  }`}
-                  style={selectedCategory === "academic" ? { backgroundColor: "var(--accent)" } : {}}
-                >
-                  Academic Research Services ({academicServices.length})
-                </a>
-              </div>
             </div>
             <Button
               className="min-h-0! px-4! py-2.5! font-inter"
