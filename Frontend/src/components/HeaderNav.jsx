@@ -764,7 +764,7 @@ export default function HeaderNav({ activePage }) {
                     aria-expanded={mobileResourcesOpen}
                     aria-controls={submenuId}
                     onClick={() => setMobileResourcesOpen((prev) => !prev)}
-                    className={`group flex min-h-[44px] w-full items-center justify-between rounded-lg px-4 py-2.5 text-[15px] font-semibold leading-tight transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] touch-manipulation cursor-pointer ${
+                    className={`group flex min-h-11 w-full items-center justify-between rounded-lg px-4 py-2.5 text-[15px] font-semibold leading-tight transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] touch-manipulation cursor-pointer ${
                       isLinkActive ? "text-(--accent-muted) bg-(--accent-soft)" : "text-slate-700"
                     }`}
                   >
@@ -844,7 +844,7 @@ export default function HeaderNav({ activePage }) {
                                       setMobileResourcesOpen(false);
                                       setExpandedServiceMenu(null);
                                     }}
-                                    className="flex min-h-[40px] min-w-0 flex-1 items-center gap-2 rounded-lg px-3 py-2 text-[13px] font-semibold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+                                    className="flex min-h-10 min-w-0 flex-1 items-center gap-2 rounded-lg px-3 py-2 text-[13px] font-semibold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                                   >
                                     <span
                                       className="grid h-7 w-7 shrink-0 place-items-center rounded-lg"
@@ -921,7 +921,7 @@ export default function HeaderNav({ activePage }) {
                                   setMenuOpen(false);
                                   setMobileResourcesOpen(false);
                                 }}
-                                className="flex min-h-[40px] items-center rounded-lg px-3 py-2 text-[13px] font-semibold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+                                className="flex min-h-10 items-center rounded-lg px-3 py-2 text-[13px] font-semibold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
                               >
                                 {child.label}
                               </a>
@@ -942,7 +942,7 @@ export default function HeaderNav({ activePage }) {
                             setMenuOpen(false);
                             setMobileResourcesOpen(false);
                           }}
-                          className={`flex min-h-[40px] items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-semibold transition-colors ${
+                          className={`flex min-h-10 items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-semibold transition-colors ${
                             isChildActive
                               ? "text-(--accent-dark) bg-(--accent-soft)"
                               : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
@@ -962,7 +962,7 @@ export default function HeaderNav({ activePage }) {
               <a
                 key={link.label}
                 aria-current={activePage === link.label ? "page" : undefined}
-                className={`group flex min-h-[44px] items-center rounded-lg px-4 py-2.5 text-[15px] font-semibold leading-tight transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] touch-manipulation ${
+                className={`group flex min-h-11 items-center rounded-lg px-4 py-2.5 text-[15px] font-semibold leading-tight transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c2b48] touch-manipulation ${
                   activePage === link.label
                     ? "text-(--accent-muted) bg-(--accent-soft)"
                     : "text-slate-700"
@@ -991,7 +991,7 @@ export default function HeaderNav({ activePage }) {
           {/* Full-width Contact Us button */}
           <div className="mt-2 pt-2 border-t border-slate-100">
             <Button
-              className="w-full! min-h-[44px]! py-2.5! text-center font-bold text-sm"
+              className="w-full! min-h-11! py-2.5! text-center font-bold text-sm"
               href="/contact"
               onClick={() => {
                 setMenuOpen(false);

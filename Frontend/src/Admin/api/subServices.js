@@ -46,6 +46,12 @@ function getFriendlyError(error) {
       { code: error.code, details: error.details, hint: error.hint }
     );
   }
+  if (error?.code === "PGRST205" || error?.message?.includes("sub_services")) {
+    return Object.assign(
+      new Error("The 'sub_services' table was not found in Supabase. To use the sub-services table, run the sub_services_setup.sql script in your Supabase SQL Editor."),
+      { code: error.code || "PGRST205", details: error.details, hint: error.hint }
+    );
+  }
   return error;
 }
 
@@ -157,7 +163,12 @@ export async function getSubServices({
 
   const from = (page - 1) * pageSize;
   const { data, error, count } = await query.range(from, from + pageSize - 1);
-  if (error) throw error;
+  if (error) {
+    if (error.code === "PGRST205" || error.message?.includes("sub_services")) {
+      return { items: [], count: 0, missingTable: true };
+    }
+    throw error;
+  }
   return { items: data || [], count: count || 0 };
 }
 

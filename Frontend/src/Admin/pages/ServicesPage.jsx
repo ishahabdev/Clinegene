@@ -397,7 +397,7 @@ export default function ServicesPage() {
       const result = await deleteService(deleteId);
       showToast(
         result.cleanupWarning ||
-          "Service and its sub-services removed successfully."
+          "Service removed successfully."
       );
       setDeleteId(null);
       await loadServicesList();
@@ -475,6 +475,7 @@ export default function ServicesPage() {
                     {stat.count}
                   </h4>
                 </div>
+              
               </div>
 
               {/* Glowing Wave SVG on the right */}
