@@ -321,7 +321,7 @@ export default function HeaderNav({ activePage }) {
     setMenuOpen((prev) => {
       const next = !prev;
       if (next) {
-        setActiveServicesCategory("Clinical");
+        setActiveServicesCategory(serviceCategories[0] || "Clinical Research");
         // Open accordion automatically only if current page is /blogs or /news
         const isResourcesPage =
           activePage === "Blog" ||
@@ -346,7 +346,7 @@ export default function HeaderNav({ activePage }) {
       desktopCloseTimerRef.current = null;
     }
     if (link.label === "Services" && openDesktopDropdown !== link.label) {
-      setActiveServicesCategory("Clinical");
+      setActiveServicesCategory(serviceCategories[0] || "Clinical Research");
     }
     setHasInteracted(true);
     setOpenDesktopDropdown(link.label);
@@ -367,7 +367,7 @@ export default function HeaderNav({ activePage }) {
 
   const handleDesktopFocus = (link) => {
     if (link.label === "Services" && openDesktopDropdown !== link.label) {
-      setActiveServicesCategory("Clinical");
+      setActiveServicesCategory(serviceCategories[0] || "Clinical Research");
     }
     setHasInteracted(true);
     setOpenDesktopDropdown(link.label);
@@ -385,7 +385,7 @@ export default function HeaderNav({ activePage }) {
     e.preventDefault();
     setHasInteracted(true);
     if (link.label === "Services" && openDesktopDropdown !== link.label) {
-      setActiveServicesCategory("Clinical");
+      setActiveServicesCategory(serviceCategories[0] || "Clinical Research");
     }
     setOpenDesktopDropdown((current) =>
       current === link.label ? null : link.label
@@ -397,7 +397,7 @@ export default function HeaderNav({ activePage }) {
       e.preventDefault();
       setHasInteracted(true);
       if (link.label === "Services" && openDesktopDropdown !== link.label) {
-        setActiveServicesCategory("Clinical");
+        setActiveServicesCategory(serviceCategories[0] || "Clinical Research");
       }
       setOpenDesktopDropdown((current) =>
         current === link.label ? null : link.label
