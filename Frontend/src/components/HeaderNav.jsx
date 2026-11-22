@@ -34,7 +34,7 @@ const links = [
     href: "/services",
     groups: [
       {
-        label: "Clinical Services",
+        label: "Clinical Research Services",
         children: [
           {
             label: "Genetic Counseling",
@@ -48,7 +48,7 @@ const links = [
         ],
       },
       {
-        label: "Academic Services",
+        label: "Academic Research Services",
         children: [
           { label: "RNA-Sequencing/Transcriptome Sequencing", href: "/services/rna-seq" },
           { label: "Metagenome Sequencing", href: "/services/whole-genome-metagenome" },
@@ -108,8 +108,8 @@ const serviceCategories = Object.keys(servicesByCategory);
 
 function getServiceMenuIcon(label) {
   const name = label.toLowerCase();
-  if (name.includes("clinical services")) return Stethoscope;
-  if (name.includes("academic services")) return GraduationCap;
+  if (name.includes("clinical")) return Stethoscope;
+  if (name.includes("academic")) return GraduationCap;
   if (name.includes("prenatal")) return Baby;
   if (name.includes("newborn")) return Activity;
   if (name.includes("genetic disease")) return ShieldPlus;

@@ -32,8 +32,8 @@ function getServiceCategory(service) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ");
   return ACADEMIC_SERVICE_PATTERNS.some((pattern) => pattern.test(identity))
-    ? "Academic Service"
-    : "Clinical Service";
+    ? "Academic Research Service"
+    : "Clinical Research Service";
 }
 
 /**

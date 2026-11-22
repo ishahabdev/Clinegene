@@ -55,8 +55,8 @@ const WEBSITE_SERVICE_TYPES = [
 ];
 
 const CATEGORIES = [
-  "Clinical Service",
-  "Academic Service",
+  "Clinical Research Service",
+  "Academic Research Service",
 ];
 
 const DEFAULT_FORM_STATE = {
@@ -65,7 +65,7 @@ const DEFAULT_FORM_STATE = {
   slug: "",
   type: "lab",
   serviceType: "",
-  category: "Clinical Service",
+  category: "Clinical Research Service",
   pricing: "On request",
   status: "Active",
   icon: "dna",
@@ -248,7 +248,7 @@ export default function ServicesPage() {
       slug: service.slug || "",
       type: service.type || "lab",
       serviceType: service.serviceType || "",
-      category: service.category || "Clinical Service",
+      category: service.category || "Clinical Research Service",
       pricing: service.pricing || "On request",
       status: service.status || "Active",
       icon: service.icon || "dna",

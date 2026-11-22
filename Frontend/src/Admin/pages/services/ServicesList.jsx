@@ -116,7 +116,7 @@ export default function ServicesList({
                   {/* Category Pill Badge */}
                   <td className="py-3.5 px-4">
                     <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-semibold bg-[#e0f7fa] dark:bg-cyan-500/15 text-[#00838f] dark:text-cyan-300 whitespace-nowrap">
-                      {service.category || "Clinical Diagnostics"}
+                      {service.category || "Clinical Research Service"}
                     </span>
                   </td>
 

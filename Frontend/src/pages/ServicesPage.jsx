@@ -504,10 +504,10 @@ export default function ServicesPage({ ssrUrl }) {
               </h2>
               <p className="mt-2 max-w-2xl font-inter text-sm leading-6 text-[#4a6e8b]">
                 {selectedCategory === "academic"
-                  ? "Explore ClinGene’s bioinformatics, high-throughput sequencing, and molecular biology services."
+                  ? "Explore ClinGene’s academic research services, bioinformatics, high-throughput sequencing, and molecular biology."
                   : selectedCategory === "clinical"
-                  ? "Explore ClinGene’s clinical genetic testing and diagnostic services for patients and clinicians."
-                  : "Explore ClinGene’s comprehensive clinical diagnostic, sequencing, and bioinformatics services."}
+                  ? "Explore ClinGene’s clinical research services, genetic testing, and diagnostic expertise for patients and researchers."
+                  : "Explore ClinGene’s comprehensive clinical research services and academic research services."}
               </p>
 
               {/* Category Filter Pills */}
@@ -543,7 +543,7 @@ export default function ServicesPage({ ssrUrl }) {
                   }`}
                   style={selectedCategory === "clinical" ? { backgroundColor: "var(--accent)" } : {}}
                 >
-                  Clinical Services ({clinicalServices.length})
+                  Clinical Research Services ({clinicalServices.length})
                 </a>
                 <a
                   href="/services?category=academic"
@@ -559,7 +559,7 @@ export default function ServicesPage({ ssrUrl }) {
                   }`}
                   style={selectedCategory === "academic" ? { backgroundColor: "var(--accent)" } : {}}
                 >
-                  Academic Services ({academicServices.length})
+                  Academic Research Services ({academicServices.length})
                 </a>
               </div>
             </div>
@@ -610,7 +610,7 @@ export default function ServicesPage({ ssrUrl }) {
                           Diagnostic Healthcare
                         </p>
                         <h3 className="font-outfit text-xl sm:text-2xl font-bold text-[#0c2b48]">
-                          Clinical Diagnostic Services
+                          Clinical Research Services
                         </h3>
                       </div>
                       <a
@@ -622,7 +622,7 @@ export default function ServicesPage({ ssrUrl }) {
                         }}
                         className="font-inter text-xs font-semibold text-[#0c2b48] hover:text-(--accent) transition-colors flex items-center gap-1"
                       >
-                        View only clinical <ArrowRight className="h-3.5 w-3.5" />
+                        View only clinical research <ArrowRight className="h-3.5 w-3.5" />
                       </a>
                     </div>
                   )}
@@ -632,7 +632,7 @@ export default function ServicesPage({ ssrUrl }) {
                     <FeaturedGeneticCounselingCard service={gcService} badgeBg={badgeBg} />
                   )}
 
-                  {/* Remaining Clinical Services Grid (02 to 05) */}
+                  {/* Remaining Clinical Research Services Grid (02 to 05) */}
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {remainingClinical.map((service, index) => (
                       <ServiceCard
@@ -663,7 +663,7 @@ export default function ServicesPage({ ssrUrl }) {
                           Bioinformatics & Genomics
                         </p>
                         <h3 className="font-outfit text-xl sm:text-2xl font-bold text-[#0c2b48]">
-                          Academic & Bioinformatics Services
+                          Academic Research Services
                         </h3>
                       </div>
                       <a
@@ -675,12 +675,12 @@ export default function ServicesPage({ ssrUrl }) {
                         }}
                         className="font-inter text-xs font-semibold text-[#0c2b48] hover:text-(--accent) transition-colors flex items-center gap-1"
                       >
-                        View only academic <ArrowRight className="h-3.5 w-3.5" />
+                        View only academic research <ArrowRight className="h-3.5 w-3.5" />
                       </a>
                     </div>
                   )}
 
-                  {/* Academic Services Grid (01 to 11) */}
+                  {/* Academic Research Services Grid (01 to 11) */}
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {academicServices.map((service, index) => (
                       <ServiceCard

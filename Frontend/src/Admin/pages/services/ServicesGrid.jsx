@@ -35,8 +35,10 @@ const ICON_MAP = {
 
 function getCategoryBadgeStyle(category) {
   switch (category) {
+    case "Clinical Research Service":
     case "Clinical Service":
       return "bg-cyan-50 text-cyan-700 border border-cyan-200/60";
+    case "Academic Research Service":
     case "Academic Service":
       return "bg-purple-50 text-purple-700 border border-purple-200/60";
     default:

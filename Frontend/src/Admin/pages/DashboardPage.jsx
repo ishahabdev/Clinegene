@@ -176,7 +176,7 @@ export default function DashboardPage({ onNavigate }) {
             title: "Genomic Service Catalog",
             description: `${s.title || "Service"}${s.category ? ` • ${s.category}` : ""}`,
             time: formatTimeAgo(s.created_at),
-            author: "Clinical Services",
+            author: "Clinical Research Services",
             icon: Layers,
             path: adminPath("/services"),
             timestamp: new Date(s.created_at).getTime() || 0,
